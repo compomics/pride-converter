@@ -1,4 +1,4 @@
-#summary Short summary of changes for each of the program
+#summary Short summary of changes for each version of the converter.
 
 *Changes from v1.7 to 1.8:*
   * Updated the about.
