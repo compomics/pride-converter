@@ -1,4 +1,5 @@
 #summary Page with sample screenshots from the converter.
 #labels Featured
 
-<img src="http://pride-converter.googlecode.com/svn/wiki/images/screenshots/databseDetails.png" />
+
+http://pride-converter.googlecode.com/svn/wiki/images/screenshots/databseDetails.png
