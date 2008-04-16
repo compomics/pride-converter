@@ -1,6 +1,4 @@
 #summary Page with sample screenshots from the converter.
 #labels Featured
 
-= Screenshots =
-
 (Screenshots from the converter will be added soon.)
