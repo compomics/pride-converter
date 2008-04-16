@@ -5,3 +5,61 @@
 http://pride-converter.googlecode.com/svn/wiki/images/screenshots/databaseConnection.PNG
 
 Screenshot 1: Database Connection
+
+
+----
+http://pride-converter.googlecode.com/svn/wiki/images/screenshots/experimentProperties.PNG
+
+Screenshot 2: Experiment Properties
+
+
+----
+http://pride-converter.googlecode.com/svn/wiki/images/screenshots/sampleDetails.PNG
+
+Screenshot 3: Sample Details
+
+
+----
+http://pride-converter.googlecode.com/svn/wiki/images/screenshots/protocolDetails.PNG
+
+Screenshot 4: Protocol Details
+
+
+----
+http://pride-converter.googlecode.com/svn/wiki/images/screenshots/protocolStep.PNG
+
+Screenshot 5: Protocol Step
+
+
+----
+http://pride-converter.googlecode.com/svn/wiki/images/screenshots/instrumentAndProcessing.PNG
+
+Screenshot 6: Instrument and Processing
+
+
+----
+http://pride-converter.googlecode.com/svn/wiki/images/screenshots/spectraSelection.PNG
+
+Screenshot 7: Spectra Selection
+
+
+----
+http://pride-converter.googlecode.com/svn/wiki/images/screenshots/userParameters.PNG
+
+Screenshot 8: User Parameters
+
+
+----
+http://pride-converter.googlecode.com/svn/wiki/images/screenshots/outputDetails.PNG
+
+Screenshot 9: Output Details
+
+
+----
+http://pride-converter.googlecode.com/svn/wiki/images/screenshots/olsDialog.PNG
+
+Screenshot 10: OLS Dialog
+
+
+
+
