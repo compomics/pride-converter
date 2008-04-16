@@ -4,4 +4,4 @@
 
 http://pride-converter.googlecode.com/svn/wiki/images/screenshots/databaseConnection.PNG
 
-*Screenshot 1: Database Connection*
+Screenshot 1: Database Connection
