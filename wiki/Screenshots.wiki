@@ -1,5 +1,7 @@
-#summary Page with sample screenshots from the converter.
+#summary Screenshots from the converter.
 #labels Featured
 
 
-http://pride-converter.googlecode.com/svn/wiki/images/screenshots/databseDetails.png
+http://pride-converter.googlecode.com/svn/wiki/images/screenshots/databaseConnection.PNG
+
+*Screenshot 1: Database Connection*
