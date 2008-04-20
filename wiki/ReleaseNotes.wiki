@@ -1,9 +1,9 @@
 #summary Short summary of changes for each version of the converter.
 #labels Featured
 
-*Changes from v1.8 v1.9:*
+*Changes from v1.9 v1.10:*
   * Added a `Preview XML` button in the output frame.
-  * The `Add Sample Details`, `Add Protocol Step` and all the OLS buttons in the Instrument frame are now disabled when a sample, protocol or instrument is not selcted, and only become enabled if a sample set, protcol or instrument is selected.
+  * The `Add Sample Details`, `Add Protocol Step` and all the OLS buttons in the Instrument frame are now disabled when a sample, protocol or instrument is not selcted, and only becomes enabled if a sample set, protcol or instrument is selected.
 
 ----
 *Changes from v1.8 v1.9:*
