@@ -2,15 +2,20 @@
 #labels Featured
 
 *Changes from v1.8 v1.9:*
-  * Fixed a bug of a missing ´/´ at the end if the output folder setting, resulting in a wrong output folder beeing used.
+  * Added a `Preview XML` button in the output frame.
+  * The `Add Sample Details`, `Add Protocol Step` and all the OLS buttons in the Instrument frame are now disabled when a sample, protocol or instrument is not selcted, and only become enabled if a sample set, protcol or instrument is selected.
+
+----
+*Changes from v1.8 v1.9:*
+  * Fixed a bug of a missing `/` at the end if the output folder setting, resulting in a wrong output folder beeing used.
   * Removed the error message saying that the user folder can not be found if this is the first time running the program. Now it just defaults to the user_home folder without the message.
   * Fixed a bug that resulted in the Project Selection frame sometimes beeing out of foucs when finished loading all the projects.
-  * Pressing ´Tab´ in the ´New Contact > Institution´ and ´New Reference > Reference´ text areas now moves the focus, while pressing ´Ctrl+Tab´ inserts a new Tab.
+  * Pressing `Tab` in the `New Contact > Institution` and `New Reference > Reference` text areas now moves the focus, while pressing `Ctrl+Tab` inserts a new Tab.
 
-
+----
 *Changes from v1.7 to 1.8:*
   * Updated the about.
   * Added a separate about for the OLS dialog.
-  * In the experiment title field pressing ´Tab´ now moves the focus to the label field, while pressing ´Ctrl+Tab´ inserts a new Tab.
+  * In the experiment title field pressing `Tab` now moves the focus to the label field, while pressing `Ctrl+Tab` inserts a new Tab.
   * Re-added the step number in the Spectrum Selection frame title.
 ----
