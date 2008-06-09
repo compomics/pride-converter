@@ -2,7 +2,7 @@
 #labels Featured
 
 *Changes from ms_lims_converter_v1.10 to PRIDE_Converter v1.10:*
-  * Name change: ms_lims_to_PRIDE_converter -> PRIDE Converter!
+  * Name change: ms_lims_to_PRIDE_converter -> PRIDE Converter
   * Added a link to the home page in the about.
   * Removed the 'Preview XML' button in the output frame.
   * Removed the 'Select All Unidentified Spectra' from the Sepctra Selection Frame.
@@ -16,7 +16,7 @@
   * Alpha version of iTRAQ support added.
   * More than one sample can now be added for one experiment. (Needed for iTRAQ, but can also be used without using iTRAQ.)
   * Multiple files can now be selected as the basis for the xml file.
-  *Added a "welcome message" in the first frame.
+  * Added a "welcome message" in the first frame.
 
 ----
 
