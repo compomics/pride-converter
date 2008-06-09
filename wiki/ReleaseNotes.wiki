@@ -8,8 +8,8 @@
   * Removed the 'Select All Unidentified Spectra' from the Sepctra Selection Frame.
   * Added a more advanced "Advanced Spectra Selection" where multiple (partial) file names can now be given.
   * Fixed a bug that made the 'Apply Selection' button stay enabled even if a loading of the spectra was canceled. Or just when returning to the Spectra Selection frame when the file name criteria field was non-empty.
-  * Added a new DataSourceSelection frame at the begining of the wizard.
-  * Moved the SpectrumSelection frame to after project selection.
+  * Added a new DataSourceSelection-frame at the begining of the wizard.
+  * Moved the SpectrumSelection-frame to after project selection.
   * Added longer name tags to each frame in the title ("Experiment Details - Step 3 of 8" etc.)
   * Mascot Dat File and Mascot Generic File support added.
   * Simple Data Format Files are now supported (simple MS/MS format).
