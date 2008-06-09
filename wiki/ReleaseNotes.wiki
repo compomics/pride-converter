@@ -4,7 +4,7 @@
 *Changes from ms_lims_converter_v1.10 to PRIDE_Converter v1.1:*
   * The wrong main-class was used in the previous version. Is now fixed.
 
----
+----
 
 *Changes from ms_lims_converter_v1.10 to PRIDE_Converter v1.1:*
   * Name change: from ms_lims_to_PRIDE_converter to PRIDE Converter
