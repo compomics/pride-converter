@@ -1,7 +1,7 @@
 #summary Short summary of changes for each version of the converter.
 #labels Featured
 
-*Changes from ms_lims_converter_v1.10 to PRIDE_Converter v1.1:*
+*Changes from PRIDE_Converter v1.0 to PRIDE_Converter v1.1:*
   * The wrong main-class was used in the previous version. Is now fixed.
 
 ----
