@@ -1,6 +1,25 @@
 #summary Short summary of changes for each version of the converter.
 #labels Featured
 
+*Changes from ms_lims_converter_v1.10 to PRIDE_Converter v1.10:*
+  * Name change: ms_lims_to_PRIDE_converter -> PRIDE Converter!
+  * Added a link to the home page in the about.
+  * Removed the 'Preview XML' button in the output frame.
+  * Removed the 'Select All Unidentified Spectra' from the Sepctra Selection Frame.
+  * Added a more advanced "Advanced Spectra Selection" where multiple (partial) file names can now be given.
+  * Fixed a bug that made the 'Apply Selection' button stay enabled even if a loading of the spectra was canceled. Or just when returning to the Spectra Selection frame when the file name criteria field was non-empty.
+  * Added a new DataSourceSelection frame at the begining of the wizard.
+  * Moved the SpectrumSelection frame to after project selection.
+  * Added longer name tags to each frame in the title ("Experiment Details - Step 3 of 8" etc.)
+  * Mascot Dat File and Mascot Generic File support added.
+  * Simple Data Format Files are now supported (simple MS/MS format).
+  * Alpha version of iTRAQ support added.
+  * More than one sample can now be added for one experiment. (Needed for iTRAQ, but can also be used without using iTRAQ.)
+  * Multiple files can now be selected as the basis for the xml file.
+  *Added a "welcome message" in the first frame.
+
+----
+
 *Changes from v1.9 v1.10:*
   * Added a `Preview XML` button in the output frame.
   * The `Add Sample Details`, `Add Protocol Step` and all the OLS buttons in the Instrument frame are now disabled when a sample, protocol or instrument is not selcted, and only becomes enabled if a sample set, protcol or instrument is selected.
