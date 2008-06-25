@@ -1,4 +1,4 @@
-#summary Screenshots from the converter.
+#summary Screenshots from the PRIDE Converter.
 #labels Featured
 
 http://pride-converter.googlecode.com/svn/wiki/images/screenshots/dataSourceSelection.PNG
@@ -13,9 +13,9 @@ Screenshot 2: Database File Selection
 
 
 ----
-http://pride-converter.googlecode.com/svn/wiki/images/screenshots/databaseConnection.PNG
+http://pride-converter.googlecode.com/svn/wiki/images/screenshots/spectraSelection.PNG
 
-Screenshot 3: Database Connection
+Screenshot 3: Spectra Selection
 
 
 ----
@@ -49,12 +49,6 @@ Screenshot 8: Instrument and Processing
 
 
 ----
-http://pride-converter.googlecode.com/svn/wiki/images/screenshots/spectraSelection.PNG
-
-Screenshot 9: Spectra Selection
-
-
-----
 http://pride-converter.googlecode.com/svn/wiki/images/screenshots/userParameters.PNG
 
 Screenshot 10: User Parameters
@@ -70,5 +64,3 @@ Screenshot 11: Output Details
 http://pride-converter.googlecode.com/svn/wiki/images/screenshots/olsDialog.PNG
 
 Screenshot 12: OLS Dialog
-
-
