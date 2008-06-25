@@ -1,66 +1,8 @@
 #summary Screenshots from the PRIDE Converter.
 #labels Featured
 
-http://pride-converter.googlecode.com/svn/wiki/images/screenshots/dataSourceSelection.PNG
-
-Screenshot 1: Data Source Selection
-
-
-----
-http://pride-converter.googlecode.com/svn/wiki/images/screenshots/dataFileSelection.PNG
-
-Screenshot 2: Database File Selection
-
-
-----
-http://pride-converter.googlecode.com/svn/wiki/images/screenshots/spectraSelection.PNG
-
-Screenshot 3: Spectra Selection
-
-
-----
-http://pride-converter.googlecode.com/svn/wiki/images/screenshots/experimentProperties.PNG
-
-Screenshot 4: Experiment Properties
-
-
-----
-http://pride-converter.googlecode.com/svn/wiki/images/screenshots/sampleDetails.PNG
-
-Screenshot 5: Sample Details
-
-
-----
-http://pride-converter.googlecode.com/svn/wiki/images/screenshots/protocolDetails.PNG
-
-Screenshot 6: Protocol Details
-
-
-----
-http://pride-converter.googlecode.com/svn/wiki/images/screenshots/protocolStep.PNG
-
-Screenshot 7: Protocol Step
-
-
-----
-http://pride-converter.googlecode.com/svn/wiki/images/screenshots/instrumentAndProcessing.PNG
-
-Screenshot 8: Instrument and Processing
-
-
-----
-http://pride-converter.googlecode.com/svn/wiki/images/screenshots/userParameters.PNG
-
-Screenshot 10: User Parameters
-
-
-----
-http://pride-converter.googlecode.com/svn/wiki/images/screenshots/outputDetails.PNG
-
-Screenshot 11: Output Details
-
-
-----
-http://pride-converter.googlecode.com/svn/wiki/images/screenshots/olsDialog.PNG
-
-Screenshot 12: OLS Dialog
+[http://pride-converter.googlecode.com/svn/wiki/images/screenshots/dataSourceSelection.PNG http://pride-converter.googlecode.com/svn/wiki/images/screenshots/dataSourceSelection_small.PNG] [http://pride-converter.googlecode.com/svn/wiki/images/screenshots/dataFileSelection.PNG http://pride-converter.googlecode.com/svn/wiki/images/screenshots/dataFileSelection_small.PNG] [http://pride-converter.googlecode.com/svn/wiki/images/screenshots/spectraSelection.PNG http://pride-converter.googlecode.com/svn/wiki/images/screenshots/spectraSelection_small.PNG] 
+[http://pride-converter.googlecode.com/svn/wiki/images/screenshots/experimentProperties.PNG http://pride-converter.googlecode.com/svn/wiki/images/screenshots/experimentProperties_small.PNG] 
+[http://pride-converter.googlecode.com/svn/wiki/images/screenshots/sampleDetails.PNG http://pride-converter.googlecode.com/svn/wiki/images/screenshots/sampleDetails_small.PNG] 
+[http://pride-converter.googlecode.com/svn/wiki/images/screenshots/protocolDetails.PNG http://pride-converter.googlecode.com/svn/wiki/images/screenshots/protocolDetails_small.PNG]
+[http://pride-converter.googlecode.com/svn/wiki/images/screenshots/instrumentAndProcessing.PNG http://pride-converter.googlecode.com/svn/wiki/images/screenshots/instrumentAndProcessing_small.PNG] [http://pride-converter.googlecode.com/svn/wiki/images/screenshots/userParameters.PNG http://pride-converter.googlecode.com/svn/wiki/images/screenshots/userParameters_small.PNG] [http://pride-converter.googlecode.com/svn/wiki/images/screenshots/outputDetails.PNG http://pride-converter.googlecode.com/svn/wiki/images/screenshots/outputDetails_small.PNG] [http://pride-converter.googlecode.com/svn/wiki/images/screenshots/olsDialog.PNG http://pride-converter.googlecode.com/svn/wiki/images/screenshots/olsDialog_small.PNG]
