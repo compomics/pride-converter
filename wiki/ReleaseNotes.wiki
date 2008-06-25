@@ -1,7 +1,7 @@
 #summary Short summary of changes for each version of the converter.
 #labels Featured
 
-*Changes from PRIDE_Converter v1.1 to PRIDE_Converter v1.2:*
+*Changes from PRIDE Converter v1.1 to PRIDE Converter v1.2:*
  * 'New Sample Step' was mistitled 'New Protocol Step'
  * Progress bars are now used when loading spectra in all spectra selection frames.
  * Fixed a bug that did not allow more than one analyzer.
@@ -27,19 +27,19 @@
  * Fixed a bug in the spectra selection for ms_lims data that resulted in spectra never beeing deselected when applying advanced spectra selection.
  * Advanced spectra selection (selecting spectra based on file names) has been added to the Mascot Dat file spectra selection frame.
  * In the advanced spectra selection frames (selecting spectra based on file names) leaving the separator field empty now results in the use of the default separators (line shift, tab etc.).
- * Added an option to round the score and threshold down to the nearest integer before comparison. (To deal with a "bug" in the dat files from ms_lims versions older than 6.0.)
+ * Added an option to round the score and threshold down to the nearest integer before comparison. (To emulate the behaviour of the Mascot web results.)
  * Fixed a bug that made it impossible to delete instruments.
  * If an error occurs while parsing a data file the error is now caught and an error message is shown.
  * Example instruments, protocols and samples are now added to make it even easier to start using the converter.
 
 ----
 
-*Changes from PRIDE_Converter v1.0 to PRIDE_Converter v1.1:*
+*Changes from PRIDE Converter v1.0 to PRIDE Converter v1.1:*
   * The wrong main-class was used in the previous version. Is now fixed.
 
 ----
 
-*Changes from ms_lims_converter_v1.10 to PRIDE_Converter v1.1:*
+*Changes from ms_lims_converter_v1.10 to PRIDE Converter v1.1:*
   * Name change: from ms_lims_to_PRIDE_converter to PRIDE Converter
   * Added a link to the home page in the about.
   * Removed the 'Preview XML' button in the output frame.
