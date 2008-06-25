@@ -2,6 +2,39 @@
 #labels Featured
 
 *Changes from PRIDE_Converter v1.0 to PRIDE_Converter v1.1:*
+ * 'New Sample Step' was mistitled 'New Protocol Step'
+ * Progress bars are now used when loading spectra in all spectra selection frames.
+ * Fixed a bug that did not allow more than one analyzer.
+ * Sometimes the Protocol and Sample name were empty in the xml file even though they were not empty in the converter.
+ * The identifications in Mascot Dat files had to be loaded at the spectra selection stage in order to appear in the xml file.
+ * The progress bar now no longer stays at 0% when getting IDs for Mascot Dat files.
+ * Added an e-mail adress to the otherwise still empty help pages.
+ * When clicking the help icon in the dialogs the help page and not the about is now shown.
+ * Added a link in the OLS Dialog that opens the browse ontology OLS web page.
+ * Updated the About pages.
+ * The external links in the help and about pages now opens in the defauls web browser.
+ * Updated the information about the data sources and added external links. (But more changes are still needed.)
+ * The last used data file folder is now remembered between each run.
+ * Changes in the value column in the processing methods table are now detected and results in a question if the instrument should be saved.
+ * Sample name is now mandatory.
+ * When saving an instrument, protocol or sample set, the option of overwriting or saving as a new instance i given.
+ * Previously only peptides with at least one peptide hit was included in the xml file. Now all are included.
+ * Previously the references between the spectra and the identifications were wrong. Its now fixed.
+ * Fixed a bug that resulted iTraq usage stoping the convertion.
+ * Included the number of identifications (both peptides and proteins) in the PRIDE XML Created message at the end.
+ * Three alternative ways of handeling protein isoforms has been added to Mascot Dat File convertion.
+ * Fixed a bug in the spectra selection frame for Mascot Dat files that resulted in the spectra list doubling when clicking on apply selection.
+ * Fixed a bug in the spectra selection for ms_lims data that resulted in spectra never beeing deselected when applying advanced spectra selection.
+ * Advanced spectra selection (selecting spectra based on file names) has been added to the Mascot Dat file spectra selection frame.
+ * In the advanced spectra selection frames (selecting spectra based on file names) leaving the separator field empty now results in the use of the default separators (line shift, tab etc.).
+ * Added an option to round the score and threshold down to the nearest integer before comparison. (To deal with a "bug" in the dat files from ms_lims versions older than 6.0.)
+ * Fixed a bug that made it impossible to delete instruments.
+ * If an error occurs while parsing a data file the error is now caught and an error message is shown.
+ * Example instruments, protocols and samples are now added to make it even easier to start using the converter.
+
+----
+
+*Changes from PRIDE_Converter v1.0 to PRIDE_Converter v1.1:*
   * The wrong main-class was used in the previous version. Is now fixed.
 
 ----
