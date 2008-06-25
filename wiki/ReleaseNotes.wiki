@@ -1,7 +1,7 @@
 #summary Short summary of changes for each version of the converter.
 #labels Featured
 
-*Changes from PRIDE_Converter v1.0 to PRIDE_Converter v1.1:*
+*Changes from PRIDE_Converter v1.1 to PRIDE_Converter v1.2:*
  * 'New Sample Step' was mistitled 'New Protocol Step'
  * Progress bars are now used when loading spectra in all spectra selection frames.
  * Fixed a bug that did not allow more than one analyzer.
