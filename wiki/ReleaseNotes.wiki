@@ -10,7 +10,7 @@
  * Added project title to experiment frame.
  * Added tool tip for the Project field.
  * Fixed a bug that resulted in the converter not beeing able to start running on Linux.
- * Removed a debug output line that ended up in the ´ErrorLog´.
+ * Removed a debug output line that ended up in the `ErrorLog`.
  * Made some minor changes in the GUI. Mainly to make it look better on non-Windows platforms.
  * The groundwork for adding additional help texts/manual has been done, but the actual texts have not yet been added.
 
