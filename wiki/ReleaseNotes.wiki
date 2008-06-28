@@ -5,8 +5,8 @@
 
 *Changes from PRIDE Converter v1.3 to PRIDE Converter v1.4:*
  * Help text has been added for all the help icons.
- * Using lineshift as file name separator now also works if you don't load the spectra first.
- * The text on the popup menus for deleting a sample set, protcol or instrument has been corrected (from not all saying "Delete Contact"...).
+ * Using line shift as file name separator now also works if you don't load the spectra first.
+ * The text on the popup menus for deleting a sample set, protocol or instrument has been corrected (from not all saying "Delete Contact"...).
  * Reordering of the `NewSample`, `NewProtocol` and `NewAnalyzer` tables are now disabled also when editing an old instance.
  * Updated the help line at the bottom of the `SampleDetails` and `ProtocolDetails` frames.
  * Added Help and About icons to the two `ProteinIsoforms` dialogs.
@@ -15,11 +15,11 @@
 
 *Changes from PRIDE Converter v1.2 to PRIDE Converter v1.3:*
  * In the Output Details frame the text in the Special Parameters border has been altered.
- * Added an experiment cv-term for the converter used to generate the xml file.
+ * Added an experiment CV-term for the converter used to generate the xml file.
  * The name of PRIDE xml files created from ms_lims is now shown in the PRIDE XML Created message at the end.
  * Added project title to experiment frame.
  * Added tool tip for the Project field.
- * Fixed a bug that resulted in the converter not beeing able to start running on Linux.
+ * Fixed a bug that resulted in the converter not being able to start running on Linux.
  * Removed a debug output line that ended up in the `ErrorLog`.
  * Made some minor changes in the GUI. Mainly to make it look better on non-Windows platforms.
  * The groundwork for adding additional help texts/manual has been done, but the actual texts have not yet been added.
@@ -33,23 +33,23 @@
  * Sometimes the Protocol and Sample name were empty in the xml file even though they were not empty in the converter.
  * The identifications in Mascot Dat files had to be loaded at the spectra selection stage in order to appear in the xml file.
  * The progress bar now no longer stays at 0% when getting IDs for Mascot Dat files.
- * Added an e-mail adress to the otherwise still empty help pages.
+ * Added an e-mail address to the otherwise still empty help pages.
  * When clicking the help icon in the dialogs the help page and not the about is now shown.
  * Added a link in the OLS Dialog that opens the browse ontology OLS web page.
  * Updated the About pages.
- * The external links in the help and about pages now opens in the defauls web browser.
+ * The external links in the help and about pages now opens in the default web browser.
  * Updated the information about the data sources and added external links. (But more changes are still needed.)
  * The last used data file folder is now remembered between each run.
  * Changes in the value column in the processing methods table are now detected and results in a question if the instrument should be saved.
  * Sample name is now mandatory.
- * When saving an instrument, protocol or sample set, the option of overwriting or saving as a new instance i given.
- * Previously only peptides with at least one peptide hit was included in the xml file. Now all are included.
+ * When saving an instrument, protocol or sample set, the option of overwriting or saving as a new instance is given.
+ * Previously only peptides with at least one peptide hit were included in the xml file. Now all are included.
  * Previously the references between the spectra and the identifications were wrong. Its now fixed.
- * Fixed a bug that resulted iTraq usage stoping the convertion.
+ * Fixed a bug that resulted iTRAQ usage stopping the conversion.
  * Included the number of identifications (both peptides and proteins) in the PRIDE XML Created message at the end.
- * Three alternative ways of handeling protein isoforms has been added to Mascot Dat File convertion.
+ * Three alternative ways of handling protein isoforms has been added to Mascot Dat File conversion.
  * Fixed a bug in the spectra selection frame for Mascot Dat files that resulted in the spectra list doubling when clicking on apply selection.
- * Fixed a bug in the spectra selection for ms_lims data that resulted in spectra never beeing deselected when applying advanced spectra selection.
+ * Fixed a bug in the spectra selection for ms_lims data that resulted in spectra never being deselected when applying advanced spectra selection.
  * Advanced spectra selection (selecting spectra based on file names) has been added to the Mascot Dat file spectra selection frame.
  * In the advanced spectra selection frames (selecting spectra based on file names) leaving the separator field empty now results in the use of the default separators (line shift, tab etc.).
  * Added an option to round the score and threshold down to the nearest integer before comparison. (To emulate the behaviour of the Mascot web results.)
@@ -68,10 +68,10 @@
   * Name change: from ms_lims_to_PRIDE_converter to PRIDE Converter
   * Added a link to the home page in the about.
   * Removed the 'Preview XML' button in the output frame.
-  * Removed the 'Select All Unidentified Spectra' from the Sepctra Selection Frame.
+  * Removed the 'Select All Unidentified Spectra' from the Spectra Selection Frame.
   * Added a more advanced "Advanced Spectra Selection" where multiple (partial) file names can now be given.
-  * Fixed a bug that made the 'Apply Selection' button stay enabled even if a loading of the spectra was canceled. Or just when returning to the Spectra Selection frame when the file name criteria field was non-empty.
-  * Added a new data source selection frame at the begining of the wizard.
+  * Fixed a bug that made the 'Apply Selection' button stay enabled even if a loading of the spectra was cancelled. Or just when returning to the Spectra Selection frame when the file name criteria field was non-empty.
+  * Added a new data source selection frame at the beginning of the wizard.
   * Moved the spectrum selection frame to after project selection.
   * Added longer name tags to each frame in the title ("Experiment Details - Step 3 of 8" etc.)
   * Mascot Dat File and Mascot Generic File support added.
@@ -83,19 +83,19 @@
 
 ----
 
-*Changes from v1.9 v1.10:*
+*Changes from ms_lims_converter_v1.9 ms_lims_converter_v1.10:*
   * Added a `Preview XML` button in the output frame.
-  * The `Add Sample Details`, `Add Protocol Step` and all the OLS buttons in the Instrument frame are now disabled when a sample, protocol or instrument is not selcted, and only becomes enabled if a sample set, protcol or instrument is selected.
+  * The `Add Sample Details`, `Add Protocol Step` and all the OLS buttons in the Instrument frame are now disabled when a sample, protocol or instrument is not selected, and only becomes enabled if a sample set, protocol or instrument is selected.
 
 ----
-*Changes from v1.8 v1.9:*
-  * Fixed a bug of a missing `/` at the end if the output folder setting, resulting in a wrong output folder beeing used.
+*Changes from ms_lims_converter_v1.8 ms_lims_converter_v1.9:*
+  * Fixed a bug of a missing `/` at the end if the output folder setting, resulting in a wrong output folder being used.
   * Removed the error message saying that the user folder can not be found if this is the first time running the program. Now it just defaults to the user_home folder without the message.
-  * Fixed a bug that resulted in the Project Selection frame sometimes beeing out of foucs when finished loading all the projects.
+  * Fixed a bug that resulted in the Project Selection frame sometimes being out of focus when finished loading all the projects.
   * Pressing `Tab` in the `New Contact > Institution` and `New Reference > Reference` text areas now moves the focus, while pressing `Ctrl+Tab` inserts a new Tab.
 
 ----
-*Changes from v1.7 to 1.8:*
+*Changes from ms_lims_converter_v1.7 to ms_lims_converter_1.8:*
   * Updated the about.
   * Added a separate about for the OLS dialog.
   * In the experiment title field pressing `Tab` now moves the focus to the label field, while pressing `Ctrl+Tab` inserts a new Tab.
