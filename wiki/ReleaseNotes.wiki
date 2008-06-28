@@ -3,6 +3,16 @@
 
 ----
 
+*Changes from PRIDE Converter v1.3 to PRIDE Converter v1.4:*
+ * Help text has been added for all the help icons.
+ * Using lineshift as file name separator now also works if you don't load the spectra first.
+ * The text on the popup menus for deleting a sample set, protcol or instrument has been corrected (from not all saying "Delete Contact"...).
+ * Reordering of the NewSample, NewProtocol and New Analyzer tables are now disabled also when editing an old instance.
+ * Updated the help line at the bottom of the SampleDetails and ProtocolDetails frames.
+ * Added Help and About icons to the two ProteinIsoforms dialogs.
+
+----
+
 *Changes from PRIDE Converter v1.2 to PRIDE Converter v1.3:*
  * In the Output Details frame the text in the Special Parameters border has been altered.
  * Added an experiment cv-term for the converter used to generate the xml file.
