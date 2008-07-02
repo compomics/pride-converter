@@ -3,6 +3,20 @@
 
 ----
 
+*Changes from PRIDE Converter v1.4 to PRIDE Converter v1.5:*
+ * Added support for xTandem data.
+ * Added iTRAQ support for xTandem data.
+ * Removed the hardcoded user parameters `ScoreCalculation`, `ThresholdCalculation`, `PeptideIdentification`, `MascotConfidenceLevel`. (`MascotConfidenceLevel` remains for Mascot Dat Files.)
+ * Removed hardcoded cv parameters `IntensityUnits`=`NumberOfCounts` and activation method: `Post-Source Decay`.
+ * New version of the Mascot Dat File parser.
+ * The database is now set to "unknown" if it is not given.
+ * If more than one protein accession number is given for an identification, e.g. HIT000030671.1|HIX0006375.1|BC001819.1|NO|NO|AA|cds, the first is now selected and used.
+ * The individual peptide scores are now included.
+ * The Mascot version taken from the Mascot Dat File was wrong. Has now been removed.
+ * The database version taken from the Mascot Dat File was wrong. Has now been fixed.
+
+----
+
 *Changes from PRIDE Converter v1.3 to PRIDE Converter v1.4:*
  * Help text has been added for all the help icons.
  * Using line shift as file name separator now also works if you don't load the spectra first.
