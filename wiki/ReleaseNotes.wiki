@@ -3,6 +3,22 @@
 
 ----
 
+*Changes from PRIDE Converter v1.5 to PRIDE Converter v1.6:*
+ * Spectrum Mill is now supported.
+ * Micromass PKL Files are now supported.
+ * Added PRIDE Converter icons to the zip-file.
+ * `Simple MS/MS Data Format` has been changed to `Sequest DTA Files`. The content has not been altered.
+ * File name extentions can now be in both lower and upper case.
+ * Non-identified spectra are now deselected when using the `Select Identified` popupmenu option.
+ * Altered the text on the buttons to `OK` instead of `Insert ...` or `Add ...` in the `NewContact` etc. dialogs.
+ * The `Experiment Properties` label has been added to the file name of the PRIDE xml file.
+ * All properties of the iTRAQ calculation are now editable by the user.
+ * iTRAQ is now supported for all formats except ms_lims.
+ * Updated the GUI for it to become more platform independent.
+
+
+----
+
 *Changes from PRIDE Converter v1.4 to PRIDE Converter v1.5:*
  * Added support for xTandem data.
  * Added iTRAQ support for xTandem data.
