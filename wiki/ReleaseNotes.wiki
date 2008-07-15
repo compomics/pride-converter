@@ -3,6 +3,24 @@
 
 ----
 
+*Changes from PRIDE Converter v1.6 to PRIDE Converter v1.7:*
+ * `Sequest Result Files` are now supported.
+ * New `Folder` and `LoadSpectra` icons.
+ * Added CV terms for the upstream and downstream flanking peptide sequences (if detected).
+ * Fixed a bug that resulted in all analyzer terms ending up as one analyzer when read from file.
+ * Increased the width of all frames to improve the GUI on Linux.
+ * Fixed a bug that resulted in an error when trying to add the same file to both of the data types in the `DataSelection TwoFileTypes` window. (Even though this error should never occur.)
+ * Peptide sequences are now set to upper case before being submitted to PRIDE.
+ * The program has now been tested on Linux and Windows Vista.
+ * Reordering of the columns in the identification column in the `FileSelection` frame is now disabled.
+ * The header for the help frame is updated to `PRIDE Converter - Help`.
+ * All frame headers have been revised and the data source is no longer included.
+ * Added a test that makes sure that only one set of spectrum data (the first) is retrieved from a pkl or dta file.
+ * iTRAQ support has been added for ms_lims data.
+
+
+----
+
 *Changes from PRIDE Converter v1.5 to PRIDE Converter v1.6:*
  * Spectrum Mill is now supported.
  * Micromass PKL Files are now supported.
