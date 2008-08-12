@@ -3,6 +3,17 @@
 
 ----
 
+*Changes from PRIDE Converter v1.7 to PRIDE Converter v1.8_beta:*
+ * Basic mzXML support has been added (imports mz-values but not instrument details etc.)
+ * Modifications are now detected, mapped to a PSI-MOD and included in the PRIDE XML file.
+ * The Spectrum Mill support has been extended due to finding two slightly different file formats.
+ * Settings from the previous version (when upgrading) can now be imported when starting the new version.
+ * Fixed a bug that resulted in no spectra ending up in the xml file if manual spectra selection was used for Spectrum Mill and Sequest.
+ * The user interface now supports the use of "large fonts" in windows xp without distorting the frame size.
+
+
+----
+
 *Changes from PRIDE Converter v1.6 to PRIDE Converter v1.7:*
  * `Sequest Result Files` are now supported.
  * New `Folder` and `LoadSpectra` icons.
