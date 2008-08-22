@@ -3,6 +3,17 @@
 
 ----
 
+*Changes from PRIDE Converter v1.8_beta to PRIDE Converter v1.8:*
+ * Fixed a bug that resulted in the having to restart the program if a conversion got canceled by the user.
+ * Fixed a bug that resulted in n- and c-terminal modifications being labeled on the first and last amino acid and not on the terminals.
+ * Up- and downstream flanking sequences are ignored if empty for Spectrum Mill.
+ * More than one modification (of the same type) on the same peptide is now detected for Spectrum Mill. (Previously only the first in the sequence was detected.)
+ * Upgraded PRIDE_core to v2.5.5
+ * Upgraded JGoodies looks to v2.2.0 
+
+
+----
+
 *Changes from PRIDE Converter v1.7 to PRIDE Converter v1.8_beta:*
  * Basic mzXML support has been added (imports mz-values but not instrument details etc.)
  * Modifications are now detected, mapped to a PSI-MOD and included in the PRIDE XML file.
