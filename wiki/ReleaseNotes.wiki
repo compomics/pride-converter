@@ -3,7 +3,7 @@
 
 ----
 
-*Changes from PRIDE Converter v1.8 to PRIDE Converter v1.9 - (22. Sep. 2008):*
+*Changes from PRIDE Converter v1.8 to PRIDE Converter v1.9 - (Sep. 22. 2008):*
  * Mac is now supported.
  * The mzXML support has been extended to also extract information about the instrument and processing.
  * Upgraded to Mascot Dat File Parser v2.0 and uses the new option of indexing large files to save memory.
