@@ -40,7 +40,7 @@
  * Upgraded PRIDE_core to v2.5.5
  * Upgraded JGoodies looks to v2.2.0
 
-Download count: 45
+Download Count: 45
 
 
 ----
