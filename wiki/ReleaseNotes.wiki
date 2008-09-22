@@ -3,6 +3,35 @@
 
 ----
 
+*Changes from PRIDE Converter v1.8 to PRIDE Converter v1.9 - (22. Sep. 2008):*
+ * Mac is now supported.
+ * The mzXML support has been extended to also extract information about the instrument and processing.
+ * Upgraded to Mascot Dat File Parser v2.0 and uses the new option of indexing large files to save memory.
+ * The XML generation software cv-term was added once for each xml file generated after starting the converter. Resulting in two copies in the second file generated, three in the third etc.
+ * The size of the PRIDE XML is now included in the summary of the conversion.
+ * Fixed a bug that made the cancel button much smaller than the ok button in the option frame for providing instrument name etc.
+ * A delete button has been added to the right of the instrument, contact, sample set and protcol comboboxes. (Previously deleting was done via a popup menu, but this for some reason is no longer working with the new look and feel.)
+ * Fixed a bug in the tooltip text for comboboxes. No tooltip is now set to `null` and not an empty string.
+ * The xml file details (number of spectra, number of identifications etc.) are now included in the Output Properties frame as well.
+ * Added an automatic check for updates at startup.
+ * Fixed a bug that made manual spectra selection impossible for sequest dta files.
+ * Added updating of the spectra counters when loading spectra formats without identifications.
+ * Added a java version test at start up. If java version 1.5 is used a message saying that you should upgrade to 1.6 is shown. Java versions older than 1.5 is not supported.
+ * The java version used to start the program is now also used internally. Previously the default java version was used, which lead to problems is this version was older than 1.6.
+ * Improved the error messages appearing if the converter fails to start. A log file is also created in the users home folder.
+ * If the parsing of a file fails the error message shown is now extended with a reference to the ErrorLog where more details can be found.
+ * The size of the two tables in the frame for selecting two data file types is now equal.
+ * The Spectrum Mill parser has been rewritten. Should now support more `versions` of the pkl.spo files, and be more robust.
+ * The Spectrum Mill parser now handles the situation where a peptide is modified with two different variable or fixed modification (for example an oxidation and a phosphorylation).
+ * Made sure that the mouse pointer always changes into a wait icon when the program is working.
+ * The correct file name is now given when parsing fails. Earlier the pkl file was given even if the problem was with the pkl.spo file etc.
+ * The import old user settings as been made more robust. Now also tests if the Properties.prop file selected starts with the PRIDE Converter tag.
+ * More than one ms_lims project can now be selected for inclusion in a PRIDE XML file.
+ * Advanced spectra selection for ms_lims has been extended with selection based on identification ids.
+
+
+----
+
 *Changes from PRIDE Converter v1.8_beta to PRIDE Converter v1.8:*
  * Fixed a bug that resulted in the having to restart the program if a conversion got canceled by the user.
  * Fixed a bug that resulted in n- and c-terminal modifications being labeled on the first and last amino acid and not on the terminals.
