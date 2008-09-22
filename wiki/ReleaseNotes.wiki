@@ -37,7 +37,7 @@
  * More than one ms_lims project can now be selected for inclusion in a PRIDE XML file.
  * Advanced spectra selection for ms_lims has been extended with selection based on identification ids.
 
-Download Count: 3
+Download Count: 4
 
 
 ----
