@@ -38,7 +38,9 @@
  * Up- and downstream flanking sequences are ignored if empty for Spectrum Mill.
  * More than one modification (of the same type) on the same peptide is now detected for Spectrum Mill. (Previously only the first in the sequence was detected.)
  * Upgraded PRIDE_core to v2.5.5
- * Upgraded JGoodies looks to v2.2.0 
+ * Upgraded JGoodies looks to v2.2.0
+
+Download count: 45
 
 
 ----
