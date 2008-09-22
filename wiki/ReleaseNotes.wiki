@@ -3,6 +3,14 @@
 
 ----
 
+
+*Changes from PRIDE Converter v1.9 to PRIDE Converter v1.9.1 - (Sep. 22. 2008):*
+ * The Spectrum Mill protein scores are changed to the sum of the highest scores for each unique peptide (and not the average) to be consistent with Spectrum Mill.
+ * Setting a lower threshold for the peptide identification scores is now possible for Spectrum Mill, X!Tandem and Sequest Result Files.
+ * For Spectrum Mill the start and end indices are now included.
+
+----
+
 *Changes from PRIDE Converter v1.8 to PRIDE Converter v1.9 - (Sep. 22. 2008):*
  * Mac is now supported.
  * The mzXML support has been extended to also extract information about the instrument and processing.
