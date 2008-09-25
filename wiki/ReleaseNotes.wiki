@@ -3,11 +3,24 @@
 
 ----
 
+*Changes from PRIDE Converter v1.9.1 to PRIDE Converter v1.10 - (Sep. 25. 2008):*
+ * Open Mass Spectrometry Search Algorithm (OMSSA) omx files are now supported.
+ * The Java version checker now only requires Java 1.4. (Previously 1.5.)
+ * Fixed a bug that made it possible to enter text into the E-mail and Institution fields in the New Contact dialog even when `- Please select a contact -` was selected.
+ * Fixed a bug that made the `Software Name` and `Software Version` fields in the instrument frame appear editable even when `- Please select an instrument -` was selected.
+ * The output frame now looks more `symmetrical`.
+ * Extracting version numbers from IPI databases has been disabled because it was not general enough. Database version is now simply included in the database name.
+ * Updated some of the help manuals.
+
+----
+
 
 *Changes from PRIDE Converter v1.9 to PRIDE Converter v1.9.1 - (Sep. 22. 2008):*
  * The Spectrum Mill protein scores are changed to the sum of the highest scores for each unique peptide (and not the average) to be consistent with Spectrum Mill.
  * Setting a lower threshold for the peptide identification scores is now possible for Spectrum Mill, X!Tandem and Sequest Result Files.
  * For Spectrum Mill the start and end indices are now included.
+
+Download Count: 7
 
 ----
 
