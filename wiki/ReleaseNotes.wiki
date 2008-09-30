@@ -3,6 +3,11 @@
 
 ----
 
+*Changes from PRIDE Converter v1.10 to PRIDE Converter v1.10.1 - (Sep. 30. 2008):*
+ * Fixed a problem that occured when converting large Mascot Dat Files.
+
+----
+
 *Changes from PRIDE Converter v1.9.1 to PRIDE Converter v1.10 - (Sep. 25. 2008):*
  * Open Mass Spectrometry Search Algorithm (OMSSA) omx files are now supported.
  * The Java version checker now only requires Java 1.4. (Previously 1.5.)
@@ -11,6 +16,8 @@
  * The output frame now looks more `symmetrical`.
  * Extracting version numbers from IPI databases has been disabled because it was not general enough. Database version is now simply included in the database name.
  * Updated some of the help manuals.
+
+Download Count: 5
 
 ----
 
