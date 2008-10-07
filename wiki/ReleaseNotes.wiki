@@ -3,8 +3,28 @@
 
 ----
 
+*Changes from PRIDE Converter v1.10.1 to PRIDE Converter v1.11 - (Oct. 7. 2008):*
+ * VEMS pkx files are now supported.
+ * Fixed a bug that made it difficult to add new users.
+ * Made some changes to reduce the memory required when parsing files.
+ * The name of the file currently being parsed has been added to the progress dialog.
+ * When doing file selection for files to convert more than one file can be selected at the time.
+ * The lower limit for indexing the Mascot Dat files has been moved from 100 MB to 40 MB. (Which seems to decrease the speed needed to parse big files.)
+ * The message given if the program fails to start has been revised. The comment regarding java version has been removed and a comment regarding memory boundaries has been added.
+ * Clicking `Delete` in most of the tables will now delete the selected rows. 
+ * Removed the limitation that pkl files could only include one spectra.
+ * New version of the Mascot Dat file parser with some debug output removed.
+ * Updated the welcome message and the data source information.
+ * The bug that the converter sometimes (very rarely) halted after clicking the Convert! button in the last step has (hopefully) been fixed.
+ * Fixed a bug that resulted in the "orginal accession number" field in the Output Properties fram remaining uneditable when returning to this frame even when the resubmission box was checked.
+
+----
+
+
 *Changes from PRIDE Converter v1.10 to PRIDE Converter v1.10.1 - (Sep. 30. 2008):*
  * Fixed a problem that occured when converting large Mascot Dat Files.
+
+Download Count: 8
 
 ----
 
@@ -17,7 +37,7 @@
  * Extracting version numbers from IPI databases has been disabled because it was not general enough. Database version is now simply included in the database name.
  * Updated some of the help manuals.
 
-Download Count: 5
+Download Count: 6
 
 ----
 
