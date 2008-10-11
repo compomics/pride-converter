@@ -3,7 +3,7 @@
 
 ----
 
-*Changes from PRIDE Converter v1.10.1 to PRIDE Converter v1.11 - (Oct. 7. 2008):*
+*Changes in PRIDE Converter v1.11 - (Oct. 7. 2008):*
  * VEMS pkx files are now supported.
  * Fixed a bug that made it difficult to add new users.
  * Made some changes to reduce the memory required when parsing files.
@@ -21,14 +21,14 @@
 ----
 
 
-*Changes from PRIDE Converter v1.10 to PRIDE Converter v1.10.1 - (Sep. 30. 2008):*
+*Changes in PRIDE Converter v1.10.1 - (Sep. 30. 2008):*
  * Fixed a problem that occured when converting large Mascot Dat Files.
 
 Download Count: 8
 
 ----
 
-*Changes from PRIDE Converter v1.9.1 to PRIDE Converter v1.10 - (Sep. 25. 2008):*
+*Changes in PRIDE Converter v1.10 - (Sep. 25. 2008):*
  * Open Mass Spectrometry Search Algorithm (OMSSA) omx files are now supported.
  * The Java version checker now only requires Java 1.4. (Previously 1.5.)
  * Fixed a bug that made it possible to enter text into the E-mail and Institution fields in the New Contact dialog even when `- Please select a contact -` was selected.
@@ -42,7 +42,7 @@ Download Count: 6
 ----
 
 
-*Changes from PRIDE Converter v1.9 to PRIDE Converter v1.9.1 - (Sep. 22. 2008):*
+*Changes in PRIDE Converter v1.9.1 - (Sep. 22. 2008):*
  * The Spectrum Mill protein scores are changed to the sum of the highest scores for each unique peptide (and not the average) to be consistent with Spectrum Mill.
  * Setting a lower threshold for the peptide identification scores is now possible for Spectrum Mill, X!Tandem and Sequest Result Files.
  * For Spectrum Mill the start and end indices are now included.
@@ -51,7 +51,7 @@ Download Count: 7
 
 ----
 
-*Changes from PRIDE Converter v1.8 to PRIDE Converter v1.9 - (Sep. 22. 2008):*
+*Changes in PRIDE Converter v1.9 - (Sep. 22. 2008):*
  * Mac is now supported.
  * The mzXML support has been extended to also extract information about the instrument and processing.
  * Upgraded to Mascot Dat File Parser v2.0 and uses the new option of indexing large files to save memory.
@@ -82,7 +82,7 @@ Download Count: 4
 
 ----
 
-*Changes from PRIDE Converter v1.8_beta to PRIDE Converter v1.8:*
+*Changes in PRIDE Converter v1.8:*
  * Fixed a bug that resulted in the having to restart the program if a conversion got canceled by the user.
  * Fixed a bug that resulted in n- and c-terminal modifications being labeled on the first and last amino acid and not on the terminals.
  * Up- and downstream flanking sequences are ignored if empty for Spectrum Mill.
@@ -95,7 +95,7 @@ Download Count: 45
 
 ----
 
-*Changes from PRIDE Converter v1.7 to PRIDE Converter v1.8_beta:*
+*Changes in PRIDE Converter v1.8_beta:*
  * Basic mzXML support has been added (imports mz-values but not instrument details etc.)
  * Modifications are now detected, mapped to a PSI-MOD and included in the PRIDE XML file.
  * The Spectrum Mill support has been extended due to finding two slightly different file formats.
@@ -106,7 +106,7 @@ Download Count: 45
 
 ----
 
-*Changes from PRIDE Converter v1.6 to PRIDE Converter v1.7:*
+*Changes in PRIDE Converter v1.7:*
  * `Sequest Result Files` are now supported.
  * New `Folder` and `LoadSpectra` icons.
  * Added CV terms for the upstream and downstream flanking peptide sequences (if detected).
@@ -124,7 +124,7 @@ Download Count: 45
 
 ----
 
-*Changes from PRIDE Converter v1.5 to PRIDE Converter v1.6:*
+*Changes in PRIDE Converter v1.6:*
  * Spectrum Mill is now supported.
  * Micromass PKL Files are now supported.
  * Added PRIDE Converter icons to the zip-file.
@@ -140,7 +140,7 @@ Download Count: 45
 
 ----
 
-*Changes from PRIDE Converter v1.4 to PRIDE Converter v1.5:*
+*Changes in PRIDE Converter v1.5:*
  * Added support for xTandem data.
  * Added iTRAQ support for xTandem data.
  * Removed the hardcoded user parameters `ScoreCalculation`, `ThresholdCalculation`, `PeptideIdentification`, `MascotConfidenceLevel`. (`MascotConfidenceLevel` remains for Mascot Dat Files.)
@@ -154,7 +154,7 @@ Download Count: 45
 
 ----
 
-*Changes from PRIDE Converter v1.3 to PRIDE Converter v1.4:*
+*Changes in PRIDE Converter v1.4:*
  * Help text has been added for all the help icons.
  * Using line shift as file name separator now also works if you don't load the spectra first.
  * The text on the popup menus for deleting a sample set, protocol or instrument has been corrected (from not all saying "Delete Contact"...).
@@ -164,7 +164,7 @@ Download Count: 45
 
 ----
 
-*Changes from PRIDE Converter v1.2 to PRIDE Converter v1.3:*
+*Changes in PRIDE Converter v1.3:*
  * In the Output Details frame the text in the Special Parameters border has been altered.
  * Added an experiment CV-term for the converter used to generate the xml file.
  * The name of PRIDE xml files created from ms_lims is now shown in the PRIDE XML Created message at the end.
@@ -177,7 +177,7 @@ Download Count: 45
 
 ----
 
-*Changes from PRIDE Converter v1.1 to PRIDE Converter v1.2:*
+*Changes in PRIDE Converter v1.2:*
  * 'New Sample Step' was mistitled 'New Protocol Step'
  * Progress bars are now used when loading spectra in all spectra selection frames.
  * Fixed a bug that did not allow more than one analyzer.
@@ -210,12 +210,12 @@ Download Count: 45
 
 ----
 
-*Changes from PRIDE Converter v1.0 to PRIDE Converter v1.1:*
+*Changes in PRIDE Converter v1.1:*
   * The wrong main-class was used in the previous version. Is now fixed.
 
 ----
 
-*Changes from ms_lims_converter_v1.10 to PRIDE Converter v1.1:*
+*Changes in PRIDE Converter v1.0:*
   * Name change: from ms_lims_to_PRIDE_converter to PRIDE Converter
   * Added a link to the home page in the about.
   * Removed the 'Preview XML' button in the output frame.
@@ -234,19 +234,21 @@ Download Count: 45
 
 ----
 
-*Changes from ms_lims_converter_v1.9 ms_lims_converter_v1.10:*
+*Changes in ms_lims_converter_v1.10:*
   * Added a `Preview XML` button in the output frame.
   * The `Add Sample Details`, `Add Protocol Step` and all the OLS buttons in the Instrument frame are now disabled when a sample, protocol or instrument is not selected, and only becomes enabled if a sample set, protocol or instrument is selected.
 
 ----
-*Changes from ms_lims_converter_v1.8 ms_lims_converter_v1.9:*
+
+*Changes in ms_lims_converter_v1.9:*
   * Fixed a bug of a missing `/` at the end if the output folder setting, resulting in a wrong output folder being used.
   * Removed the error message saying that the user folder can not be found if this is the first time running the program. Now it just defaults to the user_home folder without the message.
   * Fixed a bug that resulted in the Project Selection frame sometimes being out of focus when finished loading all the projects.
   * Pressing `Tab` in the `New Contact > Institution` and `New Reference > Reference` text areas now moves the focus, while pressing `Ctrl+Tab` inserts a new Tab.
 
 ----
-*Changes from ms_lims_converter_v1.7 to ms_lims_converter_1.8:*
+
+*Changes in ms_lims_converter_1.8:*
   * Updated the about.
   * Added a separate about for the OLS dialog.
   * In the experiment title field pressing `Tab` now moves the focus to the label field, while pressing `Ctrl+Tab` inserts a new Tab.
