@@ -6,7 +6,7 @@
 *Changes in PRIDE Converter v1.11.1 - (Oct. 17. 2008):*
  * The parsing of Mascot Generic Files have been re-implemented and is now up to 50% faster.
  * The parsing of Mascot Generic Files now also handles the use of `,` has the decimal sign.
- * The parsing of Mascot Generic Files now also handles precurso charges without a `+` or `-` sign.
+ * The parsing of Mascot Generic Files now also handles precursor charges without a `+` or `-` sign.
 
 ----
 
