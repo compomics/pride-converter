@@ -3,6 +3,13 @@
 
 ----
 
+*Changes in PRIDE Converter v1.11.1 - (Oct. 17. 2008):*
+ * The parsing of Mascot Generic Files have been re-implemented and is now up to 50% faster.
+ * The parsing of Mascot Generic Files now also handles the use of `,` has the decimal sign.
+ * The parsing of Mascot Generic Files now also handles precurso charges without a `+` or `-` sign.
+
+----
+
 *Changes in PRIDE Converter v1.11 - (Oct. 7. 2008):*
  * VEMS pkx files are now supported.
  * Fixed a bug that made it difficult to add new users.
