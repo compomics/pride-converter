@@ -4,8 +4,8 @@
 ----
 
 *Changes in PRIDE Converter v1.11.2 - (Oct. 20. 2008):*
- * Empty peak lists (i.e., only the precursor details are given) no longer crashes the parsing.
- * In the Project Selection frame using the space bar in the last column now results in the "Next>" button being enabled or disabled.
+ * Empty peak lists (i.e., only the precursor details are given) no longer crashes the parsing of the given peak list.
+ * In the Project Selection frame pressing space bar in the last column now results in the `Next` button being enabled or disabled.
 
 ----
 
