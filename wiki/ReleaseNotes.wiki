@@ -33,7 +33,7 @@ Download Count: 6
  * The bug that the converter sometimes (very rarely) halted after clicking the Convert! button in the last step has (hopefully) been fixed.
  * Fixed a bug that resulted in the "orginal accession number" field in the Output Properties fram remaining uneditable when returning to this frame even when the resubmission box was checked.
 
-Download Count: 14
+Download Count: 15
 
 ----
 
