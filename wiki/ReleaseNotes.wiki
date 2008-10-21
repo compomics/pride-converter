@@ -3,16 +3,28 @@
 
 ----
 
+*Changes in PRIDE Converter v1.11.3 - (Oct. 21. 2008):*
+ * Older Sequest files (files not containing the "Id#" column) are now supported. 
+ * Fixed a bug that resulted in the peptide and protein identifications being wrong for Sequest Result files.
+ * If the `Cancel` button is clicked when mapping modifications to PSI-MOD for Sequest and Spectrum Mill, the conversion is now actually canceled.
+ * Using comma as the decimal symbol is now also supported for pkl/pkx and dta files.
+ * Fixed a possible bug that could occur if a CV term, instrument name etc., contained ": ".
+ * Fixed a bug that made it impossible to import the old user settings if a file that was not a PRIDE Converter user properties file was chosen in the first selection.
+
+----
+
 *Changes in PRIDE Converter v1.11.2 - (Oct. 20. 2008):*
  * Empty peak lists (i.e., only the precursor details are given) no longer crashes the parsing of the given peak list.
  * In the Project Selection frame pressing space bar in the last column now results in the `Next` button being enabled or disabled.
  * Parsing of Mascot Generic Files no longer crashes when Spectra Selection is used and the charge is not given.
 
+Download Count: 2
+
 ----
 
 *Changes in PRIDE Converter v1.11.1 - (Oct. 17. 2008):*
  * The parsing of Mascot Generic Files have been re-implemented and is now up to 50% faster.
- * The parsing of Mascot Generic Files now also handles the use of `,` has the decimal sign.
+ * The parsing of Mascot Generic Files now also handles the use of "," has the decimal sign.
  * The parsing of Mascot Generic Files now also handles precursor charges without a `+` or `-` sign.
 
 Download Count: 6
