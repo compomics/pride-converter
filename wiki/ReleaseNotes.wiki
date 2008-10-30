@@ -3,10 +3,21 @@
 
 ----
 
+*Changes in PRIDE Converter v1.12 - (Oct. 30. 2008):*
+ * MS2 files are now supported.
+ * mzData files are now supported.
+ * Fixed a bug in the Spectra Selection frame for dataformats without identifications that made it impossible to go further if `Select All` had been deselected.
+ * Fixed a bug that made it difficult (if not impossible) to delete Sample Sets.
+ * Upgraded the ms_lims version to 6.1.1.
+
+----
+
 *Changes in PRIDE Converter v1.11.4 - (Oct. 22. 2008):*
  * The parsing of Mascot Dat Files has been re-implemented and is now up to 50% faster.
  * Fixed a bug that made it mandatory for dta and out, and pkl and pkl.spo files to be in the same folder.
  * Empty spectra (spectra with no peaks) are now disregarded and not included in the PRIDE xml file.
+
+Download Count: 8
 
 ----
 
@@ -18,7 +29,7 @@
  * Fixed a possible bug that could occur if a CV term, instrument name etc., contained ": ".
  * Fixed a bug that made it impossible to import the old user settings if a file that was not a PRIDE Converter user properties file was chosen in the first selection.
 
-Download Count: 1
+Download Count: 2
 
 ----
 
