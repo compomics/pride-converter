@@ -3,7 +3,7 @@
 
 ----
 
-*Changes in PRIDE Converter v1.12 - (Oct. 30. 2008):*
+*Changes in PRIDE Converter v1.12 - (Oct. 31. 2008):*
  * MS2 files are now supported.
  * mzData files are now supported.
  * Fixed a bug in the `Spectra Selection` frame for dataformats without identifications that made it impossible to go further if `Select All` had been deselected.
