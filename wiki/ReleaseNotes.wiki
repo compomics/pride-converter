@@ -3,12 +3,26 @@
 
 ----
 
+*Changes in PRIDE Converter v1.13 - (Nov. 11. 2008):*
+ * Peptide-/ProteinProphet is now supported. (beta)
+ * Upgraded Mascot Dat File Parser to version 2.0.3.
+ * Upgraded JGoodies - Looks version to 2.2.1.
+ * Added a separate message to the progress dialog when the xml file is being validated. Previously this was included in `Creating PRIDE XML File`.
+ * If an instrument or sample set already exists the program now asks if the exisiting protocol should be used. If not, it asks if the existing instrument/sample should be overwritten.
+ * Changed the order of the dataformats in the `DataSourceSelection` frame.
+ * The `JDialog` that appears if a sample already exists is now located relative to the `SampleDetails` frame, and not always in the center of screen.
+
+
+----
+
 *Changes in PRIDE Converter v1.12 - (Oct. 31. 2008):*
  * MS2 files are now supported.
  * mzData files are now supported.
  * Fixed a bug in the `Spectra Selection` frame for dataformats without identifications that made it impossible to go further if `Select All` had been deselected.
  * Fixed a bug that made it difficult (if not impossible) to delete `Sample Sets`.
  * Upgraded the ms_lims version to 6.1.1.
+
+Download Count: 7
 
 ----
 
