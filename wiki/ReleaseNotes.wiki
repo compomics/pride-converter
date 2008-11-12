@@ -4,9 +4,9 @@
 ----
 
 *Changes in PRIDE Converter v1.13.1 - (Nov. 12. 2008):*
- * Fixed a spectra reference bug in the Peptide-/ProteinProhpet conversion.
+ * Fixed a spectra reference bug in the Peptide-/ProteinProphet conversion.
  * The mzXML data folder is now also re-entered when you revisit the `TPP FileSelection` frame.
- * It is now possible for the user to change the Peptide and Protein thresholds when converting Peptide-/ProteinProhpet data.
+ * It is now possible for the user to change the Peptide and Protein thresholds when converting Peptide-/ProteinProphet data.
  * Fixed a typing error in the progress dialog when extracting identifications for TPP data.
  * The TPP properties file is no longer mandatory. The PSI-MOD mapping of the modifications is now done directly.
  * PSI-MOD modifications are now labeled with PSI-MOD and not just MOD as previously used.
