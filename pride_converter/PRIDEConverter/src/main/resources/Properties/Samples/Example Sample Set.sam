@@ -1,0 +1,14 @@
+Name: Example Sample Set
+2
+Example Sample
+#
+Accession: BTO:0000763
+CVLookup: BTO
+Name: lung
+Value: SUBSAMPLE_1
+
+Accession: BTO:0000762
+CVLookup: BTO
+Name: lung cancer cell line
+Value: SUBSAMPLE_1
+
