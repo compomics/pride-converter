@@ -23,7 +23,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class PRIDEConverterWrapper {
 
-    private boolean debug = true;
+    private boolean debug = false;
     private String jarFileName = "PRIDEConverter-1.13.3.jar";
     private String prideConverterSourceJarFileName = "prideconverter-core-1.13.3.jar";
 
