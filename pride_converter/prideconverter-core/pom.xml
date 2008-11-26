@@ -56,7 +56,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                             <outputDirectory>${project.build.directory}/lib</outputDirectory>
                             <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
-                            <excludeTransitive>false</excludeTransitive>
+                            <excludeTransitive>true</excludeTransitive>
                         </configuration>
                     </execution>
                 </executions>
