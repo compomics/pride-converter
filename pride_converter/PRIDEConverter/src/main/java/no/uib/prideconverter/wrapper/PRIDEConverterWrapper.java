@@ -1,13 +1,10 @@
-
 package no.uib.prideconverter.wrapper;
 
 import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
 import com.jgoodies.looks.plastic.theme.SkyKrupp;
 import java.io.*;
-import java.util.jar.*;
 import java.util.*;
-import java.util.zip.*;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -36,7 +33,7 @@ public class PRIDEConverterWrapper {
             PlasticLookAndFeel.setPlasticTheme(new SkyKrupp());
             UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
         } catch (UnsupportedLookAndFeelException e) {
-        // ignore exception
+            // ignore exception
         }
 
         try {
@@ -56,11 +53,9 @@ public class PRIDEConverterWrapper {
         boolean error = false;
 
         String temp = "", cmdLine, path;
-        String os = System.getProperty("os.name");
 
         //test for java version. works for 1.4 and newer
         String javaVersion = System.getProperty("java.version");
-
         StringTokenizer tok = new StringTokenizer(javaVersion, ".");
 
         if (new Integer(tok.nextToken()).intValue() >= 1 &&
@@ -91,17 +86,7 @@ public class PRIDEConverterWrapper {
             error = true;
         }
 
-
         if (!error) {
-
-            // is not really needed should be replaced by File.separator etc.
-            boolean isWindows = true;
-
-            if (os != null && os.startsWith("Windows")) {
-                isWindows = true;
-            } else {
-                isWindows = false;
-            }
 
             path = this.getClass().getResource("PRIDEConverterWrapper.class").getPath();
             path = path.substring(5, path.indexOf(jarFileName));
@@ -138,18 +123,13 @@ public class PRIDEConverterWrapper {
 
             path = path + "lib" + File.separator;
 
-		File tempFile = new File(path);
+            File tempFile = new File(path);
 
             String javaHome = System.getProperty("java.home") + File.separator +
                     "bin" + File.separator;
 
-            //if (isWindows) {
-                cmdLine = javaHome + "java " + options + " -jar " 
-                          + new File(tempFile, prideConverterSourceJarFileName).getAbsolutePath();
-            /*} else {
-                cmdLine = javaHome + "java " + options + " -jar " + tempFile.getAbsolutePath() +
-                        prideConverterSourceJarFileName;
-            }*/
+            cmdLine = javaHome + "java " + options + " -jar "
+                    + new File(tempFile, prideConverterSourceJarFileName).getAbsolutePath();
 
             if (debug) {
                 System.out.println(cmdLine);
@@ -236,6 +216,6 @@ public class PRIDEConverterWrapper {
      * @param args 
      */
     public static void main(String[] args) {
-        PRIDEConverterWrapper l = new PRIDEConverterWrapper();
+        new PRIDEConverterWrapper();
     }
 }
