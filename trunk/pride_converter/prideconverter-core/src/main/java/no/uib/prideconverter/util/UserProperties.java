@@ -372,6 +372,12 @@ public class UserProperties {
                             File protocolsFolder = new File(propertiesFolder + "/Protocols/");
                             File samplesFolder = new File(propertiesFolder + "/Samples/");
 
+                            // the contacts folder is not included in the downloaded zip file
+                            // so we have to create it
+                            if(!new File(path + "/Properties/Contacts/").exists()){
+                                new File(path + "/Properties/Contacts/").mkdir();
+                            }
+
                             File[] files = contactsFolder.listFiles();
 
                             for (int i = 0; i < files.length; i++) {

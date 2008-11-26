@@ -7,7 +7,8 @@
     <version>1.13.3</version>
     <name>PRIDEConverter</name>
     <description>The PRIDE Converter converts MS data into valid PRIDE XML for submission to the publicly available PRIDE database.
-It presents a convenient, wizard-like graphical user interface, and includes efficient access to the Ontology Lookup Service (OLS).</description>
+It presents a convenient, wizard-like graphical user interface, and includes efficient access to the Ontology Lookup Service (OLS).
+    </description>
     <url>http://code.google.com/p/pride-converter/</url>
 
     <licenses>
@@ -76,28 +77,27 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             </plugin>
 
 
-	<plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>2.3</version>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-            	<outputDirectory>${project.build.directory}/Properties</outputDirectory>
-			<resources>
-    				<resource>
-      				<directory>src/main/resources/Properties</directory>
-      			</resource>
-    			</resources>              
-            </configuration>            
-          </execution>
-        </executions>
-      </plugin>
-
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/Properties</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources/Properties</directory>
+                                </resource>
+                            </resources>              
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

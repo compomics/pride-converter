@@ -270,6 +270,15 @@ public class PeptideProphetXMLParser {
             IOException {
         while (INPUTFILE.equals(aParser.getName())) {
             String filename = aParser.getAttributeValue(null, "name");
+
+            // this should be done in a more general way...
+            // but this at least fixes the problem for orig.xml and pep.xml files
+            if(filename.endsWith(".orig.xml")){
+                filename = filename.substring(0, filename.indexOf(".orig.xml"));
+            } else if(filename.endsWith(".pep.xml")){
+                filename = filename.substring(0, filename.indexOf(".pep.xml"));
+            }
+
             File temp = new File(filename);
             File file = new File(mzXMLInputFolder, temp.getName() + ".mzXML");
             inputFiles.add(file);
