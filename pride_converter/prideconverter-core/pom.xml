@@ -76,20 +76,61 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         </plugins>
     </build>
 
+     <repositories>
+        <!-- EBI repositories -->
+        <repository>
+            <id>ebi-repo</id>
+            <name>The EBI Maven2 repository</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>ebi-repo-snapshots</id>
+            <name>The EBI Maven2 repository for snapshots</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+         <!-- UGent Genesis Maven 1 repository -->
+         <repository>
+            <id>genesis-maven-repository</id>
+            <name>Genesis repository</name>
+            <url>http://genesis.UGent.be/maven</url>
+            <layout>legacy</layout>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+         <!-- PRIDE SourceForge Maven 2 repository -->
+         <repository>
+             <id>PRIDE_SourceForge_Maven2_Repository</id>
+             <url>http://pride-proteome.sourceforge.net/maven2</url>
+             <releases>
+                 <enabled>true</enabled>
+             </releases>
+         </repository>
+    </repositories>
+
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>com.jgoodies</groupId>
             <artifactId>looks</artifactId>
             <version>2.2.0</version>
         </dependency>
         <dependency>
-            <groupId>be.proteomics</groupId>
+            <groupId>lennart</groupId>
             <artifactId>ms_lims</artifactId>
             <version>6.1.1</version>
         </dependency>
@@ -113,9 +154,9 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.systemsbiology</groupId>
-            <artifactId>jrap</artifactId>
-            <version>1</version>
+            <groupId>lennart</groupId>
+            <artifactId>lm_jrap</artifactId>
+            <version>1.1</version>
         </dependency>
         <dependency>
             <groupId>javax.activation</groupId>
@@ -128,14 +169,9 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <version>1.04</version>
         </dependency>
         <dependency>
-            <groupId>be.proteomics</groupId>
+            <groupId>lennart</groupId>
             <artifactId>dbtoolkit</artifactId>
-            <version>3.6.0</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.ejb</groupId>
-            <artifactId>ejb</artifactId>
-            <version>2.1</version>
+            <version>3.7.3</version>
         </dependency>
         <dependency>
             <groupId>hsqldb</groupId>
@@ -168,9 +204,9 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <version>2.1.7</version>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi</groupId>
+            <groupId>uk.ac.ebi.jmzml</groupId>
             <artifactId>jmzml</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>javax.transaction</groupId>
@@ -178,18 +214,12 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <version>1.1</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>lmjunit</artifactId>
-            <version>1.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
             <version>1.4</version>
         </dependency>
         <dependency>
-            <groupId>be.proteomics.mascotdatfile</groupId>
+            <groupId>kenny</groupId>
             <artifactId>mascot_datfile</artifactId>
             <version>2.0.3</version>
         </dependency>
@@ -199,29 +229,19 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <version>5.1.5</version>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.ook</groupId>
-            <artifactId>ols-client</artifactId>
-            <version>1</version>
-        </dependency>
+			<groupId>ols</groupId>
+			<artifactId>ols-client</artifactId>
+			<version>1.14</version>
+		</dependency>
         <dependency>
             <groupId>de.proteinms.omxparser</groupId>
             <artifactId>omssaparser</artifactId>
-            <version>0.9.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.p6spy</groupId>
-            <artifactId>p6spy</artifactId>
-            <version>1.1</version>
+            <version>0.9.2</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.pride</groupId>
             <artifactId>pride-core</artifactId>
-            <version>2.5.5</version>
-        </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.proteomics</groupId>
-            <artifactId>proteomics-common</artifactId>
-            <version>1.5</version>
+            <version>2.5.6</version>
         </dependency>
         <dependency>
             <groupId>activesoap</groupId>
@@ -229,17 +249,12 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <version>1.5</version>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.2</version>
-        </dependency>
-        <dependency>
             <groupId>soap</groupId>
             <artifactId>soap</artifactId>
             <version>2.3</version>
         </dependency>
         <dependency>
-            <groupId>be.proteomics.statlib</groupId>
+            <groupId>lennart</groupId>
             <artifactId>statlib</artifactId>
             <version>0.3</version>
         </dependency>
@@ -249,9 +264,9 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <version>1.0-2</version>
         </dependency>
         <dependency>
-            <groupId>be.proteomics.util</groupId>
+            <groupId>lennart</groupId>
             <artifactId>utilities</artifactId>
-            <version>2.8</version>
+            <version>2.9</version>
         </dependency>
         <dependency>
             <groupId>axis</groupId>
@@ -279,19 +294,14 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <version>2.6.2</version>
         </dependency>
         <dependency>
-            <groupId>xmlunit</groupId>
-            <artifactId>xmlunit</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>xpp3</groupId>
             <artifactId>xpp3</artifactId>
             <version>1.1.3.4.O</version>
         </dependency>
         <dependency>
-            <groupId>xxindex</groupId>
+            <groupId>psidev.psi.tools</groupId>
             <artifactId>xxindex</artifactId>
-            <version>0.3-SNAPSHOT</version>
+            <version>0.5-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>activesoap</groupId>
@@ -337,17 +347,6 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <groupId>commons-pool</groupId>
             <artifactId>commons-pool</artifactId>
             <version>1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>ojb</groupId>
-            <artifactId>db-ojb</artifactId>
-            <version>1.0.4</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>xalan</artifactId>
-                    <groupId>xalan</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>axis</groupId>
