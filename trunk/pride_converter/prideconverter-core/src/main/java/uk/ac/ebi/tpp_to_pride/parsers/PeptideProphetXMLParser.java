@@ -266,11 +266,12 @@ public class PeptideProphetXMLParser {
      * @throws XmlPullParserException   when the XML parsing generated an error.
      * @throws java.io.IOException  when the output file could not be read.
      */
-    private void readInputFiles(XmlPullParserPlus aParser) throws XmlPullParserException, IOException {
+    private void readInputFiles(XmlPullParserPlus aParser) throws XmlPullParserException,
+            IOException {
         while (INPUTFILE.equals(aParser.getName())) {
             String filename = aParser.getAttributeValue(null, "name");
-            filename = filename.substring(0, filename.lastIndexOf(".orig.xml"));
-            File file = new File(mzXMLInputFolder, filename + ".mzXML");
+            File temp = new File(filename);
+            File file = new File(mzXMLInputFolder, temp.getName() + ".mzXML");
             inputFiles.add(file);
             // Move to the tag (end tag of the one we just read).
             aParser.nextTag();
