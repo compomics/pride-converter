@@ -55,8 +55,8 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
             proteinProphetFileJTextField.setText(prideConverter.getProperties().getProteinProphetFileName());
         }
 
-        if (prideConverter.getProperties().getTppMzDataFilesFolderName() != null) {
-            mzXmlFolderJTextField.setText(prideConverter.getProperties().getTppMzDataFilesFolderName());
+        if (prideConverter.getProperties().getTppSpectrumFilesFolderName() != null) {
+            spectrumFileFolderJTextField.setText(prideConverter.getProperties().getTppSpectrumFilesFolderName());
         }
 
         peptideProphetConfidenceLevelJSpinner.setValue(
@@ -93,7 +93,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
 
         if (peptideProphetFileJTextField.getText().length() > 0 &&
                 proteinProphetFileJTextField.getText().length() > 0 && 
-                mzXmlFolderJTextField.getText().length() > 0) {
+                spectrumFileFolderJTextField.getText().length() > 0) {
             nextJButton.setEnabled(true);
         } else {
             nextJButton.setEnabled(false);
@@ -119,8 +119,8 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
         peptideProphetFileJTextField = new javax.swing.JTextField();
         findPeptideProphetFileJButton = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
-        mzXmlFolderJTextField = new javax.swing.JTextField();
-        mzXmlFolderJButton = new javax.swing.JButton();
+        spectrumFileFolderJTextField = new javax.swing.JTextField();
+        spectumFileFolderJButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         helpJButton = new javax.swing.JButton();
@@ -166,7 +166,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
             }
         });
 
-        fileSelectionJPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "File Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+        fileSelectionJPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "File Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
         proteinProphetFileJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/Directory.gif"))); // NOI18N
         proteinProphetFileJButton.setToolTipText("Select File");
@@ -200,19 +200,19 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
             }
         });
 
-        jLabel10.setText("mzXML Folder: ");
-        jLabel10.setToolTipText("The folder with the mzXML files");
+        jLabel10.setText("Spectrum File Folder: ");
+        jLabel10.setToolTipText("The folder with the mzXML or MGF files");
 
-        mzXmlFolderJTextField.setEditable(false);
-        mzXmlFolderJTextField.setToolTipText("The folder with the mzXML files");
+        spectrumFileFolderJTextField.setEditable(false);
+        spectrumFileFolderJTextField.setToolTipText("The folder with the mzXML or MGF files");
 
-        mzXmlFolderJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/Directory.gif"))); // NOI18N
-        mzXmlFolderJButton.setToolTipText("Select Folder");
-        mzXmlFolderJButton.setBorderPainted(false);
-        mzXmlFolderJButton.setContentAreaFilled(false);
-        mzXmlFolderJButton.addActionListener(new java.awt.event.ActionListener() {
+        spectumFileFolderJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/Directory.gif"))); // NOI18N
+        spectumFileFolderJButton.setToolTipText("Select Folder");
+        spectumFileFolderJButton.setBorderPainted(false);
+        spectumFileFolderJButton.setContentAreaFilled(false);
+        spectumFileFolderJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mzXmlFolderJButtonActionPerformed(evt);
+                spectumFileFolderJButtonActionPerformed(evt);
             }
         });
 
@@ -229,15 +229,15 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addGroup(fileSelectionJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(fileSelectionJPanelLayout.createSequentialGroup()
-                        .addComponent(peptideProphetFileJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
+                        .addComponent(peptideProphetFileJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(findPeptideProphetFileJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(fileSelectionJPanelLayout.createSequentialGroup()
-                        .addComponent(mzXmlFolderJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
+                        .addComponent(spectrumFileFolderJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(mzXmlFolderJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(spectumFileFolderJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(fileSelectionJPanelLayout.createSequentialGroup()
-                        .addComponent(proteinProphetFileJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
+                        .addComponent(proteinProphetFileJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(proteinProphetFileJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -267,8 +267,8 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
                         .addGap(5, 5, 5)
                         .addGroup(fileSelectionJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
-                            .addComponent(mzXmlFolderJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(mzXmlFolderJButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(spectrumFileFolderJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(spectumFileFolderJButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
@@ -291,7 +291,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Selection Thresholds", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Selection Thresholds", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
         jLabel1.setText("PeptideProphet Threshold:");
         jLabel1.setToolTipText("Probability threshold for acceptance of a peptide identification");
@@ -595,27 +595,28 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
      * 
      * @param evt
      */
-    private void mzXmlFolderJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mzXmlFolderJButtonActionPerformed
+    private void spectumFileFolderJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spectumFileFolderJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        JFileChooser chooser = new JFileChooser(prideConverter.getUserProperties().getCurrentSourceFileLocation());
+        JFileChooser chooser = new JFileChooser(
+                prideConverter.getUserProperties().getCurrentSourceFileLocation());
 
-        if (mzXmlFolderJTextField.getText().length() > 0) {
-            chooser.setSelectedFile(new File(mzXmlFolderJTextField.getText()));
+        if (spectrumFileFolderJTextField.getText().length() > 0) {
+            chooser.setSelectedFile(new File(spectrumFileFolderJTextField.getText()));
         }
 
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setDialogTitle("Select The mzXML Files Folder");
-        chooser.setFileFilter(new MzXmlFileFilter());
+        chooser.setDialogTitle("Select The Spectrum Files Folder");
 
         String path;
 
         int returnVal = chooser.showOpenDialog(this);
+        
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             path = (chooser.getSelectedFile().getAbsoluteFile().getPath());
-            mzXmlFolderJTextField.setText(path);
+            spectrumFileFolderJTextField.setText(path);
             prideConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
-            prideConverter.getProperties().setTppMzDataFilesFolderName(path);
+            prideConverter.getProperties().setTppSpectrumFilesFolderName(path);
 
             prideConverter.getProperties().setSpectrumTableModel(null);
             prideConverter.getProperties().setInstrumentDetailsExtracted(false);
@@ -629,7 +630,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
         mandatoryFieldsCheck();
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-}//GEN-LAST:event_mzXmlFolderJButtonActionPerformed
+}//GEN-LAST:event_spectumFileFolderJButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutJButton;
@@ -646,13 +647,13 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JButton mzXmlFolderJButton;
-    private javax.swing.JTextField mzXmlFolderJTextField;
     private javax.swing.JButton nextJButton;
     private javax.swing.JSpinner peptideProphetConfidenceLevelJSpinner;
     private javax.swing.JTextField peptideProphetFileJTextField;
     private javax.swing.JSpinner proteinProphetConfidenceLevelJSpinner;
     private javax.swing.JButton proteinProphetFileJButton;
     private javax.swing.JTextField proteinProphetFileJTextField;
+    private javax.swing.JTextField spectrumFileFolderJTextField;
+    private javax.swing.JButton spectumFileFolderJButton;
     // End of variables declaration//GEN-END:variables
 }
