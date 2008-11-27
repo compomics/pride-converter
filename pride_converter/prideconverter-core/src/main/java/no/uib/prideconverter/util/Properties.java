@@ -46,7 +46,7 @@ public class Properties {
     private ArrayList<String> selectedIdentificationFiles = null;
     private String proteinProphetFileName = null;
     private String peptideProphetFileName = null;
-    private String tppMzDataFilesFolderName = null;
+    private String tppSpectrumFilesFolderName = null;
     private ArrayList selectedSpectraNames;
     private ArrayList selectedIsoformAccessions;
     private ArrayList selectedIsoformPeptideSequences;
@@ -1473,20 +1473,20 @@ public class Properties {
     }
 
     /**
-     * Returns the name of the TPP mzXML file folder.
+     * Returns the name of the TPP spectrum file folder.
      * 
-     * @return the name of the TPP mzXML file folder
+     * @return the name of the TPP spectrum file folder
      */
-    public String getTppMzDataFilesFolderName() {
-        return tppMzDataFilesFolderName;
+    public String getTppSpectrumFilesFolderName() {
+        return tppSpectrumFilesFolderName;
     }
 
     /**
-     * Sets the name of the TPP mzXML file folder.
+     * Sets the name of the TPP spectrum file folder.
      * 
-     * @param tppMzDataFilesFolderName
+     * @param tppSpectrumFilesFolderName
      */
-    public void setTppMzDataFilesFolderName(String tppMzDataFilesFolderName) {
-        this.tppMzDataFilesFolderName = tppMzDataFilesFolderName;
+    public void setTppSpectrumFilesFolderName(String tppSpectrumFilesFolderName) {
+        this.tppSpectrumFilesFolderName = tppSpectrumFilesFolderName;
     }
 }

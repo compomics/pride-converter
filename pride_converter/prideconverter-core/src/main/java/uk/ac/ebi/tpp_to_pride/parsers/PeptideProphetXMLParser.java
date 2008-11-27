@@ -59,9 +59,9 @@ public class PeptideProphetXMLParser {
      */
     private Collection inputFiles = null;
     /**
-     * File with the folder from which to read the mzXML files.
+     * File with the folder from which to read the spectum files.
      */
-    private File mzXMLInputFolder = null;
+    private File spectrumFilesInputFolder = null;
     /**
      * boolean to indicate whether the inputfiles listed in
      * the PeptideProphet file should be checked for existence
@@ -75,17 +75,17 @@ public class PeptideProphetXMLParser {
     private HashMap runToMzXMLParser = new HashMap();
 
     /**
-     * The constructor takes the input folder for the mzXML files as well as a boolean
+     * The constructor takes the input folder for the spectrum files as well as a boolean
      * that indicates whether the availability of input files listed in the document
      * should be checked prior to parsing it.
      *
-     * @param   aMzXMLInputFolder   File with the folder to read the mzXML files from.
+     * @param   aMzXMLInputFolder   File with the folder to read the spectrum files from.
      * @param   aCheckFiles boolean to indicate whether the inputfiles listed in
      *                      the PeptideProphet file should be checked for existence
      *                      prior to parsing the file.
      */
-    public PeptideProphetXMLParser(File aMzXMLInputFolder, boolean aCheckFiles) {
-        mzXMLInputFolder = aMzXMLInputFolder;
+    public PeptideProphetXMLParser(File aSpectrumFilesInputFolder, boolean aCheckFiles) {
+        spectrumFilesInputFolder = aSpectrumFilesInputFolder;
         checkFiles = aCheckFiles;
     }
 
@@ -182,7 +182,7 @@ public class PeptideProphetXMLParser {
 
     /**
      * This method is the workhorse of this class. It takes an initialized XmlPullParser
-     * instance to start reading the ProteinProphet output file from.
+     * instance to start reading the PeptideProphet output file from.
      *
      * @param aParser   XmlPullParserPlus from which the output shall be read.
      * @param aThreshold    double with the 'probability' threshold for acceptance
@@ -223,7 +223,7 @@ public class PeptideProphetXMLParser {
                     if (INTERACT_SUMMARY.equals(aParser.getName())) {
                         // We should have read all input files here.
                         // Report their number and check for existence - if necessary.
-                        logger.info("Read " + inputFiles.size() + " mzXML input files from the PeptideProphet output file.");
+                        logger.info("Read " + inputFiles.size() + " spectrum input files from the PeptideProphet output file.");
                         StringBuffer errorSB = new StringBuffer();
                         if (checkFiles) {
                             for (Iterator lIterator = inputFiles.iterator(); lIterator.hasNext();) {
@@ -234,8 +234,15 @@ public class PeptideProphetXMLParser {
                                 } else {
                                     logger.info("Verified existence for file '" + lFile.getAbsolutePath() + "'!");
                                     // Now add a parser to the HashMap.
-                                    runToMzXMLParser.put(lFile.getName().substring(0, lFile.getName().lastIndexOf(".")), new MzXmlParser(lFile, true));
-                                    logger.info("Added MzXmlParser for file '" + lFile.getAbsolutePath() + "'!");
+
+                                    if(lFile.getName().endsWith(".mzXML")){
+                                        runToMzXMLParser.put(lFile.getName().substring(0, lFile.getName().lastIndexOf(".")), new MzXmlParser(lFile, true));
+                                        logger.info("Added MzXmlParser for file '" + lFile.getAbsolutePath() + "'!");
+                                    } else if(lFile.getName().endsWith(".mgf")){
+                                        // mgf files have to be handled differently of course
+//                                        runToMzXMLParser.put(lFile.getName().substring(0, lFile.getName().lastIndexOf(".")), new MzXmlParser(lFile, true));
+//                                        logger.info("Added MzXmlParser for file '" + lFile.getAbsolutePath() + "'!");
+                                    }
                                 }
                             }
                             if (errorSB.length() > 0) {
@@ -280,8 +287,16 @@ public class PeptideProphetXMLParser {
             }
 
             File temp = new File(filename);
-            File file = new File(mzXMLInputFolder, temp.getName() + ".mzXML");
-            inputFiles.add(file);
+
+            if(new File(spectrumFilesInputFolder, temp.getName() + ".mzXML").exists()){
+                inputFiles.add(new File(spectrumFilesInputFolder, temp.getName() + ".mzXML"));
+            } else if(new File(spectrumFilesInputFolder, temp.getName() + ".mgf").exists()){
+                inputFiles.add(new File(spectrumFilesInputFolder, temp.getName() + ".mgf"));
+            } else{
+                System.out.println("Error: Spectrum Input File Type Not Supported! " + filename);
+            }
+
+            
             // Move to the tag (end tag of the one we just read).
             aParser.nextTag();
             // Move to the tag (new tag).
@@ -426,8 +441,15 @@ public class PeptideProphetXMLParser {
             int assumed_charge = Integer.parseInt(aParser.getAttributeValue(null, "assumed_charge"));
             // The index.
             int index = Integer.parseInt(aParser.getAttributeValue(null, "index"));
-            // Remove the start and end scan as well as the charge from the run name.
-            run = run.substring(0, run.lastIndexOf(".", run.indexOf(start_scan + ".", run.indexOf(".") + 1)));
+
+            // @TODO has to be a better way of doing this...
+            // supports: <spectrum_query spectrum="20060320data16.00007.00007.3"
+            // but not: <spectrum_query spectrum="1: Sum of 3 scans in range 627 (rt=12.7833, f=2, i=1) to 629 (rt=12.8337, f=2, i=3)  "
+            if(run.lastIndexOf("Sum of") == -1){
+                // Remove the start and end scan as well as the charge from the run name.
+                run = run.substring(0, run.lastIndexOf(".", run.indexOf(start_scan + ".", run.indexOf(".") + 1)));
+            }
+
             // Sanity check.
             if (baseName.indexOf(run) < 0) {
                 logger.error("Found a spectrum query at line " + aParser.getLineNumber() + " which references run '" + run + "' while it is contained in run element '" + baseName + "'!");

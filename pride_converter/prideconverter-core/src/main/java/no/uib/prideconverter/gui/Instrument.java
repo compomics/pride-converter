@@ -111,17 +111,38 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             instrumentPath = "" +
                     this.getClass().getProtectionDomain().getCodeSource().getLocation();
             instrumentPath = instrumentPath.substring(5, instrumentPath.lastIndexOf("/"));
-            instrumentPath = instrumentPath.substring(0, instrumentPath.lastIndexOf("/") + 1) 
-                    + "Properties/Instruments/";
+            instrumentPath = instrumentPath.substring(0, instrumentPath.lastIndexOf("/") + 1) + "Properties/Instruments/";
             instrumentPath = instrumentPath.replace("%20", " ");
         }
 
         // for mzXML, mzData and TPP information about the instrument is extraced from the file
-        if ((prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") 
-                || prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData") 
-                || prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) &&
+        if ((prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")
+                || prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) &&
                 !prideConverter.getProperties().areInstrumentDetailsExtracted()) {
             extractInstrumentDetailsFromFile();
+        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP") &&
+                !prideConverter.getProperties().areInstrumentDetailsExtracted()) {
+
+            // see if the spectrum files folder contains any mzXML files
+            File[] mzXmlFiles =
+                    new File(prideConverter.getProperties().getTppSpectrumFilesFolderName()).listFiles();
+
+            boolean mzXmlFileFound = false;
+
+            for (int i = 0; i < mzXmlFiles.length && !mzXmlFileFound; i++) {
+                if (mzXmlFiles[i].getName().endsWith(".mzXML") ||
+                        mzXmlFiles[i].getName().endsWith(".MZXML")) {
+                    mzXmlFileFound = true;
+                }
+            }
+
+            if(mzXmlFileFound){
+                extractInstrumentDetailsFromFile();
+            } else{
+                this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+                readInstrumentsFromFile();
+                this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            }
         } else {
             this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
             readInstrumentsFromFile();
@@ -147,19 +168,22 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         }
 
         MSXMLParser msXMLParser = null;
-        String instrumentName;
+        String instrumentName = null;
         String fileName;
+
+        boolean mzXmlFileFound = false;
 
         if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") ||
                 prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
 
             if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")) {
                 fileName = prideConverter.getProperties().getSelectedSourceFiles().get(0);
+                mzXmlFileFound = true;
             } else {
                 File[] mzXmlFiles =
-                        new File(prideConverter.getProperties().getTppMzDataFilesFolderName()).listFiles();
+                        new File(prideConverter.getProperties().getTppSpectrumFilesFolderName()).listFiles();
 
-                boolean mzXmlFileFound = false;
+                mzXmlFileFound = false;
                 fileName = null;
 
                 for (int i = 0; i < mzXmlFiles.length && !mzXmlFileFound; i++) {
@@ -171,60 +195,53 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                 }
             }
 
-            msXMLParser = new MSXMLParser(fileName);
+            if (mzXmlFileFound) {
 
-            instrumentName = msXMLParser.getHeaderInfo().
-                    getInstrumentInfo().getManufacturer() + " " +
-                    msXMLParser.getHeaderInfo().getInstrumentInfo().getModel();
+                msXMLParser = new MSXMLParser(fileName);
+
+                instrumentName = msXMLParser.getHeaderInfo().
+                        getInstrumentInfo().getManufacturer() + " " +
+                        msXMLParser.getHeaderInfo().getInstrumentInfo().getModel();
+            }
 
         } else { //mzData
             instrumentName = prideConverter.getProperties().getMzDataFile().getInstrumentName();
         }
 
-        String newName =
-                instrumentPath +
-                instrumentName +
-                ".int";
+        if (mzXmlFileFound || prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
 
-        boolean useExistingInstrument = true;
-
-        // check if the instrument already exists
-        if (new File(newName).exists()) {
-
-            int option =
-                    JOptionPane.showConfirmDialog(this,
-                    "The instrument name \'" +
+            String newName =
+                    instrumentPath +
                     instrumentName +
-                    "\' is already in use.\nDo you want to use the existing instrument?",
-                    "Use Existing Instrument?",
-                    JOptionPane.YES_NO_OPTION);
+                    ".int";
 
-            if (option == JOptionPane.NO_OPTION) {
+            boolean useExistingInstrument = true;
 
-                useExistingInstrument = false;
+            // check if the instrument already exists
+            if (new File(newName).exists()) {
 
-                option =
+                int option =
                         JOptionPane.showConfirmDialog(this,
-                        "Do you want to overwrite the existing instrument?",
-                        "Overwrite Existing Instrument?",
+                        "The instrument name \'" +
+                        instrumentName +
+                        "\' is already in use.\nDo you want to use the existing instrument?",
+                        "Use Existing Instrument?",
                         JOptionPane.YES_NO_OPTION);
 
                 if (option == JOptionPane.NO_OPTION) {
 
-                    instrumentName = JOptionPane.showInputDialog(this, 
-                            "Please provide the name of the new instrument:",
-                            instrumentName);
+                    useExistingInstrument = false;
 
-                    while (instrumentName == null) {
-                        instrumentName = JOptionPane.showInputDialog(this, "Please provide a valid name:",
-                                instrumentName);
-                    }
+                    option =
+                            JOptionPane.showConfirmDialog(this,
+                            "Do you want to overwrite the existing instrument?",
+                            "Overwrite Existing Instrument?",
+                            JOptionPane.YES_NO_OPTION);
 
-                    newName = instrumentPath + instrumentName + ".int";
+                    if (option == JOptionPane.NO_OPTION) {
 
-                    while (new File(newName).exists()) {
-                        instrumentName = JOptionPane.showInputDialog(this, 
-                                "This name is also in use. Please choose a different name: ",
+                        instrumentName = JOptionPane.showInputDialog(this,
+                                "Please provide the name of the new instrument:",
                                 instrumentName);
 
                         while (instrumentName == null) {
@@ -233,257 +250,269 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         }
 
                         newName = instrumentPath + instrumentName + ".int";
-                    }
 
-                    saveInstrument(instrumentName);
-                }
-            }
-        } else {
-            saveInstrument(instrumentName);
-        }
+                        while (new File(newName).exists()) {
+                            instrumentName = JOptionPane.showInputDialog(this,
+                                    "This name is also in use. Please choose a different name: ",
+                                    instrumentName);
 
-        prideConverter.getUserProperties().setCurrentSelectedInstrument(instrumentName);
-        readInstrumentsFromFile();
+                            while (instrumentName == null) {
+                                instrumentName = JOptionPane.showInputDialog(this, "Please provide a valid name:",
+                                        instrumentName);
+                            }
 
-        if (!useExistingInstrument) {
-
-            tempProcessingMethods = new Vector();
-
-            while (processingMethodsJTable.getRowCount() > 0) {
-                ((DefaultTableModel) processingMethodsJTable.getModel()).removeRow(0);
-            }
-
-            while (analyzerJTable.getRowCount() > 0) {
-                ((DefaultTableModel) analyzerJTable.getModel()).removeRow(0);
-            }
-
-            if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") ||
-                    prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
-
-                //add or updated the properties
-                if (msXMLParser.getHeaderInfo().getDataProcessing().getCentroided() ==
-                        msXMLParser.getHeaderInfo().getDataProcessing().YES) {
-                    addProcessingMethod("PeakProcessing", "PSI:1000035", "PSI",
-                            "CentroidMassSpectrum", -1);
-                } else if (msXMLParser.getHeaderInfo().getDataProcessing().
-                        getCentroided() ==
-                        msXMLParser.getHeaderInfo().getDataProcessing().NO) {
-
-                } else {
-                //unknown
-                }
-
-                if (msXMLParser.getHeaderInfo().getDataProcessing().
-                        getChargeDeconvoluted() ==
-                        msXMLParser.getHeaderInfo().getDataProcessing().YES) {
-                    addProcessingMethod("ChargeDeconvolution", "PSI:1000034", "PSI",
-                            "true", -1);
-                } else if (msXMLParser.getHeaderInfo().getDataProcessing().
-                        getChargeDeconvoluted() ==
-                        msXMLParser.getHeaderInfo().getDataProcessing().NO) {
-                    addProcessingMethod("ChargeDeconvolution", "PSI:1000034", "PSI",
-                            "false", -1);
-                } else {
-                //unknown
-                }
-
-                if (msXMLParser.getHeaderInfo().getDataProcessing().getDeisotoped() ==
-                        msXMLParser.getHeaderInfo().getDataProcessing().YES) {
-                    addProcessingMethod("Deisotoping", "PSI:1000033", "PSI", "true",
-                            -1);
-                } else if (msXMLParser.getHeaderInfo().getDataProcessing().
-                        getDeisotoped() ==
-                        msXMLParser.getHeaderInfo().getDataProcessing().NO) {
-                    addProcessingMethod("Deisotoping", "PSI:1000033", "PSI", "false",
-                            -1);
-                } else {
-                //unknown
-                }
-
-                softwareNameJTextField.setText(msXMLParser.getHeaderInfo().
-                        getInstrumentInfo().getSoftwareInfo().name);
-                softwareVersionJTextField.setText(msXMLParser.getHeaderInfo().
-                        getInstrumentInfo().getSoftwareInfo().version);
-
-                JOptionPane.showMessageDialog(this, "Some of the instrument details have been " +
-                        "extracted directly from the data file(s). \n" +
-                        "Please verify that the information is correct and provide any missing " +
-                        "information.", "Instrument Properties Extracted",
-                        JOptionPane.INFORMATION_MESSAGE);
-
-            } else { // mzData
-
-                if (prideConverter.getProperties().getMzDataFile().getProcessingMethodCvParams() != null) {
-                    Iterator<CvParam> iterator =
-                            prideConverter.getProperties().getMzDataFile().getProcessingMethodCvParams().iterator();
-
-                    while (iterator.hasNext()) {
-
-                        CvParam tempCvTerm = iterator.next();
-
-                        addProcessingMethod(tempCvTerm.getName(),
-                                tempCvTerm.getAccession(),
-                                tempCvTerm.getCVLookup(),
-                                tempCvTerm.getValue(), -1);
-                    }
-                }
-
-                softwareNameJTextField.setText(
-                        prideConverter.getProperties().getMzDataFile().getSoftwareName());
-                softwareVersionJTextField.setText(
-                        prideConverter.getProperties().getMzDataFile().getSoftwareVersion());
-            }
-
-            CvParamImpl tempCVTerm;
-
-            if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") ||
-                    prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
-                //instrument source
-                if (prideConverter.getUserProperties().getCVTermMappings().
-                        containsKey(
-                        msXMLParser.getHeaderInfo().getInstrumentInfo().getIonization())) {
-
-                    tempCVTerm = (CvParamImpl) prideConverter.getUserProperties().
-                            getCVTermMappings().get(
-                            msXMLParser.getHeaderInfo().getInstrumentInfo().getIonization());
-
-                    setInstrumentSource(tempCVTerm.getName(),
-                            tempCVTerm.getAccession(), tempCVTerm.getCVLookup());
-                } else {
-                    JOptionPane.showMessageDialog(this, "Please use OLS to map the instruments source \'" +
-                            msXMLParser.getHeaderInfo().getInstrumentInfo().getIonization() +
-                            "\' to the correct CV term.", "CV Term Mapping",
-                            JOptionPane.INFORMATION_MESSAGE);
-
-                    this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-                    new OLSDialog(this, true, "instrumentSource",
-                            "Mass Spectroscopy CV (PSI-MS) [PSI]",
-                            msXMLParser.getHeaderInfo().getInstrumentInfo().getIonization());
-                }
-
-                //instrument detector
-                if (prideConverter.getUserProperties().getCVTermMappings().
-                        containsKey(
-                        msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector())) {
-
-                    tempCVTerm = (CvParamImpl) prideConverter.getUserProperties().
-                            getCVTermMappings().get(
-                            msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector());
-
-                    setInstrumentDetector(tempCVTerm.getName(),
-                            tempCVTerm.getAccession(), tempCVTerm.getCVLookup());
-                } else {
-                    JOptionPane.showMessageDialog(this, "Please use OLS to map the instruments detector \'" +
-                            msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector() +
-                            "\' to the correct CV term.", "CV Term Mapping",
-                            JOptionPane.INFORMATION_MESSAGE);
-
-                    this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-                    new OLSDialog(this, true, "instrumentDetector",
-                            "Mass Spectroscopy CV (PSI-MS) [PSI]",
-                            msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector());
-                }
-
-                //analyzer
-                if (prideConverter.getUserProperties().getCVTermMappings().
-                        containsKey(
-                        msXMLParser.getHeaderInfo().getInstrumentInfo().getMassAnalyzer())) {
-
-                    prideConverter.getProperties().setAnalyzerList(new ArrayList());
-
-                    tempCVTerm = (CvParamImpl) prideConverter.getUserProperties().
-                            getCVTermMappings().get(
-                            msXMLParser.getHeaderInfo().getInstrumentInfo().getMassAnalyzer());
-
-                    Vector names = new Vector();
-                    names.add(tempCVTerm.getName());
-                    Vector accessions = new Vector();
-                    accessions.add(tempCVTerm.getAccession());
-                    Vector ontologies = new Vector();
-                    ontologies.add(tempCVTerm.getCVLookup());
-                    Vector values = new Vector();
-                    values.add(tempCVTerm.getValue());
-
-                    insertAnalyzer(names, accessions, ontologies, values, -1);
-                } else {
-
-                    prideConverter.getProperties().setAnalyzerList(new ArrayList());
-
-                    JOptionPane.showMessageDialog(this, "Please use OLS to map the mass analyzer \'" +
-                            msXMLParser.getHeaderInfo().getInstrumentInfo().getMassAnalyzer() +
-                            "\' to the correct CV term.", "CV Term Mapping",
-                            JOptionPane.INFORMATION_MESSAGE);
-
-                    this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-                    new OLSDialog(this, true, "analyzer",
-                            "Mass Spectroscopy CV (PSI-MS) [PSI]",
-                            msXMLParser.getHeaderInfo().getInstrumentInfo().
-                            getMassAnalyzer());
-                }
-            } else { // mzData
-                //instrument source
-                if (prideConverter.getProperties().getMzDataFile().getInstrumentSourceCvParams() != null) {
-                    tempCVTerm =
-                            (CvParamImpl) prideConverter.getProperties().getMzDataFile().getInstrumentSourceCvParams().iterator().next();
-
-                    setInstrumentSource(tempCVTerm.getName(),
-                            tempCVTerm.getAccession(), tempCVTerm.getCVLookup());
-                }
-
-                //instrument detector
-                if (prideConverter.getProperties().getMzDataFile().getInstrumentDetectorCvParams() != null) {
-                    tempCVTerm =
-                            (CvParamImpl) prideConverter.getProperties().getMzDataFile().getInstrumentDetectorCvParams().iterator().next();
-
-                    setInstrumentDetector(tempCVTerm.getName(),
-                            tempCVTerm.getAccession(), tempCVTerm.getCVLookup());
-                }
-
-                //analyzer
-                if (prideConverter.getProperties().getMzDataFile().getAnalyzerListCollection() != null) {
-                    Iterator<Analyzer> iteratorAnalyzers =
-                            prideConverter.getProperties().getMzDataFile().getAnalyzerListCollection().iterator();
-
-                    Vector terms = new Vector();
-                    Vector accessions = new Vector();
-                    Vector ontologies = new Vector();
-                    Vector values = new Vector();
-
-                    while (iteratorAnalyzers.hasNext()) {
-
-                        terms = new Vector();
-                        accessions = new Vector();
-                        ontologies = new Vector();
-                        values = new Vector();
-
-                        Analyzer tempAnalyzer = iteratorAnalyzers.next();
-
-                        Iterator<CvParam> tempCvParams = tempAnalyzer.getAnalyzerCvParameterList().iterator();
-
-                        while (tempCvParams.hasNext()) {
-
-                            CvParam tempCvTerm = tempCvParams.next();
-
-                            terms.add(tempCvTerm.getName());
-                            accessions.add(tempCvTerm.getAccession());
-                            ontologies.add(tempCvTerm.getCVLookup());
-                            values.add(tempCvTerm.getValue());
+                            newName = instrumentPath + instrumentName + ".int";
                         }
 
-                        insertAnalyzer(terms, accessions, ontologies, values, -1);
+                        saveInstrument(instrumentName);
                     }
                 }
-
-                JOptionPane.showMessageDialog(this, "Some of the instrument details have been " +
-                        "extracted directly from the data file(s). \n" +
-                        "Please verify that the information is correct and provide any missing " +
-                        "information.", "Instrument Properties Extracted",
-                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                saveInstrument(instrumentName);
             }
 
-            saveInstrument(instrumentName);
             prideConverter.getUserProperties().setCurrentSelectedInstrument(instrumentName);
             readInstrumentsFromFile();
+
+            if (!useExistingInstrument) {
+
+                tempProcessingMethods = new Vector();
+
+                while (processingMethodsJTable.getRowCount() > 0) {
+                    ((DefaultTableModel) processingMethodsJTable.getModel()).removeRow(0);
+                }
+
+                while (analyzerJTable.getRowCount() > 0) {
+                    ((DefaultTableModel) analyzerJTable.getModel()).removeRow(0);
+                }
+
+                if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") ||
+                        prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
+
+                    //add or updated the properties
+                    if (msXMLParser.getHeaderInfo().getDataProcessing().getCentroided() ==
+                            msXMLParser.getHeaderInfo().getDataProcessing().YES) {
+                        addProcessingMethod("PeakProcessing", "PSI:1000035", "PSI",
+                                "CentroidMassSpectrum", -1);
+                    } else if (msXMLParser.getHeaderInfo().getDataProcessing().
+                            getCentroided() ==
+                            msXMLParser.getHeaderInfo().getDataProcessing().NO) {
+                    } else {
+                        //unknown
+                    }
+
+                    if (msXMLParser.getHeaderInfo().getDataProcessing().
+                            getChargeDeconvoluted() ==
+                            msXMLParser.getHeaderInfo().getDataProcessing().YES) {
+                        addProcessingMethod("ChargeDeconvolution", "PSI:1000034", "PSI",
+                                "true", -1);
+                    } else if (msXMLParser.getHeaderInfo().getDataProcessing().
+                            getChargeDeconvoluted() ==
+                            msXMLParser.getHeaderInfo().getDataProcessing().NO) {
+                        addProcessingMethod("ChargeDeconvolution", "PSI:1000034", "PSI",
+                                "false", -1);
+                    } else {
+                        //unknown
+                    }
+
+                    if (msXMLParser.getHeaderInfo().getDataProcessing().getDeisotoped() ==
+                            msXMLParser.getHeaderInfo().getDataProcessing().YES) {
+                        addProcessingMethod("Deisotoping", "PSI:1000033", "PSI", "true",
+                                -1);
+                    } else if (msXMLParser.getHeaderInfo().getDataProcessing().
+                            getDeisotoped() ==
+                            msXMLParser.getHeaderInfo().getDataProcessing().NO) {
+                        addProcessingMethod("Deisotoping", "PSI:1000033", "PSI", "false",
+                                -1);
+                    } else {
+                        //unknown
+                    }
+
+                    softwareNameJTextField.setText(msXMLParser.getHeaderInfo().
+                            getInstrumentInfo().getSoftwareInfo().name);
+                    softwareVersionJTextField.setText(msXMLParser.getHeaderInfo().
+                            getInstrumentInfo().getSoftwareInfo().version);
+
+                    JOptionPane.showMessageDialog(this, "Some of the instrument details have been " +
+                            "extracted directly from the data file(s). \n" +
+                            "Please verify that the information is correct and provide any missing " +
+                            "information.", "Instrument Properties Extracted",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                } else { // mzData
+
+                    if (prideConverter.getProperties().getMzDataFile().getProcessingMethodCvParams() != null) {
+                        Iterator<CvParam> iterator =
+                                prideConverter.getProperties().getMzDataFile().getProcessingMethodCvParams().iterator();
+
+                        while (iterator.hasNext()) {
+
+                            CvParam tempCvTerm = iterator.next();
+
+                            addProcessingMethod(tempCvTerm.getName(),
+                                    tempCvTerm.getAccession(),
+                                    tempCvTerm.getCVLookup(),
+                                    tempCvTerm.getValue(), -1);
+                        }
+                    }
+
+                    softwareNameJTextField.setText(
+                            prideConverter.getProperties().getMzDataFile().getSoftwareName());
+                    softwareVersionJTextField.setText(
+                            prideConverter.getProperties().getMzDataFile().getSoftwareVersion());
+                }
+
+                CvParamImpl tempCVTerm;
+
+                if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") ||
+                        prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
+                    //instrument source
+                    if (prideConverter.getUserProperties().getCVTermMappings().
+                            containsKey(
+                            msXMLParser.getHeaderInfo().getInstrumentInfo().getIonization())) {
+
+                        tempCVTerm = (CvParamImpl) prideConverter.getUserProperties().
+                                getCVTermMappings().get(
+                                msXMLParser.getHeaderInfo().getInstrumentInfo().getIonization());
+
+                        setInstrumentSource(tempCVTerm.getName(),
+                                tempCVTerm.getAccession(), tempCVTerm.getCVLookup());
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Please use OLS to map the instruments source \'" +
+                                msXMLParser.getHeaderInfo().getInstrumentInfo().getIonization() +
+                                "\' to the correct CV term.", "CV Term Mapping",
+                                JOptionPane.INFORMATION_MESSAGE);
+
+                        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+                        new OLSDialog(this, true, "instrumentSource",
+                                "Mass Spectroscopy CV (PSI-MS) [PSI]",
+                                msXMLParser.getHeaderInfo().getInstrumentInfo().getIonization());
+                    }
+
+                    //instrument detector
+                    if (prideConverter.getUserProperties().getCVTermMappings().
+                            containsKey(
+                            msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector())) {
+
+                        tempCVTerm = (CvParamImpl) prideConverter.getUserProperties().
+                                getCVTermMappings().get(
+                                msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector());
+
+                        setInstrumentDetector(tempCVTerm.getName(),
+                                tempCVTerm.getAccession(), tempCVTerm.getCVLookup());
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Please use OLS to map the instruments detector \'" +
+                                msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector() +
+                                "\' to the correct CV term.", "CV Term Mapping",
+                                JOptionPane.INFORMATION_MESSAGE);
+
+                        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+                        new OLSDialog(this, true, "instrumentDetector",
+                                "Mass Spectroscopy CV (PSI-MS) [PSI]",
+                                msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector());
+                    }
+
+                    //analyzer
+                    if (prideConverter.getUserProperties().getCVTermMappings().
+                            containsKey(
+                            msXMLParser.getHeaderInfo().getInstrumentInfo().getMassAnalyzer())) {
+
+                        prideConverter.getProperties().setAnalyzerList(new ArrayList());
+
+                        tempCVTerm = (CvParamImpl) prideConverter.getUserProperties().
+                                getCVTermMappings().get(
+                                msXMLParser.getHeaderInfo().getInstrumentInfo().getMassAnalyzer());
+
+                        Vector names = new Vector();
+                        names.add(tempCVTerm.getName());
+                        Vector accessions = new Vector();
+                        accessions.add(tempCVTerm.getAccession());
+                        Vector ontologies = new Vector();
+                        ontologies.add(tempCVTerm.getCVLookup());
+                        Vector values = new Vector();
+                        values.add(tempCVTerm.getValue());
+
+                        insertAnalyzer(names, accessions, ontologies, values, -1);
+                    } else {
+
+                        prideConverter.getProperties().setAnalyzerList(new ArrayList());
+
+                        JOptionPane.showMessageDialog(this, "Please use OLS to map the mass analyzer \'" +
+                                msXMLParser.getHeaderInfo().getInstrumentInfo().getMassAnalyzer() +
+                                "\' to the correct CV term.", "CV Term Mapping",
+                                JOptionPane.INFORMATION_MESSAGE);
+
+                        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+                        new OLSDialog(this, true, "analyzer",
+                                "Mass Spectroscopy CV (PSI-MS) [PSI]",
+                                msXMLParser.getHeaderInfo().getInstrumentInfo().
+                                getMassAnalyzer());
+                    }
+                } else { // mzData
+                    //instrument source
+                    if (prideConverter.getProperties().getMzDataFile().getInstrumentSourceCvParams() != null) {
+                        tempCVTerm =
+                                (CvParamImpl) prideConverter.getProperties().getMzDataFile().getInstrumentSourceCvParams().iterator().next();
+
+                        setInstrumentSource(tempCVTerm.getName(),
+                                tempCVTerm.getAccession(), tempCVTerm.getCVLookup());
+                    }
+
+                    //instrument detector
+                    if (prideConverter.getProperties().getMzDataFile().getInstrumentDetectorCvParams() != null) {
+                        tempCVTerm =
+                                (CvParamImpl) prideConverter.getProperties().getMzDataFile().getInstrumentDetectorCvParams().iterator().next();
+
+                        setInstrumentDetector(tempCVTerm.getName(),
+                                tempCVTerm.getAccession(), tempCVTerm.getCVLookup());
+                    }
+
+                    //analyzer
+                    if (prideConverter.getProperties().getMzDataFile().getAnalyzerListCollection() != null) {
+                        Iterator<Analyzer> iteratorAnalyzers =
+                                prideConverter.getProperties().getMzDataFile().getAnalyzerListCollection().iterator();
+
+                        Vector terms = new Vector();
+                        Vector accessions = new Vector();
+                        Vector ontologies = new Vector();
+                        Vector values = new Vector();
+
+                        while (iteratorAnalyzers.hasNext()) {
+
+                            terms = new Vector();
+                            accessions = new Vector();
+                            ontologies = new Vector();
+                            values = new Vector();
+
+                            Analyzer tempAnalyzer = iteratorAnalyzers.next();
+
+                            Iterator<CvParam> tempCvParams = tempAnalyzer.getAnalyzerCvParameterList().iterator();
+
+                            while (tempCvParams.hasNext()) {
+
+                                CvParam tempCvTerm = tempCvParams.next();
+
+                                terms.add(tempCvTerm.getName());
+                                accessions.add(tempCvTerm.getAccession());
+                                ontologies.add(tempCvTerm.getCVLookup());
+                                values.add(tempCvTerm.getValue());
+                            }
+
+                            insertAnalyzer(terms, accessions, ontologies, values, -1);
+                        }
+                    }
+
+                    JOptionPane.showMessageDialog(this, "Some of the instrument details have been " +
+                            "extracted directly from the data file(s). \n" +
+                            "Please verify that the information is correct and provide any missing " +
+                            "information.", "Instrument Properties Extracted",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+
+                saveInstrument(instrumentName);
+                prideConverter.getUserProperties().setCurrentSelectedInstrument(instrumentName);
+                readInstrumentsFromFile();
+            }
         }
 
         prideConverter.getProperties().setInstrumentDetailsExtracted(true);
@@ -1108,6 +1137,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     /**
      * If the user double clicks on a row in the processing methods table the  
      * OLS dialog is shown where the processing method can be 
@@ -1580,8 +1610,6 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         }
     }
 //GEN-LAST:event_analyzersMoveUpJMenuItemActionPerformed
-
-
     /**
      * Moves the selected row in the analyzers table down one position.
      * 
@@ -2486,9 +2514,9 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
             ((DefaultTableModel) this.processingMethodsJTable.getModel()).addRow(
                     new Object[]{
-                new Integer(processingMethodsJTable.getRowCount() + 1),
-                name + " [" + accession + "]", value
-            });
+                        new Integer(processingMethodsJTable.getRowCount() + 1),
+                        name + " [" + accession + "]", value
+                    });
 
             tempProcessingMethods.add(new CvParamImpl(
                     accession,
@@ -2566,10 +2594,10 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
             ((DefaultTableModel) analyzerJTable.getModel()).addRow(
                     new Object[]{
-                new Integer(analyzerJTable.getRowCount() + 1),
-                temp,
-                new Integer(numberOfTerms)
-            });
+                        new Integer(analyzerJTable.getRowCount() + 1),
+                        temp,
+                        new Integer(numberOfTerms)
+                    });
         } else {
             analyzerJTable.setValueAt(temp, modifiedRow, 1);
             analyzerJTable.setValueAt(new Integer(numberOfTerms), modifiedRow, 2);
@@ -2662,6 +2690,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
     private javax.swing.JTextField softwareNameJTextField;
     private javax.swing.JTextField softwareVersionJTextField;
     // End of variables declaration//GEN-END:variables
+
     /**
      * See ComboBoxInputable
      */

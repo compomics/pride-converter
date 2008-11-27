@@ -18,6 +18,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -144,17 +145,17 @@
                   <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="peptideProphetFileJTextField" pref="359" max="32767" attributes="0"/>
+                          <Component id="peptideProphetFileJTextField" pref="355" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="findPeptideProphetFileJButton" min="-2" pref="27" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="mzXmlFolderJTextField" pref="359" max="32767" attributes="0"/>
+                          <Component id="spectrumFileFolderJTextField" pref="355" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="mzXmlFolderJButton" min="-2" pref="27" max="-2" attributes="0"/>
+                          <Component id="spectumFileFolderJButton" min="-2" pref="27" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="proteinProphetFileJTextField" pref="359" max="32767" attributes="0"/>
+                          <Component id="proteinProphetFileJTextField" pref="355" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="proteinProphetFileJButton" min="-2" pref="27" max="-2" attributes="0"/>
                       </Group>
@@ -194,10 +195,10 @@
                           <EmptySpace min="5" pref="5" max="5" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="mzXmlFolderJTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="spectrumFileFolderJTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Component id="mzXmlFolderJButton" alignment="1" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="spectumFileFolderJButton" alignment="1" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="27" max="32767" attributes="0"/>
               </Group>
@@ -257,17 +258,17 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel10">
           <Properties>
-            <Property name="text" type="java.lang.String" value="mzXML Folder: "/>
-            <Property name="toolTipText" type="java.lang.String" value="The folder with the mzXML files"/>
+            <Property name="text" type="java.lang.String" value="Spectrum File Folder: "/>
+            <Property name="toolTipText" type="java.lang.String" value="The folder with the mzXML or MGF files"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="mzXmlFolderJTextField">
+        <Component class="javax.swing.JTextField" name="spectrumFileFolderJTextField">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
-            <Property name="toolTipText" type="java.lang.String" value="The folder with the mzXML files"/>
+            <Property name="toolTipText" type="java.lang.String" value="The folder with the mzXML or MGF files"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="mzXmlFolderJButton">
+        <Component class="javax.swing.JButton" name="spectumFileFolderJButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/no/uib/prideconverter/icons/Directory.gif"/>
@@ -277,7 +278,7 @@
             <Property name="contentAreaFilled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mzXmlFolderJButtonActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="spectumFileFolderJButtonActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

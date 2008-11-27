@@ -219,6 +219,7 @@ public class PRIDEConverter {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
 
+            @Override
             public void run() {
 
                 try {
@@ -332,6 +333,7 @@ public class PRIDEConverter {
 
         final Thread t = new Thread(new Runnable() {
 
+            @Override
             public void run() {
 
                 if (properties.getDataSource().equalsIgnoreCase("ms_lims")) {
@@ -3849,7 +3851,7 @@ public class PRIDEConverter {
             XmlPullParserPlus xppp = new XmlPullParserPlus(xpp);
             currentFile = getProperties().getPeptideProphetFileName();
             PeptideProphetXMLParser ppxp = new PeptideProphetXMLParser(
-                    new File(getProperties().getTppMzDataFilesFolderName()), true);
+                    new File(getProperties().getTppSpectrumFilesFolderName()), true);
 
             HashMap runs = ppxp.readPeptideProphet(xppp, properties.getPeptideProphetThreshold());
             br.close();
