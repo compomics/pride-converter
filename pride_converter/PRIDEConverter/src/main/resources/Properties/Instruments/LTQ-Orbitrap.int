@@ -1,0 +1,31 @@
+#instrument name
+Name: LTQ-Orbitrap
+
+#instrument source
+Accession: PSI:1000073
+cvLookup: PSI
+Name: Electrospray Ionization
+
+#instrument detector
+Accession: PSI:1000111
+cvLookup: PSI
+Name: Electron Multiplier Tube
+
+#analyzers
+1
+1
+Accession: PSI:1000449
+CVLookup: PSI
+Name: LTQ Orbitrap
+Value: null
+
+#processing methods
+1
+Accession: PSI:1000033
+CVLookup: PSI
+Name: Deisotoping
+Value: true
+
+#software
+Name: unknown
+Version: unknown
