@@ -24,7 +24,7 @@ public class ProteinProphetPeptideID {
 
     private String sequence = null;
 
-    private int charge = -1;
+    private Integer charge = null;
 
     private int count = -1;
 
@@ -32,7 +32,7 @@ public class ProteinProphetPeptideID {
 
     private List alternativeParentProteins = null;
 
-    public ProteinProphetPeptideID(int aCharge, int aCount, String aModified_sequence, String aSequence, List aAlternativeParentProteins) {
+    public ProteinProphetPeptideID(Integer aCharge, int aCount, String aModified_sequence, String aSequence, List aAlternativeParentProteins) {
         charge = aCharge;
         count = aCount;
         modified_sequence = aModified_sequence;
@@ -40,11 +40,11 @@ public class ProteinProphetPeptideID {
         alternativeParentProteins = aAlternativeParentProteins;
     }
 
-    public int getCharge() {
+    public Integer getCharge() {
         return charge;
     }
 
-    public void setCharge(int aCharge) {
+    public void setCharge(Integer aCharge) {
         charge = aCharge;
     }
 

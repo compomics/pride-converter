@@ -28,6 +28,10 @@ public class PeptideProphetQuery {
      */
     private String startScan = null;
     /**
+     * The title of the spectrum. Can be null.
+     */
+    private String spectrumTitle = null;
+    /**
      * The scan at which the spectrum recording ended.
      * Can be the same as 'startScan' for querioes derived
      * from a single scan.
@@ -54,7 +58,8 @@ public class PeptideProphetQuery {
      */
     private PeptideProphetSearchHit searchHit = null;
 
-    public PeptideProphetQuery(int aAssumed_charge, String aEndScan, int aIndex, double aPrecursorMass, String aRun, PeptideProphetSearchHit aSearchHit, String aStartScan) {
+    public PeptideProphetQuery(int aAssumed_charge, String aEndScan, int aIndex, double aPrecursorMass, String aRun, 
+            PeptideProphetSearchHit aSearchHit, String aStartScan, String aScanTitle) {
         assumed_charge = aAssumed_charge;
         endScan = aEndScan;
         index = aIndex;
@@ -62,6 +67,7 @@ public class PeptideProphetQuery {
         run = aRun;
         searchHit = aSearchHit;
         startScan = aStartScan;
+        spectrumTitle = aScanTitle;
     }
 
     public int getAssumed_charge() {
@@ -118,5 +124,13 @@ public class PeptideProphetQuery {
 
     public void setStartScan(String aStartScan) {
         startScan = aStartScan;
+    }
+
+    public String getSpectrumTitle() {
+        return spectrumTitle;
+    }
+
+    public void setSpectrumTitle(String aSpectrumTitle) {
+        spectrumTitle = aSpectrumTitle;
     }
 }

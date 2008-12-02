@@ -29,6 +29,7 @@ import java.util.*;
  *
  * @author martlenn
  * @version $Id: ProteinProphetXMLParser.java,v 1.1.1.1 2007/01/12 17:17:10 lmartens Exp $
+ * Modified by Harald Barsnes (November 2008)
  */
 public class ProteinProphetXMLParser {
 
@@ -39,6 +40,7 @@ public class ProteinProphetXMLParser {
     private static final String MODIFICATION_INFO = "modification_info";
     private static final String PEPTIDE_PARENT_PROTEIN = "peptide_parent_protein";
     private static final String ANALYSIS_RESULT = "analysis_result";
+    private static final String PARAMETER = "parameter";
 
     /**
 	 * Define a static logger variable.
@@ -49,7 +51,6 @@ public class ProteinProphetXMLParser {
      * Protein prophet summary information is kept here.
      */
     private ProteinProphetSummary proteinProphetSummary = null;
-
 
     /**
      * This method is the workhorse of this class. It takes an initialized XmlPullParser
@@ -204,12 +205,13 @@ public class ProteinProphetXMLParser {
         String peptidesLine = aParser.getAttributeValue(null, "unique_stripped_peptides");
         int totPeptides = Integer.parseInt(aParser.getAttributeValue(null, "total_number_peptides"));
 
-        // Move to the next tag, which could be one or more 'analysis_result'.
         aParser.moveToNextStartTag(true);
-
-        while(ANALYSIS_RESULT.equals(aParser.getName())) {
-            aParser.moveToNextStartTagAfterTag(ANALYSIS_RESULT);
+        
+        // skip any parameter and analysis result tags
+        while(PARAMETER.equals(aParser.getName()) || ANALYSIS_RESULT.equals(aParser.getName())) {
+            aParser.moveToNextStartTag(true);
         }
+        
         // This tag should be 'annotation'.
         // Read attributes here as well.
         String description = aParser.getAttributeValue(null, "protein_description");
@@ -223,6 +225,7 @@ public class ProteinProphetXMLParser {
                 isoforms = new ArrayList(isoformCount-1);
             }
             aParser.moveToNextStartTag(true);
+
             // This should be an indistinguishable protein tag.
             String isoform_accession = aParser.getAttributeValue(null, "protein_name");
             // Move on to the annotation for this element.
@@ -260,14 +263,24 @@ public class ProteinProphetXMLParser {
      * @throws IOException  when the output file could not be read.
      */
     private void parsePeptide(XmlPullParserPlus aParser, HashMap aPeptides) throws XmlPullParserException, IOException {
+        
         // We are on a peptide tag here, so we should
         // start by gathering attributes.
         String sequence = aParser.getAttributeValue(null, "peptide_sequence");
-        int charge = Integer.parseInt(aParser.getAttributeValue(null, "charge"));
+
+        Integer charge = null;
+
+        if(aParser.getAttributeValue(null, "charge") != null){
+            charge = Integer.parseInt(aParser.getAttributeValue(null, "charge"));
+        }
+        
         int count = Integer.parseInt(aParser.getAttributeValue(null, "n_instances"));
+
         String modified_sequence = null;
+
         // Next tag is modifications, if any.
         aParser.moveToNextStartTag(true);
+        
         // Check whether it is a modification.
         if(MODIFICATION_INFO.equals(aParser.getName())) {
             // Get the correct attribute tag.
@@ -276,6 +289,7 @@ public class ProteinProphetXMLParser {
         } else {
             modified_sequence = sequence;
         }
+
         List parentProteins = new ArrayList();
         // Now see if we're on the peptide parent protein element.
         while(PEPTIDE_PARENT_PROTEIN.equals(aParser.getName())) {
@@ -283,8 +297,10 @@ public class ProteinProphetXMLParser {
             parentProteins.add(parent_protein);
             aParser.moveToNextStartTag(true);
         }
+        
         // OK, peptide read.
         ProteinProphetPeptideID peptideID = new ProteinProphetPeptideID(charge, count, modified_sequence, sequence, parentProteins);
-        aPeptides.put(charge + " " + modified_sequence, peptideID);
+
+        aPeptides.put(sequence, peptideID);
     }
 }

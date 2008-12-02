@@ -41,7 +41,9 @@ public class PeptideProphetMSMSRun {
     private Collection queries = null;
 
 
-    public PeptideProphetMSMSRun(String aName, PeptideProphetEnzyme aEnzyme, String aMassSpectrometerDetector, String aMassSpectrometerIonSource, String aMassSpectrometerManufacturer, String aMassSpectrometerMassAnalyzer, String aMassSpectrometerModel, PeptideProphetSearch aSearchInfo, Collection aQueries) {
+    public PeptideProphetMSMSRun(String aName, PeptideProphetEnzyme aEnzyme, String aMassSpectrometerDetector, 
+            String aMassSpectrometerIonSource, String aMassSpectrometerManufacturer, String aMassSpectrometerMassAnalyzer,
+            String aMassSpectrometerModel, PeptideProphetSearch aSearchInfo, Collection aQueries) {
         name = aName;
         enzyme = aEnzyme;
         massSpectrometerDetector = aMassSpectrometerDetector;

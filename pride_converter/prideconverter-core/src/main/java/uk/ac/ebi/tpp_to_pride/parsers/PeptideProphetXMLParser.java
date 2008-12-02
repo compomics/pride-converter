@@ -1,9 +1,3 @@
-/**
- * Created by IntelliJ IDEA.
- * User: martlenn
- * Date: 23-Aug-2006
- * Time: 10:15:09
- */
 package uk.ac.ebi.tpp_to_pride.parsers;
 
 import org.apache.log4j.Logger;
@@ -17,13 +11,14 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
-/*
- * CVS information:
- *
- * $Revision: 1.1.1.1 $
- * $Date: 2007/01/12 17:17:10 $
- */
+
 import no.uib.prideconverter.gui.ProgressDialog;
+import no.uib.prideconverter.util.MascotGenericFile_MultipleSpectra;
+import uk.ac.ebi.pride.model.implementation.mzData.BinaryArrayImpl;
+import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
+import uk.ac.ebi.pride.model.implementation.mzData.PrecursorImpl;
+import uk.ac.ebi.pride.model.implementation.mzData.SpectrumImpl;
+import uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum;
 
 /**
  * This class uses the XmlPullParser to read a PeptideProphet output XML
@@ -36,7 +31,6 @@ import no.uib.prideconverter.gui.ProgressDialog;
 public class PeptideProphetXMLParser {
 
     private static final String INPUTFILE = "inputfile";
-    private static final String INTERACT_SUMMARY = "interact_summary";
     private static final String MSMS_RUN_SUMMARY = "msms_run_summary";
     private static final String SEARCH_SUMMARY = "search_summary";
     private static final String AMINOACID_MODIFICATION = "aminoacid_modification";
@@ -46,6 +40,7 @@ public class PeptideProphetXMLParser {
     private static final String MODIFICATION_INFO = "modification_info";
     private static final String MOD_AMINOACID_MASS = "mod_aminoacid_mass";
     private static final String ALTERNATIVE_PROTEIN = "alternative_protein";
+    private int spectraCounter = 1;
     /**
      * Define a static logger variable.
      */
@@ -70,16 +65,16 @@ public class PeptideProphetXMLParser {
     private boolean checkFiles = false;
     /**
      * This HashMap contains the run names included in this analysis as keys,
-     * and the corresponding MzXmlParsers as values.
+     * and the corresponding data file parsers as values.
      */
-    private HashMap runToMzXMLParser = new HashMap();
+    private HashMap runToParser = new HashMap();
 
     /**
      * The constructor takes the input folder for the spectrum files as well as a boolean
      * that indicates whether the availability of input files listed in the document
      * should be checked prior to parsing it.
      *
-     * @param   aMzXMLInputFolder   File with the folder to read the spectrum files from.
+     * @param   aSpectrumFilesInputFolder   File with the folder to read the spectrum files from.
      * @param   aCheckFiles boolean to indicate whether the inputfiles listed in
      *                      the PeptideProphet file should be checked for existence
      *                      prior to parsing the file.
@@ -100,7 +95,7 @@ public class PeptideProphetXMLParser {
      *                          ("runname + " " + scannumber", mzData spectrum ID)
      */
     public void addAllSpectra(List aSpectra, HashMap aFileAndScanToID) {
-        Iterator iter = runToMzXMLParser.values().iterator();
+        Iterator iter = runToParser.values().iterator();
         while (iter.hasNext()) {
             MzXmlParser mzXmlParser = (MzXmlParser) iter.next();
             mzXmlParser.addAllSpectra(aSpectra, aFileAndScanToID);
@@ -121,13 +116,113 @@ public class PeptideProphetXMLParser {
     public void addAllSpectra(List aSpectra, HashMap aFileAndScanToID, ProgressDialog progressDialog) {
 
         int counter = 1;
-        int size = runToMzXMLParser.values().size();
+        int size = runToParser.values().size();
 
-        Iterator iter = runToMzXMLParser.values().iterator();
+        Iterator iter = runToParser.values().iterator();
         while (iter.hasNext()) {
-            MzXmlParser mzXmlParser = (MzXmlParser) iter.next();
-            progressDialog.setString("(" + counter++ + "/" + size + ")");
-            mzXmlParser.addAllSpectra(aSpectra, aFileAndScanToID, progressDialog);
+
+            Object temp = iter.next();
+
+            // parse as mzXML or mgf file
+            if (temp instanceof MzXmlParser) {
+                MzXmlParser mzXmlParser = (MzXmlParser) temp;
+                progressDialog.setString("(" + counter++ + "/" + size + ")");
+                mzXmlParser.addAllSpectra(aSpectra, aFileAndScanToID, progressDialog);
+            } else if (temp instanceof MascotGenericFile_MultipleSpectra) {
+                MascotGenericFile_MultipleSpectra mgfParser = (MascotGenericFile_MultipleSpectra) temp;
+                progressDialog.setString("(" + counter++ + "/" + size + ")");
+
+                int totalScans = mgfParser.getSpectraCount();
+
+                progressDialog.setIntermidiate(false);
+                progressDialog.setValue(0);
+                progressDialog.setMax(totalScans);
+
+                Spectrum mzDataSpectrum = null;
+
+                for (int i = 0; i < totalScans; i++) {
+                    progressDialog.setValue(i);
+
+                    // Precursor collection.
+                    ArrayList precursors = new ArrayList(1);
+
+                    // Ion selection parameters.
+                    ArrayList ionSelection = new ArrayList(3);
+
+                    if (mgfParser.getPrecursorCharge(i) > 0) {
+                        ionSelection.add(new CvParamImpl("PSI:1000041",
+                                "PSI", "ChargeState", 0,
+                                Integer.toString(mgfParser.getPrecursorCharge(i))));
+                    }
+
+                    if (mgfParser.getIntensity(i) > 1) {
+                        ionSelection.add(new CvParamImpl("PSI:1000042",
+                                "PSI", "Intensity", 1,
+                                Double.toString(mgfParser.getIntensity(i))));
+                    }
+
+                    ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
+                            "MassToChargeRatio", 2, Double.toString(
+                            mgfParser.getPrecursorMZ(i))));
+
+                    precursors.add(new PrecursorImpl(null, null,
+                            ionSelection, null, 1, -1, 0));
+
+                    // Spectrum description comments.
+                    ArrayList spectrumDescriptionComments = null;//new ArrayList(1);
+
+                    // we don't have this information at this stage(?)
+//                    String identified = "Not identified";
+//                    spectrumDescriptionComments.add(new SpectrumDescCommentImpl(identified));
+
+                    if (mgfParser.getPeaks(i).size() > 0) {
+
+                        Iterator<Double> mzIterator = mgfParser.getPeaks(i).keySet().iterator();
+                        double[][] arrays = new double[2][mgfParser.getPeaks(i).size()];
+
+                        int mzCounter = 0;
+
+                        Double mzRangeStart = Double.MAX_VALUE;
+                        Double mzRangeStop = 0.0;
+
+                        while (mzIterator.hasNext()) {
+                            double tempMz = mzIterator.next();
+
+                            arrays[0][mzCounter] = tempMz;
+                            arrays[1][mzCounter++] = (Double) mgfParser.getPeaks(i).get(tempMz);
+
+                            if (tempMz < mzRangeStart) {
+                                mzRangeStart = tempMz;
+                            }
+
+                            if (tempMz > mzRangeStop) {
+                                mzRangeStop = tempMz;
+                            }
+                        }
+
+                        mzDataSpectrum =
+                                new SpectrumImpl(
+                                new BinaryArrayImpl(arrays[1],
+                                BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                mzRangeStart,
+                                new BinaryArrayImpl(arrays[0],
+                                BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                2l, null,
+                                mzRangeStop,
+                                null,
+                                spectraCounter, precursors,
+                                spectrumDescriptionComments,
+                                null, null, null, null);
+
+                        aSpectra.add(mzDataSpectrum);
+
+                        String fileName = mgfParser.getFilename();
+                        fileName = fileName.substring(0, fileName.lastIndexOf("."));
+
+                        aFileAndScanToID.put(fileName + ".tandem " + mgfParser.getTitle(i), new Integer(spectraCounter++));
+                    }
+                }
+            }
         }
     }
 
@@ -144,10 +239,13 @@ public class PeptideProphetXMLParser {
      *                  conversion to mzData Spectrum.
      * @param aFileAndScanToID  HashMap for the mapping between
      *                          ("runname + " " + scannumber", mzData spectrum ID)
-     * @return int with the spectrum ID assigned.  
+     * @return int with the spectrum ID assigned.
      */
     public int addMzSpectrumForSpecifiedScan(String aRunName, int aScanNumber, List aSpectra, HashMap aFileAndScanToID) {
-        MzXmlParser mzXMLParser = (MzXmlParser) runToMzXMLParser.get(aRunName);
+
+        // @TODO implement for mgf files
+
+        MzXmlParser mzXMLParser = (MzXmlParser) runToParser.get(aRunName);
         return mzXMLParser.addSpectrum(aScanNumber, aSpectra, aFileAndScanToID);
     }
 
@@ -163,7 +261,10 @@ public class PeptideProphetXMLParser {
      * @return int with the spectrum ID assigned.
      */
     public int addMzSpectrumForSpecifiedScan(String aRunName, int aScanNumber, List aSpectra) {
-        MzXmlParser mzXMLParser = (MzXmlParser) runToMzXMLParser.get(aRunName);
+
+        // @TODO implement for mgf files
+
+        MzXmlParser mzXMLParser = (MzXmlParser) runToParser.get(aRunName);
         return mzXMLParser.addSpectrum(aScanNumber, aSpectra);
     }
 
@@ -175,7 +276,10 @@ public class PeptideProphetXMLParser {
      * @return  MSInstrumentInfo    with the instrument info.
      */
     public MSInstrumentInfo getInstrumentInfo() {
-        MzXmlParser mzXMLParser = (MzXmlParser) runToMzXMLParser.values().iterator().next();
+
+        // @TODO implement (return null) for mgf files
+
+        MzXmlParser mzXMLParser = (MzXmlParser) runToParser.values().iterator().next();
         MZXMLFileInfo fileInfo = mzXMLParser.getInfo();
         return fileInfo.getInstrumentInfo();
     }
@@ -205,12 +309,8 @@ public class PeptideProphetXMLParser {
                     break;
                 case XmlPullParser.START_TAG:
                     String start = aParser.getName();
-                    if (INTERACT_SUMMARY.equals(start)) {
-                        // The list of input files.
-                        inputFiles = new ArrayList();
-                        aParser.nextTag();
-                        readInputFiles(aParser);
-                    } else if (MSMS_RUN_SUMMARY.equals(start)) {
+
+                    if (MSMS_RUN_SUMMARY.equals(start)) {
                         // Process the whole run.
                         PeptideProphetMSMSRun ppRun = processMSMSRun(aParser, aThreshold);
                         // Add the run to the HashMap.
@@ -220,36 +320,6 @@ public class PeptideProphetXMLParser {
                     }
                     break;
                 case XmlPullParser.END_TAG:
-                    if (INTERACT_SUMMARY.equals(aParser.getName())) {
-                        // We should have read all input files here.
-                        // Report their number and check for existence - if necessary.
-                        logger.info("Read " + inputFiles.size() + " spectrum input files from the PeptideProphet output file.");
-                        StringBuffer errorSB = new StringBuffer();
-                        if (checkFiles) {
-                            for (Iterator lIterator = inputFiles.iterator(); lIterator.hasNext();) {
-                                File lFile = (File) lIterator.next();
-                                if (!lFile.exists()) {
-                                    logger.error(" *** Unable to find file '" + lFile.getAbsolutePath() + "'!");
-                                    errorSB.append("'" + lFile.getAbsolutePath() + "', ");
-                                } else {
-                                    logger.info("Verified existence for file '" + lFile.getAbsolutePath() + "'!");
-                                    // Now add a parser to the HashMap.
-
-                                    if(lFile.getName().endsWith(".mzXML")){
-                                        runToMzXMLParser.put(lFile.getName().substring(0, lFile.getName().lastIndexOf(".")), new MzXmlParser(lFile, true));
-                                        logger.info("Added MzXmlParser for file '" + lFile.getAbsolutePath() + "'!");
-                                    } else if(lFile.getName().endsWith(".mgf")){
-                                        // mgf files have to be handled differently of course
-//                                        runToMzXMLParser.put(lFile.getName().substring(0, lFile.getName().lastIndexOf(".")), new MzXmlParser(lFile, true));
-//                                        logger.info("Added MzXmlParser for file '" + lFile.getAbsolutePath() + "'!");
-                                    }
-                                }
-                            }
-                            if (errorSB.length() > 0) {
-                                throw new IOException("Unable to find the following files: " + errorSB.substring(0, errorSB.length() - 2) + "!");
-                            }
-                        }
-                    }
                     aParser.next();
                     break;
                 case XmlPullParser.TEXT:
@@ -260,48 +330,11 @@ public class PeptideProphetXMLParser {
                     break;
             }
         }
+
         // Signal completion.
         logger.debug("Document end encountered.");
 
         return result;
-    }
-
-    /**
-     * This method reads the mzXML input files to be verified.
-     *
-     * @param aParser   XmlPullParser to read the mzXML files from.
-     * @throws XmlPullParserException   when the XML parsing generated an error.
-     * @throws java.io.IOException  when the output file could not be read.
-     */
-    private void readInputFiles(XmlPullParserPlus aParser) throws XmlPullParserException,
-            IOException {
-        while (INPUTFILE.equals(aParser.getName())) {
-            String filename = aParser.getAttributeValue(null, "name");
-
-            // this should be done in a more general way...
-            // but this at least fixes the problem for orig.xml and pep.xml files
-            if(filename.endsWith(".orig.xml")){
-                filename = filename.substring(0, filename.indexOf(".orig.xml"));
-            } else if(filename.endsWith(".pep.xml")){
-                filename = filename.substring(0, filename.indexOf(".pep.xml"));
-            }
-
-            File temp = new File(filename);
-
-            if(new File(spectrumFilesInputFolder, temp.getName() + ".mzXML").exists()){
-                inputFiles.add(new File(spectrumFilesInputFolder, temp.getName() + ".mzXML"));
-            } else if(new File(spectrumFilesInputFolder, temp.getName() + ".mgf").exists()){
-                inputFiles.add(new File(spectrumFilesInputFolder, temp.getName() + ".mgf"));
-            } else{
-                System.out.println("Error: Spectrum Input File Type Not Supported! " + filename);
-            }
-
-            
-            // Move to the tag (end tag of the one we just read).
-            aParser.nextTag();
-            // Move to the tag (new tag).
-            aParser.nextTag();
-        }
     }
 
     /**
@@ -316,7 +349,8 @@ public class PeptideProphetXMLParser {
      * @throws XmlPullParserException   whenever the results could not be parsed.
      * @throws IOException  whenever the underlying file could not be read.
      */
-    private PeptideProphetMSMSRun processMSMSRun(XmlPullParserPlus aParser, double aThreshold) throws XmlPullParserException, IOException {
+    private PeptideProphetMSMSRun processMSMSRun(XmlPullParserPlus aParser, double aThreshold)
+            throws XmlPullParserException, IOException {
         // Start with the MS/MS summary data.
         String baseName = aParser.getAttributeValue(null, "base_name");
         // Remove paths from base_name.
@@ -392,18 +426,23 @@ public class PeptideProphetXMLParser {
             // is variable or not.
             boolean variable = false;
             String varString = aParser.getAttributeValue(null, "variable");
+
             if ("Y".equals(varString)) {
                 variable = true;
             }
+
             String symbol = aParser.getAttributeValue(null, "symbol");
             // Add the modification to the HashMap.
-            Object temp = modifications.put(aminoacid + " " + symbol, new PeptideProphetModification(aminoacid, mass, massDiff, symbol, variable));
+            Object temp = modifications.put(aminoacid + " " + mass, new PeptideProphetModification(aminoacid, mass, massDiff, symbol, variable));
+
             if (temp != null) {
                 logger.error("Modification on '" + aminoacid + "' with symbol '" + symbol + "' was used more than once!");
             }
+
             // Move to the next start tag.
             aParser.moveToNextStartTagWithEndBreaker(SEARCH_SUMMARY);
         }
+
         // Finally, a set of parameters as key-value pairs. These are stored in a HashMap.
         HashMap search_parameters = new HashMap();
         while (PARAMETER.equals(aParser.getName())) {
@@ -412,13 +451,37 @@ public class PeptideProphetXMLParser {
             // Move to the next start tag.
             aParser.moveToNextStartTagWithEndBreaker(SEARCH_SUMMARY);
         }
+
+        boolean inputIsMzXml = true;
+
+        // check if the input files are mzXML or mgf files
+        if (search_parameters.containsKey("spectrum, path")) {
+
+            File lFile = new File((String) search_parameters.get("spectrum, path"));
+            lFile = new File(spectrumFilesInputFolder, lFile.getName());
+
+            if (lFile.getName().toLowerCase().endsWith(".mzxml")) {
+                inputIsMzXml = true;
+                runToParser.put(lFile.getName().substring(0, lFile.getName().lastIndexOf(".")), new MzXmlParser(lFile, true));
+                logger.info("Added MzXmlParser for file '" + lFile.getAbsolutePath() + "'!");
+            } else if (lFile.getName().toLowerCase().endsWith(".mgf")) {
+                inputIsMzXml = false;
+                runToParser.put(lFile.getName().substring(0, lFile.getName().lastIndexOf(".")), new MascotGenericFile_MultipleSpectra(lFile));
+                logger.info("Added MascotGenericFileParser for file '" + lFile.getAbsolutePath() + "'!");
+            } else {
+                logger.error("Input file is neither mzXML nor MGF!! File: " + (String) search_parameters.get("spectrum, path"));
+            }
+        }
+
         // We should be on the end tag of SEARCH_SUMMARY.
         // Check this.
         if (!(aParser.getEventType() == XmlPullParser.END_TAG && SEARCH_SUMMARY.equals(aParser.getName()))) {
             logger.warn("Current tag should be the 'search_summary' end tag, instead it was: " + aParser.getName() + "!");
         }
         // OK, create the corresponding wrapper instance.
-        PeptideProphetSearch pps = new PeptideProphetSearch(precursor_mass_type, fragment_mass_type, search_enzyme, max_number_internal_cleavages, min_number_termini, modifications, search_parameters, filename, type, search_engine);
+        PeptideProphetSearch pps = new PeptideProphetSearch(precursor_mass_type, fragment_mass_type, search_enzyme,
+                max_number_internal_cleavages, min_number_termini, modifications, search_parameters, filename, type,
+                search_engine);
 
         aParser.moveToNextStartTagWithEndBreaker(SEARCH_SUMMARY);
         // The next few tags are skipped, these are all timestamps.
@@ -442,12 +505,15 @@ public class PeptideProphetXMLParser {
             // The index.
             int index = Integer.parseInt(aParser.getAttributeValue(null, "index"));
 
-            // @TODO has to be a better way of doing this...
-            // supports: <spectrum_query spectrum="20060320data16.00007.00007.3"
-            // but not: <spectrum_query spectrum="1: Sum of 3 scans in range 627 (rt=12.7833, f=2, i=1) to 629 (rt=12.8337, f=2, i=3)  "
-            if(run.lastIndexOf("Sum of") == -1){
+            String spectrumTitle = null;
+
+            // have to handle mzXML files and MGF files differently
+            if (inputIsMzXml) {
                 // Remove the start and end scan as well as the charge from the run name.
                 run = run.substring(0, run.lastIndexOf(".", run.indexOf(start_scan + ".", run.indexOf(".") + 1)));
+            } else { // assumed to be mgf file
+                spectrumTitle = run.trim();
+                run = baseName;
             }
 
             // Sanity check.
@@ -455,6 +521,7 @@ public class PeptideProphetXMLParser {
                 logger.error("Found a spectrum query at line " + aParser.getLineNumber() + " which references run '" + run + "' while it is contained in run element '" + baseName + "'!");
                 throw new IOException("Found a spectrum query at line " + aParser.getLineNumber() + " which references run '" + run + "' while it is contained in run element '" + baseName + "'!");
             }
+
             // Now let's process the corresponding search result.
             // The first tag is the search_result.
             aParser.moveToNextStartTag(true);
@@ -481,25 +548,21 @@ public class PeptideProphetXMLParser {
             int tempProteinCount = proteinCount - 1;
             Collection alternateProteins = new ArrayList(tempProteinCount);
             while (tempProteinCount > 0) {
+
                 if (!ALTERNATIVE_PROTEIN.equals(aParser.getName())) {
                     logger.warn("There should have been an 'alternative_protein' at line " + aParser.getLineNumber() + " (" + tempProteinCount + " alternative proteins left), instead, there was a '" + aParser.getName() + "' tag!");
                     break;
                 }
+
                 String alt_protein_accession = aParser.getAttributeValue(null, "protein");
                 String alt_protein_description = aParser.getAttributeValue(null, "protein_descr");
 
-
-                // PREVIOUS VERSION:
-                //int alt_num_tol_term = Integer.parseInt(aParser.getAttributeValue(null, "num_tol_term"));
-
-                // NEW ONE:
                 String temp = aParser.getAttributeValue(null, "num_tol_term");
 
                 int alt_num_tol_term = -1;
                 if (temp != null) {
                     alt_num_tol_term = Integer.parseInt(temp);
                 }
-
 
                 alternateProteins.add(new PeptideProphetProteinID(alt_protein_accession, alt_protein_description, alt_num_tol_term));
                 tempProteinCount--;
@@ -533,6 +596,7 @@ public class PeptideProphetXMLParser {
                 searchScores.put(name, value);
                 aParser.moveToNextStartTag(true);
             }
+
             // Next tag should be analysis_result.
             String analysis = aParser.getAttributeValue(null, "analysis");
             aParser.moveToNextStartTag(true);
@@ -543,6 +607,7 @@ public class PeptideProphetXMLParser {
             // as 'parameter' tags, which we HashMap again.
             aParser.moveToNextStartTag(true);
             aParser.moveToNextStartTag(true);
+
             HashMap search_score_summary = new HashMap();
             while (PARAMETER.equals(aParser.getName())) {
                 String name = aParser.getAttributeValue(null, "name");
@@ -556,18 +621,24 @@ public class PeptideProphetXMLParser {
             double roundedProbability = new BigDecimal(probability).setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
             if (roundedProbability >= aThreshold) {
                 // The hit.
-                PeptideProphetSearchHit ppsh = new PeptideProphetSearchHit(alternateProteins, all_ntt_prob, analysis, calculatedMass, hit_rank, isRejected, massDiff, matchedIons, modifiedAA, modSeq, next_AA, num_missed_cleavages, previous_AA, probability, roundedProbability, proteinID, proteinCount, searchScores, search_score_summary, sequence, totalIons);
+                PeptideProphetSearchHit ppsh = new PeptideProphetSearchHit(
+                        alternateProteins, all_ntt_prob, analysis, calculatedMass, hit_rank, isRejected,
+                        massDiff, matchedIons, modifiedAA, modSeq, next_AA, num_missed_cleavages, previous_AA,
+                        probability, roundedProbability, proteinID, proteinCount, searchScores, search_score_summary,
+                        sequence, totalIons);
                 // The query.
-                PeptideProphetQuery ppq = new PeptideProphetQuery(assumed_charge, end_scan, index, precMass, run, ppsh, start_scan);
+                PeptideProphetQuery ppq = new PeptideProphetQuery(
+                        assumed_charge, end_scan, index, precMass, run, ppsh, start_scan, spectrumTitle);
                 // Add the query to the collection.
                 queries.add(ppq);
             } else {
                 logger.debug("Skipped query and peptidehit (" + sequence + ") with a probability (" + probability + ") below " + aThreshold + ".");
             }
 
-            // Move to the next tag after the closing of this spectrum_query.
-            aParser.moveToNextStartTagAfterTag(SPECTRUM_QUERY);
+            // Move to the next tag
+            aParser.moveToNextStartTag(true);
         }
+
         // Create the complete MS/MS run instance
         PeptideProphetMSMSRun run = new PeptideProphetMSMSRun(baseName, enzyme, msDetector, msIonization, msManufacturer, msMassAnalyzer, msModel, pps, queries);
 
