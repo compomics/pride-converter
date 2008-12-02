@@ -44,6 +44,8 @@ import java.util.*;
  */
 public class ParseOutputFiles {
 
+    // @TODO This file has not been updated to handle MGF files as spectra files.
+
     /**
      * Define a static logger variable so that it references the
      * Logger instance named "ParseOutputFiles_Harald".
