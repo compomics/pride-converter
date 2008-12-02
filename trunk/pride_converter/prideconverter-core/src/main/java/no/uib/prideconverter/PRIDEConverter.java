@@ -308,13 +308,13 @@ public class PRIDEConverter {
      * First saves the user properties.
      */
     public void cancelConvertion() {
-        
+
         userProperties.saveUserPropertiesToFile();
-        
+
         if (debug) {
             System.out.println("Converter closed.");
         }
-        
+
         System.exit(0);
     }
 
@@ -433,7 +433,7 @@ public class PRIDEConverter {
                     }
 
                     // removes the current file name string
-                    progressDialog.setString(null); 
+                    progressDialog.setString(null);
 
                     try {
                         progressDialog.setTitle("Creating mzData. Please Wait.");
@@ -1261,7 +1261,7 @@ public class PRIDEConverter {
 
                                                                         properties.getAlreadyChoosenModifications().add(modificationName);
                                                                     } else {
-                                                                    //do nothing, mapping already choosen
+                                                                        //do nothing, mapping already choosen
                                                                     }
 
                                                                     CvParamImpl tempCvParam =
@@ -1901,7 +1901,7 @@ public class PRIDEConverter {
                                                                 properties.getAlreadyChoosenModifications().
                                                                         add(modificationName);
                                                             } else {
-                                                            //do nothing, mapping already choosen
+                                                                //do nothing, mapping already choosen
                                                             }
 
                                                             CvParamImpl tempCvParam =
@@ -1983,7 +1983,7 @@ public class PRIDEConverter {
                                                                 properties.getAlreadyChoosenModifications().
                                                                         add(modificationName);
                                                             } else {
-                                                            //do nothing, mapping already choosen
+                                                                //do nothing, mapping already choosen
                                                             }
 
                                                             CvParamImpl tempCvParam =
@@ -2047,7 +2047,7 @@ public class PRIDEConverter {
                                 String[] iTraqUT = null;
                                 String[][] iTraqRatio = null;
 
-                                if (properties.getSampleDescriptionCVParamsQuantification(). size() > 0) {
+                                if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
                                     //iTraq-stuff
                                     iTraqNorm = (String[]) iTRAQValues.getAllNorms().get(0);
                                     iTraqUT = (String[]) iTRAQValues.getAllUTs().get(0);
@@ -2169,17 +2169,17 @@ public class PRIDEConverter {
                                 while (currentLine != null && !hitFound) {
 
                                     allLines.add(currentLine);
-                                    
+
                                     // extract the name of the database
-                                    if(currentLine.lastIndexOf("# amino acids") != -1){
-                                        
-                                        if(currentLine.lastIndexOf("\\") != -1){
+                                    if (currentLine.lastIndexOf("# amino acids") != -1) {
+
+                                        if (currentLine.lastIndexOf("\\") != -1) {
                                             database = currentLine.substring(currentLine.lastIndexOf("\\") + 1);
-                                        } else if(currentLine.lastIndexOf("/") != -1){
+                                        } else if (currentLine.lastIndexOf("/") != -1) {
                                             database = currentLine.substring(currentLine.lastIndexOf("/") + 1);
-                                        } else if(currentLine.lastIndexOf(" ") != -1){
+                                        } else if (currentLine.lastIndexOf(" ") != -1) {
                                             database = currentLine.substring(currentLine.lastIndexOf(" ") + 1);
-                                        } else{
+                                        } else {
                                             database = null;
                                         }
                                     }
@@ -2225,7 +2225,7 @@ public class PRIDEConverter {
                                                 properties.getAlreadyChoosenModifications().
                                                         add(modificationName);
                                             } else {
-                                            //do nothing, mapping already choosen
+                                                //do nothing, mapping already choosen
                                             }
                                         }
 
@@ -2263,14 +2263,14 @@ public class PRIDEConverter {
                                                 properties.getAlreadyChoosenModifications().
                                                         add(modificationName);
                                             } else {
-                                            //do nothing, mapping already choosen
+                                                //do nothing, mapping already choosen
                                             }
                                         }
 
-                                        
+
                                         currentLine = b.readLine();
                                         currentLine = b.readLine();
-                                                      
+
                                         // handle protein isoforms
                                         // not currently used and not finished. 
                                         // see Mascot Dat file for example.
@@ -2285,7 +2285,7 @@ public class PRIDEConverter {
 //                                            
 //                                            nextLine = b.readLine();
 //                                        }
-                                        
+
                                         tok = new StringTokenizer(currentLine);
 
                                         tok.nextToken(); // # column
@@ -2342,7 +2342,7 @@ public class PRIDEConverter {
                                         sequence = sequence.substring(2, sequence.length() - 2);
                                         sequenceArray = new String[sequence.length()];
 
-                                        modificationsDetected = false;                                      
+                                        modificationsDetected = false;
                                         index = 0;
 
                                         for (int i = 0; i < sequence.length() && !cancelConversion; i++) {
@@ -2366,45 +2366,52 @@ public class PRIDEConverter {
                                         peptideModifications = null;
 
                                         for (int i = 0; i < sequenceArray.length && !cancelConversion; i++) {
-                                            if (properties.getAlreadyChoosenModifications().contains(sequenceArray[i])) {
 
-                                                if (peptideModifications == null) {
-                                                    peptideModifications = new ArrayList();
-                                                }
+                                            if (sequenceArray[i] != null) {
 
-                                                CvParamImpl tempCvParam =
-                                                        (CvParamImpl) userProperties.getCVTermMappings().get(sequenceArray[i]);
+                                                if (sequenceArray[i].length() == 2) {
 
-                                                modificationCVParams = new ArrayList();
-                                                modificationCVParams.add(tempCvParam);
+                                                    if (properties.getAlreadyChoosenModifications().contains(sequenceArray[i])) {
 
-                                                monoMasses = new ArrayList();
+                                                        if (peptideModifications == null) {
+                                                            peptideModifications = new ArrayList();
+                                                        }
 
-                                                // get the modification mass (DiffMono) retrieved from PSI-MOD
-                                                if (tempCvParam.getValue() != null) {
-                                                    monoMasses.add(new MonoMassDeltaImpl(
-                                                            new Double(tempCvParam.getValue()).doubleValue()));
-                                                } else {
-                                                    // it would be possible to use the mass from the data file
-                                                    // but this is currently not used, as this could be incorrect 
-                                                    // relative to properties of the PSI-MOD modification
+                                                        CvParamImpl tempCvParam =
+                                                                (CvParamImpl) userProperties.getCVTermMappings().get(sequenceArray[i]);
+
+                                                        modificationCVParams = new ArrayList();
+                                                        modificationCVParams.add(tempCvParam);
+
+                                                        monoMasses = new ArrayList();
+
+                                                        // get the modification mass (DiffMono) retrieved from PSI-MOD
+                                                        if (tempCvParam.getValue() != null) {
+                                                            monoMasses.add(new MonoMassDeltaImpl(
+                                                                    new Double(tempCvParam.getValue()).doubleValue()));
+                                                        } else {
+                                                            // it would be possible to use the mass from the data file
+                                                            // but this is currently not used, as this could be incorrect
+                                                            // relative to properties of the PSI-MOD modification
 //                                                    monoMasses.add(new MonoMassDeltaImpl(((Double) modifications.get(
 //                                                            sequenceArray[i])).doubleValue()));
-                                                    monoMasses = null;
-                                                }
+                                                            monoMasses = null;
+                                                        }
 
-                                                peptideModifications.add(new ModificationImpl(
-                                                        tempCvParam.getAccession(),
-                                                        new Integer(i + 1),
-                                                        tempCvParam.getCVLookup(),
-                                                        null,
-                                                        monoMasses,
-                                                        null,
-                                                        modificationCVParams,
-                                                        null));
+                                                        peptideModifications.add(new ModificationImpl(
+                                                                tempCvParam.getAccession(),
+                                                                new Integer(i + 1),
+                                                                tempCvParam.getCVLookup(),
+                                                                null,
+                                                                monoMasses,
+                                                                null,
+                                                                modificationCVParams,
+                                                                null));
+                                                    }
+                                                }
                                             }
 
-                                            // check if the current amino acid also contains a fixed modification
+                                            // check if the current amino acid contains a fixed modification
                                             if (sequenceArray[i] != null) {
                                                 if (properties.getAlreadyChoosenModifications().contains(sequenceArray[i].substring(0, 1))) {
 
@@ -3147,7 +3154,7 @@ public class PRIDEConverter {
 
         // note: this method is currently not in use. for mzData files the original mzData file
         //       is used directly 
-        
+
         HashMap mapping = new HashMap();
 
         return mapping;
@@ -3840,7 +3847,6 @@ public class PRIDEConverter {
         peptideIdCount = 0;
 
         try {
-
             factory = XmlPullParserFactory.newInstance(System.getProperty(XmlPullParserFactory.PROPERTY_NAME), null);
             factory.setNamespaceAware(true);
             xpp = factory.newPullParser();
@@ -3876,8 +3882,9 @@ public class PRIDEConverter {
 
             // Key all queries by the peptide found in them as well
             // (again, charge + ' ' + modified sequence)
-            // Also make a list of the identified scans per run (per mzXML file).
+            // Also make a list of the identified scans per run (per file).
             HashMap peptidesToQueries = new HashMap();
+
             Iterator iter = runs.values().iterator();
 
             progressDialog.setString(null);
@@ -3887,12 +3894,15 @@ public class PRIDEConverter {
 
             while (iter.hasNext() && !cancelConversion) {
                 PeptideProphetMSMSRun lRun = (PeptideProphetMSMSRun) iter.next();
+
                 Iterator innerIt = lRun.getQueries().iterator();
 
                 while (innerIt.hasNext() && !cancelConversion) {
                     PeptideProphetQuery lQuery = (PeptideProphetQuery) innerIt.next();
                     PeptideProphetSearchHit ppsh = lQuery.getSearchHit();
-                    String key = lQuery.getAssumed_charge() + " " + ppsh.getModifiedSequence();
+
+                    String key = ppsh.getSequence();
+
                     // Create the peptide (modseq + charge) to query map.
                     Collection queries = null;
 
@@ -3902,6 +3912,7 @@ public class PRIDEConverter {
                         queries = new ArrayList();
                         peptidesToQueries.put(key, queries);
                     }
+
                     queries.add(lQuery);
                 }
             }
@@ -3933,28 +3944,31 @@ public class PRIDEConverter {
                 progressDialog.setValue(counter++);
 
                 ProteinProphetProteinID protein = (ProteinProphetProteinID) lIterator.next();
+
                 // Report proteins without a sequence.
                 String protSequence = protein.getSequence();
                 if (protSequence == null) {
-                    if(debug){
+                    if (debug) {
                         System.out.println("Protein '" + protein.getAccession() + "' did not have an associated sequence.");
                     }
                 }
 
                 Collection PRIDE_peptides = new ArrayList();
                 HashMap peptides = protein.getPeptides();
+
                 Iterator innerIt = peptides.keySet().iterator();
 
                 while (innerIt.hasNext() && !cancelConversion) {
                     String chargeModSeq = (String) innerIt.next();
+
                     // Find the corresponding queries.
                     Collection queries = (Collection) peptidesToQueries.get(chargeModSeq);
 
                     // Sanity check.
                     if (queries == null) {
-                        if(debug){
-                            System.out.println("Could not find any queries for peptide '" + chargeModSeq 
-                                    + "', assigned to protein '" + protein.getAccession() + "'!");
+                        if (debug) {
+                            System.out.println("Could not find any queries for peptide '" + chargeModSeq +
+                                    "', assigned to protein '" + protein.getAccession() + "'!");
                         }
                     } else {
                         // Collect all peptide info for each query.
@@ -3971,14 +3985,20 @@ public class PRIDEConverter {
                             int id = -1;
 
                             // First check if we have already encountered this spectrum.
-                            String spectrumKey = runName + " " + lQuery.getStartScan();
+                            String spectrumKey;
+
+                            // have to be handled differently for mzXML and mgf files
+                            if (lQuery.getSpectrumTitle() != null) { // MGF
+                                spectrumKey = runName + " " + lQuery.getSpectrumTitle();
+                            } else { // mzXML
+                                spectrumKey = runName + " " + lQuery.getStartScan();
+                            }
 
                             if (runAndScanToSpectrumID.containsKey(spectrumKey)) {
                                 id = ((Integer) runAndScanToSpectrumID.get(spectrumKey)).intValue();
                             } else {
-                                if(debug){
-                                    System.out.println("Unable to find pre-parsed spectrum for key '" 
-                                            + spectrumKey + "'!");
+                                if (debug) {
+                                    System.out.println("Unable to find pre-parsed spectrum for key '" + spectrumKey + "'!");
                                 }
                                 id = ppxp.addMzSpectrumForSpecifiedScan(runName, Integer.parseInt(lQuery.getStartScan()), mzDataSpectra);
                                 // It is a new ID. Add it to the runAndScanToSpectrumID HashMap.
@@ -3987,9 +4007,9 @@ public class PRIDEConverter {
 
                             // Sanity check on the number of scans for this query.
                             if (!lQuery.getStartScan().equals(lQuery.getEndScan())) {
-                                if(debug){
-                                    System.out.println("Query '" + lQuery.getRun() + " (" + lQuery.getStartScan() 
-                                            + " - " + lQuery.getEndScan() + ")" + "' consists of more than one scan!");
+                                if (debug) {
+                                    System.out.println("Query '" + lQuery.getRun() + " (" + lQuery.getStartScan() +
+                                            " - " + lQuery.getEndScan() + ")" + "' consists of more than one scan!");
                                 }
                             }
 
@@ -4010,13 +4030,13 @@ public class PRIDEConverter {
                                     pepStart = new Integer(start);
                                 } else {
                                     if(debug){
-                                        System.out.println("Could not find start position of '" + pepSequence + "' in '" 
+                                        System.out.println("Could not find start position of '" + pepSequence + "' in '"
                                                 + protein.getAccession() + "' (protein sequence '" + protSequence + "')!");
                                     }
                                 }
                             } else {
                                 if(debug){
-                                    System.out.println("Unable to determine start and stop position of '" + pepSequence 
+                                    System.out.println("Unable to determine start and stop position of '" + pepSequence
                                             + "' in '" + protein.getAccession() + "' because no protein sequence was found.");
                                 }
                             }
@@ -4051,15 +4071,13 @@ public class PRIDEConverter {
                                     Object duplicate = modificationByMass.put(mod.getMass() + "_" + mod.getAminoacid(), mod);
 
                                     if (duplicate != null) {
-                                        if(debug){
-                                            System.out.println("Modifications with non-unique combination of mass and amino acid (" 
-                                                    + mod.getMass() + " " + mod.getAminoacid() + ") found!");
+                                        if (debug) {
+                                            System.out.println("Modifications with non-unique combination of mass and amino acid (" + mod.getMass() + " " + mod.getAminoacid() + ") found!");
                                         }
                                     }
                                 }
 
-                                // Now cycle through the found modifications and annotate them in PRIDE style
-                                // using OLS!
+                                // Now cycle through the found modifications and annotate them in PRIDE style using OLS
                                 for (Iterator lIterator2 = foundMods.iterator(); lIterator2.hasNext();) {
                                     PeptideProphetModifiedAminoAcid ppma = (PeptideProphetModifiedAminoAcid) lIterator2.next();
                                     double mass = ppma.getMass();
@@ -4072,13 +4090,16 @@ public class PRIDEConverter {
                                         BigDecimal bd = new BigDecimal(Double.toString(mass));
                                         // If we round ALL decimals, something is horribly wrong!
                                         bd = bd.setScale(bd.scale() - 1, BigDecimal.ROUND_HALF_UP);
+
                                         if (bd.scale() == 0) {
-                                            if(debug){
-                                                System.out.println("Rounded down modification mass for '" 
-                                                        + ppma.getMass() + "_" + residue + "' down to '" + bd.doubleValue() + "' without finding a match!");
+                                            if (debug) {
+                                                System.out.println("Rounded down modification mass for '" + ppma.getMass() 
+                                                        + "_" + residue + "' down to '" + bd.doubleValue() +
+                                                        "' without finding a match!");
                                             }
                                             break;
                                         }
+
                                         mass = bd.doubleValue();
                                         key = mass + "_" + residue;
                                     }
@@ -4095,7 +4116,7 @@ public class PRIDEConverter {
                                                 (CvParamImpl) userProperties.getCVTermMappings().get(key));
                                         properties.getAlreadyChoosenModifications().add(key);
                                     } else {
-                                    //do nothing, mapping already choosen
+                                        //do nothing, mapping already choosen
                                     }
 
                                     if (userProperties.getCVTermMappings().get(
@@ -4138,7 +4159,7 @@ public class PRIDEConverter {
 
                             // Add the PeptideProphet probability.
                             additionalParams.add(new CvParamImpl(
-                                    "PRIDE:0000099", "PRIDE", "PeptideProphet probability score", 
+                                    "PRIDE:0000099", "PRIDE", "PeptideProphet probability score",
                                     0, hit.getProbability() + ""));
 
                             // Retrieval of the constituent scores.
@@ -4198,8 +4219,8 @@ public class PRIDEConverter {
 
                             // Data integrity check.
                             if (hit.getRoundedProbability() < properties.getPeptideProphetThreshold()) {
-                                if(debug){
-                                    System.out.println("Output peptide '" + chargeModSeq + 
+                                if (debug) {
+                                    System.out.println("Output peptide '" + chargeModSeq +
                                             "' with a PeptideProphet probability lower than " +
                                             "properties.getPeptideProphetThreshold(): " + hit.getProbability() + ".");
                                 }
@@ -4211,23 +4232,23 @@ public class PRIDEConverter {
                 // Adding protein annotations.
                 Collection additionalCVParams = new ArrayList();
                 if (protSequence != null) {
-                    additionalCVParams.add(new CvParamImpl("PRIDE:0000041", "PRIDE", 
+                    additionalCVParams.add(new CvParamImpl("PRIDE:0000041", "PRIDE",
                             "Search database protein sequence", -1, protein.getSequence()));
                 }
 
                 if (protein.getDescription() != null && !protein.getDescription().trim().equals("")) {
-                    additionalCVParams.add(new CvParamImpl("PRIDE:0000063", "PRIDE", 
+                    additionalCVParams.add(new CvParamImpl("PRIDE:0000063", "PRIDE",
                             "Protein description line", -1, protein.getDescription()));
                 }
 
-                additionalCVParams.add(new CvParamImpl("PRIDE:0000100", "PRIDE", 
+                additionalCVParams.add(new CvParamImpl("PRIDE:0000100", "PRIDE",
                         "ProteinProphet probability score", -1, protein.getProbability() + ""));
                 Collection isoforms = protein.getIsoforms();
 
                 if (isoforms != null && !isoforms.isEmpty()) {
                     for (Iterator lIterator1 = isoforms.iterator(); lIterator1.hasNext();) {
                         ProteinProphetIsoform isoform = (ProteinProphetIsoform) lIterator1.next();
-                        additionalCVParams.add(new CvParamImpl("PRIDE:0000098", "PRIDE", 
+                        additionalCVParams.add(new CvParamImpl("PRIDE:0000098", "PRIDE",
                                 "Indistinguishable alternative protein accession", -1, isoform.getAccession()));
                     }
                 }
@@ -4344,11 +4365,11 @@ public class PRIDEConverter {
         } catch (Exception e) {
             // Not good. Print line and dump stacktrace.
             if (factory == null) {
-            //logger.error(" *** Unable to create XmlPullParserFactory!");
+                //logger.error(" *** Unable to create XmlPullParserFactory!");
             } else if (xpp == null) {
-            //logger.error(" *** Unable to create XmlPullParser!");
+                //logger.error(" *** Unable to create XmlPullParser!");
             } else {
-            //logger.error(" *** Error parsing line " + xpp.getLineNumber() + " in file '" + currentFile + "'!");
+                //logger.error(" *** Error parsing line " + xpp.getLineNumber() + " in file '" + currentFile + "'!");
             }
             //logger.error(e.getMessage(), e);
             e.printStackTrace();
@@ -4825,7 +4846,7 @@ public class PRIDEConverter {
 
                     properties.getAlreadyChoosenModifications().add(modName);
                 } else {
-                //do nothing, mapping already choosen
+                    //do nothing, mapping already choosen
                 }
             }
 
@@ -4839,7 +4860,7 @@ public class PRIDEConverter {
                             (CvParamImpl) userProperties.getCVTermMappings().get(modName));
                     properties.getAlreadyChoosenModifications().add(modName);
                 } else {
-                //do nothing, mapping already choosen
+                    //do nothing, mapping already choosen
                 }
             }
 
@@ -6045,7 +6066,7 @@ public class PRIDEConverter {
                                             (CvParamImpl) userProperties.getCVTermMappings().get(modificationName));
                                     properties.getAlreadyChoosenModifications().add(modificationName);
                                 } else {
-                                //do nothing, mapping already choosen
+                                    //do nothing, mapping already choosen
                                 }
 
                                 if (peptideModifications == null) {
@@ -6087,7 +6108,7 @@ public class PRIDEConverter {
                                     properties.getAlreadyChoosenModifications().
                                             add(modificationName);
                                 } else {
-                                //do nothing, mapping already choosen
+                                    //do nothing, mapping already choosen
                                 }
 
                                 if (peptideModifications == null) {
@@ -6144,7 +6165,7 @@ public class PRIDEConverter {
                                             get(modificationName));
                                     properties.getAlreadyChoosenModifications().add(modificationName);
                                 } else {
-                                //do nothing, mapping already choosen
+                                    //do nothing, mapping already choosen
                                 }
 
                                 if (peptideModifications == null) {
@@ -6496,7 +6517,7 @@ public class PRIDEConverter {
                                         selectedSpectra.add(dbSpectra[j]);
                                         selectedFileNames.add(dbSpectra[j].getFilename());
                                     } else {
-                                    //System.out.println("Discarded: " + dbSpectra[i].getFilename());
+                                        //System.out.println("Discarded: " + dbSpectra[i].getFilename());
                                     }
                                 }
                             }
