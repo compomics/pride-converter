@@ -3,6 +3,21 @@
 
 ----
 
+*Changes in PRIDE Converter v1.14 - (Dec. 03. 2008):*
+ * The Peptide-/ProteinProphet conversion has been made more general and now also supports MGF files for the spectra.
+ * Removed the extra space before "Emulates Mascot web results" in the OutputDetails frame.
+ * For Sequest data the name of the database is now extracted from the files.
+ * Reduced the size of the zip file by removing libraries that were not used.
+ * Fixed a problem where fixed modifications in Sequest was added twice.
+ * A set of default PSI-MOD mapping for the most common modifications has been added.
+ * If CV term mapping is available when clicking an OLS button, information about the given term will be presented.
+ * A third default instrument has been added: LTQ-Orbitrap.
+ * Fixed a bug where the wrong default ontology was selected when adding editing sample CV terms.
+ * Fixed a bug where the list of analyzers was not reset when importing instrument details from mzData files.
+
+
+----
+
 *Changes in PRIDE Converter v1.13.2 - (Nov. 17. 2008):*
  * The Peptide-/ProteinProphet conversion is no loner considered `beta`.
  * Changed the progress bar headings at the beginning of processing Peptide-/ProteinProphet data.
@@ -16,6 +31,7 @@
  * Modification masses, extracted from PSI-MOD, are now included for Spectrum Mill data.
  * The modification masses for Mascot Dat files, X!Tandem, OMSSA and Peptide-/ProteinProphet are now extracted from PSI-MOD, and not from the file itself. Unless the modification mass is not found in PSI-MOD.
 
+Download Count: 15
 
 ----
 
@@ -94,7 +110,7 @@ Download Count: 6
 
 ----
 
-*Changes in PRIDE Converter v1.11 - (Oct. 7. 2008):*
+*Changes in PRIDE Converter v1.11 - (Oct. 07. 2008):*
  * VEMS pkx files are now supported.
  * Fixed a bug that made it difficult to add new users.
  * Made some changes to reduce the memory required when parsing files.
