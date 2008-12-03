@@ -97,8 +97,102 @@ public class PeptideProphetXMLParser {
     public void addAllSpectra(List aSpectra, HashMap aFileAndScanToID) {
         Iterator iter = runToParser.values().iterator();
         while (iter.hasNext()) {
-            MzXmlParser mzXmlParser = (MzXmlParser) iter.next();
-            mzXmlParser.addAllSpectra(aSpectra, aFileAndScanToID);
+
+            Object temp = iter.next();
+
+            // parse as mzXML or mgf file
+            if (temp instanceof MzXmlParser) {
+                MzXmlParser mzXmlParser = (MzXmlParser) temp;
+                mzXmlParser.addAllSpectra(aSpectra, aFileAndScanToID);
+            } else if (temp instanceof MascotGenericFile_MultipleSpectra) {
+                MascotGenericFile_MultipleSpectra mgfParser = (MascotGenericFile_MultipleSpectra) temp;
+
+                int totalScans = mgfParser.getSpectraCount();
+
+                Spectrum mzDataSpectrum = null;
+
+                for (int i = 0; i < totalScans; i++) {
+
+                    // Precursor collection.
+                    ArrayList precursors = new ArrayList(1);
+
+                    // Ion selection parameters.
+                    ArrayList ionSelection = new ArrayList(3);
+
+                    if (mgfParser.getPrecursorCharge(i) > 0) {
+                        ionSelection.add(new CvParamImpl("PSI:1000041",
+                                "PSI", "ChargeState", 0,
+                                Integer.toString(mgfParser.getPrecursorCharge(i))));
+                    }
+
+                    if (mgfParser.getIntensity(i) > 1) {
+                        ionSelection.add(new CvParamImpl("PSI:1000042",
+                                "PSI", "Intensity", 1,
+                                Double.toString(mgfParser.getIntensity(i))));
+                    }
+
+                    ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
+                            "MassToChargeRatio", 2, Double.toString(
+                            mgfParser.getPrecursorMZ(i))));
+
+                    precursors.add(new PrecursorImpl(null, null,
+                            ionSelection, null, 1, -1, 0));
+
+                    // Spectrum description comments.
+                    ArrayList spectrumDescriptionComments = null;//new ArrayList(1);
+
+                    // we don't have this information at this stage(?)
+//                    String identified = "Not identified";
+//                    spectrumDescriptionComments.add(new SpectrumDescCommentImpl(identified));
+
+                    if (mgfParser.getPeaks(i).size() > 0) {
+
+                        Iterator<Double> mzIterator = mgfParser.getPeaks(i).keySet().iterator();
+                        double[][] arrays = new double[2][mgfParser.getPeaks(i).size()];
+
+                        int mzCounter = 0;
+
+                        Double mzRangeStart = Double.MAX_VALUE;
+                        Double mzRangeStop = 0.0;
+
+                        while (mzIterator.hasNext()) {
+                            double tempMz = mzIterator.next();
+
+                            arrays[0][mzCounter] = tempMz;
+                            arrays[1][mzCounter++] = (Double) mgfParser.getPeaks(i).get(tempMz);
+
+                            if (tempMz < mzRangeStart) {
+                                mzRangeStart = tempMz;
+                            }
+
+                            if (tempMz > mzRangeStop) {
+                                mzRangeStop = tempMz;
+                            }
+                        }
+
+                        mzDataSpectrum =
+                                new SpectrumImpl(
+                                new BinaryArrayImpl(arrays[1],
+                                BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                mzRangeStart,
+                                new BinaryArrayImpl(arrays[0],
+                                BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                2l, null,
+                                mzRangeStop,
+                                null,
+                                spectraCounter, precursors,
+                                spectrumDescriptionComments,
+                                null, null, null, null);
+
+                        aSpectra.add(mzDataSpectrum);
+
+                        String fileName = mgfParser.getFilename();
+                        fileName = fileName.substring(0, fileName.lastIndexOf("."));
+
+                        aFileAndScanToID.put(fileName + ".tandem " + mgfParser.getTitle(i), new Integer(spectraCounter++));
+                    }
+                }
+            }
         }
     }
 
@@ -277,7 +371,7 @@ public class PeptideProphetXMLParser {
      */
     public MSInstrumentInfo getInstrumentInfo() {
 
-        // @TODO implement (return null) for mgf files
+        // @TODO implement (return null or similar) for mgf files
 
         MzXmlParser mzXMLParser = (MzXmlParser) runToParser.values().iterator().next();
         MZXMLFileInfo fileInfo = mzXMLParser.getInfo();

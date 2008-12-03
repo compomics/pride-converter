@@ -9,7 +9,6 @@ package uk.ac.ebi.tpp_to_pride;
 import org.apache.log4j.Logger;
 import org.systemsbiology.jrap.MSInstrumentInfo;
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import uk.ac.ebi.tpp_to_pride.parsers.PeptideProphetXMLParser;
 import uk.ac.ebi.tpp_to_pride.parsers.ProteinProphetXMLParser;
@@ -29,22 +28,15 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/*
- * CVS information:
- *
- * $Revision: 1.1.1.1 $
- * $Date: 2007/01/12 17:17:10 $
- */
 /**
  * This class reads the ProteinProphet and PeptideProphet output files,
  * and assembles them into an object model.
  *
  * @author martlenn
  * @version $Id: ParseOutputFiles.java,v 1.1.1.1 2007/01/12 17:17:10 lmartens Exp $
+ * Modified by Harald Barsnes (December 2008)
  */
 public class ParseOutputFiles {
-
-    // @TODO This file has not been updated to handle MGF files as spectra files.
 
     /**
      * Define a static logger variable so that it references the
@@ -54,8 +46,6 @@ public class ParseOutputFiles {
     private static final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
     private static double pepProphetThreshold = 0.9;
     private static double protProphetThreshold = 0.9;
-    private static final String OLS_URL = "http://www.ebi.ac.uk/ontology-lookup/services/OntologyQuery";
-    private static final String OLS_SERVICENAME = "OntologyQuery";
     private static final String MZDATA_CONTACT_LIST = "MZDATA_CONTACT_LIST";
     private static final String MZDATA_SOURCE_CV_ACCESSION = "MZDATA_SOURCE_CV_ACCESSION";
     private static final String MZDATA_SOURCE_CV_NAME = "MZDATA_SOURCE_CV_NAME";
@@ -78,42 +68,41 @@ public class ParseOutputFiles {
      * @param args String[] with the start-up arguments.
      */
     public static void main(String[] args) {
-        
-        long startTimer = System.currentTimeMillis();
-        
+
+        //long startTimer = System.currentTimeMillis();
+
         // Activity log.
         logger.debug("Application started at " + dateTimeFormat.format(new Date()) + ".");
 
-//        File peptidesFile = new File("D:\\PRIDE_ms_lims\\TPP\\20060320data16.pep.xml");
-//        File proteinsFile = new File("D:\\PRIDE_ms_lims\\TPP\\20060320data16.prot.xml");
-//        File mzXMLFolder = new File("D:\\PRIDE_ms_lims\\TPP\\");//currentDir;
-//        File sequenceDatabase = new File("D:\\PRIDE_ms_lims\\TPP\\ipi.HUMAN.v3.50.fasta");
-//        File propertiesfile = new File("D:\\PRIDE_ms_lims\\TPP\\Mallick_submission.properties");
-
         // Check the start-up args.
-        if(args == null || args.length != 4) {
+        if (args == null || args.length != 4) {
             printUsage();
         }
+
         // Check for the existence of the inputfiles.
         File peptidesFile = new File(args[0]);
-        if(!peptidesFile.exists()) {
+        if (!peptidesFile.exists()) {
             printError("Unable to read the PeptideProphet output file you specified ('" + args[0] + "')!");
         }
+
         File proteinsFile = new File(args[1]);
-        if(!proteinsFile.exists()) {
+        if (!proteinsFile.exists()) {
             printError("Unable to read the ProteinProphet output file you specified ('" + args[1] + "')!");
         }
-        File mzXMLFolder = new File(args[2]);
-        if(!mzXMLFolder.exists()) {
+
+        File spectraFolder = new File(args[2]);
+        if (!spectraFolder.exists()) {
             printError("Unable to locate the mzXML input folder you specified ('" + args[2] + "')!");
         }
+
         File propertiesfile = new File(args[3]);
-        if(!propertiesfile.exists()) {
+        if (!propertiesfile.exists()) {
             printError("Unable to read the project properties file you specified ('" + args[3] + "')!");
         }
-        logger.debug("Checked input files (" + dateTimeFormat.format(new Date()) + ").");
-        // OK, we have valid input files.
 
+        logger.debug("Checked input files (" + dateTimeFormat.format(new Date()) + ").");
+
+        // OK, we have valid input files.
 
         // Load the project properties file.
         Properties projectProperties = new Properties();
@@ -139,12 +128,25 @@ public class ParseOutputFiles {
             factory.setNamespaceAware(true);
             xpp = factory.newPullParser();
             logger.debug("XML Pull Parser created (" + dateTimeFormat.format(new Date()) + ").");
+
             // First build a HashMap of all the peptides identified by PeptideProphet.
             BufferedReader br = new BufferedReader(new FileReader(peptidesFile));
             xpp.setInput(br);
             XmlPullParserPlus xppp = new XmlPullParserPlus(xpp);
             currentFile = peptidesFile.getAbsolutePath();
-            PeptideProphetXMLParser ppxp = new PeptideProphetXMLParser(mzXMLFolder, true);
+
+            // check if the input files are mzXML or MGF
+            File[] spectraFiles = spectraFolder.listFiles();
+
+            boolean spectraAreMzXml = true;
+
+            for (int i = 0; i < spectraFiles.length; i++) {
+                if (spectraFiles[i].getName().toLowerCase().endsWith("mgf")) {
+                    spectraAreMzXml = false;
+                }
+            }
+
+            PeptideProphetXMLParser ppxp = new PeptideProphetXMLParser(spectraFolder, true);
             logger.debug("Parsing PeptideProphet file (" + dateTimeFormat.format(new Date()) + ")...");
             HashMap runs = ppxp.readPeptideProphet(xppp, pepProphetThreshold);
             br.close();
@@ -162,27 +164,32 @@ public class ParseOutputFiles {
             logger.debug("ProteinProphet file parsing complete (" + dateTimeFormat.format(new Date()) + ").");
 
             logger.debug("Creating protein lookup table (" + dateTimeFormat.format(new Date()) + ")...");
+
             // Create a HashMap of proteins for quick retrieval.
             HashMap forProteinSequences = new HashMap();
+
             for (Iterator lIterator = proteins.iterator(); lIterator.hasNext();) {
                 ProteinProphetProteinID protein = (ProteinProphetProteinID) lIterator.next();
                 forProteinSequences.put(protein.getAccession(), protein);
             }
+
             logger.debug("Created protein lookup table (" + dateTimeFormat.format(new Date()) + ").");
 
             // Key all queries by the peptide found in them as well
             // (again, charge + ' ' + modified sequence)
             // Also make a list of the identified scans per run (per mzXML file).
             logger.debug("Creating peptide lookup tables (" + dateTimeFormat.format(new Date()) + ")...");
+
             HashMap peptidesToQueries = new HashMap();
             Iterator iter = runs.values().iterator();
+
             while (iter.hasNext()) {
                 PeptideProphetMSMSRun lRun = (PeptideProphetMSMSRun) iter.next();
                 Iterator innerIt = lRun.getQueries().iterator();
                 while (innerIt.hasNext()) {
                     PeptideProphetQuery lQuery = (PeptideProphetQuery) innerIt.next();
                     PeptideProphetSearchHit ppsh = lQuery.getSearchHit();
-                    String key = lQuery.getAssumed_charge() + " " + ppsh.getModifiedSequence();
+                    String key = ppsh.getSequence();
                     // Create the peptide (modseq + charge) to query map.
                     Collection queries = null;
                     if (peptidesToQueries.containsKey(key)) {
@@ -204,6 +211,7 @@ public class ParseOutputFiles {
             List mzDataSpectra = new ArrayList();
             // Load all mzXML spectra.
             ppxp.addAllSpectra(mzDataSpectra, runAndScanToSpectrumID);
+
             for (Iterator lIterator = proteins.iterator(); lIterator.hasNext();) {
                 ProteinProphetProteinID protein = (ProteinProphetProteinID) lIterator.next();
                 // Report proteins without a sequence.
@@ -221,7 +229,8 @@ public class ParseOutputFiles {
                     Collection queries = (Collection) peptidesToQueries.get(chargeModSeq);
                     // Sanity check.
                     if (queries == null) {
-                        logger.error("Could not find any queries for peptide '" + chargeModSeq + "', assigned to protein '" + protein.getAccession() + "'!");
+                        logger.error("Could not find any queries for peptide '" + chargeModSeq +
+                                "', assigned to protein '" + protein.getAccession() + "'!");
                     } else {
                         // Collect all peptide info for each query.
                         for (Iterator lIterator1 = queries.iterator(); lIterator1.hasNext();) {
@@ -233,21 +242,33 @@ public class ParseOutputFiles {
                             // the spectrumidentifier should be entered in the lookup HashMap if it is novel.
                             String runName = lQuery.getRun();
                             int id = -1;
+
                             // First check if we have already encountered this spectrum.
-                            String spectrumKey = runName + " " + lQuery.getStartScan();
+                            String spectrumKey;
+
+                            // have to be handled differently for mzXML and mgf files
+                            if (lQuery.getSpectrumTitle() != null) { // MGF
+                                spectrumKey = runName + " " + lQuery.getSpectrumTitle();
+                            } else { // mzXML
+                                spectrumKey = runName + " " + lQuery.getStartScan();
+                            }
+
                             if (runAndScanToSpectrumID.containsKey(spectrumKey)) {
                                 id = ((Integer) runAndScanToSpectrumID.get(spectrumKey)).intValue();
                             } else {
-                                //System.out.println("Unable to find pre-parsed spectrum for key '" + spectrumKey + "'!");
+                                System.out.println("Unable to find pre-parsed spectrum for key '" + spectrumKey + "'!");
                                 logger.warn("Unable to find pre-parsed spectrum for key '" + spectrumKey + "'!");
                                 id = ppxp.addMzSpectrumForSpecifiedScan(runName, Integer.parseInt(lQuery.getStartScan()), mzDataSpectra);
                                 // It is a new ID. Add it to the runAndScanToSpectrumID HashMap.
                                 runAndScanToSpectrumID.put(spectrumKey, new Integer(id));
                             }
+
                             // Sanity check on the number of scans for this query.
                             if (!lQuery.getStartScan().equals(lQuery.getEndScan())) {
-                                logger.warn("Query '" + lQuery.getRun() + " (" + lQuery.getStartScan() + " - " + lQuery.getEndScan() + ")" + "' consists of more than one scan!");
+                                logger.warn("Query '" + lQuery.getRun() + " (" + lQuery.getStartScan() + " - " +
+                                        lQuery.getEndScan() + ")" + "' consists of more than one scan!");
                             }
+
                             Long specRef = new Long(id);
                             // Get the hit sequence.
                             String pepSequence = hit.getSequence();
@@ -259,12 +280,16 @@ public class ParseOutputFiles {
                                     start += 1;
                                     pepStart = new Integer(start);
                                 } else {
-                                    logger.error("Could not find start position of '" + pepSequence + "' in '" + protein.getAccession() + "' (protein sequence '" + protSequence + "')!");
+                                    logger.error("Could not find start position of '" + pepSequence + "' in '"
+                                            + protein.getAccession() + "' (protein sequence '" + protSequence + "')!");
                                 }
                             } else {
-                                logger.info("Unable to determine start and stop position of '" + pepSequence + "' in '" + protein.getAccession() + "' because no protein sequence was found.");
+                                logger.info("Unable to determine start and stop position of '" + pepSequence + "' in '"
+                                        + protein.getAccession() + "' because no protein sequence was found.");
                             }
+
                             Collection PRIDE_modifications = null;
+
                             if (hit.getModifiedAminoAcids() != null && hit.getModifiedAminoAcids().size() > 0) {
                                 // Do modification stuff.
                                 Collection foundMods = hit.getModifiedAminoAcids();
@@ -286,9 +311,11 @@ public class ParseOutputFiles {
                                     // issue an error.
                                     Object duplicate = modificationByMass.put(mod.getMass() + "_" + mod.getAminoacid(), mod);
                                     if (duplicate != null) {
-                                        logger.error("Modifications with non-unique combination of mass and amino acid (" + mod.getMass() + " " + mod.getAminoacid() + ") found!");
+                                        logger.error("Modifications with non-unique combination of mass and amino acid ("
+                                                + mod.getMass() + " " + mod.getAminoacid() + ") found!");
                                     }
                                 }
+
                                 // Now cycle through the found modifications and annotate them in PRIDE style
                                 // using OLS!
                                 for (Iterator lIterator2 = foundMods.iterator(); lIterator2.hasNext();) {
@@ -324,6 +351,7 @@ public class ParseOutputFiles {
                                     PRIDE_modifications.add(new ModificationImpl(modAccession, new Integer(ppma.getPosition()), "PSI-MOD", "1.0", modMonoDeltas, null, modCVParams, null));
                                 }
                             }
+
                             Collection additionalParams = new ArrayList();
                             // Add the PeptideProphet probability.
                             additionalParams.add(new CvParamImpl("PRIDE:0000099", "PRIDE", "PeptideProphet probability score", 0, hit.getProbability() + ""));
@@ -333,6 +361,7 @@ public class ParseOutputFiles {
                             String deltastar = (String) hit.getSearchScores().get("deltastar");
                             String zscore = (String) hit.getSearchScores().get("zscore");
                             String expect = (String) hit.getSearchScores().get("expect");
+
                             // Only add the parameter if it can be found.
                             // Since these should be found, signal all missing
                             // params as a logger warning!
@@ -361,6 +390,7 @@ public class ParseOutputFiles {
                             } else {
                                 logger.warn("No expect found for peptide " + hit.getModifiedSequence());
                             }
+
                             // Create the peptide.
                             PRIDE_peptides.add(new PeptideImpl(specRef, pepSequence, pepStart, PRIDE_modifications, additionalParams, null));
                             // Data integrity check.
@@ -376,11 +406,14 @@ public class ParseOutputFiles {
                 if (protSequence != null) {
                     additionalCVParams.add(new CvParamImpl("PRIDE:0000041", "PRIDE", "Search database protein sequence", -1, protein.getSequence()));
                 }
+
                 if (protein.getDescription() != null && !protein.getDescription().trim().equals("")) {
                     additionalCVParams.add(new CvParamImpl("PRIDE:0000063", "PRIDE", "Protein description line", -1, protein.getDescription()));
                 }
+
                 additionalCVParams.add(new CvParamImpl("PRIDE:0000100", "PRIDE", "ProteinProphet probability score", -1, protein.getProbability() + ""));
                 Collection isoforms = protein.getIsoforms();
+
                 if (isoforms != null && !isoforms.isEmpty()) {
                     for (Iterator lIterator1 = isoforms.iterator(); lIterator1.hasNext();) {
                         ProteinProphetIsoform isoform = (ProteinProphetIsoform) lIterator1.next();
@@ -393,7 +426,6 @@ public class ParseOutputFiles {
             }
             logger.debug("Created PRIDE protein objects (" + dateTimeFormat.format(new Date()) + ").");
 
-
             // Create contacts.
             Collection contacts = new ArrayList();
             // @TODO Check contacts.
@@ -401,6 +433,7 @@ public class ParseOutputFiles {
             if (contactStrings == null || contactStrings.length == 0) {
                 logger.error("No contact details found in the project properties file ('" + propertiesfile.getAbsolutePath() + "')!");
             }
+
             // Add each contact.
             for (int i = 0; i < contactStrings.length; i++) {
                 // Each contact string consists of three parts.
@@ -413,31 +446,66 @@ public class ParseOutputFiles {
             }
 
             // Process instrument info.
-            MSInstrumentInfo instrumentInfo = ppxp.getInstrumentInfo();
-            // Instrument name.
-            String instrumentName = instrumentInfo.getManufacturer() + " " + instrumentInfo.getModel();
-            // Instrument source.
-            String ionization = instrumentInfo.getIonization();
+
+            // @TODO for MGF files all instrument details has to be extracted from the projectProperties file
+
+            MSInstrumentInfo instrumentInfo = null;
+
+            String instrumentName = "unknown";
+            String ionization = "unknown";
+
+            if (spectraAreMzXml) {
+                instrumentInfo = ppxp.getInstrumentInfo();
+                // Instrument name.
+                instrumentName = instrumentInfo.getManufacturer() + " " + instrumentInfo.getModel();
+                // Instrument source.
+                ionization = instrumentInfo.getIonization();
+            } else {
+                // MGF files
+                // @TODO extract from projectProperties file
+            }
+
             Collection instrumentSourceCVParams = new ArrayList();
             // @TODO  Check instrument source stuff.
             instrumentSourceCVParams.add(new CvParamImpl(projectProperties.getProperty(MZDATA_SOURCE_CV_ACCESSION), "PSI", projectProperties.getProperty(MZDATA_SOURCE_CV_NAME), 0, null));
             Collection instrumentSourceUserParams = new ArrayList(1);
             instrumentSourceUserParams.add(new UserParamImpl("Original mzXML instrument ionisation description", 0, ionization));
+
+            String detector = "unknown";
+
             // Instrument detector.
-            String detector = instrumentInfo.getDetector();
+            if (spectraAreMzXml) {
+                detector = instrumentInfo.getDetector();
+            } else {
+                // MGF files
+                // @TODO extract from projectProperties file
+            }
+
             Collection instrumentDetectorCVParams = new ArrayList();
             // @TODO  Check instrument detector stuff.
             instrumentDetectorCVParams.add(new CvParamImpl(projectProperties.getProperty(MZDATA_DETECTOR_CV_ACCESSION), "PSI", projectProperties.getProperty(MZDATA_DETECTOR_CV_NAME), 0, null));
             Collection instrumentDetectorUserParams = new ArrayList();
             instrumentDetectorUserParams.add(new UserParamImpl("Original mzXML instrument detector description", 0, detector));
-            // Instrument analyzers.
-            String analyzer = instrumentInfo.getMassAnalyzer();
+
+            // Instrument analyzer
+            String analyzer = "unknown";
+
+            // Instrument analyzer
+            if (spectraAreMzXml) {
+                analyzer = instrumentInfo.getMassAnalyzer();
+            } else {
+                // MGF files
+                // @TODO extract from projectProperties file
+            }
+
             // @TODO  Check instrument analyzer list stuff.
             String[] analyzerAccessions = projectProperties.getProperty(MZDATA_ANALYZERLIST_CV_ACCESSIONS).split("\\[\\*\\]");
             String[] analyzerNames = projectProperties.getProperty(MZDATA_ANALYZERLIST_CV_NAMES).split("\\[\\*\\]");
+
             if (analyzerAccessions.length != analyzerNames.length) {
                 logger.error("Mismatch in the number of analyzers when comparing accessions (" + analyzerAccessions.length + ") with names (" + analyzerNames.length + ")!");
             }
+
             Collection analyzerList = new ArrayList(analyzerAccessions.length);
             for (int i = 0; i < analyzerAccessions.length; i++) {
                 Collection analyzerCVParams = new ArrayList(1);
@@ -447,7 +515,6 @@ public class ParseOutputFiles {
                 Analyzer mzDataAnalyzer = new AnalyzerImpl(analyzerCVParams, analyzerUserParams, 0);
                 analyzerList.add(mzDataAnalyzer);
             }
-
 
             // Sample name.
             // @TODO Check sample.
@@ -472,8 +539,33 @@ public class ParseOutputFiles {
             cvLookups.add(new CVLookupImpl("2006-07-07", "The NEWT Ontology", "NEWT", "http://www.ebi.ac.uk/newt/"));
             cvLookups.add(new CVLookupImpl("1.0", "The PRIDE Ontology", "PRIDE", "http://www.ebi.ac.uk/pride"));
 
+            // @TODO for MGF files software details has to be extracted from the projectProperties file
+
+            // softwareName
+            String softwareName = "unknown";
+
+            if (spectraAreMzXml) {
+                softwareName = instrumentInfo.getSoftwareInfo().name;
+            } else {
+                // MGF files
+                // @TODO extract from projectProperties file
+            }
+
+            // softwareVersion
+            String softwareVersion = "unknown";
+
+            if (spectraAreMzXml) {
+                softwareVersion = instrumentInfo.getSoftwareInfo().version;
+            } else {
+                // MGF files
+                // @TODO extract from projectProperties file
+            }
+
             // Create mzData instance.
-            MzData mzData = new MzDataImpl(mzDataSpectra, null, contacts, instrumentName, null, null, null, sample, null, null, cvLookups, "1.05", instrumentDetectorCVParams, instrumentDetectorUserParams, null, "1", analyzerList, null, instrumentSourceCVParams, instrumentSourceUserParams, instrumentInfo.getSoftwareInfo().version, sampleDescriptionParams, null, instrumentInfo.getSoftwareInfo().name);
+            MzData mzData = new MzDataImpl(mzDataSpectra, null, contacts, instrumentName, null, null, null, sample,
+                    null, null, cvLookups, "1.05", instrumentDetectorCVParams, instrumentDetectorUserParams, null,
+                    "1", analyzerList, null, instrumentSourceCVParams, instrumentSourceUserParams, softwareVersion,
+                    sampleDescriptionParams, null, softwareName);
 
             // Create references.
             Collection references = new ArrayList();
@@ -525,7 +617,7 @@ public class ParseOutputFiles {
             // Output file.
             // @TODO  Check output file.
             // Marshall experiments in chunks.
-            String outputFile = "D:\\PRIDE_ms_lims\\TPP\\tppResult.xml";
+            String outputFile = "D:\\PRIDE_ms_lims\\Data\\TPP\\tppResult.xml";
             //projectProperties.getProperty(OUTPUT_FILE) + peptidesFile.getName().substring(0, peptidesFile.getName().indexOf(".pep.xml")) + ".prideXML";
             XMLMarshaller marshaller = new XMLMarshaller(true);
             BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));
@@ -544,15 +636,9 @@ public class ParseOutputFiles {
             logger.error(e.getMessage(), e);
             e.printStackTrace();
         }
-        
-        long end = System.currentTimeMillis();
-                System.out.println("Done: " + (end - startTimer) + "\n");
-    }
 
-    private static HashMap readPeptideProphet(XmlPullParserPlus aParser) throws XmlPullParserException, IOException {
-        HashMap result = new HashMap();
-
-        return result;
+//        long end = System.currentTimeMillis();
+//        System.out.println("Done: " + (end - startTimer) + "\n");
     }
 
     /**
