@@ -91,12 +91,12 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
             cvParams = (CvParamImpl) cvTerms.next();
 
             ((DefaultTableModel) cvTermsJTable.getModel()).addRow(new Object[]{
-                new Integer(++rowCounter),
-                cvParams.getName(),
-                cvParams.getAccession(),
-                cvParams.getCVLookup(),
-                cvParams.getValue()
-            });
+                        new Integer(++rowCounter),
+                        cvParams.getName(),
+                        cvParams.getAccession(),
+                        cvParams.getCVLookup(),
+                        cvParams.getValue()
+                    });
         }
 
 
@@ -122,9 +122,9 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
         if (modifiedRow == -1) {
             ((DefaultTableModel) this.cvTermsJTable.getModel()).addRow(
                     new Object[]{
-                new Integer(cvTermsJTable.getRowCount() + 1),
-                name, accession, ontology, null
-            });
+                        new Integer(cvTermsJTable.getRowCount() + 1),
+                        name, accession, ontology, null
+                    });
         } else {
             cvTermsJTable.setValueAt(name, modifiedRow, 1);
             cvTermsJTable.setValueAt(accession, modifiedRow, 2);
@@ -339,6 +339,7 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     /**
      * Opens an OLS dialog.
      * 
@@ -358,8 +359,8 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
     private void insertJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertJButtonActionPerformed
 
         if (cvTermsJTable.isEditing()) {
-            JOptionPane.showMessageDialog(this, 
-                    "The table is still beeing edited. Please complete the editing before inserting.", 
+            JOptionPane.showMessageDialog(this,
+                    "The table is still beeing edited. Please complete the editing before inserting.",
                     "The table is beeing edited", JOptionPane.INFORMATION_MESSAGE);
         } else {
 
@@ -401,11 +402,24 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
      * @param evt
      */
     private void editJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editJMenuItemActionPerformed
-        int selectedRow = cvTermsJTable.getSelectedRow();
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new OLSDialog(this, true, "analyzers", prideConverter.getUserProperties().getLastSelectedOntology(), 
-                selectedRow, null);
+
+        int selectedRow = cvTermsJTable.getSelectedRow();
+
+        String searchTerm = (String) cvTermsJTable.getValueAt(selectedRow, 1);
+
+        searchTerm = searchTerm.replaceAll("-", " ");
+        searchTerm = searchTerm.replaceAll(":", " ");
+        searchTerm = searchTerm.replaceAll("\\(", " ");
+        searchTerm = searchTerm.replaceAll("\\)", " ");
+        searchTerm = searchTerm.replaceAll("&", " ");
+        searchTerm = searchTerm.replaceAll("\\+", " ");
+        searchTerm = searchTerm.replaceAll("\\[", " ");
+        searchTerm = searchTerm.replaceAll("\\]", " ");
+
+        new OLSDialog(this, true, "analyzers", prideConverter.getUserProperties().getLastSelectedOntology(),
+                selectedRow, searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_editJMenuItemActionPerformed
 
@@ -575,6 +589,7 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
     private javax.swing.JPopupMenu popupJMenu;
     private javax.swing.JPanel protocolStepJPanel;
     // End of variables declaration//GEN-END:variables
+
     /**
      * See OLSInputable
      */

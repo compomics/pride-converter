@@ -132,6 +132,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
 
         final Thread t = new Thread(new Runnable() {
 
+            @Override
             public void run() {
                 progressDialog.setVisible(true);
             }
@@ -141,6 +142,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
 
         Thread t2 = new Thread(new Runnable() {
 
+            @Override
             public void run() {
 
                 try {
@@ -208,6 +210,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
 
         final Thread t = new Thread(new Runnable() {
 
+            @Override
             public void run() {
                 progressDialog.setVisible(true);
             }
@@ -217,6 +220,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
 
         Thread t2 = new Thread(new Runnable() {
 
+            @Override
             public void run() {
 
 //                try {

@@ -4,11 +4,10 @@
     <groupId>no.uib</groupId>
     <artifactId>PRIDEConverter</artifactId>
     <packaging>jar</packaging>
-    <version>1.13.3</version>
+    <version>1.14</version>
     <name>PRIDEConverter</name>
     <description>The PRIDE Converter converts MS data into valid PRIDE XML for submission to the publicly available PRIDE database.
-It presents a convenient, wizard-like graphical user interface, and includes efficient access to the Ontology Lookup Service (OLS).
-    </description>
+It presents a convenient, wizard-like graphical user interface, and includes efficient access to the Ontology Lookup Service (OLS).</description>
     <url>http://code.google.com/p/pride-converter/</url>
 
     <licenses>
@@ -105,7 +104,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         <dependency>
             <groupId>no.uib</groupId>
             <artifactId>prideconverter-core</artifactId>
-            <version>1.13.3</version>
+            <version>1.14</version>
         </dependency>
     </dependencies>
 </project>

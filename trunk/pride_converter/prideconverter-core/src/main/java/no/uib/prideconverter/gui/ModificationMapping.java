@@ -382,9 +382,26 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
      */
     private void psiModJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_psiModJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+
+        String searchTerm = "";
+
+        if(psiModJTextField.getText().length() > 0){
+            searchTerm = psiModJTextField.getText().substring(0, psiModJTextField.getText().indexOf("[") -1);
+            searchTerm = searchTerm.replaceAll("-", " ");
+            searchTerm = searchTerm.replaceAll(":", " ");
+            searchTerm = searchTerm.replaceAll("\\(", " ");
+            searchTerm = searchTerm.replaceAll("\\)", " ");
+            searchTerm = searchTerm.replaceAll("&", " ");
+            searchTerm = searchTerm.replaceAll("\\+", " ");
+            searchTerm = searchTerm.replaceAll("\\[", " ");
+            searchTerm = searchTerm.replaceAll("\\]", " ");
+        } else{
+            searchTerm = nameJTextField.getText();
+        }
+
         new OLSDialog(this, true, "modificationSelection",
-                "Protein Modifications (PSI-MOD) [MOD]"/*prideConverter.getUserProperties().getLastSelectedOntology()*/,
-                nameJTextField.getText());
+                "Protein Modifications (PSI-MOD) [MOD]",
+                searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_psiModJButtonActionPerformed
 

@@ -22,7 +22,6 @@ import javax.swing.JOptionPane;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import no.uib.prideconverter.gui.ComboBoxInputDialog;
 import no.uib.prideconverter.util.ComboBoxInputable;
 import no.uib.prideconverter.util.MyComboBoxRenderer;
 import no.uib.prideconverter.util.OLSInputable;
@@ -93,6 +92,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         ((DefaultTableModel) processingMethodsJTable.getModel()).addTableModelListener(
                 new TableModelListener() {
 
+                    @Override
                     public void tableChanged(TableModelEvent e) {
                         valuesChanged = true;
                     }
@@ -116,8 +116,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         }
 
         // for mzXML, mzData and TPP information about the instrument is extraced from the file
-        if ((prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")
-                || prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) &&
+        if ((prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") || prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) &&
                 !prideConverter.getProperties().areInstrumentDetailsExtracted()) {
             extractInstrumentDetailsFromFile();
         } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP") &&
@@ -136,9 +135,9 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                 }
             }
 
-            if(mzXmlFileFound){
+            if (mzXmlFileFound) {
                 extractInstrumentDetailsFromFile();
-            } else{
+            } else {
                 this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
                 readInstrumentsFromFile();
                 this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -166,6 +165,8 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         while (analyzerJTable.getRowCount() > 0) {
             ((DefaultTableModel) analyzerJTable.getModel()).removeRow(0);
         }
+
+        prideConverter.getProperties().setAnalyzerList(new ArrayList());
 
         MSXMLParser msXMLParser = null;
         String instrumentName = null;
@@ -390,12 +391,10 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     }
 
                     //instrument detector
-                    if (prideConverter.getUserProperties().getCVTermMappings().
-                            containsKey(
+                    if (prideConverter.getUserProperties().getCVTermMappings().containsKey(
                             msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector())) {
 
-                        tempCVTerm = (CvParamImpl) prideConverter.getUserProperties().
-                                getCVTermMappings().get(
+                        tempCVTerm = (CvParamImpl) prideConverter.getUserProperties().getCVTermMappings().get(
                                 msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector());
 
                         setInstrumentDetector(tempCVTerm.getName(),
@@ -413,8 +412,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     }
 
                     //analyzer
-                    if (prideConverter.getUserProperties().getCVTermMappings().
-                            containsKey(
+                    if (prideConverter.getUserProperties().getCVTermMappings().containsKey(
                             msXMLParser.getHeaderInfo().getInstrumentInfo().getMassAnalyzer())) {
 
                         prideConverter.getProperties().setAnalyzerList(new ArrayList());
@@ -1444,8 +1442,23 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
      */
     private void instrumentSourceJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_instrumentSourceJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+
+        String searchTerm = null;
+
+        if (instrumentSourceJTextField.getText().length() > 0) {
+            searchTerm = instrumentSourceJTextField.getText().substring(0, instrumentSourceJTextField.getText().indexOf("[") - 1);
+            searchTerm = searchTerm.replaceAll("-", " ");
+            searchTerm = searchTerm.replaceAll(":", " ");
+            searchTerm = searchTerm.replaceAll("\\(", " ");
+            searchTerm = searchTerm.replaceAll("\\)", " ");
+            searchTerm = searchTerm.replaceAll("&", " ");
+            searchTerm = searchTerm.replaceAll("\\+", " ");
+            searchTerm = searchTerm.replaceAll("\\[", " ");
+            searchTerm = searchTerm.replaceAll("\\]", " ");
+        }
+
         new OLSDialog(this, true, "instrumentSource", prideConverter.getUserProperties().
-                getLastSelectedOntology(), null);
+                getLastSelectedOntology(), searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_instrumentSourceJButtonActionPerformed
 
@@ -1456,8 +1469,24 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
      */
     private void instrumentDetectorJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_instrumentDetectorJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+
+        String searchTerm = null;
+
+        if (instrumentDetectorJTextField.getText().length() > 0) {
+            searchTerm = instrumentDetectorJTextField.getText().substring(
+                    0, instrumentDetectorJTextField.getText().indexOf("[") - 1);
+            searchTerm = searchTerm.replaceAll("-", " ");
+            searchTerm = searchTerm.replaceAll(":", " ");
+            searchTerm = searchTerm.replaceAll("\\(", " ");
+            searchTerm = searchTerm.replaceAll("\\)", " ");
+            searchTerm = searchTerm.replaceAll("&", " ");
+            searchTerm = searchTerm.replaceAll("\\+", " ");
+            searchTerm = searchTerm.replaceAll("\\[", " ");
+            searchTerm = searchTerm.replaceAll("\\]", " ");
+        }
+
         new OLSDialog(this, true, "instrumentDetector", prideConverter.getUserProperties().
-                getLastSelectedOntology(), null);
+                getLastSelectedOntology(), searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_instrumentDetectorJButtonActionPerformed
 
@@ -1490,11 +1519,25 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
      * @param evt
      */
     private void processingMethodsEditJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processingMethodsEditJMenuItemActionPerformed
-        int selectedRow = processingMethodsJTable.getSelectedRow();
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+
+        int selectedRow = processingMethodsJTable.getSelectedRow();
+
+        String searchTerm = (String) processingMethodsJTable.getValueAt(selectedRow, 1);
+        searchTerm = searchTerm.substring(0, searchTerm.indexOf("[") - 1);
+
+        searchTerm = searchTerm.replaceAll("-", " ");
+        searchTerm = searchTerm.replaceAll(":", " ");
+        searchTerm = searchTerm.replaceAll("\\(", " ");
+        searchTerm = searchTerm.replaceAll("\\)", " ");
+        searchTerm = searchTerm.replaceAll("&", " ");
+        searchTerm = searchTerm.replaceAll("\\+", " ");
+        searchTerm = searchTerm.replaceAll("\\[", " ");
+        searchTerm = searchTerm.replaceAll("\\]", " ");
+
         new OLSDialog(this, true, "processingMethods", prideConverter.getUserProperties().
-                getLastSelectedOntology(), selectedRow, null);
+                getLastSelectedOntology(), selectedRow, searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_processingMethodsEditJMenuItemActionPerformed
 
