@@ -1479,7 +1479,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
     private void applyAdvancedSelectionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyAdvancedSelectionButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        StringTokenizer tok;
+        StringTokenizer selectionCriteriaTokenizer;
         String tempToken;
         boolean selected = false;
         boolean errorDetected = false;
@@ -1503,17 +1503,17 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         for (int i = 0; i < spectraJTable.getRowCount() && !errorDetected; i++) {
 
             if (separatorJTextField.getText().length() == 0) {
-                tok = new StringTokenizer(selectionCriteria);
+                selectionCriteriaTokenizer = new StringTokenizer(selectionCriteria);
             } else {
-                tok = new StringTokenizer(selectionCriteria, separatorJTextField.getText());
+                selectionCriteriaTokenizer = new StringTokenizer(selectionCriteria, separatorJTextField.getText());
             }
 
             selected = false;
             errorDetected = false;
 
-            while (tok.hasMoreTokens() && !selected && !errorDetected) {
+            while (selectionCriteriaTokenizer.hasMoreTokens() && !selected && !errorDetected) {
 
-                tempToken = tok.nextToken();
+                tempToken = selectionCriteriaTokenizer.nextToken();
                 tempToken = tempToken.trim();
 
                 if (selectionColumn == 1) {
@@ -1591,15 +1591,15 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
             String path = (chooser.getSelectedFile().getAbsoluteFile().getPath());
 
             try {
-                FileReader f = new FileReader(path);
-                BufferedReader b = new BufferedReader(f);
+                FileReader fr = new FileReader(path);
+                BufferedReader br = new BufferedReader(fr);
 
-                String s = b.readLine();
+                String s = br.readLine();
                 String temp = "";
 
                 while (s != null) {
                     temp += s + "\n";
-                    s = b.readLine();
+                    s = br.readLine();
                 }
 
                 advancedSelectionJTextArea.setText(temp);
@@ -1609,8 +1609,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                     applyAdvancedSelectionButton.setEnabled(true);
                 }
 
-                b.close();
-                f.close();
+                br.close();
+                fr.close();
             } catch (FileNotFoundException ex) {
                 JOptionPane.showMessageDialog(null, 
                         "Error when reading file. See ../Properties/ErrorLog.txt for more details.", 

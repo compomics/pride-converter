@@ -15,7 +15,6 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
-import no.uib.prideconverter.gui.ComboBoxInputDialog;
 import no.uib.prideconverter.util.ComboBoxInputable;
 import uk.ac.ebi.pride.model.implementation.mzData.ContactImpl;
 

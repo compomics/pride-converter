@@ -421,10 +421,24 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
      * @param evt
      */
     private void editJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editJMenuItemActionPerformed
-        int selectedRow = cvTermsJTable.getSelectedRow();
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new OLSDialog(this, true, "sample", prideConverter.getUserProperties().getLastSelectedOntology(), selectedRow, null);
+        
+        int selectedRow = cvTermsJTable.getSelectedRow();
+
+        String searchTerm = (String) cvTermsJTable.getValueAt(selectedRow, 1);
+
+        searchTerm = searchTerm.replaceAll("-", " ");
+        searchTerm = searchTerm.replaceAll(":", " ");
+        searchTerm = searchTerm.replaceAll("\\(", " ");
+        searchTerm = searchTerm.replaceAll("\\)", " ");
+        searchTerm = searchTerm.replaceAll("&", " ");
+        searchTerm = searchTerm.replaceAll("\\+", " ");
+        searchTerm = searchTerm.replaceAll("\\[", " ");
+        searchTerm = searchTerm.replaceAll("\\]", " ");
+
+        new OLSDialog(this, true, "sample", prideConverter.getUserProperties().getLastSelectedSampleOntology(),
+                selectedRow, searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_editJMenuItemActionPerformed
 

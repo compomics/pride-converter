@@ -1,5 +1,5 @@
 PRIDEConverter
-v1.13.3*
+v1.14*
 OutputPath: user.home
 UserName: 
 ServerHost: localhost
@@ -41,3 +41,7 @@ Gln->pyro-Glu|MOD:00040|MOD|2-pyrrolidone-5-carboxylic acid (Gln)|-17.026549|
 Oxidation|MOD:00425|MOD|monohydroxylated residue|15.994915|
 M*|MOD:00425|MOD|monohydroxylated residue|15.994915|
 Ace (N-terminal)|MOD:00408|MOD|N-acetylated residue|42.010565|
+electrospray ionization|PSI:1000073|PSI|Electrospray Ionization|null|
+Ion Trap|PSI:1000264|PSI|Ion Trap|null|
+EMT|PSI:1000111|PSI|Electron Multiplier Tube|null|
+ESI|PSI:1000073|PSI|Electrospray Ionization|null|

@@ -2,7 +2,6 @@
 package no.uib.prideconverter.filefilters;
 
 import java.io.File;
-import javax.swing.*;
 import javax.swing.filechooser.*;
 
 

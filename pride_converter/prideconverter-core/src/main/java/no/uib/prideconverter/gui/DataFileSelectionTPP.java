@@ -8,7 +8,6 @@ import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import no.uib.prideconverter.filefilters.MzXmlFileFilter;
 import no.uib.prideconverter.filefilters.PepXmlFileFilter;
 import no.uib.prideconverter.filefilters.ProtXmlFileFilter;
 

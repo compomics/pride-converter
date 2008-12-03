@@ -21,8 +21,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class PRIDEConverterWrapper {
 
     private boolean debug = false;
-    private String jarFileName = "PRIDEConverter-1.13.3.jar";
-    private String prideConverterSourceJarFileName = "prideconverter-core-1.13.3.jar";
+    private String jarFileName = "PRIDEConverter-1.14.jar";
+    private String prideConverterSourceJarFileName = "prideconverter-core-1.14.jar";
 
     /**
      * Starts the launcher by calling the launch method. Use this as the 
