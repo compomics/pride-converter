@@ -1,38 +1,25 @@
-/**
- * Created by IntelliJ IDEA.
- * User: Lennart
- * Date: 20-jan-2004
- * Time: 10:07:23
- */
 package no.uib.prideconverter.util;
 
-//import be.proteomics.lims.util.mascot.MascotIdentifiedSpectrum;
 import java.io.*;
 import java.util.*;
-
-/*
- * CVS information:
- *
- * $Revision: 1.3 $
- * $Date: 2007/03/08 10:14:19 $
- */
 import java.util.ArrayList;
 
 /**
  * This class maps a multiple spectra Mascot Generic File to memory.
- * It allows for search and retrieval (as well as comparing functionality).
+ * It allows for search and retrieval.
+ *
+ * Based on be.proteomics.lims.util.fileio.MascotGenericFile
  *
  * @author Lennart
- * @version $Id: MascotGenericFile.java,v 1.3 2007/03/08 10:14:19 kenny Exp $
  * Modified by Harald Barsnes (November 2008)
  */
 public class MascotGenericFile_MultipleSpectra {
 
     /**
      * @TODO This class is a modified version of be.proteomics.lims.util.fileio.MascotGenericFile
-     * and should somehow be related to this (extend?), but this is not currently done.
+     * and should somehow be related to this, but this is not currently done.
      */
-
+    
     protected ArrayList peaks;
     protected ArrayList precursorMzs;
     protected ArrayList precursorCharge;
@@ -40,9 +27,7 @@ public class MascotGenericFile_MultipleSpectra {
     protected ArrayList charges;
     protected ArrayList commentsAll;
     protected ArrayList titles;
-    
     protected int numberOfSpectra = 0;
-    
     /**
      * This variable holds the filename for the spectrum file.
      */
@@ -160,120 +145,9 @@ public class MascotGenericFile_MultipleSpectra {
     }
 
     /**
-     * This method checks whether the MascotIdentifiedSpectrum corresponds to
-     * this spectrum. The precise method for comparison is up to the individual
-     * implementations.
-     *
-     * @param   aMIS   MascotIdentifiedSpectrum to compare to.
-     * @return  boolean which indicates whether these objects correspond.
-     */
-//    public boolean corresponds(MascotIdentifiedSpectrum aMIS) {
-//        boolean corresponds = false;
-//        // The search title can yield the information we need.
-//        // Typically, the title is maintained, or, if it is not, we simply need to
-//        // check against the filename (in the latter case, we have substituted the
-//        // title with the filename ourselves).
-//        String searchTitle = aMIS.getSearchTitle();
-//        if(this.iTitle.equals(searchTitle) || this.iFilename.equals(searchTitle)) {
-//            corresponds = true;
-//        }
-//
-//        // Return the result.
-//        return corresponds;
-//    }
-
-    /**
-     * This methods returns the comments for this MascotGenericFile.
-     *
-     * @return  String with the comments for this MascotGenericFile.
-     */
-    public String getComments() {
-        return iComments;
-    }
-
-    /**
-     * This method sets the comments for this MascotGenericFile.
-     *
-     * @param aComments String with the comments for this MAscotGenericFile.
-     */
-    public void setComments(String aComments) {
-        iComments = aComments;
-    }
-
-    /**
-     * This method returns the Value of the corresponding embedded parameter Key.
-     * @param aKey  String with the Key of the embedded parameter.
-     * @return String   Value of the embedded parameter Key.
-     */
-//    public String getExtraEmbeddedProperty(String aKey) {
-//        String lReturn = "NoSuchKey";
-//        if (iExtraEmbeddedParameters != null) {
-//            if (iExtraEmbeddedParameters.containsKey(aKey)) {
-//                lReturn = (String) iExtraEmbeddedParameters.get(aKey);
-//            }
-//        }
-//        return lReturn;
-//    }
-
-    /**
-     * This private method can be called during the parsing of the aFileContents String to save embedded parameters in the Properties instance.
-     * @param aKey Embedded Property Key.
-     * @param aValue Embedded Property Value.
-     */
-//    private void addExtraEmbeddedParameter(String aKey, String aValue) {
-//        if (iExtraEmbeddedParameters == null) {
-//            iExtraEmbeddedParameters = new Properties();
-//        }
-//        iExtraEmbeddedParameters.put(aKey, aValue);
-//    }
-
-    /**
-     * This method checks for equality between this object and the
-     * specified object.
-     *
-     * @param anObject  Object to test equality with.
-     * @return  boolean indicating whether the presented objects are equal
-     *                  ('true') or not ('false').
-     */
-    public boolean equals(Object anObject) {
-        boolean result = false;
-
-        if (anObject != null &&
-                anObject instanceof MascotGenericFile_MultipleSpectra) {
-            MascotGenericFile_MultipleSpectra other = (MascotGenericFile_MultipleSpectra) anObject;
-            if (this.iFilename.equals(other.iFilename) && this.iCharge ==
-                    other.iCharge &&
-                    this.iTitle.equals(other.iTitle) &&
-                    this.iPeaks.equals(other.iPeaks) &&
-                    this.iCharges.equals(other.iCharges)) {
-                result = true;
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * This method formats an integer to a charge String as used in a MascotGenericFile
-     * (eg., 1 to 1+).
-     *
-     * @param aCharge   int with the charge to format.
-     * @return  String with the formatted charge (eg., 1+).
-     */
-    private String processCharge(int aCharge) {
-        // The charge notation is '1+', or conversely, '1-'.
-        // Therefore we do some extra processing.
-        String affix = "+";
-        if (aCharge < 0) {
-            affix = "-";
-        }
-        return Math.abs(aCharge) + affix;
-    }
-
-    /**
-     * This method extracts an integer from Mascot Generic File charge notation, eg.,
-     * 1+.
-     * Remark that the charge can also be annotated as "+2,+3", in those rather cases the charge is also "not known." So we save a zero value.
+     * This method extracts an integer from Mascot Generic File charge notation, eg., 1+.
+     * Remark that the charge can also be annotated as "+2,+3", in those rather cases the charge
+     * is also "not known." So we save a zero value.
      *
      * @param aCharge   String with the Mascot Generic File charge notation (eg., 1+).
      * @return  int with the corresponding integer.
@@ -300,9 +174,7 @@ public class MascotGenericFile_MultipleSpectra {
         if (!multiCharge) {
             // Charge is now: trimmedCharge without the sign character,
             // negated if necessary.
-
-            charge = Integer.parseInt(trimmedCharge.substring(0, trimmedCharge.length() -
-                    1));
+            charge = Integer.parseInt(trimmedCharge.substring(0, trimmedCharge.length() - 1));
             if (negate) {
                 charge = -charge;
             }
@@ -321,6 +193,7 @@ public class MascotGenericFile_MultipleSpectra {
         try {
             BufferedReader br = new BufferedReader(new StringReader(aFileContent));
             String line = null;
+
             // Cycle the file.
             int lineCount = 0;
             boolean inSpectrum = false;
@@ -333,26 +206,34 @@ public class MascotGenericFile_MultipleSpectra {
             numberOfSpectra = 0;
 
             while ((line = br.readLine()) != null) {
+                
                 // Advance line count.
                 lineCount++;
+
                 // Delete leading/trailing spaces.
                 line = line.trim();
+                
                 // Skip empty lines.
                 if (line.equals("")) {
                     continue;
                 }
+
                 // First line can be 'CHARGE'.
                 if (lineCount == 1 && line.startsWith(CHARGE)) {
                     continue;
                 }
-                // Read all starting comments.
+                
                 if (line.startsWith("#")) {
+
+                    // Read all starting comments.
                     comments.append(line + "\n");
-                } // BEGIN IONS marks the start of the real file.
-                else if (line.equals(IONS_START)) {
+                } else if (line.equals(IONS_START)) {
+                    
+                    // BEGIN IONS marks the start of the real file.
                     inSpectrum = true;
-                } // END IONS marks the end.
-                else if (line.equals(IONS_END)) {
+                } else if (line.equals(IONS_END)) {
+
+                    // END IONS marks the end.
                     inSpectrum = false;
 
                     peaks.add(iPeaks);
@@ -361,16 +242,18 @@ public class MascotGenericFile_MultipleSpectra {
                     precursorMzs.add(iPrecursorMz);
                     precursorCharge.add(iCharge);
                     precursorIntensity.add(iIntensity);
-                    //titles.add(iTitle);
 
                     numberOfSpectra++;
                     iPeaks = new HashMap();
                     iComments = "";
                     iCharges = new HashMap();
 
-                } // Read embedded parameters. The most important parameters (such as TITLE, PEPMASS and optional CHARGE fields )
-                // will be saved as instance variables as well as in the iEmbeddedParameter Properties instance.
-                else if (inSpectrum && (line.indexOf("=") >= 0)) {
+                } else if (inSpectrum && (line.indexOf("=") >= 0)) {
+
+                    // Read embedded parameters. The most important parameters (such as TITLE, PEPMASS and optional 
+                    // CHARGE fields) will be saved as instance variables as well as in the iEmbeddedParameter
+                    // Properties instance.
+
                     // Find the starting location of the value (which is one beyond the location
                     // of the '=').
                     int equalSignIndex = line.indexOf("=");
@@ -393,14 +276,13 @@ public class MascotGenericFile_MultipleSpectra {
                     } else if (line.startsWith(CHARGE)) {
                         // CHARGE line found.
                         // Note the extra parsing to read a Mascot Generic File charge (eg., 1+).
-                        this.setCharge(this.extractCharge(line.substring(equalSignIndex +
-                                1)));
+                        this.setCharge(this.extractCharge(line.substring(equalSignIndex + 1)));
                     } else {
                         // This is an extra embedded parameter!
                         String aKey = line.substring(0, equalSignIndex);
                         String aValue = line.substring(equalSignIndex + 1);
                         // Save the extra embedded parameter in iEmbeddedParameter
-//                        addExtraEmbeddedParameter(aKey, aValue);
+                        // addExtraEmbeddedParameter(aKey, aValue);
                     }
                 } // Read peaks, minding the possibility of charge present!
                 else if (inSpectrum) {
@@ -427,6 +309,7 @@ public class MascotGenericFile_MultipleSpectra {
                     }
                 }
             }
+
             // Last but not least: add the comments.
             this.iComments = comments.toString();
             // That's it.
@@ -438,7 +321,9 @@ public class MascotGenericFile_MultipleSpectra {
     }
 
     /**
-     * This method reports on the charge of the precursor ion.
+     * This method reports on the charge of the precursor ion
+     * of the spectrum with the given spectra number.
+     * 
      * Note that when the charge could not be determined, this
      * method will return '0'.
      *
@@ -459,7 +344,8 @@ public class MascotGenericFile_MultipleSpectra {
     }
 
     /**
-     * This method reports on the intensity of the precursor ion.
+     * This method reports on the intensity of the precursor ion
+     * of the spectrum with the given spectra number.
      *
      * @return  double with the intensity of the precursor ion.
      */
@@ -468,9 +354,9 @@ public class MascotGenericFile_MultipleSpectra {
     }
 
     /**
-     * This method reports on the peaks in the spectrum, with the
-     * Doubles for the masses as keys in the HashMap, and the intensities
-     * for each peak as Double value for that mass key.
+     * This method returns the peaks of the spectrum with the given spectra number, with the
+     * Doubles for the masses as keys in the HashMap, and the intensities for each peak as
+     * Double value for that mass key.
      *
      * @return  HashMap with Doubles as keys (the masses) and Doubles as values (the intensities).
      */
@@ -478,12 +364,18 @@ public class MascotGenericFile_MultipleSpectra {
         return (HashMap) peaks.get(spectraNumber);
     }
 
+    /**
+     * Returns the title of the spectrum with the given spectra number.
+     *
+     * @param spectraNumber
+     * @return the title of the spectra given by the spectra number
+     */
     public String getTitle(int spectraNumber) {
         return (String) titles.get(spectraNumber);
     }
 
     /**
-     * This method reports on the precursor M/Z
+     * This method reports the precursor M/Z of the spectra with the given spectra number.
      *
      * @return  double with the precursor M/Z
      */
@@ -492,54 +384,39 @@ public class MascotGenericFile_MultipleSpectra {
     }
 
     /**
-     * This method sets the charge of the precursor ion. When the charge is not known,
-     * it should be set to '0'.
+     * This method sets the charge of the precursor ion of the current spectrum.
+     * When the charge is not known, it should be set to '0'.
      *
      * @param aCharge   int with the charge of the precursor ion.
      */
-    public void setCharge(int aCharge) {
+    private void setCharge(int aCharge) {
         this.iCharge = aCharge;
     }
 
     /**
-     * This method sets the filename for the file.
-     *
-     * @param aFilename String with the filename for the file.
-     */
-    public void setFilename(String aFilename) {
-        this.iFilename = aFilename;
-    }
-
-    /**
-     * This method sets the intensity of the precursor ion.
+     * This method sets the intensity of the precursor ion for the current spectra.
      *
      * @param aIntensity double with the intensity of the precursor ion.
      */
-    public void setIntensity(double aIntensity) {
+    private void setIntensity(double aIntensity) {
         this.iIntensity = aIntensity;
     }
 
     /**
-     * This method sets the peaks on the spectrum.
-     * Doubles for the masses as keys in the HashMap, and the intensities
-     * for each peak as Double value for that mass key.
-     *
-     * @param aPeaks HashMap with Doubles as keys (the masses) and Doubles as values (the intensities).
-     */
-    public void setPeaks(HashMap aPeaks) {
-        this.iPeaks = aPeaks;
-    }
-
-    /**
-     * This method sets the precursor M/Z on the file.
+     * This method sets the precursor M/Z of the current spectra.
      *
      * @param aPrecursorMZ  double with the precursor M/Z
      */
-    public void setPrecursorMZ(double aPrecursorMZ) {
+    private void setPrecursorMZ(double aPrecursorMZ) {
         this.iPrecursorMz = aPrecursorMZ;
     }
-    
-    public int getSpectraCount(){
+
+    /**
+     * Returns the number of spectra in the in the MGF file.
+     *
+     * @return the number of spectra in the in the MGF file
+     */
+    public int getSpectraCount() {
         return numberOfSpectra;
     }
 }
