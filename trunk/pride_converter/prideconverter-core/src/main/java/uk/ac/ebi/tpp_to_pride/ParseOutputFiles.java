@@ -330,7 +330,8 @@ public class ParseOutputFiles {
                                         // If we round ALL decimals, something is horribly wrong!
                                         bd = bd.setScale(bd.scale() - 1, BigDecimal.ROUND_HALF_UP);
                                         if (bd.scale() == 0) {
-                                            logger.error("Rounded down modification mass for '" + ppma.getMass() + "_" + residue + "' down to '" + bd.doubleValue() + "' without finding a match!");
+                                            logger.error("Rounded down modification mass for '" + ppma.getMass() + "_"
+                                                    + residue + "' down to '" + bd.doubleValue() + "' without finding a match!");
                                             break;
                                         }
                                         mass = bd.doubleValue();
@@ -348,13 +349,16 @@ public class ParseOutputFiles {
                                     modMonoDeltas.add(new MonoMassDeltaImpl(modInfo.getMassDiff()));
                                     Collection modCVParams = new ArrayList();
                                     modCVParams.add(new CvParamImpl(modAccession, "PSI-MOD", modName, 0, null));
-                                    PRIDE_modifications.add(new ModificationImpl(modAccession, new Integer(ppma.getPosition()), "PSI-MOD", "1.0", modMonoDeltas, null, modCVParams, null));
+                                    PRIDE_modifications.add(new ModificationImpl(modAccession, 
+                                            new Integer(ppma.getPosition()), "PSI-MOD", "1.0", modMonoDeltas,
+                                            null, modCVParams, null));
                                 }
                             }
 
                             Collection additionalParams = new ArrayList();
                             // Add the PeptideProphet probability.
-                            additionalParams.add(new CvParamImpl("PRIDE:0000099", "PRIDE", "PeptideProphet probability score", 0, hit.getProbability() + ""));
+                            additionalParams.add(new CvParamImpl("PRIDE:0000099", "PRIDE",
+                                    "PeptideProphet probability score", 0, hit.getProbability() + ""));
                             // Retrieval of the constituent scores.
                             String dotproduct = (String) hit.getSearchScores().get("dotproduct");
                             String delta = (String) hit.getSearchScores().get("delta");
@@ -395,7 +399,8 @@ public class ParseOutputFiles {
                             PRIDE_peptides.add(new PeptideImpl(specRef, pepSequence, pepStart, PRIDE_modifications, additionalParams, null));
                             // Data integrity check.
                             if (hit.getRoundedProbability() < pepProphetThreshold) {
-                                logger.warn("Output peptide '" + chargeModSeq + "' with a PeptideProphet probability lower than 0.9: " + hit.getProbability() + ".");
+                                logger.warn("Output peptide '" + chargeModSeq +
+                                        "' with a PeptideProphet probability lower than 0.9: " + hit.getProbability() + ".");
                             }
                         }
                     }
@@ -404,24 +409,32 @@ public class ParseOutputFiles {
                 // Adding protein annotations.
                 Collection additionalCVParams = new ArrayList();
                 if (protSequence != null) {
-                    additionalCVParams.add(new CvParamImpl("PRIDE:0000041", "PRIDE", "Search database protein sequence", -1, protein.getSequence()));
+                    additionalCVParams.add(new CvParamImpl("PRIDE:0000041", "PRIDE", "Search database protein sequence",
+                            -1, protein.getSequence()));
                 }
 
                 if (protein.getDescription() != null && !protein.getDescription().trim().equals("")) {
-                    additionalCVParams.add(new CvParamImpl("PRIDE:0000063", "PRIDE", "Protein description line", -1, protein.getDescription()));
+                    additionalCVParams.add(new CvParamImpl("PRIDE:0000063", "PRIDE", "Protein description line",
+                            -1, protein.getDescription()));
                 }
 
-                additionalCVParams.add(new CvParamImpl("PRIDE:0000100", "PRIDE", "ProteinProphet probability score", -1, protein.getProbability() + ""));
+                additionalCVParams.add(new CvParamImpl("PRIDE:0000100", "PRIDE", "ProteinProphet probability score",
+                        -1, protein.getProbability() + ""));
                 Collection isoforms = protein.getIsoforms();
 
                 if (isoforms != null && !isoforms.isEmpty()) {
                     for (Iterator lIterator1 = isoforms.iterator(); lIterator1.hasNext();) {
                         ProteinProphetIsoform isoform = (ProteinProphetIsoform) lIterator1.next();
-                        additionalCVParams.add(new CvParamImpl("PRIDE:0000098", "PRIDE", "Indistinguishable alternative protein accession", -1, isoform.getAccession()));
+                        additionalCVParams.add(new CvParamImpl("PRIDE:0000098", "PRIDE",
+                                "Indistinguishable alternative protein accession", -1, isoform.getAccession()));
                     }
                 }
 
-                GelFreeIdentificationImpl PRIDE_protein = new GelFreeIdentificationImpl(protein.getAccession(), protein.getVersion(), null, ppSummary.getSourceDatabase(), PRIDE_peptides, additionalCVParams, null, ppSummary.getSoftware(), ppSummary.getDbVersion(), new Double(protein.getPercent_coverage() / 100), new Double(protein.getProbability()), new Double(0.9), null);
+                GelFreeIdentificationImpl PRIDE_protein = new GelFreeIdentificationImpl(protein.getAccession(), 
+                        protein.getVersion(), null, ppSummary.getSourceDatabase(), PRIDE_peptides,
+                        additionalCVParams, null, ppSummary.getSoftware(), ppSummary.getDbVersion(),
+                        new Double(protein.getPercent_coverage() / 100), new Double(protein.getProbability()),
+                        new Double(0.9), null);
                 PRIDE_proteins.add(PRIDE_protein);
             }
             logger.debug("Created PRIDE protein objects (" + dateTimeFormat.format(new Date()) + ").");
@@ -440,15 +453,14 @@ public class ParseOutputFiles {
                 String lContactString = contactStrings[i];
                 String[] contactDetails = lContactString.split("\\[@\\]");
                 if (contactDetails.length != 3) {
-                    logger.error("Invalid contact details found in '" + propertiesfile.getAbsolutePath() + "': expected 3 parts, but found " + contactDetails.length + " (contact was: " + lContactString + ")!");
+                    logger.error("Invalid contact details found in '" + propertiesfile.getAbsolutePath() +
+                            "': expected 3 parts, but found " + contactDetails.length + " (contact was: " + lContactString + ")!");
                 }
                 contacts.add(new ContactImpl(contactDetails[0], contactDetails[1], contactDetails[2]));
             }
 
             // Process instrument info.
-
             // @TODO for MGF files all instrument details has to be extracted from the projectProperties file
-
             MSInstrumentInfo instrumentInfo = null;
 
             String instrumentName = "unknown";
@@ -467,7 +479,8 @@ public class ParseOutputFiles {
 
             Collection instrumentSourceCVParams = new ArrayList();
             // @TODO  Check instrument source stuff.
-            instrumentSourceCVParams.add(new CvParamImpl(projectProperties.getProperty(MZDATA_SOURCE_CV_ACCESSION), "PSI", projectProperties.getProperty(MZDATA_SOURCE_CV_NAME), 0, null));
+            instrumentSourceCVParams.add(new CvParamImpl(projectProperties.getProperty(MZDATA_SOURCE_CV_ACCESSION),
+                    "PSI", projectProperties.getProperty(MZDATA_SOURCE_CV_NAME), 0, null));
             Collection instrumentSourceUserParams = new ArrayList(1);
             instrumentSourceUserParams.add(new UserParamImpl("Original mzXML instrument ionisation description", 0, ionization));
 
@@ -483,7 +496,8 @@ public class ParseOutputFiles {
 
             Collection instrumentDetectorCVParams = new ArrayList();
             // @TODO  Check instrument detector stuff.
-            instrumentDetectorCVParams.add(new CvParamImpl(projectProperties.getProperty(MZDATA_DETECTOR_CV_ACCESSION), "PSI", projectProperties.getProperty(MZDATA_DETECTOR_CV_NAME), 0, null));
+            instrumentDetectorCVParams.add(new CvParamImpl(projectProperties.getProperty(MZDATA_DETECTOR_CV_ACCESSION),
+                    "PSI", projectProperties.getProperty(MZDATA_DETECTOR_CV_NAME), 0, null));
             Collection instrumentDetectorUserParams = new ArrayList();
             instrumentDetectorUserParams.add(new UserParamImpl("Original mzXML instrument detector description", 0, detector));
 
@@ -503,7 +517,8 @@ public class ParseOutputFiles {
             String[] analyzerNames = projectProperties.getProperty(MZDATA_ANALYZERLIST_CV_NAMES).split("\\[\\*\\]");
 
             if (analyzerAccessions.length != analyzerNames.length) {
-                logger.error("Mismatch in the number of analyzers when comparing accessions (" + analyzerAccessions.length + ") with names (" + analyzerNames.length + ")!");
+                logger.error("Mismatch in the number of analyzers when comparing accessions (" +
+                        analyzerAccessions.length + ") with names (" + analyzerNames.length + ")!");
             }
 
             Collection analyzerList = new ArrayList(analyzerAccessions.length);
@@ -527,7 +542,8 @@ public class ParseOutputFiles {
                 String lSampleDescriptor = sampleDescriptors[i];
                 String[] term = lSampleDescriptor.split("\\[@\\]");
                 if (term.length != 3) {
-                    logger.error("Invalid sample descriptor details found in '" + propertiesfile.getAbsolutePath() + "': expected 3 parts, but found " + term.length + " (descriptor was: " + lSampleDescriptor + ")!");
+                    logger.error("Invalid sample descriptor details found in '" + propertiesfile.getAbsolutePath()
+                            + "': expected 3 parts, but found " + term.length + " (descriptor was: " + lSampleDescriptor + ")!");
                 }
                 sampleDescriptionParams.add(new CvParamImpl(term[1], term[0], term[2], i, null));
             }
@@ -540,7 +556,6 @@ public class ParseOutputFiles {
             cvLookups.add(new CVLookupImpl("1.0", "The PRIDE Ontology", "PRIDE", "http://www.ebi.ac.uk/pride"));
 
             // @TODO for MGF files software details has to be extracted from the projectProperties file
-
             // softwareName
             String softwareName = "unknown";
 
@@ -604,9 +619,17 @@ public class ParseOutputFiles {
 
             // Experiment CV parameters.
             Collection experimentCvParams = new ArrayList();
+
+            // add a CV term for the XML generation software
+            experimentCvParams.add(new CvParamImpl(
+                    "PRIDE:0000175", "PRIDE", "XML generation software",
+                    new Long(0), "PRIDE Converter - TPP command line version"));
+
             String project_cv_param = projectProperties.getProperty(PROJECT_CV_PARAMETER);
+
             if (project_cv_param != null && !project_cv_param.trim().equals("")) {
-                experimentCvParams.add(new CvParamImpl("PRIDE:0000097", "PRIDE", "Project", 0, project_cv_param));
+                experimentCvParams.add(new CvParamImpl("PRIDE:0000097", "PRIDE", "Project", 
+                        experimentCvParams.size(), project_cv_param));
             }
 
             // Create a PRIDE experiment.
@@ -617,8 +640,8 @@ public class ParseOutputFiles {
             // Output file.
             // @TODO  Check output file.
             // Marshall experiments in chunks.
-            String outputFile = "D:\\PRIDE_ms_lims\\Data\\TPP\\tppResult.xml";
-            //projectProperties.getProperty(OUTPUT_FILE) + peptidesFile.getName().substring(0, peptidesFile.getName().indexOf(".pep.xml")) + ".prideXML";
+            String outputFile = projectProperties.getProperty(OUTPUT_FILE) + peptidesFile.getName().substring(
+                    0, peptidesFile.getName().indexOf(".pep.xml")) + ".prideXML";
             XMLMarshaller marshaller = new XMLMarshaller(true);
             BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));
             marshaller.marshallExperiments(experiments, bw);
@@ -647,7 +670,8 @@ public class ParseOutputFiles {
      */
     private static void printUsage() {
         printError("Usage:\n\n\t" +
-                "ParseOutputFiles <PeptideProphet_output_file> <ProteinProphet_output_file> <mzXML_files_input_folder> <project_properties_configuration_file>");
+                "ParseOutputFiles <PeptideProphet_output_file> <ProteinProphet_output_file> " +
+                "<mzXML_files_input_folder> <project_properties_configuration_file>");
     }
 
     /**
