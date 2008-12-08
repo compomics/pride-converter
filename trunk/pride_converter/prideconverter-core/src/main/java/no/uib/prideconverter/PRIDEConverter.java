@@ -90,6 +90,7 @@ import uk.ac.ebi.pride.model.implementation.core.PeptideImpl;
 import uk.ac.ebi.pride.model.implementation.core.GelFreeIdentificationImpl;
 import uk.ac.ebi.pride.model.implementation.core.ModificationImpl;
 import uk.ac.ebi.pride.model.implementation.core.MonoMassDeltaImpl;
+import uk.ac.ebi.pride.model.implementation.core.TwoDimensionalIdentificationImpl;
 import uk.ac.ebi.pride.model.interfaces.mzdata.MzData;
 import uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum;
 import uk.ac.ebi.pride.model.interfaces.core.Experiment;
@@ -4029,15 +4030,13 @@ public class PRIDEConverter {
                                     start += 1;
                                     pepStart = new Integer(start);
                                 } else {
-                                    if(debug){
-                                        System.out.println("Could not find start position of '" + pepSequence + "' in '"
-                                                + protein.getAccession() + "' (protein sequence '" + protSequence + "')!");
+                                    if (debug) {
+                                        System.out.println("Could not find start position of '" + pepSequence + "' in '" + protein.getAccession() + "' (protein sequence '" + protSequence + "')!");
                                     }
                                 }
                             } else {
-                                if(debug){
-                                    System.out.println("Unable to determine start and stop position of '" + pepSequence
-                                            + "' in '" + protein.getAccession() + "' because no protein sequence was found.");
+                                if (debug) {
+                                    System.out.println("Unable to determine start and stop position of '" + pepSequence + "' in '" + protein.getAccession() + "' because no protein sequence was found.");
                                 }
                             }
 
@@ -4093,8 +4092,7 @@ public class PRIDEConverter {
 
                                         if (bd.scale() == 0) {
                                             if (debug) {
-                                                System.out.println("Rounded down modification mass for '" + ppma.getMass() 
-                                                        + "_" + residue + "' down to '" + bd.doubleValue() +
+                                                System.out.println("Rounded down modification mass for '" + ppma.getMass() + "_" + residue + "' down to '" + bd.doubleValue() +
                                                         "' without finding a match!");
                                             }
                                             break;
@@ -4137,7 +4135,7 @@ public class PRIDEConverter {
                                             // if the DiffMono is not found for the PSI-MOD the mass 
                                             // from the file is used
                                             monoMasses.add(new MonoMassDeltaImpl(modInfo.getMassDiff()));
-                                            //monoMasses = null;
+                                        //monoMasses = null;
                                         }
 
                                         PRIDE_modifications.add(new ModificationImpl(
@@ -4175,7 +4173,7 @@ public class PRIDEConverter {
                             if (dotproduct != null) {
                                 additionalParams.add(new CvParamImpl("PRIDE:0000179", "PRIDE", "dotproduct", 1, dotproduct));
                             } else {
-                                if(debug){
+                                if (debug) {
                                     System.out.println("No dotproduct score found for peptide " + hit.getModifiedSequence());
                                 }
                             }
@@ -4183,7 +4181,7 @@ public class PRIDEConverter {
                             if (delta != null) {
                                 additionalParams.add(new CvParamImpl("PRIDE:0000180", "PRIDE", "delta", 2, delta));
                             } else {
-                                if(debug){
+                                if (debug) {
                                     System.out.println("No delta found for peptide " + hit.getModifiedSequence());
                                 }
                             }
@@ -4191,7 +4189,7 @@ public class PRIDEConverter {
                             if (deltastar != null) {
                                 additionalParams.add(new CvParamImpl("PRIDE:0000181", "PRIDE", "deltastar", 3, deltastar));
                             } else {
-                                if(debug){
+                                if (debug) {
                                     System.out.println("No deltastar found for peptide " + hit.getModifiedSequence());
                                 }
                             }
@@ -4199,7 +4197,7 @@ public class PRIDEConverter {
                             if (zscore != null) {
                                 additionalParams.add(new CvParamImpl("PRIDE:0000182", "PRIDE", "zscore", 4, zscore));
                             } else {
-                                if(debug){
+                                if (debug) {
                                     System.out.println("No zscore score found for peptide " + hit.getModifiedSequence());
                                 }
                             }
@@ -4207,7 +4205,7 @@ public class PRIDEConverter {
                             if (expect != null) {
                                 additionalParams.add(new CvParamImpl("PRIDE:0000183", "PRIDE", "expect", 5, expect));
                             } else {
-                                if(debug){
+                                if (debug) {
                                     System.out.println("No expect found for peptide " + hit.getModifiedSequence());
                                 }
                             }
@@ -4277,11 +4275,47 @@ public class PRIDEConverter {
 //                    userParams = null;
 //                }
 
-                GelFreeIdentificationImpl PRIDE_protein = new GelFreeIdentificationImpl(
-                        protein.getAccession(), protein.getVersion(), null, ppSummary.getSourceDatabase(),
-                        PRIDE_peptides, additionalCVParams, null, ppSummary.getSoftware(),
-                        ppSummary.getDbVersion(), new Double(protein.getPercent_coverage() / 100),
-                        new Double(protein.getProbability()), new Double(0.9), null);
+                uk.ac.ebi.pride.model.interfaces.core.Identification PRIDE_protein;
+
+                if (properties.isGelFree()) {
+
+                    //GelFreeIdentificationImpl PRIDE_protein = new GelFreeIdentificationImpl(
+                    PRIDE_protein =
+                            new GelFreeIdentificationImpl(
+                            protein.getAccession(), //protein accession
+                            protein.getVersion(), // accession version
+                            null, // spliceforms
+                            ppSummary.getSourceDatabase(), // database
+                            PRIDE_peptides, // the peptides
+                            additionalCVParams, // cv params
+                            null, // user params
+                            ppSummary.getSoftware(), // search engine
+                            ppSummary.getDbVersion(), // database version
+                            new Double(protein.getPercent_coverage() / 100), // sequence coverage
+                            new Double(protein.getProbability()), // score
+                            new Double(properties.getProteinProphetThreshold()), // threshold
+                            null); // spectrum reference
+                } else {
+                    PRIDE_protein = new TwoDimensionalIdentificationImpl(
+                            protein.getAccession(), //protein accession
+                            protein.getVersion(), // accession version
+                            null, // spliceforms
+                            ppSummary.getSourceDatabase(), // database
+                            ppSummary.getDbVersion(), // database version
+                            PRIDE_peptides, // the peptides
+                            additionalCVParams, // cv params
+                            null, // user params
+                            null, // PI
+                            null, // MW
+                            null, // sequence coverage
+                            null, // the gel
+                            null, // x coordinate
+                            null, // y Coordinate
+                            null, // spectrum reference
+                            ppSummary.getSoftware(), // search engine
+                            new Double(protein.getProbability()), // score
+                            new Double(properties.getProteinProphetThreshold())); // threshold
+                }
 
                 identifications.add(PRIDE_protein);
             }
@@ -6384,7 +6418,7 @@ public class PRIDEConverter {
          *
          * @return  GelFreeIdentification   with the PRIDE GelFreeIdentification object.
          */
-        public GelFreeIdentificationImpl getGelFreeIdentification() {
+        public uk.ac.ebi.pride.model.interfaces.core.Identification getGelFreeIdentification() {
             Collection userParams;
 
             if (properties.getDataSource().equalsIgnoreCase("Mascot Dat File")) {
@@ -6419,9 +6453,48 @@ public class PRIDEConverter {
                 score = this.getScore();
             }
 
-            return new GelFreeIdentificationImpl(iAccession, iAccessionVersion,
-                    null, iDatabase, iPeptides, null, userParams, iSearchEngine,
-                    iDBVersion, null, score, threshold, null);
+            uk.ac.ebi.pride.model.interfaces.core.Identification PRIDE_protein;
+
+            if (properties.isGelFree()) {
+
+                PRIDE_protein = new GelFreeIdentificationImpl(
+                        iAccession, //protein accession
+                        iAccessionVersion, // accession version
+                        null,  // spliceforms
+                        iDatabase, // database
+                        iPeptides, // the peptides
+                        null, // cv params
+                        userParams, // user params
+                        iSearchEngine, // search engine
+                        iDBVersion, // database version
+                        null, // sequence coverage
+                        score, // score
+                        threshold, // threshold
+                        null); // spectrum reference
+
+            } else {
+                PRIDE_protein = new TwoDimensionalIdentificationImpl(
+                        iAccession, //protein accession
+                        iAccessionVersion, // accession version
+                        null, // spliceforms
+                        iDatabase, // database
+                        iDBVersion, // database version
+                        iPeptides, // the peptides
+                        null, // cv params
+                        userParams, // user params
+                        null, // PI
+                        null, // MW
+                        null, // sequence coverage
+                        null, // the gel
+                        null, // x coordinate
+                        null, // y Coordinate
+                        null, // spectrum reference
+                        iSearchEngine, // search engine
+                        score, // score
+                        threshold); // threshold
+            }
+
+            return PRIDE_protein;
         }
     }
 

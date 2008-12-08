@@ -64,6 +64,7 @@ public class Properties {
     private DefaultTableModel spectrumTableModel = null;
     private MzData mzDataFile;
     private MzML mzML;
+    private boolean isGelFree = true;
     
     // contact information
     private Collection contacts;
@@ -1488,5 +1489,23 @@ public class Properties {
      */
     public void setTppSpectrumFilesFolderName(String tppSpectrumFilesFolderName) {
         this.tppSpectrumFilesFolderName = tppSpectrumFilesFolderName;
+    }
+
+    /**
+     * Returns true of the identifications are gel free, false otherwise (means 2D gel).
+     *
+     * @return true of the identifications are gel free, false otherwise (means 2D gel).
+     */
+    public boolean isGelFree() {
+        return isGelFree;
+    }
+
+    /**
+     * Sets if the identifications are gel free or 2D gel.
+     *
+     * @param isGelFree true of the identifications are gel free, false otherwise (means 2D gel).
+     */
+    public void setGelFree(boolean isGelFree) {
+        this.isGelFree = isGelFree;
     }
 }

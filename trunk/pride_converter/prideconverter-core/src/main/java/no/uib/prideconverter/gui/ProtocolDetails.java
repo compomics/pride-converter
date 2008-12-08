@@ -84,6 +84,15 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
             protocolPath = protocolPath.replace("%20", " ");
         }
 
+        // set the identification type (2D gel or gel free)
+        if(prideConverter.getProperties().isGelFree()){
+            gelFreeJRadioButton.setSelected(true);
+            twoDimmensionalGelJRadioButton.setSelected(false);
+        } else{
+            gelFreeJRadioButton.setSelected(false);
+            twoDimmensionalGelJRadioButton.setSelected(true);
+        }
+
         readProtocolsFromFile();
         mandatoryFieldsCheck();
 
@@ -269,6 +278,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         deleteSelectedRowJMenuItem = new javax.swing.JMenuItem();
         popupMenu = new javax.swing.JPopupMenu();
         deleteJMenuItem = new javax.swing.JMenuItem();
+        identificationTypeButtonGroup = new javax.swing.ButtonGroup();
         nextJButton = new javax.swing.JButton();
         backJButton = new javax.swing.JButton();
         cancelJButton = new javax.swing.JButton();
@@ -284,6 +294,10 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         deleteJButton = new javax.swing.JButton();
         helpJButton = new javax.swing.JButton();
         aboutJButton = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        gelFreeJRadioButton = new javax.swing.JRadioButton();
+        twoDimmensionalGelJRadioButton = new javax.swing.JRadioButton();
 
         editJMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         editJMenuItem.setMnemonic('E');
@@ -370,7 +384,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         jLabel3.setFont(new java.awt.Font("Tahoma", 2, 11));
         jLabel3.setText("Select a protocol from the list, or create your own, and click on 'Next' to continue.");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Protocol", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(51, 51, 51)));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Protocol", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(51, 51, 51))); // NOI18N
 
         jLabel21.setText("Name:");
 
@@ -466,8 +480,8 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                         .addComponent(namesJComboBox, 0, 446, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(deleteJButton))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addJButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE))
+                    .addComponent(addJButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -477,10 +491,10 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                     .addComponent(jLabel21)
                     .addComponent(deleteJButton)
                     .addComponent(namesJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(17, 17, 17)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(addJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -502,14 +516,50 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
             }
         });
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Identifications", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+
+        jLabel2.setText("Identification Type:");
+
+        identificationTypeButtonGroup.add(gelFreeJRadioButton);
+        gelFreeJRadioButton.setText("Gel Free");
+
+        identificationTypeButtonGroup.add(twoDimmensionalGelJRadioButton);
+        twoDimmensionalGelJRadioButton.setText("2D Gel");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(gelFreeJRadioButton)
+                .addGap(18, 18, 18)
+                .addComponent(twoDimmensionalGelJRadioButton)
+                .addContainerGap(282, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(gelFreeJRadioButton)
+                    .addComponent(twoDimmensionalGelJRadioButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(helpJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(aboutJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -519,9 +569,8 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                         .addComponent(nextJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(cancelJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -529,6 +578,8 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1188,6 +1239,8 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
         prideConverter.getUserProperties().setCurrentProtocol((String) namesJComboBox.getSelectedItem());
 
+        prideConverter.getProperties().setGelFree(gelFreeJRadioButton.isSelected());
+        
         boolean cancel = false;
 
         if (valuesChanged) {
@@ -1353,11 +1406,15 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
     private javax.swing.JMenuItem deleteJMenuItem;
     private javax.swing.JMenuItem deleteSelectedRowJMenuItem;
     private javax.swing.JMenuItem editJMenuItem;
+    private javax.swing.JRadioButton gelFreeJRadioButton;
     private javax.swing.JButton helpJButton;
+    private javax.swing.ButtonGroup identificationTypeButtonGroup;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator3;
@@ -1369,6 +1426,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
     private javax.swing.JPopupMenu popupJMenu;
     private javax.swing.JPopupMenu popupMenu;
     private javax.swing.JTable protocolStepsJTable;
+    private javax.swing.JRadioButton twoDimmensionalGelJRadioButton;
     // End of variables declaration//GEN-END:variables
     /**
      * See ComboBoxInputable
