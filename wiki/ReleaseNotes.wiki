@@ -3,6 +3,13 @@
 
 ----
 
+*Changes in PRIDE Converter v1.14 - (Dec. 08. 2008):*
+ * It is now possible to select if the identifications are 2D gel based or gel free.
+ * The selected ProteinProphet threshold was not included in the PRIDE XML file, even though it was used for calculating the protein identifications to include.
+
+
+----
+
 *Changes in PRIDE Converter v1.14 - (Dec. 03. 2008):*
  * The Peptide-/ProteinProphet conversion has been made more general and now also supports MGF files for the spectra.
  * Removed the extra space before "Emulates Mascot web results" in the OutputDetails frame.
@@ -14,6 +21,8 @@
  * A third default instrument has been added: LTQ-Orbitrap.
  * Fixed a bug where the wrong default ontology was selected when adding editing sample CV terms.
  * Fixed a bug where the list of analyzers was not reset when importing instrument details from mzData files.
+
+Download Count: 25
 
 
 ----
