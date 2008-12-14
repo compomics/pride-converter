@@ -3,7 +3,7 @@
 
 ----
 
-*Changes in PRIDE Converter v1.14 - (Dec. 08. 2008):*
+*Changes in PRIDE Converter v1.14.1 - (Dec. 08. 2008):*
  * It is now possible to select if the identifications are 2D gel based or gel free.
  * The selected ProteinProphet threshold was not included in the PRIDE XML file, even though it was used for calculating the protein identifications to include. Instead a default threshold of 0.9 was used. This as now been fixed.
 
