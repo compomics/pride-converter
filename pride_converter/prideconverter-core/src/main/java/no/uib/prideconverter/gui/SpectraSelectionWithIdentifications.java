@@ -9,10 +9,10 @@ import be.proteomics.mascotdatfile.util.mascot.Query;
 import be.proteomics.mascotdatfile.util.mascot.enumeration.MascotDatfileType;
 import be.proteomics.mascotdatfile.util.mascot.factory.MascotDatfileFactory;
 import be.proteomics.mascotdatfile.util.mascot.iterator.QueryEnumerator;
+import de.proteinms.omxparser.OmssaOmxFile;
+import de.proteinms.omxparser.util.MSHitSet;
+import de.proteinms.omxparser.util.MSSpectrum;
 import no.uib.prideconverter.PRIDEConverter;
-import de.proteinms.omxparser.util.OmssaOmxFile;
-import de.proteinms.omxparser.util.omssaparser.MSHitSet;
-import de.proteinms.omxparser.util.omssaparser.MSSpectrum;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -723,6 +723,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
         Thread t = new Thread(new Runnable() {
 
+            @Override
             public void run() {
                 progressDialog.setVisible(true);
             }
@@ -733,6 +734,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
         Thread t2 = new Thread(new Runnable() {
 
+            @Override
             public void run() {
 
                 int spectrumID;
@@ -1000,8 +1002,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                                 selected = false;
 
-                                String[] files = {file.getPath()};
-                                omxFile = new OmssaOmxFile(files);
+                                omxFile = new OmssaOmxFile(file.getPath(), null, null);
                                 results = omxFile.getSpectrumToHitSetMap();
 
                                 iterator = results.keySet().iterator();
