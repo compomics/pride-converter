@@ -50,14 +50,12 @@ import com.jgoodies.looks.plastic.theme.SkyKrupp;
 import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
-import de.proteinms.omxparser.util.OmssaOmxFile;
-import de.proteinms.omxparser.util.omssaparser.AbundanceValue;
-import de.proteinms.omxparser.util.omssaparser.MSHitSet;
-import de.proteinms.omxparser.util.omssaparser.MSHits;
-import de.proteinms.omxparser.util.omssaparser.MSModHit;
-import de.proteinms.omxparser.util.omssaparser.MSPepHit;
-import de.proteinms.omxparser.util.omssaparser.MSSpectrum;
-import de.proteinms.omxparser.util.omssaparser.MZValue;
+import de.proteinms.omxparser.OmssaOmxFile;
+import de.proteinms.omxparser.util.MSHitSet;
+import de.proteinms.omxparser.util.MSHits;
+import de.proteinms.omxparser.util.MSModHit;
+import de.proteinms.omxparser.util.MSPepHit;
+import de.proteinms.omxparser.util.MSSpectrum;
 
 import java.sql.Connection;
 import java.util.Collection;
@@ -116,7 +114,7 @@ import uk.ac.ebi.tpp_to_pride.wrappers.peptideprophet.*;
 public class PRIDEConverter {
 
     private static String wizardName = "PRIDE Converter";
-    private static String prideConverterVersionNumber = "v1.14.1";
+    private static String prideConverterVersionNumber = "v1.14.2";
     private static ArrayList<IdentificationGeneral> ids;
     private static Collection identifications;
     private static int totalNumberOfSpectra = 0;
@@ -5302,8 +5300,8 @@ public class PRIDEConverter {
         MSPepHit currentMSPepHit;
         MSHits currentMSHit;
         ArrayList cVParams, userParams;
-        List<MZValue> mzValues;
-        List<AbundanceValue> intensityValues;
+        List<Integer> mzValues;
+        List<Integer> intensityValues;
         Collection spectrumDescriptionComments;
         MSModHit currentMSModHit;
 
@@ -5525,13 +5523,16 @@ public class PRIDEConverter {
             progressDialog.setString(currentFileName + " (" + (k + 1) + "/" +
                     properties.getSelectedSourceFiles().size() + ")");
 
-            String[] files = {properties.getSelectedSourceFiles().get(k)};
-            omxFile = new OmssaOmxFile(files);
+            // @TODO move the parsing of the mods.xml and usermodsxml into the OmssaOmxFile
+            omxFile = new OmssaOmxFile(properties.getSelectedSourceFiles().get(k), null, null);
 
             fixedModifications =
                     omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_fixed.MSMod;
             variableModifications =
                     omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_variable.MSMod;
+
+            int omssaScale =
+                    omxFile.getParserResult().MSSearch_response.MSResponse.get(0).MSResponse_scale;
 
             // fixed modifications
             for (int i = 0; i < fixedModifications.size(); i++) {
@@ -5612,8 +5613,8 @@ public class PRIDEConverter {
 
                     for (int j = 0; j <
                             mzValues.size(); j++) {
-                        arrays[0][j] = mzValues.get(j).getMzValue();
-                        arrays[1][j] = intensityValues.get(j).getAbundanceValue();
+                        arrays[0][j] = mzValues.get(j) / omssaScale;
+                        arrays[1][j] = intensityValues.get(j) / omssaScale;
                     }
 
                     // Precursor collection.
@@ -5633,7 +5634,7 @@ public class PRIDEConverter {
                     }
 
                     ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                            "MassToChargeRatio", 2, "" + tempSpectrum.getPrecursorMz()));
+                            "MassToChargeRatio", 2, "" + tempSpectrum.MSSpectrum_precursormz  / omssaScale));
 
                     precursors.add(new PrecursorImpl(null, null, ionSelection,
                             null, 1, idCounter, 0));
@@ -5641,8 +5642,7 @@ public class PRIDEConverter {
                     // Spectrum description comments.
                     spectrumDescriptionComments = new ArrayList(1);
 
-                    if (results.get(tempSpectrum).MSHitSet_hits.MSHits.size() >
-                            0) {
+                    if (results.get(tempSpectrum).MSHitSet_hits.MSHits.size() > 0) {
                         spectrumDescriptionComments.add(new SpectrumDescCommentImpl("Identified"));
 
                         cVParams = new ArrayList();
@@ -5811,7 +5811,7 @@ public class PRIDEConverter {
 
                         if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
                             iTRAQValues = new iTRAQ(arrays,
-                                    tempSpectrum.getPrecursorMz(),
+                                    tempSpectrum.MSSpectrum_precursormz  / omssaScale,
                                     tempSpectrum.MSSpectrum_charge.MSSpectrum_charge_E.get(0),
                                     userProperties.getPeakIntegrationRangeLower(),
                                     userProperties.getPeakIntegrationRangeUpper(),

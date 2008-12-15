@@ -521,7 +521,8 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         jLabel2.setText("Identification Type:");
 
         identificationTypeButtonGroup.add(gelFreeJRadioButton);
-        gelFreeJRadioButton.setText("Gel Free");
+        gelFreeJRadioButton.setText("Other");
+        gelFreeJRadioButton.setToolTipText("Everything that's not 2D gel based");
 
         identificationTypeButtonGroup.add(twoDimmensionalGelJRadioButton);
         twoDimmensionalGelJRadioButton.setText("2D Gel");
@@ -534,10 +535,10 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(gelFreeJRadioButton)
-                .addGap(18, 18, 18)
                 .addComponent(twoDimmensionalGelJRadioButton)
-                .addContainerGap(282, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(gelFreeJRadioButton)
+                .addContainerGap(294, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

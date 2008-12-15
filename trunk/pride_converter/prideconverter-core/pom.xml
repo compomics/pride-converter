@@ -4,7 +4,7 @@
     <groupId>no.uib</groupId>
     <artifactId>prideconverter-core</artifactId>
     <packaging>jar</packaging>
-    <version>1.14.1</version>
+    <version>1.14.2</version>
     <name>prideconverter-core</name>
     <description>The PRIDE Converter converts MS data into valid PRIDE XML for submission to the publicly available PRIDE database.
 It presents a convenient, wizard-like graphical user interface, and includes efficient access to the Ontology Lookup Service (OLS).</description>
@@ -122,7 +122,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         <dependency>
             <groupId>de.proteinms.omxparser</groupId>
             <artifactId>omssaparser</artifactId>
-            <version>0.9.2</version>
+            <version>0.9.4</version>
         </dependency>
         <dependency>
             <groupId>com.jgoodies</groupId>

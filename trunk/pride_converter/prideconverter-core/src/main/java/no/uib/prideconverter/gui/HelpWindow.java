@@ -33,7 +33,7 @@ public class HelpWindow extends javax.swing.JFrame {
         initComponents();
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
-                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
+                getResource("/no/uib/prideconverter/icons/help.GIF")));
 
         boolean aboutFile = false;
 
@@ -54,6 +54,14 @@ public class HelpWindow extends javax.swing.JFrame {
             if (fileName.getPath().endsWith("AboutPRIDE_Converter.html") ||
                     fileName.getPath().endsWith("AboutOLS.html")) {
                 aboutFile = true;
+
+                if (fileName.getPath().endsWith("AboutPRIDE_Converter.html")) {
+                    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+                            getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
+                } else {
+                    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+                            getResource("/no/uib/prideconverter/icons/ols_transparent_small.GIF")));
+                }
             }
         } catch (Exception e) {
 
@@ -118,6 +126,12 @@ public class HelpWindow extends javax.swing.JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
                 getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
 
+        if (fileName.getPath().endsWith("OLSDialog.html")) {
+            setTitle("OLS - Help");
+            setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+                    getResource("/no/uib/prideconverter/icons/ols_transparent_small.GIF")));
+        }
+
         boolean aboutFile = false;
 
         try {
@@ -137,6 +151,14 @@ public class HelpWindow extends javax.swing.JFrame {
             if (fileName.getPath().endsWith("AboutPRIDE_Converter.html") ||
                     fileName.getPath().endsWith("AboutOLS.html")) {
                 aboutFile = true;
+
+                if (fileName.getPath().endsWith("AboutPRIDE_Converter.html")) {
+                    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+                            getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
+                } else {
+                    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+                            getResource("/no/uib/prideconverter/icons/ols_transparent_small.GIF")));
+                }
             }
         } catch (Exception e) {
             try {
@@ -260,7 +282,8 @@ public class HelpWindow extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    /** 
+
+    /**
      * Closes the dialog 
      *
      * @param evt
