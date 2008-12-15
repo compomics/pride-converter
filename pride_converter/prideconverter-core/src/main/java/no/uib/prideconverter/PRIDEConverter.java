@@ -5531,8 +5531,12 @@ public class PRIDEConverter {
             variableModifications =
                     omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_variable.MSMod;
 
-            int omssaScale =
+            int omssaResponseScale =
                     omxFile.getParserResult().MSSearch_response.MSResponse.get(0).MSResponse_scale;
+
+//            int omssaSearchSettingsScale =
+//                    omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_scale;
+
 
             // fixed modifications
             for (int i = 0; i < fixedModifications.size(); i++) {
@@ -5609,12 +5613,14 @@ public class PRIDEConverter {
                     mzValues = tempSpectrum.MSSpectrum_mz.MSSpectrum_mz_E;
                     intensityValues = tempSpectrum.MSSpectrum_abundance.MSSpectrum_abundance_E;
 
+                    int omssaAbundanceScale = tempSpectrum.MSSpectrum_iscale;
+
                     arrays = new double[2][mzValues.size()];
 
                     for (int j = 0; j <
                             mzValues.size(); j++) {
-                        arrays[0][j] = mzValues.get(j) / omssaScale;
-                        arrays[1][j] = intensityValues.get(j) / omssaScale;
+                        arrays[0][j] = mzValues.get(j) / omssaResponseScale;
+                        arrays[1][j] = intensityValues.get(j) / omssaAbundanceScale;
                     }
 
                     // Precursor collection.
@@ -5634,7 +5640,7 @@ public class PRIDEConverter {
                     }
 
                     ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                            "MassToChargeRatio", 2, "" + tempSpectrum.MSSpectrum_precursormz  / omssaScale));
+                            "MassToChargeRatio", 2, "" + tempSpectrum.MSSpectrum_precursormz  / omssaResponseScale));
 
                     precursors.add(new PrecursorImpl(null, null, ionSelection,
                             null, 1, idCounter, 0));
@@ -5811,7 +5817,7 @@ public class PRIDEConverter {
 
                         if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
                             iTRAQValues = new iTRAQ(arrays,
-                                    tempSpectrum.MSSpectrum_precursormz  / omssaScale,
+                                    tempSpectrum.MSSpectrum_precursormz  / omssaResponseScale,
                                     tempSpectrum.MSSpectrum_charge.MSSpectrum_charge_E.get(0),
                                     userProperties.getPeakIntegrationRangeLower(),
                                     userProperties.getPeakIntegrationRangeUpper(),
