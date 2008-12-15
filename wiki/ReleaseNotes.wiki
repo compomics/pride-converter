@@ -5,7 +5,7 @@
 
 
 *Changes in PRIDE Converter v1.14.2 - (Dec. 15. 2008):*
- * Fixed a bug where OMSSA data values was divided by 1000 to get the real value. Now the `MSResponse_scale value` from the OMSSA file is used.
+ * Fixed a bug where OMSSA data values was divided by 1000 to get the real value. Now the `MSResponse_scale` and the `MSSpectrum_iscale` values from the OMSSA file are used.
  * Upgraded to `omssaparser-0.9.4`.
  * Replaced `Gel Free` identifications by `Other`, to be able to support 1D Gel identifications.
 
