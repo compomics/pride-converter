@@ -3,10 +3,20 @@
 
 ----
 
+
+*Changes in PRIDE Converter v1.14.2 - (Dec. 15. 2008):*
+ * Fixed a bug where OMSSA data values was divided by 1000 to get the real value. Now the `MSResponse_scale value` from the OMSSA file is used.
+ * Upgraded to `omssaparser-0.9.4`.
+ * Replaced `Gel Free` identifications by `Other`, to be able to support 1D Gel identifications.
+
+
+----
+
 *Changes in PRIDE Converter v1.14.1 - (Dec. 08. 2008):*
  * It is now possible to select if the identifications are 2D gel based or gel free.
  * The selected ProteinProphet threshold was not included in the PRIDE XML file, even though it was used for calculating the protein identifications to include. Instead a default threshold of 0.9 was used. This as now been fixed.
 
+Download Count: 11
 
 ----
 
