@@ -10,6 +10,8 @@
 It presents a convenient, wizard-like graphical user interface, and includes efficient access to the Ontology Lookup Service (OLS).</description>
     <url>http://code.google.com/p/pride-converter/</url>
 
+
+    <!-- Licence -->
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -17,6 +19,8 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         </license>
     </licenses>
 
+
+    <!-- Developers -->
     <developers>
         <developer>
             <name>Harald Barsnes</name>
@@ -32,8 +36,12 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         </developer>
     </developers>
 
+
+    <!-- Build -->
     <build>
         <plugins>
+
+            <!-- Compiler plugin -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.0.2</version>
@@ -42,6 +50,8 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                     <target>1.4</target>
                 </configuration>
             </plugin>
+
+            <!-- Dependency plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -61,6 +71,8 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Jar plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -75,7 +87,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                 </configuration>
             </plugin>
 
-
+            <!-- Resources plugin -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.3</version>
@@ -100,6 +112,8 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         </plugins>
     </build>
 
+
+    <!-- Dependencies -->
     <dependencies>
         <dependency>
             <groupId>no.uib</groupId>

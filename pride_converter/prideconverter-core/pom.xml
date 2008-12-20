@@ -10,6 +10,8 @@
 It presents a convenient, wizard-like graphical user interface, and includes efficient access to the Ontology Lookup Service (OLS).</description>
     <url>http://code.google.com/p/pride-converter/</url>
 
+
+    <!-- Licence -->
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -17,6 +19,8 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         </license>
     </licenses>
 
+
+    <!-- Developers -->
     <developers>
         <developer>
             <name>Harald Barsnes</name>
@@ -32,8 +36,12 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         </developer>
     </developers>
 
+
+    <!-- Build -->
     <build>
         <plugins>
+
+            <!-- Compiler plugin -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.0.2</version>
@@ -42,6 +50,8 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                     <target>1.6</target>
                 </configuration>
             </plugin>
+
+            <!-- Dependency plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -61,6 +71,8 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                     </execution>
                 </executions>
             </plugin>
+            
+            <!-- Jar plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -76,7 +88,10 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         </plugins>
     </build>
 
+
+    <!-- Repositories -->
     <repositories>
+
         <!-- EBI repositories -->
         <repository>
             <id>ebi-repo</id>
@@ -98,6 +113,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <snapshots>
             </snapshots>
         </repository>
+
          <!-- UGent Genesis Maven 1 repository -->
         <repository>
             <id>genesis-maven-repository</id>
@@ -109,6 +125,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <snapshots>
             </snapshots>
         </repository>
+
          <!-- PRIDE SourceForge Maven 2 repository -->
         <repository>
             <id>PRIDE_SourceForge_Maven2_Repository</id>
@@ -118,6 +135,8 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         </repository>
     </repositories>
 
+
+    <!-- Dependencies -->
     <dependencies>
         <dependency>
             <groupId>de.proteinms.omxparser</groupId>
@@ -151,16 +170,15 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                     <artifactId>jmxtools</artifactId>
                     <groupId>com.sun.jdmk</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>mail</artifactId>
+                    <groupId>javax.mail</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
             <groupId>lennart</groupId>
             <artifactId>lm_jrap</artifactId>
-            <version>1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.activation</groupId>
-            <artifactId>activation</artifactId>
             <version>1.1</version>
         </dependency>
         <dependency>
@@ -179,19 +197,15 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <version>1.8.0.7</version>
         </dependency>
         <dependency>
-            <groupId>isorelax</groupId>
-            <artifactId>isorelax</artifactId>
-            <version>20030108</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lowagie</groupId>
-            <artifactId>itext</artifactId>
-            <version>2.0.6</version>
-        </dependency>
-        <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>2.1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>activation</artifactId>
+                    <groupId>javax.activation</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
@@ -207,16 +221,6 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <groupId>uk.ac.ebi.jmzml</groupId>
             <artifactId>jmzml</artifactId>
             <version>0.3-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.transaction</groupId>
-            <artifactId>jta</artifactId>
-            <version>1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>1.4</version>
         </dependency>
         <dependency>
             <groupId>kenny</groupId>
@@ -238,6 +242,10 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <artifactId>pride-core</artifactId>
             <version>2.5.6</version>
             <exclusions>
+                <exclusion>
+                    <artifactId>activation</artifactId>
+                    <groupId>javax.activation</groupId>
+                </exclusion>
                 <exclusion>
                     <artifactId>asm</artifactId>
                     <groupId>asm</groupId>
@@ -290,22 +298,11 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                     <artifactId>xsdlib</artifactId>
                     <groupId>msv</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>mail</artifactId>
+                    <groupId>javax.mail</groupId>
+                </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>activesoap</groupId>
-            <artifactId>relaxngDatatype</artifactId>
-            <version>1.5</version>
-        </dependency>
-        <dependency>
-            <groupId>soap</groupId>
-            <artifactId>soap</artifactId>
-            <version>2.3</version>
-        </dependency>
-        <dependency>
-            <groupId>lennart</groupId>
-            <artifactId>statlib</artifactId>
-            <version>0.3</version>
         </dependency>
         <dependency>
             <groupId>javax.xml.stream</groupId>
@@ -326,16 +323,6 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
             <version>2.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>activesoap</groupId>
-            <artifactId>xercesImpl</artifactId>
-            <version>1.5</version>
-        </dependency>
-        <dependency>
-            <groupId>xml-apis</groupId>
-            <artifactId>xml-apis</artifactId>
-            <version>2.0.2</version>
         </dependency>
         <dependency>
             <groupId>xerces</groupId>
@@ -359,11 +346,6 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>activesoap</groupId>
-            <artifactId>xsdlib</artifactId>
-            <version>1.5</version>
-        </dependency>
-        <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.7.0</version>
@@ -382,11 +364,6 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <groupId>commons-discovery</groupId>
             <artifactId>commons-discovery</artifactId>
             <version>0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>1.3.2</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -413,16 +390,6 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                     <groupId>org.apache.axis</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.axis</groupId>
-            <artifactId>axis-ant</artifactId>
-            <version>1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.axis</groupId>
-            <artifactId>axis-jaxrpc</artifactId>
-            <version>1.4</version>
         </dependency>
         <dependency>
             <groupId>jcs</groupId>
@@ -480,14 +447,19 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>isorelax</groupId>
+            <artifactId>isorelax</artifactId>
+            <version>20030108</version>
+        </dependency>
+        <dependency>
             <groupId>msv</groupId>
             <artifactId>msv</artifactId>
             <version>20030225</version>
         </dependency>
         <dependency>
-            <groupId>javax.xml.soap</groupId>
-            <artifactId>saaj-api</artifactId>
-            <version>1.3</version>
+            <groupId>activesoap</groupId>
+            <artifactId>xsdlib</artifactId>
+            <version>1.5</version>
         </dependency>
     </dependencies>
 </project>
