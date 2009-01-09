@@ -31,6 +31,7 @@ import java.util.StringTokenizer;
 import no.uib.prideconverter.gui.ComboBoxInputDialog;
 import no.uib.prideconverter.util.ComboBoxInputable;
 import no.uib.prideconverter.util.MyComboBoxRenderer;
+import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
 
 /**
@@ -59,13 +60,13 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         this.prideConverter = prideConverter;
 
         // sets the default wizard frame size
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setSize(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
@@ -287,8 +288,16 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                         prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
 
                     } catch (FileNotFoundException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, "The file " + newName + " could not be found.",
+                                "File Not Found", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to save file: ");
                         ex.printStackTrace();
                     } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, "An error occured when trying to save the file " + newName + ".",
+                                "File Error", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to save file: ");
                         ex.printStackTrace();
                     }
                 }
@@ -339,8 +348,16 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
 
             } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(
+                        this, "The file " + newName + " could not be found.",
+                        "File Not Found", JOptionPane.ERROR_MESSAGE);
+                Util.writeToErrorLog("Error when trying to save file: ");
                 ex.printStackTrace();
             } catch (IOException ex) {
+                JOptionPane.showMessageDialog(
+                        this, "An error occured when trying to save the file " + newName + ".",
+                        "File Error", JOptionPane.ERROR_MESSAGE);
+                Util.writeToErrorLog("Error when trying to save file: ");
                 ex.printStackTrace();
             }
         }
@@ -385,6 +402,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     private void readSamplesFromFile() {
 
         File file = new File(samplePath);
+        String tempSampleName = null;
 
         try {
             if (!file.exists()) {
@@ -394,7 +412,6 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             File[] sampleFiles = file.listFiles();
             FileReader f = null;
             BufferedReader b = null;
-            String tempSampleName;
             Vector sampleNames = new Vector();
 
             for (int i = 0; i < sampleFiles.length; i++) {
@@ -436,8 +453,16 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             namesJComboBoxActionPerformed(null);
 
         } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "The file " + tempSampleName + " could not be found.",
+                    "File Not Found", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to read file: ");
             ex.printStackTrace();
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "An error occured when trying to read the file " + tempSampleName + ".",
+                    "File Error", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to read file: ");
             ex.printStackTrace();
         }
     }
@@ -864,6 +889,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     /**
      * If the user double clicks on a row in the table the OLS 
      * dialog is shown where the information about the given sample can be 
@@ -1318,10 +1344,10 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
                 if (value == JOptionPane.YES_OPTION) {
 
-                    try {
+                    String newName;
+                    newName = samplePath + lastSelectedSampleName + ".sam";
 
-                        String newName;
-                        newName = samplePath + lastSelectedSampleName + ".sam";
+                    try {
 
                         FileWriter r = new FileWriter(newName);
                         BufferedWriter bw = new BufferedWriter(r);
@@ -1360,8 +1386,16 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                         prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
 
                     } catch (FileNotFoundException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, "The file " + newName + " could not be found.",
+                                "File Not Found", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to save file: ");
                         ex.printStackTrace();
                     } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, "An error occured when trying to save the file " + newName + ".",
+                                "File Error", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to save file: ");
                         ex.printStackTrace();
                     }
                 } else if (value == JOptionPane.CANCEL_OPTION) {
@@ -1370,10 +1404,12 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                     namesJComboBox.setSelectedItem(lastSelectedSampleName);
 
                 } else { //value == NO
+
+                    String newSampleName = JOptionPane.showInputDialog(this,
+                            "Please provide the name of the new sample set: ",
+                            "Sample Set Name", JOptionPane.PLAIN_MESSAGE);
+
                     try {
-                        String newSampleName = JOptionPane.showInputDialog(this,
-                                "Please provide the name of the new sample set: ",
-                                "Sample Set Name", JOptionPane.PLAIN_MESSAGE);
 
                         if (newSampleName != null) {
 
@@ -1447,8 +1483,16 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                             prideConverter.getUserProperties().setCurrentSampleSet(lastSelectedSampleName);
                         }
                     } catch (FileNotFoundException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, "The file " + newSampleName + " could not be found.",
+                                "File Not Found", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to save file: ");
                         ex.printStackTrace();
                     } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, "An error occured when trying to save the file " + newSampleName + ".",
+                                "File Error", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to save file: ");
                         ex.printStackTrace();
                     }
                 }
@@ -1578,8 +1622,16 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                     f.close();
 
                 } catch (FileNotFoundException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "The file " + selectedSampleName + " could not be found.",
+                            "File Not Found", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to read file: ");
                     ex.printStackTrace();
                 } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "An error occured when trying to read the file " + selectedSampleName + ".",
+                            "File Error", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to read file: ");
                     ex.printStackTrace();
                 }
 
@@ -1693,7 +1745,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
             ((DefaultTableModel) sampleDetailsJTable.getModel()).addRow(
                     new Object[]{new Integer(sampleDetailsJTable.getRowCount() + 1), temp
-            });
+                    });
 
             if (sampleName != null) {
                 prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().add(sampleName);
@@ -1811,11 +1863,12 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
                 if (value == JOptionPane.YES_OPTION) {
 
+                    String newName;
+                    newName = samplePath +
+                            prideConverter.getUserProperties().getCurrentSampleSet() +
+                            ".sam";
+
                     try {
-                        String newName;
-                        newName = samplePath +
-                                prideConverter.getUserProperties().getCurrentSampleSet() +
-                                ".sam";
 
                         FileWriter r = new FileWriter(newName);
                         BufferedWriter bw = new BufferedWriter(r);
@@ -1849,17 +1902,27 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                         r.close();
 
                     } catch (FileNotFoundException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, "The file " + newName + " could not be found.",
+                                "File Not Found", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to save file: ");
                         ex.printStackTrace();
                     } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, "An error occured when trying to save the file " + newName + ".",
+                                "File Error", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to save file: ");
                         ex.printStackTrace();
                     }
                 } else if (value == JOptionPane.CANCEL_OPTION) {
                     cancel = true;
                 } else { //value == NO
+
+                    String newSampleName = JOptionPane.showInputDialog(this,
+                            "Please provide the name of the new sample set: ",
+                            "Sample Set Name", JOptionPane.PLAIN_MESSAGE);
+
                     try {
-                        String newSampleName = JOptionPane.showInputDialog(this,
-                                "Please provide the name of the new sample set: ",
-                                "Sample Set Name", JOptionPane.PLAIN_MESSAGE);
 
                         if (newSampleName != null) {
 
@@ -1920,8 +1983,16 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                             cancel = true;
                         }
                     } catch (FileNotFoundException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, "The file " + newSampleName + " could not be found.",
+                                "File Not Found", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to save file: ");
                         ex.printStackTrace();
                     } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, "An error occured when trying to save the file " + newSampleName + ".",
+                                "File Error", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to save file: ");
                         ex.printStackTrace();
                     }
                 }
@@ -1944,8 +2015,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 prideConverter.getUserProperties().setPeakIntegrationRangeUpper(
                         new Double(upperRangeJTextField.getText()).doubleValue());
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, 
-                        "Peak Integreation Upper Range is not a number.", 
+                JOptionPane.showMessageDialog(this,
+                        "Peak Integreation Upper Range is not a number.",
                         "Input Error", JOptionPane.ERROR_MESSAGE);
                 cancel = true;
                 upperRangeJTextField.requestFocus();
@@ -1953,8 +2024,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
             if (Math.abs(prideConverter.getUserProperties().getPeakIntegrationRangeLower()) +
                     prideConverter.getUserProperties().getPeakIntegrationRangeUpper() > 1) {
-                JOptionPane.showMessageDialog(this, 
-                        "The input peak integration range cross over between peaks (sum is > 1).", 
+                JOptionPane.showMessageDialog(this,
+                        "The input peak integration range cross over between peaks (sum is > 1).",
                         "Input Error", JOptionPane.ERROR_MESSAGE);
                 cancel = true;
                 lowerRangeJTextField.requestFocus();
@@ -1964,8 +2035,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 prideConverter.getUserProperties().setReporterIonIntensityThreshold(
                         new Double(intensityThresholdJTextField.getText()).doubleValue());
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, 
-                        "The Reporter Ion Intensity Threshold is not a number.", 
+                JOptionPane.showMessageDialog(this,
+                        "The Reporter Ion Intensity Threshold is not a number.",
                         "Input Error", JOptionPane.ERROR_MESSAGE);
                 cancel = true;
                 intensityThresholdJTextField.requestFocus();
@@ -1983,8 +2054,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 }
 
                 if (purrityCorrectionsCounter != 16) {
-                    JOptionPane.showMessageDialog(this, 
-                            "The number of Purity Correction values has to be 16.", 
+                    JOptionPane.showMessageDialog(this,
+                            "The number of Purity Correction values has to be 16.",
                             "Input Error", JOptionPane.ERROR_MESSAGE);
                     cancel = true;
                     purityCorrectionsJTextField.requestFocus();
@@ -1992,14 +2063,14 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
                 prideConverter.getUserProperties().setPurityCorrections(purrityCorrections);
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, 
-                        "One of the Purity Correction values is not a number.", 
+                JOptionPane.showMessageDialog(this,
+                        "One of the Purity Correction values is not a number.",
                         "Input Error", JOptionPane.ERROR_MESSAGE);
                 cancel = true;
                 purityCorrectionsJTextField.requestFocus();
             } catch (ArrayIndexOutOfBoundsException e) {
-                JOptionPane.showMessageDialog(this, 
-                        "The number of Purity Correction values has to be 16.", 
+                JOptionPane.showMessageDialog(this,
+                        "The number of Purity Correction values has to be 16.",
                         "Input Error", JOptionPane.ERROR_MESSAGE);
                 cancel = true;
                 purityCorrectionsJTextField.requestFocus();
@@ -2046,6 +2117,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     private javax.swing.JLabel upperRangeJLabel;
     private javax.swing.JTextField upperRangeJTextField;
     // End of variables declaration//GEN-END:variables
+
     /**
      * See ComboBoxInputable
      */
@@ -2068,8 +2140,16 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             readSamplesFromFile();
 
         } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "The file " + newName + " could not be found.",
+                    "File Not Found", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to save file: ");
             ex.printStackTrace();
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "An error occured when trying to save the file " + newName + ".",
+                    "File Error", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to save file: ");
             ex.printStackTrace();
         }
     }

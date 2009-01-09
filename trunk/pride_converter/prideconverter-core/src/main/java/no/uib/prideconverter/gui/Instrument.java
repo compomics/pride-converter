@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 import no.uib.prideconverter.util.ComboBoxInputable;
 import no.uib.prideconverter.util.MyComboBoxRenderer;
 import no.uib.prideconverter.util.OLSInputable;
+import no.uib.prideconverter.util.Util;
 import org.systemsbiology.jrap.MSXMLParser;
 import uk.ac.ebi.pride.model.implementation.mzData.AnalyzerImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
@@ -578,8 +579,16 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
             instrumentNameJComboBoxActionPerformed(null);
         } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "The file " + file.getPath() + " could not be found.",
+                    "File Not Found", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to read file: ");
             ex.printStackTrace();
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "An error occured when trying to read the file " + file.getPath() + ".",
+                    "File Error", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to read file: ");
             ex.printStackTrace();
         }
     }
@@ -1846,11 +1855,11 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                 if (value == JOptionPane.YES_OPTION) {
 
+                    String newName =
+                            instrumentPath + lastSelectedInstrumentName +
+                            ".int";
+
                     try {
-                        String newName;
-                        newName =
-                                instrumentPath + lastSelectedInstrumentName +
-                                ".int";
 
                         FileWriter r = new FileWriter(newName);
                         BufferedWriter bw = new BufferedWriter(r);
@@ -1969,8 +1978,16 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         bw.close();
                         r.close();
                     } catch (FileNotFoundException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, "The file " + newName + " could not be found.",
+                                "File Not Found", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to save file: ");
                         ex.printStackTrace();
                     } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, "An error occured when trying to save the file " + newName + ".",
+                                "File Error", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to save file: ");
                         ex.printStackTrace();
                     }
                 } else if (value == JOptionPane.CANCEL_OPTION) {
@@ -2126,8 +2143,16 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                                 bw.close();
                                 r.close();
                             } catch (FileNotFoundException ex) {
+                                JOptionPane.showMessageDialog(
+                                        this, "The file " + newName + " could not be found.",
+                                        "File Not Found", JOptionPane.ERROR_MESSAGE);
+                                Util.writeToErrorLog("Error when trying to save file: ");
                                 ex.printStackTrace();
                             } catch (IOException ex) {
+                                JOptionPane.showMessageDialog(
+                                        this, "An error occured when trying to save the file " + newName + ".",
+                                        "File Error", JOptionPane.ERROR_MESSAGE);
+                                Util.writeToErrorLog("Error when trying to save file: ");
                                 ex.printStackTrace();
                             }
 
@@ -2361,8 +2386,16 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     b.close();
                     f.close();
                 } catch (FileNotFoundException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "The file " + selectedInstrumentName + " could not be found.",
+                            "File Not Found", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to read file: ");
                     ex.printStackTrace();
                 } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "An error occured when trying to read the file " + selectedInstrumentName + ".",
+                            "File Error", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to read file: ");
                     ex.printStackTrace();
                 }
 
@@ -2777,8 +2810,16 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             readInstrumentsFromFile();
 
         } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "The file " + newName + " could not be found.",
+                    "File Not Found", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to save file: ");
             ex.printStackTrace();
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "An error occured when trying to save the file " + newName + ".",
+                    "File Error", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to save file: ");
             ex.printStackTrace();
         }
     }
@@ -2811,12 +2852,13 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
      */
     private void saveInstrument(String instrumentName) {
 
+        String newName = instrumentName;
+        newName =
+                instrumentPath +
+                newName +
+                ".int";
+
         try {
-            String newName = instrumentName;
-            newName =
-                    instrumentPath +
-                    newName +
-                    ".int";
 
             FileWriter r = new FileWriter(newName);
             BufferedWriter bw = new BufferedWriter(r);
@@ -2926,8 +2968,16 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             r.close();
 
         } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "The file " + newName + " could not be found.",
+                    "File Not Found", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to save file: ");
             ex.printStackTrace();
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "An error occured when trying to save the file " + newName + ".",
+                    "File Error", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to save file: ");
             ex.printStackTrace();
         }
     }

@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.event.TableModelListener;
+import no.uib.prideconverter.util.Util;
 
 /**
  * A frame that lets the user select one or more ms_lims projects to convert 
@@ -344,7 +345,10 @@ public class ProjectSelection extends javax.swing.JFrame {
                     progressDialog.setVisible(false);
                     progressDialog.dispose();
 
-                    JOptionPane.showMessageDialog(null, "Error while retrieving project details.");
+                    JOptionPane.showMessageDialog(null, 
+                            "An error occured while retrieving project details.\n" +
+                            "See the ErrorLog.txt file in the Properties folder for more detals");
+                    Util.writeToErrorLog("Error while retrieving project details: ");
                     sqle.printStackTrace();
                 }
             }

@@ -200,8 +200,12 @@ public class PRIDEConverter {
                 }
             } catch (SQLException sqle) {
                 // Nothing to be done.
-                Util.writeToErrorLog("DB Connection: Error while attempting to close DB connection!\n" +
-                        sqle.toString());
+                JOptionPane.showMessageDialog(
+                        null, "An error occured when attempting to close the DB connection." +
+                        "See ../Properties/ErrorLog.txt for more details.",
+                        "DB Connection Error", JOptionPane.ERROR_MESSAGE);
+                Util.writeToErrorLog("DB Connection: Error while attempting to close DB connection!");
+                sqle.printStackTrace();
             }
         }
     }
@@ -225,8 +229,7 @@ public class PRIDEConverter {
                     PlasticLookAndFeel.setPlasticTheme(new SkyKrupp());
                     UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
                 } catch (UnsupportedLookAndFeelException e) {
-                    Util.writeToErrorLog("Setting Look And Feel: Error while attempting set the Look And Feel!\n" +
-                            e.toString());
+                    Util.writeToErrorLog("Setting Look And Feel: Error while attempting to set the Look And Feel");
                     e.printStackTrace();
                 }
 
@@ -292,8 +295,12 @@ public class PRIDEConverter {
                             w.close();
                         }
                     } catch (Exception e) {
-                        Util.writeToErrorLog("Error when creating ErrorLog!!! " +
-                                e.toString());
+                        JOptionPane.showMessageDialog(
+                                null, "An error occured when trying to create the ErrorLog." +
+                                "See ../Properties/ErrorLog.txt for more details.",
+                                "Error Creating ErrorLog", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when creating ErrorLog: ");
+                        e.printStackTrace();
                     }
                 }
 
@@ -891,8 +898,7 @@ public class PRIDEConverter {
                     outputFrame.setConvertButtonEnabled(true);
                 } catch (Exception ex) {
 
-                    Util.writeToErrorLog("An error occured while trying to parse: " +
-                            currentFileName + " " + ex.toString());
+                    Util.writeToErrorLog("An error occured while trying to parse: " + currentFileName);
                     ex.printStackTrace();
 
                     JOptionPane.showMessageDialog(outputFrame,
@@ -1507,6 +1513,7 @@ public class PRIDEConverter {
                         file.getPath() +
                         "\ncould not be found.",
                         "File Not Found", JOptionPane.ERROR_MESSAGE);
+                Util.writeToErrorLog("File not found: ");
                 ex.printStackTrace();
             } catch (Exception e) {
                 if (!cancelConversion) {
@@ -1721,7 +1728,7 @@ public class PRIDEConverter {
 
                     if (!cancelConversion) {
 
-                        Util.writeToErrorLog("Error parsing " + fileType + ": " + e.toString());
+                        Util.writeToErrorLog("Error parsing " + fileType + ": ");
                         e.printStackTrace();
 
                         JOptionPane.showMessageDialog(null,
@@ -2681,6 +2688,7 @@ public class PRIDEConverter {
                                 properties.getSelectedSourceFiles().get(j) +
                                 "\ncould not be found.",
                                 "File Not Found", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("File not found: ");
                         ex.printStackTrace();
                     } catch (Exception e) {
                         String fileType = "";
@@ -2693,7 +2701,7 @@ public class PRIDEConverter {
 
                         if (!cancelConversion) {
 
-                            Util.writeToErrorLog("Error parsing " + fileType + ": " + e.toString());
+                            Util.writeToErrorLog("Error parsing " + fileType + ": ");
                             e.printStackTrace();
 
                             JOptionPane.showMessageDialog(null,
@@ -3121,7 +3129,7 @@ public class PRIDEConverter {
 
                 if (!cancelConversion) {
 
-                    Util.writeToErrorLog("Error parsing " + fileType + ": " + e.toString());
+                    Util.writeToErrorLog("Error parsing " + fileType + ": ");
                     e.printStackTrace();
 
                     JOptionPane.showMessageDialog(null,
@@ -4404,6 +4412,11 @@ public class PRIDEConverter {
                 //logger.error(" *** Error parsing line " + xpp.getLineNumber() + " in file '" + currentFile + "'!");
             }
             //logger.error(e.getMessage(), e);
+            JOptionPane.showMessageDialog(
+                    null, "An error occured when parsing a Peptide-/ProteinProphet project.\n" +
+                    "See ../Properties/ErrorLog.txt for more details.",
+                    "Error Parsing Peptide-/ProteinProphet", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error Parsing Peptide-/ProteinProphet: ");
             e.printStackTrace();
         }
 
@@ -5416,8 +5429,7 @@ public class PRIDEConverter {
                     }
                 }
             } catch (Exception e) {
-                Util.writeToErrorLog("Error parsing the mods.xml: " +
-                        e.toString());
+                Util.writeToErrorLog("Error parsing the mods.xml: ");
                 e.printStackTrace();
 
                 JOptionPane.showMessageDialog(null,
@@ -5498,7 +5510,7 @@ public class PRIDEConverter {
                     }
                 }
             } catch (Exception e) {
-                Util.writeToErrorLog("Error parsing the usermods.xml: " + e.toString());
+                Util.writeToErrorLog("Error parsing the usermods.xml: ");
                 e.printStackTrace();
 
                 JOptionPane.showMessageDialog(null,
@@ -5640,7 +5652,7 @@ public class PRIDEConverter {
                     }
 
                     ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                            "MassToChargeRatio", 2, "" + tempSpectrum.MSSpectrum_precursormz  / omssaResponseScale));
+                            "MassToChargeRatio", 2, "" + tempSpectrum.MSSpectrum_precursormz / omssaResponseScale));
 
                     precursors.add(new PrecursorImpl(null, null, ionSelection,
                             null, 1, idCounter, 0));
@@ -5817,7 +5829,7 @@ public class PRIDEConverter {
 
                         if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
                             iTRAQValues = new iTRAQ(arrays,
-                                    tempSpectrum.MSSpectrum_precursormz  / omssaResponseScale,
+                                    tempSpectrum.MSSpectrum_precursormz / omssaResponseScale,
                                     tempSpectrum.MSSpectrum_charge.MSSpectrum_charge_E.get(0),
                                     userProperties.getPeakIntegrationRangeLower(),
                                     userProperties.getPeakIntegrationRangeUpper(),
@@ -6258,7 +6270,7 @@ public class PRIDEConverter {
                 JOptionPane.showMessageDialog(null, "An error occured when accessing the database.\n" +
                         "See ../Properties/ErrorLog.txt for more details.",
                         "Database Error", JOptionPane.ERROR_MESSAGE);
-                Util.writeToErrorLog("An error occured when accessing the database: " + e.toString());
+                Util.writeToErrorLog("An error occured when accessing the database: ");
                 e.printStackTrace();
             }
         }
@@ -6466,7 +6478,7 @@ public class PRIDEConverter {
                 PRIDE_protein = new GelFreeIdentificationImpl(
                         iAccession, //protein accession
                         iAccessionVersion, // accession version
-                        null,  // spliceforms
+                        null, // spliceforms
                         iDatabase, // database
                         iPeptides, // the peptides
                         null, // cv params

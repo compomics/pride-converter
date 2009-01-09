@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import javax.swing.JOptionPane;
+import no.uib.prideconverter.util.Util;
 
 /**
  * A window used to display help text in html format.
@@ -316,8 +318,18 @@ public class HelpWindow extends javax.swing.JFrame {
                 try {
                     Desktop.getDesktop().browse(new URI(evt.getDescription()));
                 } catch (URISyntaxException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "Not able to open the web page. Make sure that you are online and try again.\n" +
+                            "You may also want to check your firewall settings.",
+                            "Web Page Not Available", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to open web page: ");
                     ex.printStackTrace();
                 } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "Not able to open the web page. Make sure that you are online and try again.\n" +
+                            "You may also want to check your firewall settings.",
+                            "Web Page Not Available", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to open web page: ");
                     ex.printStackTrace();
                 }
 

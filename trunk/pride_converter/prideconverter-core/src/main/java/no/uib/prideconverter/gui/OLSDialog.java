@@ -17,6 +17,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import no.uib.prideconverter.util.OLSInputable;
+import no.uib.prideconverter.util.Util;
 
 /**
  * A dialog for interacting with the Ontology Lookup Service OLS 
@@ -120,14 +121,18 @@ public class OLSDialog extends javax.swing.JDialog {
             ontologyJComboBox.setSelectedItem(selectedOntology);
         } catch (RemoteException ex) {
             JOptionPane.showMessageDialog(
-                    this, "Not able to contact the OLS. Make sure that you are online and try again.",
-                    "OLS not available", JOptionPane.ERROR_MESSAGE);
+                    this, "Not able to contact the OLS. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall settings.",
+                    "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to access OLS: ");
             ex.printStackTrace();
             error = true;
         } catch (ServiceException ex) {
             JOptionPane.showMessageDialog(
-                    this, "Not able to contact the OLS. Make sure that you are online and try again.",
-                    "OLS not available", JOptionPane.ERROR_MESSAGE);
+                    this, "Not able to contact the OLS. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall settings.",
+                    "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to access OLS: ");
             ex.printStackTrace();
             error = true;
         }
@@ -399,6 +404,7 @@ public class OLSDialog extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     /**
      * Updates the search results if the ontology is changed.
      * 
@@ -455,11 +461,23 @@ public class OLSDialog extends javax.swing.JDialog {
 
             //No mathcing terms found
             if (map.size() == 0) {
-            //JOptionPane.showMessageDialog(this, "No mathcing terms found.");
-            //this.olsSearchTextField.requestFocus();
+                //JOptionPane.showMessageDialog(this, "No mathcing terms found.");
+                //this.olsSearchTextField.requestFocus();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (RemoteException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "Not able to contact the OLS. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall settings.",
+                    "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to access OLS: ");
+            ex.printStackTrace();
+        } catch (ServiceException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "Not able to contact the OLS. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall settings.",
+                    "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to access OLS: ");
+            ex.printStackTrace();
         }
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -495,8 +513,20 @@ public class OLSDialog extends javax.swing.JDialog {
             this.setVisible(false);
             this.dispose();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (RemoteException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "Not able to contact the OLS. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall settings.",
+                    "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to access OLS: ");
+            ex.printStackTrace();
+        } catch (ServiceException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "Not able to contact the OLS. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall settings.",
+                    "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to access OLS: ");
+            ex.printStackTrace();
         }
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -572,8 +602,20 @@ public class OLSDialog extends javax.swing.JDialog {
                     olsResultsJEditorPane.setText(temp);
                     olsResultsJEditorPane.setCaretPosition(0);
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (RemoteException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "Not able to contact the OLS. Make sure that you are online and try again.\n" +
+                            "You may also want to check your firewall settings.",
+                            "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to access OLS: ");
+                    ex.printStackTrace();
+                } catch (ServiceException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "Not able to contact the OLS. Make sure that you are online and try again.\n" +
+                            "You may also want to check your firewall settings.",
+                            "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to access OLS: ");
+                    ex.printStackTrace();
                 }
             }
         }
@@ -639,8 +681,18 @@ public class OLSDialog extends javax.swing.JDialog {
             Desktop.getDesktop().browse(new URI("http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=" +
                     ontologyShort));
         } catch (URISyntaxException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "Not able to open the OLS web page. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall settings.",
+                    "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to open OLS web page: ");
             ex.printStackTrace();
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "Not able to open the OLS web page. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall settings.",
+                    "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to open OLS web page: ");
             ex.printStackTrace();
         }
 

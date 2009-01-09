@@ -159,7 +159,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
                 } catch (FileNotFoundException e) {
 
                     Util.writeToErrorLog("An error occured while trying to parse: " +
-                            prideConverter.getProperties().getSelectedSourceFiles().get(0) + " " + e.toString());
+                            prideConverter.getProperties().getSelectedSourceFiles().get(0));
                     e.printStackTrace();
 
                     JOptionPane.showMessageDialog(null,
@@ -172,7 +172,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
                 } catch (IOException e) {
 
                     Util.writeToErrorLog("An error occured while trying to parse: " +
-                            prideConverter.getProperties().getSelectedSourceFiles().get(0) + " " + e.toString());
+                            prideConverter.getProperties().getSelectedSourceFiles().get(0));
                     e.printStackTrace();
 
                     JOptionPane.showMessageDialog(null,

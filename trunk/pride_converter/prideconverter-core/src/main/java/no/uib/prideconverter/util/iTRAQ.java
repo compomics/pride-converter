@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 
 /**
  * A class that lets you extract iTRAQ values for a given dataset. Translated 
@@ -40,7 +41,7 @@ public class iTRAQ {
     private Vector allNorms = new Vector();
     private Vector allUTs = new Vector();
     private Vector allRatios = new Vector();
-    private String err1 = "NA", err2 = "NA", err3 = "NA", err4 = "NA";
+    private String err1 = "NA",  err2 = "NA",  err3 = "NA",  err4 = "NA";
     private double i114max = 0,  i115max = 0,  i116max = 0,  i117max = 0;
     private double[][] arrays;
     private double precursorMass,  precursorCharge;
@@ -57,7 +58,7 @@ public class iTRAQ {
      * @param threshold
      * @param corrections
      */
-    public iTRAQ(double[][] arrays, double precursorMass, int precursorCharge, 
+    public iTRAQ(double[][] arrays, double precursorMass, int precursorCharge,
             double lowerRange, double upperRange,
             double threshold, double[] corrections) {
 
@@ -89,7 +90,7 @@ public class iTRAQ {
      * @param threshold
      * @param corrections 
      */
-    public iTRAQ(double[] mzValues, double[] intValues, double precursorMass, int precursorCharge, 
+    public iTRAQ(double[] mzValues, double[] intValues, double precursorMass, int precursorCharge,
             double lowerRange, double upperRange,
             double threshold, double[] corrections) {
 
@@ -145,7 +146,7 @@ public class iTRAQ {
         if (file.getPath().endsWith(".dat")) {
             //read dat file
             mascotDatFile = new MascotDatfile(file.getPath());
-        } else{
+        } else {
             System.out.println("Only Mascot Dat Files are supported!");
         }
     }
@@ -248,7 +249,7 @@ public class iTRAQ {
         double area0 = 0, area1 = 0, area2 = 0, area3 = 0;
 
         if (totalArea == 0) {
-        //do nothing
+            //do nothing
         } else {
             area0 = roundToThreeDecimalPlaces(corrections[0] / totalArea);
             area1 = roundToThreeDecimalPlaces(corrections[1] / totalArea);
@@ -533,10 +534,11 @@ public class iTRAQ {
 
                 calculateRatios(tempQuery.getPrecursorMZ());
             }
-        } if (arrays != null) {
+        }
+        if (arrays != null) {
             calculateRatios(precursorMass);
         } else {
-            
+
             // Tries to read the file as a space separated text file of 
             // precursor and intensities.
             try {
@@ -573,10 +575,16 @@ public class iTRAQ {
                 calculateRatios(precursorMass);
 
             } catch (FileNotFoundException ex) {
-                System.out.println("iTRAQ: The file named " + file +
-                        " was not found!!!");
+                JOptionPane.showMessageDialog(
+                        null, "The file named " + file + " could not be found.",
+                        "File Not Found", JOptionPane.ERROR_MESSAGE);
+                Util.writeToErrorLog("File not found: ");
+                ex.printStackTrace();
             } catch (Exception e) {
-                System.out.println("iTRAQ: Error while reading file");
+                JOptionPane.showMessageDialog(
+                        null, "An error occured when reading " + file + ".",
+                        "Error Reading File", JOptionPane.ERROR_MESSAGE);
+                Util.writeToErrorLog("Error when reading file: ");
                 e.printStackTrace();
             }
         }
@@ -676,16 +684,16 @@ public class iTRAQ {
 //                        err4 + "\n>");
 
         allNorms.add(new String[]{"" + tempNorms[0], "" + tempNorms[1],
-            "" + tempNorms[2], "" + tempNorms[3]
-        });
+                    "" + tempNorms[2], "" + tempNorms[3]
+                });
 
         allUTs.add(new String[]{areaUT1, areaUT2, areaUT3, areaUT4});
 
         ratios = new String[][]{
-            {"" + 1, "" + r21[0], "" + r31[0], "" +r41[0]},
-            {"" + r12, "" + 1, "" + r32[0], "" + r42[0]},
-            {"" + r13, "" + r23, "" + 1, "" + r43[0]},
-            {"" + r14, "" + r24, "" + r34, "" + 1}};
+                    {"" + 1, "" + r21[0], "" + r31[0], "" + r41[0]},
+                    {"" + r12, "" + 1, "" + r32[0], "" + r42[0]},
+                    {"" + r13, "" + r23, "" + 1, "" + r43[0]},
+                    {"" + r14, "" + r24, "" + r34, "" + 1}};
 
         allRatios.add(ratios);
     }

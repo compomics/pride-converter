@@ -9,7 +9,9 @@ import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.implementation.core.ReferenceImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 
@@ -35,7 +37,7 @@ public class NewReference extends javax.swing.JDialog {
         super(experimentProperties, modal);
         this.experimentProperties = experimentProperties;
         initComponents();
-        
+
         // alters the usage if TAB so that it can be used to move between fields
         KeyStroke ctrlTab = KeyStroke.getKeyStroke("ctrl TAB");
         KeyStroke tab = KeyStroke.getKeyStroke("TAB");
@@ -68,7 +70,7 @@ public class NewReference extends javax.swing.JDialog {
         this.selectedRow = selectedRow;
         this.experimentProperties = experimentProperties;
         initComponents();
-        
+
         // alters the usage if TAB so that it can be used to move between fields
         KeyStroke ctrlTab = KeyStroke.getKeyStroke("ctrl TAB");
         KeyStroke tab = KeyStroke.getKeyStroke("TAB");
@@ -303,6 +305,7 @@ public class NewReference extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     /**
      * Insert the reference into the ExperimentProperties frame.
      * 
@@ -311,7 +314,7 @@ public class NewReference extends javax.swing.JDialog {
     private void insertRefJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertRefJButtonActionPerformed
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        
+
         String tempRef = referenceJTextArea.getText();
         tempRef = tempRef.trim();
         tempRef = tempRef.replaceAll("\n", ", ");
@@ -331,7 +334,7 @@ public class NewReference extends javax.swing.JDialog {
                 selectedRow);
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        
+
         formWindowClosing(null);
     }//GEN-LAST:event_insertRefJButtonActionPerformed
 
@@ -377,8 +380,18 @@ public class NewReference extends javax.swing.JDialog {
         try {
             Desktop.getDesktop().browse(new URI("http://www.pubmed.gov"));
         } catch (URISyntaxException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "Not able to open the web page. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall settings.",
+                    "Web Page Not Available", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to open web page: ");
             ex.printStackTrace();
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "Not able to open the web page. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall settings.",
+                    "Web Page Not Available", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to open web page: ");
             ex.printStackTrace();
         }
 

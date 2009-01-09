@@ -882,11 +882,11 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                         prideConverter.getProperties().getSelectedSourceFiles().get(j) +
                                         "\ncould not be found.",
                                         "File Not Found", JOptionPane.ERROR_MESSAGE);
+                                Util.writeToErrorLog("Error when reading X!Tandem file: ");
                                 ex.printStackTrace();
                             } catch (Exception e) {
 
-                                Util.writeToErrorLog("Error parsing X!Tandem file: " +
-                                        e.toString());
+                                Util.writeToErrorLog("Error parsing X!Tandem file: ");
                                 e.printStackTrace();
 
                                 JOptionPane.showMessageDialog(null,
@@ -962,6 +962,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                         file.getName() +
                                         "\ncould not be found.",
                                         "File Not Found", JOptionPane.ERROR_MESSAGE);
+                                Util.writeToErrorLog("File not found: ");
                                 ex.printStackTrace();
                             } catch (Exception e) {
 
@@ -971,8 +972,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                     fileName = "Micromass PKL file";
                                 }
 
-                                Util.writeToErrorLog("Error parsing " + fileName +
-                                        ": " + e.toString());
+                                Util.writeToErrorLog("Error parsing " + fileName + ": ");
                                 e.printStackTrace();
 
                                 JOptionPane.showMessageDialog(null,
@@ -1051,8 +1051,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                 }
                             } catch (Exception e) {
 
-                                Util.writeToErrorLog("Error parsing OMSSA file: " +
-                                        e.toString());
+                                Util.writeToErrorLog("Error parsing OMSSA file: ");
                                 e.printStackTrace();
 
                                 JOptionPane.showMessageDialog(null,
@@ -1259,6 +1258,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                         progressDialog.dispose();
                         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
                         JOptionPane.showMessageDialog(null, "Error while retrieving spectrum data.");
+                        Util.writeToErrorLog("Error while retrieving spectrum data: ");
                         e.printStackTrace();
                     }
                 }
@@ -1616,13 +1616,13 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, 
                         "Error when reading file. See ../Properties/ErrorLog.txt for more details.", 
                         "File Not Found", JOptionPane.ERROR_MESSAGE);
-                Util.writeToErrorLog("UserProperties: " + ex.toString());
+                Util.writeToErrorLog("Error when reading file: ");
                 ex.printStackTrace();
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, 
                         "Error when reading file. See ../Properties/ErrorLog.txt for more details.", 
                         "File Error", JOptionPane.ERROR_MESSAGE);
-                Util.writeToErrorLog("UserProperties: " + ex.toString());
+                Util.writeToErrorLog("Error when reading file: ");
                 ex.printStackTrace();
             }
         }

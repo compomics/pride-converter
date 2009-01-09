@@ -16,6 +16,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import no.uib.prideconverter.util.ComboBoxInputable;
+import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.implementation.mzData.ContactImpl;
 
 /**
@@ -124,6 +125,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
         }
 
         File file = new File(contactPath);
+        String tempContactName = null;
 
         try {
 
@@ -134,7 +136,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
             File[] contactFiles = file.listFiles();
             FileReader f;
             BufferedReader b;
-            String tempContactName;
+
             Vector contactNames = new Vector();
 
             for (int i = 0; i < contactFiles.length; i++) {
@@ -167,8 +169,16 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
 
             namesJComboBoxActionPerformed(null);
         } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "The file " + tempContactName + " could not be found.",
+                    "File Not Found", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to read file: ");
             ex.printStackTrace();
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "An error occured when trying to read the file " + tempContactName + ".",
+                    "File Error", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to read file: ");
             ex.printStackTrace();
         }
 
@@ -411,6 +421,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     /**
      * Clicking the add button inserts the new contact into the contact 
      * table in the ExperimentProperies frame. Also writes the contact 
@@ -446,9 +457,9 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
                         1);
             }
 
-            try {
-                String newName = contactPath + currentContactName + ".con";
+            String newName = contactPath + currentContactName + ".con";
 
+            try {
                 FileWriter r = new FileWriter(newName);
                 BufferedWriter bw = new BufferedWriter(r);
 
@@ -460,8 +471,16 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
                 r.close();
 
             } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(
+                        this, "The file " + newName + " could not be found.",
+                        "File Not Found", JOptionPane.ERROR_MESSAGE);
+                Util.writeToErrorLog("Error when trying to save file: ");
                 ex.printStackTrace();
             } catch (IOException ex) {
+                JOptionPane.showMessageDialog(
+                        this, "An error occured when trying to save the file " + newName + ".",
+                        "File Error", JOptionPane.ERROR_MESSAGE);
+                Util.writeToErrorLog("Error when trying to save file: ");
                 ex.printStackTrace();
             }
 
@@ -542,8 +561,10 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
                     "Contact Changed", JOptionPane.YES_NO_CANCEL_OPTION);
 
             if (value == JOptionPane.YES_OPTION) {
+
+                String newName = contactPath + lastSelectedContact + ".con";
+
                 try {
-                    String newName = contactPath + lastSelectedContact + ".con";
 
                     FileWriter r = new FileWriter(newName);
                     BufferedWriter bw = new BufferedWriter(r);
@@ -557,8 +578,16 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
                     r.close();
 
                 } catch (FileNotFoundException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "The file " + newName + " could not be found.",
+                            "File Not Found", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to save file: ");
                     ex.printStackTrace();
                 } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "An error occured when trying to save the file " + newName + ".",
+                            "File Error", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to save file: ");
                     ex.printStackTrace();
                 }
             } else if (value == JOptionPane.CANCEL_OPTION) {
@@ -637,8 +666,16 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
                     f.close();
 
                 } catch (FileNotFoundException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "The file " + selectedContactName + " could not be found.",
+                            "File Not Found", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to read file: ");
                     ex.printStackTrace();
                 } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "An error occured when trying to read the file " + selectedContactName + ".",
+                            "File Error", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to read file: ");
                     ex.printStackTrace();
                 }
             }
@@ -764,6 +801,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
     private javax.swing.JComboBox namesJComboBox;
     private javax.swing.JPopupMenu popupMenu;
     // End of variables declaration//GEN-END:variables
+
     /**
      * See ComboBoxInputable
      */
@@ -793,8 +831,16 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
             readContactsFromFile();
 
         } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "The file " + newName + " could not be found.",
+                    "File Not Found", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to save file: ");
             ex.printStackTrace();
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "An error occured when trying to save the file " + newName + ".",
+                    "File Error", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to save file: ");
             ex.printStackTrace();
         }
     }
