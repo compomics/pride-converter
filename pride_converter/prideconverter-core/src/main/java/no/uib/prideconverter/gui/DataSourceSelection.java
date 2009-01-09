@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.border.TitledBorder;
+import no.uib.prideconverter.util.Util;
 
 /**
  * This frame handles the selection of the dataformat to be converted.
@@ -33,13 +35,13 @@ public class DataSourceSelection extends javax.swing.JFrame {
         this.prideConverter = prideConverter;
 
         // sets the default wizard frame size
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setSize(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
@@ -127,7 +129,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
                 getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
 
-        
+
 
         //helpJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("../resources/icons/help.GIF")));
 
@@ -566,6 +568,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     /**
      * Closes the frame and the wizard.
      * 
@@ -719,7 +722,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
             resetDataSourceProperties();
-        }  
+        }
     }//GEN-LAST:event_mascotDatFileJRadioButtonActionPerformed
 
     /**
@@ -892,8 +895,18 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 try {
                     Desktop.getDesktop().browse(new URI(evt.getDescription()));
                 } catch (URISyntaxException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "Not able to open the web page. Make sure that you are online and try again.\n" +
+                            "You may also want to check your firewall settings.",
+                            "Web Page Not Available", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to open web page: ");
                     ex.printStackTrace();
                 } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "Not able to open the web page. Make sure that you are online and try again.\n" +
+                            "You may also want to check your firewall settings.",
+                            "Web Page Not Available", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to open web page: ");
                     ex.printStackTrace();
                 }
 
@@ -1035,8 +1048,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         this.nextJButton.setEnabled(true);
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
-                "<b>Phenyx</b><br><br>" + "Phenyx<br><br>" 
-                + "File Extension: ?<br><br>" +
+                "<b>Phenyx</b><br><br>" + "Phenyx<br><br>" + "File Extension: ?<br><br>" +
                 "More Information: <a href=\"http://www.genebio.com/products/phenyx/\">" +
                 "http://www.genebio.com/products/phenyx/</a>");
         descriptionJEditorPane.setCaretPosition(0);

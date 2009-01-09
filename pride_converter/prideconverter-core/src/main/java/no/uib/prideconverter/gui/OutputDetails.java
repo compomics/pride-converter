@@ -11,6 +11,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import no.uib.prideconverter.util.Util;
 
 /**
  * This frame handles the final step in the wizard and deal with selecting 
@@ -34,13 +35,13 @@ public class OutputDetails extends javax.swing.JFrame {
         this.prideConverter = prideConverter;
 
         // set the default wizard frame size
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setSize(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
@@ -79,11 +80,11 @@ public class OutputDetails extends javax.swing.JFrame {
         // verify the choosen OMSSA installation folder
         verifyOmssaInstallationFolder();
     }
-    
+
     /**
      * Verifies if the selected output folder exists. If not uses the users home folder.
      */
-    private void verifyOutputFolder(){
+    private void verifyOutputFolder() {
         if (prideConverter.getUserProperties().getOutputPath().equalsIgnoreCase("user.home")) {
             outPutPathJTextField.setText(System.getProperty("user.home"));
         } else {
@@ -97,11 +98,11 @@ public class OutputDetails extends javax.swing.JFrame {
             }
         }
     }
-    
+
     /**
      * Verifies the choosen OMSSA folder.
      */
-    private void verifyOmssaInstallationFolder(){
+    private void verifyOmssaInstallationFolder() {
         if (prideConverter.getUserProperties().getOmssaInstallDir() != null &&
                 !prideConverter.getUserProperties().getOmssaInstallDir().equalsIgnoreCase("")) {
             omssaInstallationFolderJTextField.setText(
@@ -539,6 +540,7 @@ public class OutputDetails extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     /**
      * Opens the PRIDE login page in a web browser.
      * 
@@ -551,8 +553,18 @@ public class OutputDetails extends javax.swing.JFrame {
         try {
             Desktop.getDesktop().browse(new URI("http://www.ebi.ac.uk/pride/plainLogin.do"));
         } catch (URISyntaxException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "Not able to open the web page. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall settings.",
+                    "Web Page Not Available", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to open web page: ");
             ex.printStackTrace();
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "Not able to open the web page. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall settings.",
+                    "Web Page Not Available", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to open web page: ");
             ex.printStackTrace();
         }
 
@@ -571,8 +583,18 @@ public class OutputDetails extends javax.swing.JFrame {
         try {
             Desktop.getDesktop().browse(new URI("http://www.ebi.ac.uk/pride/startRegistration.do"));
         } catch (URISyntaxException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "Not able to open the web page. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall settings.",
+                    "Web Page Not Available", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to open web page: ");
             ex.printStackTrace();
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "Not able to open the web page. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall settings.",
+                    "Web Page Not Available", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to open web page: ");
             ex.printStackTrace();
         }
 

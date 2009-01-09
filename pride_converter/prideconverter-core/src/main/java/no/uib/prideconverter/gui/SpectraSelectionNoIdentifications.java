@@ -881,11 +881,11 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                 file.getPath() +
                                 "\ncould not be found.",
                                 "File Not Found", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to read file: ");
                         ex.printStackTrace();
                     } catch (Exception e) {
 
-                        Util.writeToErrorLog("Error parsing " + prideConverter.getProperties().getDataSource() + ": " +
-                                e.toString());
+                        Util.writeToErrorLog("Error parsing " + prideConverter.getProperties().getDataSource() + ": ");
                         e.printStackTrace();
 
                         String fileType = prideConverter.getProperties().getDataSource();

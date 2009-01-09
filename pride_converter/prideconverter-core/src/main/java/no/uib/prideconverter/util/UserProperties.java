@@ -437,17 +437,17 @@ public class UserProperties {
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Error when reading the user properties. " +
                     "See ../Properties/ErrorLog.txt for more details.", "File Not Found", JOptionPane.ERROR_MESSAGE);
-            Util.writeToErrorLog("UserProperties: " + ex.toString());
+            Util.writeToErrorLog("UserProperties: ");
             ex.printStackTrace();
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Error when reading the user properties. " +
                     "See ../Properties/ErrorLog.txt for more details.", "File Error", JOptionPane.ERROR_MESSAGE);
-            Util.writeToErrorLog("UserProperties: " + ex.toString());
+            Util.writeToErrorLog("UserProperties: ");
             ex.printStackTrace();
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(null, "Error when reading the user properties. " +
                     "See ../Properties/ErrorLog.txt for more details.", "File Error", JOptionPane.ERROR_MESSAGE);
-            Util.writeToErrorLog("UserProperties: " + ex.toString());
+            Util.writeToErrorLog("UserProperties: ");
             ex.printStackTrace();
         }
     }
@@ -478,12 +478,12 @@ public class UserProperties {
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Error when importing old user settings. " +
                     "See ../Properties/ErrorLog.txt for more details.", "File Not Found", JOptionPane.ERROR_MESSAGE);
-            Util.writeToErrorLog("UserProperties: " + ex.toString());
+            Util.writeToErrorLog("UserProperties: ");
             ex.printStackTrace();
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Error when importing old user settings. " +
                     "See ../Properties/ErrorLog.txt for more details.", "File Error", JOptionPane.ERROR_MESSAGE);
-            Util.writeToErrorLog("UserProperties: " + ex.toString());
+            Util.writeToErrorLog("UserProperties: ");
             ex.printStackTrace();
         }
     }
@@ -559,7 +559,7 @@ public class UserProperties {
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Error when saving the user properties. " +
                     "See the ErrorLog for more details.", "File Error", JOptionPane.ERROR_MESSAGE);
-            Util.writeToErrorLog("UserProperties: " + ex.toString());
+            Util.writeToErrorLog("UserProperties: ");
             ex.printStackTrace();
         }
     }

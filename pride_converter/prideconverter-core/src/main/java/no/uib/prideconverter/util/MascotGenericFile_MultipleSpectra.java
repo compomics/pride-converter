@@ -3,6 +3,7 @@ package no.uib.prideconverter.util;
 import java.io.*;
 import java.util.*;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  * This class maps a multiple spectra Mascot Generic File to memory.
@@ -19,7 +20,6 @@ public class MascotGenericFile_MultipleSpectra {
      * @TODO This class is a modified version of be.proteomics.lims.util.fileio.MascotGenericFile
      * and should somehow be related to this, but this is not currently done.
      */
-    
     protected ArrayList peaks;
     protected ArrayList precursorMzs;
     protected ArrayList precursorCharge;
@@ -206,13 +206,13 @@ public class MascotGenericFile_MultipleSpectra {
             numberOfSpectra = 0;
 
             while ((line = br.readLine()) != null) {
-                
+
                 // Advance line count.
                 lineCount++;
 
                 // Delete leading/trailing spaces.
                 line = line.trim();
-                
+
                 // Skip empty lines.
                 if (line.equals("")) {
                     continue;
@@ -222,13 +222,13 @@ public class MascotGenericFile_MultipleSpectra {
                 if (lineCount == 1 && line.startsWith(CHARGE)) {
                     continue;
                 }
-                
+
                 if (line.startsWith("#")) {
 
                     // Read all starting comments.
                     comments.append(line + "\n");
                 } else if (line.equals(IONS_START)) {
-                    
+
                     // BEGIN IONS marks the start of the real file.
                     inSpectrum = true;
                 } else if (line.equals(IONS_END)) {
@@ -281,8 +281,8 @@ public class MascotGenericFile_MultipleSpectra {
                         // This is an extra embedded parameter!
                         String aKey = line.substring(0, equalSignIndex);
                         String aValue = line.substring(equalSignIndex + 1);
-                        // Save the extra embedded parameter in iEmbeddedParameter
-                        // addExtraEmbeddedParameter(aKey, aValue);
+                    // Save the extra embedded parameter in iEmbeddedParameter
+                    // addExtraEmbeddedParameter(aKey, aValue);
                     }
                 } // Read peaks, minding the possibility of charge present!
                 else if (inSpectrum) {
@@ -316,6 +316,11 @@ public class MascotGenericFile_MultipleSpectra {
             br.close();
         } catch (IOException ioe) {
             // We do not expect IOException when using a StringReader.
+            JOptionPane.showMessageDialog(
+                    null, "An error occured when parsing the MGF file.\n" +
+                    "See ../Properties/ErrorLog.txt for more details.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when parsing MGF file: ");
             ioe.printStackTrace();
         }
     }

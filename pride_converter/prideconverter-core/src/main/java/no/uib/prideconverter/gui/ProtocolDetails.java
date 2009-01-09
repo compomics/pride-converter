@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import no.uib.prideconverter.util.ComboBoxInputable;
 import no.uib.prideconverter.util.MyComboBoxRenderer;
+import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.implementation.core.ProtocolStepImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 
@@ -47,13 +48,13 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
     public ProtocolDetails(PRIDEConverter prideConverter, Point location) {
         this.prideConverter = prideConverter;
 
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setSize(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
@@ -85,10 +86,10 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         }
 
         // set the identification type (2D gel or gel free)
-        if(prideConverter.getProperties().isGelFree()){
+        if (prideConverter.getProperties().isGelFree()) {
             gelFreeJRadioButton.setSelected(true);
             twoDimmensionalGelJRadioButton.setSelected(false);
-        } else{
+        } else {
             gelFreeJRadioButton.setSelected(false);
             twoDimmensionalGelJRadioButton.setSelected(true);
         }
@@ -108,6 +109,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
     private void readProtocolsFromFile() {
 
         File file = new File(protocolPath);
+        String tempProtocolName = null;
 
         try {
             if (!file.exists()) {
@@ -118,7 +120,6 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
             FileReader f = null;
             BufferedReader b = null;
-            String tempProtocolName;
             Vector protocolNames = new Vector();
 
             for (int i = 0; i < protocolFiles.length; i++) {
@@ -160,8 +161,16 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
             namesJComboBoxActionPerformed(null);
 
         } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "The file " + tempProtocolName + " could not be found.",
+                    "File Not Found", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to read file: ");
             ex.printStackTrace();
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "An error occured when trying to save the file " + tempProtocolName + ".",
+                    "File Error", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to read file: ");
             ex.printStackTrace();
         }
     }
@@ -236,10 +245,10 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
             ((DefaultTableModel) protocolStepsJTable.getModel()).addRow(
                     new Object[]{
-                new Integer(protocolStepsJTable.getRowCount() + 1),
-                temp,
-                new Integer(numberOfTerms)
-            });
+                        new Integer(protocolStepsJTable.getRowCount() + 1),
+                        temp,
+                        new Integer(numberOfTerms)
+                    });
         } else {
 
             protocolStepsJTable.setValueAt(temp, modifiedRow, 1);
@@ -602,6 +611,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     /**
      * Delete the selected protocol step.
      * 
@@ -635,7 +645,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
                 if (i != selectedRow) {
                     tempProtocolStepImpl = (ProtocolStepImpl) protocolSteps[i];
-                    tempProtocolStepImpl = new ProtocolStepImpl(i, 
+                    tempProtocolStepImpl = new ProtocolStepImpl(i,
                             tempProtocolStepImpl.getProtocolStepCvParameterList(), null);
 
                     prideConverter.getProperties().getExperimentProtocolSteps().add(tempProtocolStepImpl);
@@ -688,7 +698,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         for (int i = 0; i < protocolSteps.length; i++) {
 
             tempProtocolStepImpl = (ProtocolStepImpl) protocolSteps[i];
-            tempProtocolStepImpl = new ProtocolStepImpl(i, 
+            tempProtocolStepImpl = new ProtocolStepImpl(i,
                     tempProtocolStepImpl.getProtocolStepCvParameterList(), null);
 
             prideConverter.getProperties().getExperimentProtocolSteps().add(tempProtocolStepImpl);
@@ -733,7 +743,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         for (int i = 0; i < protocolSteps.length; i++) {
 
             tempProtocolStepImpl = (ProtocolStepImpl) protocolSteps[i];
-            tempProtocolStepImpl = new ProtocolStepImpl(i, 
+            tempProtocolStepImpl = new ProtocolStepImpl(i,
                     tempProtocolStepImpl.getProtocolStepCvParameterList(), null);
 
             prideConverter.getProperties().getExperimentProtocolSteps().add(tempProtocolStepImpl);
@@ -907,11 +917,11 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
                 if (value == JOptionPane.YES_OPTION) {
 
-                    try {
+                    String newName;
+                    newName = protocolPath + lastSelectedProtocolName +
+                            ".pro";
 
-                        String newName;
-                        newName = protocolPath + lastSelectedProtocolName +
-                                ".pro";
+                    try {
 
                         FileWriter r = new FileWriter(newName);
                         BufferedWriter bw = new BufferedWriter(r);
@@ -953,8 +963,16 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                         r.close();
 
                     } catch (FileNotFoundException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, "The file " + newName + " could not be found.",
+                                "File Not Found", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to save file: ");
                         ex.printStackTrace();
                     } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, "An error occured when trying to save the file " + newName + ".",
+                                "File Error", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to save file: ");
                         ex.printStackTrace();
                     }
                 } else if (value == JOptionPane.CANCEL_OPTION) {
@@ -1039,8 +1057,16 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                                 namesJComboBox.insertItemAt(protocolName, namesJComboBox.getItemCount() - 2);
 
                             } catch (FileNotFoundException ex) {
+                                JOptionPane.showMessageDialog(
+                                        this, "The file " + newName + " could not be found.",
+                                        "File Not Found", JOptionPane.ERROR_MESSAGE);
+                                Util.writeToErrorLog("Error when trying to save file: ");
                                 ex.printStackTrace();
                             } catch (IOException ex) {
+                                JOptionPane.showMessageDialog(
+                                        this, "An error occured when trying to save the file " + newName + ".",
+                                        "File Error", JOptionPane.ERROR_MESSAGE);
+                                Util.writeToErrorLog("Error when trying to save file: ");
                                 ex.printStackTrace();
                             }
                         } else {
@@ -1140,8 +1166,16 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                     f.close();
 
                 } catch (FileNotFoundException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "The file " + selectedProtocolName + " could not be found.",
+                            "File Not Found", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to read file: ");
                     ex.printStackTrace();
                 } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "An error occured when trying to read the file " + selectedProtocolName + ".",
+                            "File Error", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to read file: ");
                     ex.printStackTrace();
                 }
 
@@ -1241,7 +1275,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         prideConverter.getUserProperties().setCurrentProtocol((String) namesJComboBox.getSelectedItem());
 
         prideConverter.getProperties().setGelFree(gelFreeJRadioButton.isSelected());
-        
+
         boolean cancel = false;
 
         if (valuesChanged) {
@@ -1257,10 +1291,11 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
                 if (value == JOptionPane.YES_OPTION) {
 
+                    String newName;
+                    newName = protocolPath +
+                            prideConverter.getUserProperties().getCurrentProtocol() + ".pro";
+
                     try {
-                        String newName;
-                        newName = protocolPath +
-                                prideConverter.getUserProperties().getCurrentProtocol() + ".pro";
 
                         FileWriter r = new FileWriter(newName);
                         BufferedWriter bw = new BufferedWriter(r);
@@ -1303,8 +1338,16 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                         r.close();
 
                     } catch (FileNotFoundException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, "The file " + newName + " could not be found.",
+                                "File Not Found", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to save file: ");
                         ex.printStackTrace();
                     } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(
+                                this, "An error occured when trying to save the file " + newName + ".",
+                                "File Error", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to save file: ");
                         ex.printStackTrace();
                     }
                 } else if (value == JOptionPane.CANCEL_OPTION) {
@@ -1378,8 +1421,16 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                                 prideConverter.getUserProperties().setCurrentProtocol(protocolName);
 
                             } catch (FileNotFoundException ex) {
+                                JOptionPane.showMessageDialog(
+                                        this, "The file " + newName + " could not be found.",
+                                        "File Not Found", JOptionPane.ERROR_MESSAGE);
+                                Util.writeToErrorLog("Error when trying to save file: ");
                                 ex.printStackTrace();
                             } catch (IOException ex) {
+                                JOptionPane.showMessageDialog(
+                                        this, "An error occured when trying to save the file " + newName + ".",
+                                        "File Error", JOptionPane.ERROR_MESSAGE);
+                                Util.writeToErrorLog("Error when trying to save file: ");
                                 ex.printStackTrace();
                             }
                         } else {
@@ -1429,6 +1480,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
     private javax.swing.JTable protocolStepsJTable;
     private javax.swing.JRadioButton twoDimmensionalGelJRadioButton;
     // End of variables declaration//GEN-END:variables
+
     /**
      * See ComboBoxInputable
      */
@@ -1452,8 +1504,16 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
             readProtocolsFromFile();
 
         } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "The file " + newName + " could not be found.",
+                    "File Not Found", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to save file: ");
             ex.printStackTrace();
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "An error occured when trying to save the file " + newName + ".",
+                    "File Error", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to save file: ");
             ex.printStackTrace();
         }
     }

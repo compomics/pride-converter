@@ -204,7 +204,9 @@ public class ExcelAdapter implements ActionListener {
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null,
-                        "An error occured during pasting. Perhaps you had an empty selection? \n" + "See ../Properties/ErrorLog.txt for more details.");
+                        "An error occured during pasting. Perhaps you had an empty selection? \n" 
+                        + "See ../Properties/ErrorLog.txt for more details.");
+                Util.writeToErrorLog("Error occured during pasting: ");
                 ex.printStackTrace();
 
                 ((DefaultTableModel) jTable1.getModel()).addRow(new Object[]{null, null});

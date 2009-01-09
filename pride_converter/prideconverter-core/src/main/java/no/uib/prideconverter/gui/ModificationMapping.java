@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.xml.rpc.ServiceException;
 import no.uib.prideconverter.util.OLSInputable;
+import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.ook.web.services.Query;
 import uk.ac.ebi.ook.web.services.QueryService;
 import uk.ac.ebi.ook.web.services.QueryServiceLocator;
@@ -518,12 +519,14 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
             JOptionPane.showMessageDialog(
                     this, "Not able to contact the OLS. Make sure that you are online and try again.",
                     "OLS not available", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to access OLS: ");
             ex.printStackTrace();
             error = true;
         } catch (ServiceException ex) {
             JOptionPane.showMessageDialog(
                     this, "Not able to contact the OLS. Make sure that you are online and try again.",
                     "OLS not available", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to access OLS: ");
             ex.printStackTrace();
             error = true;
         }
