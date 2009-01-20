@@ -217,7 +217,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     instrumentName +
                     ".int";
 
-            boolean useExistingInstrument = true;
+            boolean useExistingInstrument = false;
 
             // check if the instrument already exists
             if (new File(newName).exists()) {
@@ -268,6 +268,8 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                         saveInstrument(instrumentName);
                     }
+                } else{
+                    useExistingInstrument = true;
                 }
             } else {
                 saveInstrument(instrumentName);

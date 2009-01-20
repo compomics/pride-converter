@@ -94,9 +94,9 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         spectraJTable.getColumn("PID").setMaxWidth(50);
 
         columnToolTips = new Vector();
-        columnToolTips.add("Project ID");
+        columnToolTips.add("Project Identification");
         columnToolTips.add("Filename of Spectrum File");
-        columnToolTips.add("Identification ID");
+        columnToolTips.add("Spectrum Identification");
         columnToolTips.add(null);
         columnToolTips.add(null);
 

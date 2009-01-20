@@ -376,8 +376,14 @@ public class UserProperties {
 
                         if (!cancel) {
 
-                            //copy the instrumens, contacts, protocols and samples
+                            // copy the instrumens, contacts, protocols and samples
                             File propertiesFolder = selectedFile.getParentFile();
+
+                            // copy the JavaOptions file
+                            if(new File(propertiesFolder + "/JavaOptions.txt").exists()){
+                                copyFile(new File(propertiesFolder + "/JavaOptions.txt"),
+                                        new File(path + "/Properties/JavaOptions.txt"));
+                            }
 
                             File contactsFolder = new File(propertiesFolder + "/Contacts/");
                             File instrumentsFolder = new File(propertiesFolder + "/Instruments/");
@@ -431,7 +437,8 @@ public class UserProperties {
 
             if (settingsFile != null) {
                 JOptionPane.showMessageDialog(null,
-                        "The settings from the previous version has been successfully imported.",
+                        "The settings from the previous version has been successfully imported.\n" +
+                        "(Changes to the default memory boundaries requires a restart of the program.)",
                         "Settings Imported", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (FileNotFoundException ex) {
