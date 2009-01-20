@@ -454,6 +454,7 @@ public class PeptideProphetXMLParser {
         String msIonization = aParser.getAttributeValue(null, "msIonization");
         String msMassAnalyzer = aParser.getAttributeValue(null, "msMassAnalyzer");
         String msDetector = aParser.getAttributeValue(null, "msDetector");
+        String raw_data = aParser.getAttributeValue(null, "raw_data"); // should be ".mzXML" or ".mgf", but can be ".?"
 
         // Next tag is the enzyme.
         aParser.moveToNextStartTag(true);
@@ -548,8 +549,12 @@ public class PeptideProphetXMLParser {
 
         boolean inputIsMzXml = true;
 
+        boolean spectrumPathFound = false;
+
         // check if the input files are mzXML or mgf files
         if (search_parameters.containsKey("spectrum, path")) {
+
+            spectrumPathFound = true;
 
             File lFile = new File((String) search_parameters.get("spectrum, path"));
             lFile = new File(spectrumFilesInputFolder, lFile.getName());
@@ -565,6 +570,8 @@ public class PeptideProphetXMLParser {
             } else {
                 logger.error("Input file is neither mzXML nor MGF!! File: " + (String) search_parameters.get("spectrum, path"));
             }
+        } else {
+            spectrumPathFound = false;
         }
 
         // We should be on the end tag of SEARCH_SUMMARY.
@@ -608,6 +615,31 @@ public class PeptideProphetXMLParser {
             } else { // assumed to be mgf file
                 spectrumTitle = run.trim();
                 run = baseName;
+            }
+
+            if (!spectrumPathFound) {
+                // use the raw_data parameter to try to detect the data format
+                if (raw_data != null) {
+                    if (!raw_data.equalsIgnoreCase(".?")) {
+
+                        spectrumPathFound = true;
+                        File lFile = new File(spectrumFilesInputFolder, run + raw_data);
+
+                        if (lFile.getName().toLowerCase().endsWith(".mzxml")) {
+                            inputIsMzXml = true;
+                            runToParser.put(lFile.getName().substring(0, lFile.getName().lastIndexOf(".")), new MzXmlParser(lFile, true));
+                            logger.info("Added MzXmlParser for file '" + lFile.getAbsolutePath() + "'!");
+                        } else if (lFile.getName().toLowerCase().endsWith(".mgf")) {
+                            inputIsMzXml = false;
+                            runToParser.put(lFile.getName().substring(0, lFile.getName().lastIndexOf(".")), new MascotGenericFile_MultipleSpectra(lFile));
+                            logger.info("Added MascotGenericFileParser for file '" + lFile.getAbsolutePath() + "'!");
+                        } else {
+                            logger.error("Input file is neither mzXML nor MGF!! File: " + (String) search_parameters.get("spectrum, path"));
+                        }
+                    }
+                } else {
+                    logger.error("Input file format is not given!! base_name: " + baseName);
+                }
             }
 
             // Sanity check.

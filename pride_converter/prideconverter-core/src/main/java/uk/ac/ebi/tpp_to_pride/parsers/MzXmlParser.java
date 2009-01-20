@@ -120,7 +120,7 @@ public class MzXmlParser {
     public void addAllSpectra(List aSpectra, HashMap aFileAndScanToID, ProgressDialog progressDialog) {
 
         int totalScans = mxp.getScanCount();
-        
+
         progressDialog.setIntermidiate(false);
         progressDialog.setValue(0);
         progressDialog.setMax(totalScans);
@@ -332,13 +332,13 @@ public class MzXmlParser {
         ArrayList spectrumDescriptionComments = new ArrayList(1);
         spectrumDescriptionComments.add(comment);
         
-        
-        
-        
         // Create new mzData spectrum for the fragmentation spectrum.
         // Notice that certain collections and annotations are 'null' here.
         // Feel free to add any kind of annotation yourself, however.
-        return new SpectrumImpl(new BinaryArrayImpl(aScan.getMassIntensityList()[1], BinaryArrayImpl.BIG_ENDIAN_LABEL), new Double(aScan.getLowMz()), new BinaryArrayImpl(aScan.getMassIntensityList()[0], BinaryArrayImpl.BIG_ENDIAN_LABEL), aScan.getMsLevel(), null, new Double(aScan.getHighMz()), null, aSpectrumID, null, spectrumDescriptionComments, spectrumInstrumentCvParameters, null, null, null);
+        return new SpectrumImpl(new BinaryArrayImpl(aScan.getMassIntensityList()[1], BinaryArrayImpl.BIG_ENDIAN_LABEL),
+                new Double(aScan.getLowMz()), new BinaryArrayImpl(aScan.getMassIntensityList()[0],
+                BinaryArrayImpl.BIG_ENDIAN_LABEL), aScan.getMsLevel(), null, new Double(aScan.getHighMz()),
+                null, aSpectrumID, null, spectrumDescriptionComments, spectrumInstrumentCvParameters, null, null, null);
     }
 
     /**

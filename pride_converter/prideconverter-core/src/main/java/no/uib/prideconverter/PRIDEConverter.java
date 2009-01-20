@@ -1466,7 +1466,7 @@ public class PRIDEConverter {
 
                                     precursors.add(new PrecursorImpl(/*activation*/null,
                                             null, ionSelection, null, 1,
-                                            spectraCounter, 0));
+                                            0, 0));
 
                                     // Spectrum description comments.
                                     spectrumDescriptionComments = new ArrayList(1);
@@ -2603,7 +2603,7 @@ public class PRIDEConverter {
                                 precursorMass)));
 
                         precursors.add(new PrecursorImpl(null, null,
-                                ionSelection, null, 1, spectraCounter, 0));
+                                ionSelection, null, 1, 0, 0));
 
                         spectrumDescriptionComments.add(new SpectrumDescCommentImpl(identified));
 
@@ -2906,7 +2906,7 @@ public class PRIDEConverter {
                             }
 
                             precursors.add(new PrecursorImpl(null, null,
-                                    ionSelection, null, 1, spectraCounter, 0));
+                                    ionSelection, null, 1, 0, 0));
 
                             spectrumDescriptionComments = new ArrayList(1);
                             spectrumDescriptionComments.add(new SpectrumDescCommentImpl("Not identified"));
@@ -3056,7 +3056,7 @@ public class PRIDEConverter {
                     }
 
                     precursors.add(new PrecursorImpl(null, null, ionSelection,
-                            null, 1, spectraCounter, 0));
+                            null, 1, 0, 0));
 
                     spectrumDescriptionComments = new ArrayList(1);
                     spectrumDescriptionComments.add(new SpectrumDescCommentImpl("Not identified"));
@@ -3468,7 +3468,7 @@ public class PRIDEConverter {
                             precursorMz)));
 
                     precursors.add(new PrecursorImpl(null, null, ionSelection,
-                            null, 1, spectraCounter, 0));
+                            null, 1, 0, 0));
 
                     // Spectrum description comments.
                     spectrumDescriptionComments =
@@ -3638,6 +3638,7 @@ public class PRIDEConverter {
             intensities = new Vector();
             charges = new Vector();
             boolean inSpectrum = false;
+            Integer msLevel = 2; // defaults to MS/MS
 
             while ((line = br.readLine()) != null && !cancelConversion) {
                 // Advance line count.
@@ -3679,6 +3680,15 @@ public class PRIDEConverter {
                                     }
                                 }
                             }
+
+                            // Not yet finished
+                            // ms level
+//                            if (temp[4] != null) {
+//                                msLevel = (Integer) temp[4];
+//                            } else {
+//                                // defaults to MS2
+//                                msLevel = 2;
+//                            }
                         }
                     } else {
                         matchFound = true;
@@ -3716,13 +3726,12 @@ public class PRIDEConverter {
                                 precursorMass)));
 
                         precursors.add(new PrecursorImpl(null, null,
-                                ionSelection, null, 1, spectraCounter, 0));
+                                ionSelection, null, msLevel - 1, 0, 0));
 
                         // Spectrum description comments.
-                        spectrumDescriptionComments = new ArrayList(1);
-
-                        identified = "Not identified";
-                        spectrumDescriptionComments.add(new SpectrumDescCommentImpl(identified));
+                        spectrumDescriptionComments = null;
+//                        spectrumDescriptionComments = new ArrayList(1);
+//                        spectrumDescriptionComments.add(new SpectrumDescCommentImpl(comments));
 
                         if (arrays[properties.MZ_ARRAY].length > 0) {
                             mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
@@ -3736,7 +3745,7 @@ public class PRIDEConverter {
                                     mzRangeStart,
                                     new BinaryArrayImpl(arrays[properties.MZ_ARRAY],
                                     BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
-                                    2l, null,
+                                    msLevel, null,
                                     mzRangeStop,
                                     null,
                                     spectraCounter, precursors,
@@ -3840,7 +3849,7 @@ public class PRIDEConverter {
 //        long timerStart = System.currentTimeMillis();
 
         progressDialog.setString(null);
-        progressDialog.setTitle("Reading Files. Please Wait.");
+        progressDialog.setTitle("Reading PeptideProphet File. Please Wait.");
         progressDialog.setIntermidiate(true);
         progressDialog.setString(null);
 
@@ -3869,6 +3878,11 @@ public class PRIDEConverter {
             HashMap runs = ppxp.readPeptideProphet(xppp, properties.getPeptideProphetThreshold());
             br.close();
 
+            progressDialog.setString(null);
+            progressDialog.setTitle("Reading ProteinProphet File. Please Wait.");
+            progressDialog.setIntermidiate(true);
+            progressDialog.setString(null);
+
             // Now build all proteins from ProteinProphet, associating them to the peptides.
             br = new BufferedReader(new FileReader(getProperties().getProteinProphetFileName()));
             xpp.setInput(br);
@@ -3878,6 +3892,11 @@ public class PRIDEConverter {
             Collection proteins = ppp.readProteinProphet(xppp, properties.getProteinProphetThreshold());
             ProteinProphetSummary ppSummary = ppp.getProteinProphetSummary();
             br.close();
+
+            progressDialog.setString(null);
+            progressDialog.setTitle("Creating Protein Map. Please Wait.");
+            progressDialog.setIntermidiate(true);
+            progressDialog.setString(null);
 
             // Create a HashMap of proteins for quick retrieval.
             HashMap forProteinSequences = new HashMap();
@@ -3935,7 +3954,7 @@ public class PRIDEConverter {
             progressDialog.setIntermidiate(true);
             progressDialog.setString(null);
 
-            // Load all mzXML spectra.
+            // Load all spectra.
             ppxp.addAllSpectra(mzDataSpectra, runAndScanToSpectrumID, progressDialog);
 
             progressDialog.setString(null);
@@ -4581,7 +4600,7 @@ public class PRIDEConverter {
                                     precursorMass)));
 
                             precursors.add(new PrecursorImpl(null, null,
-                                    ionSelection, null, 1, spectraCounter, 0));
+                                    ionSelection, null, 1, 0, 0));
 
                             // Spectrum description comments.
                             spectrumDescriptionComments = new ArrayList(1);
@@ -4747,7 +4766,7 @@ public class PRIDEConverter {
                                 precursorMass)));
 
                         precursors.add(new PrecursorImpl(null, null,
-                                ionSelection, null, 1, spectraCounter, 0));
+                                ionSelection, null, 1, 0, 0));
 
                         // Spectrum description comments.
                         spectrumDescriptionComments = new ArrayList(1);
@@ -5009,7 +5028,7 @@ public class PRIDEConverter {
                                     Double.toString(currentQuery.getPrecursorMZ())));
 
                             precursors.add(new PrecursorImpl(null, null,
-                                    ionSelection, null, 1, idCounter, 0));
+                                    ionSelection, null, 1, 0, 0));
 
                             // Spectrum description comments.
                             spectrumDescriptionComments = new ArrayList(1);
@@ -5655,7 +5674,7 @@ public class PRIDEConverter {
                             "MassToChargeRatio", 2, "" + tempSpectrum.MSSpectrum_precursormz / omssaResponseScale));
 
                     precursors.add(new PrecursorImpl(null, null, ionSelection,
-                            null, 1, idCounter, 0));
+                            null, 1, 0, 0));
 
                     // Spectrum description comments.
                     spectrumDescriptionComments = new ArrayList(1);
@@ -5997,7 +6016,7 @@ public class PRIDEConverter {
                     "MassToChargeRatio", 2,
                     Double.toString(lSpectrumFile.getPrecursorMZ())));
 
-            precursors.add(new PrecursorImpl(null, null, ionSelection, null, 1, idCounter, 0));
+            precursors.add(new PrecursorImpl(null, null, ionSelection, null, 1, 0, 0));
             idCounter++;
 
             // Spectrum description comments.
