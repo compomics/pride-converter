@@ -438,7 +438,7 @@ public class UserProperties {
             if (settingsFile != null) {
                 JOptionPane.showMessageDialog(null,
                         "The settings from the previous version has been successfully imported.\n" +
-                        "(Changes to the default memory boundaries requires a restart of the program.)",
+                        "(Changes to the default memory settings requires a restart of the program.)",
                         "Settings Imported", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (FileNotFoundException ex) {

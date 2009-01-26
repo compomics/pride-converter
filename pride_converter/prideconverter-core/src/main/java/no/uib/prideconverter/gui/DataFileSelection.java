@@ -321,15 +321,6 @@ public class DataFileSelection extends javax.swing.JFrame {
      * @param evt
      */
     private void nextJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextJButtonActionPerformed
-
-        if(prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")){
-            if(selectedFilesJTable.getRowCount() != 1){
-                JOptionPane.showMessageDialog(this, 
-                        "Currently only one file per conversion for mzData.", 
-                        "One File Only", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-        } 
         
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 

@@ -1250,7 +1250,9 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                         Runtime.getRuntime().gc();
                         JOptionPane.showMessageDialog(null,
                                 "The task used up all the available memory and had to be stopped.\n" +
-                                "Memory boundaries are set in ../Properties/JavaOptions.txt.",
+                                "Memory boundaries are set in ../Properties/JavaOptions.txt.\n\n" +
+                                "If the data sets are too big for your computer, e-mail a support\n" +
+                                "request to the PRIDE team at the EBI: pride-support@ebi.ac.uk",
                                 "Out of memory error",
                                 JOptionPane.ERROR_MESSAGE);
                     } catch (Exception e) {

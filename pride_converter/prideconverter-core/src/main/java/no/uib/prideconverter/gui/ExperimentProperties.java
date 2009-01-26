@@ -225,7 +225,6 @@ public class ExperimentProperties extends javax.swing.JFrame {
 
 //                try {
 
-
                 if (!prideConverter.getProperties().hasDataFileBeenLoaded()) {
                     MzMLUnmarshaller unmarshallerMzMl = new MzMLUnmarshaller(
                             new File(prideConverter.getProperties().getSelectedSourceFiles().get(0)));

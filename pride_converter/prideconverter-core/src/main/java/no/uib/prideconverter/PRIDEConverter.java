@@ -89,9 +89,10 @@ import uk.ac.ebi.pride.model.implementation.core.GelFreeIdentificationImpl;
 import uk.ac.ebi.pride.model.implementation.core.ModificationImpl;
 import uk.ac.ebi.pride.model.implementation.core.MonoMassDeltaImpl;
 import uk.ac.ebi.pride.model.implementation.core.TwoDimensionalIdentificationImpl;
-import uk.ac.ebi.pride.model.interfaces.mzdata.MzData;
 import uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum;
 import uk.ac.ebi.pride.model.interfaces.core.Experiment;
+import uk.ac.ebi.pride.model.interfaces.mzdata.MzData;
+import uk.ac.ebi.pride.xml.MzDataXMLUnmarshaller;
 import uk.ac.ebi.pride.xml.XMLMarshaller;
 import uk.ac.ebi.pride.xml.validation.PrideXmlValidator;
 import uk.ac.ebi.pride.xml.validation.XMLValidationErrorHandler;
@@ -426,6 +427,9 @@ public class PRIDEConverter {
                         filenameToSpectrumID =
                                 transformSpectraFromTPPFiles(mzDataSpectra);
                     }
+//                    else if (properties.getDataSource().equalsIgnoreCase("mzData")) {
+//                        transformSpectraFromMzDataFiles(mzDataSpectra);
+//                    }
 
 
                     if (debug) {
@@ -451,10 +455,18 @@ public class PRIDEConverter {
                     // create the mzData object
                     MzData mzData;
 
-                    // for mzData and TPP its already created
-                    if (properties.getDataSource().equalsIgnoreCase("mzData") ||
-                            properties.getDataSource().equalsIgnoreCase("TPP")) {
-                        mzData = createMzData(properties.getMzDataFile());
+                    if (properties.getDataSource().equalsIgnoreCase("TPP")) {
+
+                        // for TPP data the mzDataFile has already been created, we
+                        // just need to add/update the additional details
+                        mzData = updateMzData(properties.getMzDataFile());
+
+                    } else if (properties.getDataSource().equalsIgnoreCase("mzData")) {
+
+                        // for mzData the, we just have to add/update the additional details
+                        // and combine the files into one mzData file
+                        mzData = transformSpectraFromMzDataFiles();
+
                     } else {
                         mzData = createMzData(mzDataSpectra);
                     }
@@ -889,7 +901,9 @@ public class PRIDEConverter {
                     JOptionPane.showMessageDialog(null,
                             "The task used up all the available memory and had to be stopped.\n" +
                             "Memory boundaries are set in ../Properties/JavaOptions.txt.\n" +
-                            "PRIDE XML file not created.",
+                            "PRIDE XML file not created.\n\n" +
+                            "If the data sets are too big for your computer, e-mail a support\n" +
+                            "request to the PRIDE team at the EBI: pride-support@ebi.ac.uk",
                             "Out of Memory Error",
                             JOptionPane.ERROR_MESSAGE);
 
@@ -3681,8 +3695,8 @@ public class PRIDEConverter {
                                 }
                             }
 
-                            // Not yet finished
-                            // ms level
+                        // Not yet finished
+                        // ms level
 //                            if (temp[4] != null) {
 //                                msLevel = (Integer) temp[4];
 //                            } else {
@@ -6677,6 +6691,160 @@ public class PRIDEConverter {
     }
 
     /**
+     * Updates the annotation (contacts, instrument details etc) with the
+     * values chosen by the user, combines all the spectra from the selected
+     * mzData files into one mzData object and returns this object.
+     *
+     * @return the mzData object
+     */
+    private MzData transformSpectraFromMzDataFiles() {
+
+        // The CV lookup stuff. (NB: currently hardcoded to PSI only)
+        Collection cvLookups = new ArrayList(1);
+        cvLookups.add(new CVLookupImpl(properties.getCvVersion(),
+                properties.getCvFullName(),
+                properties.getCvLabel(),
+                properties.getCvAddress()));
+
+        // Instrument source CV parameters.
+        Collection instrumentSourceCVParameters = new ArrayList(3);
+        instrumentSourceCVParameters.add(new CvParamImpl(
+                properties.getAccessionInstrumentSourceParameter(),
+                properties.getCVLookupInstrumentSourceParameter(),
+                properties.getNameInstrumentSourceParameter(),
+                0,
+                properties.getValueInstrumentSourceParameter()));
+
+        // Instrument detector parameters.
+        Collection instrumentDetectorParamaters = new ArrayList(3);
+        instrumentDetectorParamaters.add(new CvParamImpl(
+                properties.getAccessionInstrumentDetectorParamater(),
+                properties.getCVLookupInstrumentDetectorParamater(),
+                properties.getNameInstrumentDetectorParamater(),
+                0,
+                properties.getValueInstrumentDetectorParamater()));
+
+        ArrayList sampleDescriptionUserParams = new ArrayList(
+                properties.getSampleDescriptionUserSubSampleNames().size());
+
+        for (int i = 0; i < properties.getSampleDescriptionUserSubSampleNames().size(); i++) {
+            sampleDescriptionUserParams.add(new UserParamImpl(
+                    "SUBSAMPLE_" + (i + 1),
+                    i, (String) properties.getSampleDescriptionUserSubSampleNames().
+                    get(i)));
+        }
+
+        for (int i = 0; i < properties.getSampleDescriptionCVParamsQuantification().size(); i++) {
+            properties.getSampleDescriptionCVParams().add(
+                    properties.getSampleDescriptionCVParamsQuantification().get(i));
+        }
+
+
+        progressDialog.setString(null);
+        progressDialog.setIntermidiate(true);
+
+        ArrayList aTransformedSpectra = new ArrayList();
+
+        long spectrumId = 1;
+
+        for (int j = 0; j < properties.getSelectedSourceFiles().size() && !cancelConversion; j++) {
+
+            String filePath = properties.getSelectedSourceFiles().get(j);
+
+            currentFileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
+
+            progressDialog.setIntermidiate(true);
+            progressDialog.setString(currentFileName + " (" + (j + 1) + "/" +
+                    properties.getSelectedSourceFiles().size() + ")");
+
+            try {
+                MzDataXMLUnmarshaller unmarshallerMzData = new MzDataXMLUnmarshaller();
+                MzData currentMzDataFile = unmarshallerMzData.unMarshall(new FileReader(filePath));
+
+                Iterator<Spectrum> spectra = currentMzDataFile.getSpectrumCollection().iterator();
+
+                while (spectra.hasNext()) {
+
+                    Spectrum currentSpectrum = spectra.next();
+
+                    Spectrum updatedSpectrum =
+                            new SpectrumImpl(
+                            currentSpectrum.getIntenArrayBinary(),
+                            currentSpectrum.getMzRangeStart(),
+                            currentSpectrum.getMzArrayBinary(),
+                            currentSpectrum.getMsLevel(),
+                            currentSpectrum.getSupDataArrayBinaryCollection(),
+                            currentSpectrum.getMzRangeStop(),
+                            currentSpectrum.getAcqSpecification(),
+                            spectrumId++,
+                            currentSpectrum.getPrecursorCollection(),
+                            currentSpectrum.getSpectrumDescCommentCollection(),
+                            currentSpectrum.getSpectrumInstrumentCvParameters(),
+                            currentSpectrum.getSpectrumInstrumentUserParameters(),
+                            currentSpectrum.getSupDataArrayCollection(),
+                            currentSpectrum.getSupDescCollection());
+
+                    aTransformedSpectra.add(updatedSpectrum);
+                }
+            } catch (FileNotFoundException e) {
+
+                Util.writeToErrorLog("An error occured while trying to parse: " + filePath);
+                e.printStackTrace();
+
+                JOptionPane.showMessageDialog(null,
+                        "An error occured while trying to parse: " + filePath + "\n\n" +
+                        "See ../Properties/ErrorLog.txt for more details.\n" +
+                        "The file can most likely not be converted to PRIDE XML.",
+                        "Parsing Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (IOException e) {
+
+                Util.writeToErrorLog("An error occured while trying to parse: " +
+                        filePath);
+                e.printStackTrace();
+
+                JOptionPane.showMessageDialog(null,
+                        "An error occured while trying to parse: " + filePath + "\n\n" +
+                        "See ../Properties/ErrorLog.txt for more details.\n" +
+                        "The file can most likely not be converted to PRIDE XML.",
+                        "Parsing Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        // Create the combinded mzData object.
+        MzData mzData = new MzDataImpl(
+                aTransformedSpectra,
+                properties.getSoftwareCompletionTime(),
+                properties.getContacts(),
+                properties.getInstrumentName(),
+                properties.getProcessingMethod(),
+                properties.getProcessingMethodUserParams(),
+                properties.getSourceFile(),
+                userProperties.getCurrentSampleSet(),
+                properties.getInstrumentAdditionalCvParams(),
+                properties.getInstrumentAdditionalUserParams(),
+                cvLookups,
+                properties.getMzDataVersion(),
+                instrumentDetectorParamaters,
+                properties.getInstrumentDetectorUserParams(),
+                properties.getSampleDescriptionComment(),
+                properties.getMzDataAccessionNumber(),
+                properties.getAnalyzerList(),
+                properties.getSoftwareComments(),
+                instrumentSourceCVParameters,
+                properties.getInstrumentSourceUserParams(),
+                properties.getSoftwareVersion(),
+                properties.getSampleDescriptionCVParams(),
+                sampleDescriptionUserParams,
+                properties.getSoftwareName());
+
+        totalNumberOfSpectra = aTransformedSpectra.size();
+
+        return mzData;
+    }
+
+    /**
      * Builds and returns the mzData object.
      * 
      * @param mzDataSpectra
@@ -6755,12 +6923,13 @@ public class PRIDEConverter {
     }
 
     /**
-     * Builds and returns the mzData object.
+     * Updates the annotation (contacts, instrument details etc) with the
+     * values chosen by the user and returns the updated mzData object.
      * 
-     * @param mzDataSpectra
-     * @return the mzData object
+     * @param mzData the mzData object to be updated
+     * @return the updated mzData object
      */
-    private MzData createMzData(MzData mzData) {
+    private MzData updateMzData(MzData mzData) {
 
         // The CV lookup stuff. (NB: currently hardcoded to PSI only)
         Collection cvLookups = new ArrayList(1);
