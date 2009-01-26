@@ -12,7 +12,6 @@ import org.systemsbiology.jrap.MZXMLFileInfo;
 import org.systemsbiology.jrap.Scan;
 import uk.ac.ebi.pride.model.implementation.mzData.*;
 import uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum;
-import uk.ac.ebi.pride.model.interfaces.mzdata.SpectrumDescComment;
 
 import java.io.File;
 import java.util.*;
@@ -328,9 +327,9 @@ public class MzXmlParser {
         spectrumInstrumentCvParameters.add(new CvParamImpl("PSI:1000037", "psi", "Polarity", 1, aScan.getPolarity()));
         
         // Spectrum description comment containing the original mzXML scan number.
-        SpectrumDescComment comment = new SpectrumDescCommentImpl("Original mzXML scan number: " + aScanNumber);
-        ArrayList spectrumDescriptionComments = new ArrayList(1);
-        spectrumDescriptionComments.add(comment);
+        //SpectrumDescComment comment = new SpectrumDescCommentImpl("Original mzXML scan number: " + aScanNumber);
+        ArrayList spectrumDescriptionComments = null;//new ArrayList(1);
+        //spectrumDescriptionComments.add(comment);
         
         // Create new mzData spectrum for the fragmentation spectrum.
         // Notice that certain collections and annotations are 'null' here.
@@ -351,17 +350,23 @@ public class MzXmlParser {
      * @return  Spectrum instance with the mzData spectrum.
      */
     private Spectrum parseMsMsSpectrum(int aScanNumber, int aSpectrumID, int aPrecursorSpectrumID, Scan aScan) {
+
         // CV parameters for the spectruminstrument.
         // Note that this information is hardcoded here!
         Collection spectrumInstrumentCvParameters = new ArrayList(2);
+
         if (aScan.getScanType() != null) {
             spectrumInstrumentCvParameters.add(new CvParamImpl("PSI:1000036", "psi", "ScanMode", 0, aScan.getScanType()));
         }
+
         spectrumInstrumentCvParameters.add(new CvParamImpl("PSI:1000037", "psi", "Polarity", 1, aScan.getPolarity()));
+
         // Precursor annotation collection.
         Collection precursors = new ArrayList(1);
+
         // Ion selection annotation parameters.
         Collection ionSelection = new ArrayList(3);
+
         // See if we know the precursor charge, and if so, include it.
         int charge = aScan.getPrecursorCharge();
         if (charge > 0) {
@@ -369,16 +374,23 @@ public class MzXmlParser {
         }
         ionSelection.add(new CvParamImpl("PSI:1000040", "psi", "MassToChargeRatio", 1, Double.toString(aScan.getPrecursorMz())));
         ionSelection.add(new CvParamImpl("PSI:RETENTION TIME", "PSI", "Retention time", 2, aScan.getRetentionTime()));
+
         // Add the precursor.
         precursors.add(new PrecursorImpl(null, null, ionSelection, null, aScan.getMsLevel() - 1, aPrecursorSpectrumID, 0));
+
         // Spectrum description comment containing the original mzXML scan number.
-        SpectrumDescComment comment = new SpectrumDescCommentImpl("Original mzXML scan number: " + aScanNumber);
-        ArrayList spectrumDescriptionComments = new ArrayList(1);
-        spectrumDescriptionComments.add(comment);
+        //SpectrumDescComment comment = new SpectrumDescCommentImpl("Original mzXML scan number: " + aScanNumber);
+        ArrayList spectrumDescriptionComments = null;//new ArrayList(1);
+        //spectrumDescriptionComments.add(comment);
+
         // Create new mzData spectrum for the fragmentation spectrum.
         // Notice that certain collections and annotations are 'null' here.
         // Feel free to add any kind of annotation yourself, however.
-        return new SpectrumImpl(new BinaryArrayImpl(aScan.getMassIntensityList()[1], BinaryArrayImpl.BIG_ENDIAN_LABEL), new Double(aScan.getLowMz()), new BinaryArrayImpl(aScan.getMassIntensityList()[0], BinaryArrayImpl.BIG_ENDIAN_LABEL), 2, null, new Double(aScan.getHighMz()), null, aSpectrumID, precursors, spectrumDescriptionComments, spectrumInstrumentCvParameters, null, null, null);
+        return new SpectrumImpl(new BinaryArrayImpl(aScan.getMassIntensityList()[1], 
+                BinaryArrayImpl.BIG_ENDIAN_LABEL), new Double(aScan.getLowMz()),
+                new BinaryArrayImpl(aScan.getMassIntensityList()[0], BinaryArrayImpl.BIG_ENDIAN_LABEL),
+                2, null, new Double(aScan.getHighMz()), null, aSpectrumID, precursors,
+                spectrumDescriptionComments, spectrumInstrumentCvParameters, null, null, null);
     }
 
     /**
