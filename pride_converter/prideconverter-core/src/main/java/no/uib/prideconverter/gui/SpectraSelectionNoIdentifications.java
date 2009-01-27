@@ -1,5 +1,6 @@
 package no.uib.prideconverter.gui;
 
+import javax.swing.event.TableModelEvent;
 import no.uib.prideconverter.PRIDEConverter;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -17,6 +18,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import no.uib.prideconverter.util.Util;
@@ -63,13 +65,13 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         this.prideConverter = prideConverter;
 
         // sets the default wizard frame size
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setSize(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
@@ -98,6 +100,43 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
         spectraJTable.setAutoCreateColumnsFromModel(false);
         spectraJTable.setAutoCreateRowSorter(true);
+
+        // makes sure that inserting an MS level lower than 1 is not allowed
+        // and displays a warning message for MS levels above 3
+        spectraJTable.getModel().addTableModelListener(new TableModelListener() {
+
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                if (spectraJTable.getSelectedColumn() == 4) {
+
+                    int insertedValue = ((Integer) spectraJTable.getValueAt(
+                            spectraJTable.getSelectedRow(), spectraJTable.getSelectedColumn())).intValue();
+
+                    if (insertedValue < 2) {
+
+                        JOptionPane.showMessageDialog(null, "The inserted MS level is smaller than 2!",
+                                "Incorrect MS Level", JOptionPane.ERROR_MESSAGE);
+                        spectraJTable.changeSelection(spectraJTable.getSelectedRow(), spectraJTable.getSelectedColumn(),
+                                false, false);
+                        spectraJTable.setValueAt(null, spectraJTable.getSelectedRow(), spectraJTable.getSelectedColumn());
+                        spectraJTable.editCellAt(spectraJTable.getSelectedRow(), spectraJTable.getSelectedColumn());
+
+                    } else if (insertedValue > 3) {
+
+                        int option = JOptionPane.showConfirmDialog(null,
+                                "The inserted MS level is larger than 3. Are you sure this is the correct MS level?",
+                                "Verify MS Level", JOptionPane.YES_NO_OPTION);
+
+                        if (option == JOptionPane.NO_OPTION) {
+                            spectraJTable.changeSelection(spectraJTable.getSelectedRow(), spectraJTable.getSelectedColumn(),
+                                    false, false);
+                            spectraJTable.setValueAt(null, spectraJTable.getSelectedRow(), spectraJTable.getSelectedColumn());
+                            spectraJTable.editCellAt(spectraJTable.getSelectedRow(), spectraJTable.getSelectedColumn());
+                        }
+                    }
+                }
+            }
+        });
 
         selectAllJCheckBox.setSelected(prideConverter.getProperties().selectAllSpectra());
 
@@ -409,6 +448,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     /**
      * Closes the frame and the wizard.
      * 
@@ -471,13 +511,13 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
      */
     private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backJButtonActionPerformed
         saveInsertedInformation();
-        
-        if(prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")){
+
+        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
             new DataFileSelectionTPP(prideConverter, this.getLocation());
-        } else{
+        } else {
             new DataFileSelection(prideConverter, this.getLocation());
-        } 
-        
+        }
+
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_backJButtonActionPerformed
@@ -563,12 +603,12 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                             ((DefaultTableModel) spectraJTable.getModel()).addRow(
                                     new Object[]{
-                                file.getName(),
-                                null,
-                                precursorMass, precursorCharge,
-                                2,
-                                new Boolean(true)
-                            });
+                                        file.getName(),
+                                        null,
+                                        precursorMass, precursorCharge,
+                                        2,
+                                        new Boolean(true)
+                                    });
 
                             numberOfSelectedSpectra++;
 
@@ -597,12 +637,12 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                                     ((DefaultTableModel) spectraJTable.getModel()).addRow(
                                             new Object[]{
-                                        file.getName(),
-                                        null,
-                                        precursorMass, precursorCharge,
-                                        2,
-                                        new Boolean(true)
-                                    });
+                                                file.getName(),
+                                                null,
+                                                precursorMass, precursorCharge,
+                                                2,
+                                                new Boolean(true)
+                                            });
 
                                     numberOfSelectedSpectra++;
                                 }
@@ -635,12 +675,12 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                                     ((DefaultTableModel) spectraJTable.getModel()).addRow(
                                             new Object[]{
-                                        file.getName(),
-                                        null,
-                                        precursorMass, precursorCharge,
-                                        2,
-                                        new Boolean(true)
-                                    });
+                                                file.getName(),
+                                                null,
+                                                precursorMass, precursorCharge,
+                                                2,
+                                                new Boolean(true)
+                                            });
 
                                     numberOfSelectedSpectra++;
                                 }
@@ -669,41 +709,41 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                         precursorCharge != -1) {
                                     ((DefaultTableModel) spectraJTable.getModel()).addRow(
                                             new Object[]{
-                                        file.getName(),
-                                        scan.getNum(),
-                                        precursorMass, precursorCharge,
-                                        2,
-                                        new Boolean(true)
-                                    });
+                                                file.getName(),
+                                                scan.getNum(),
+                                                precursorMass, precursorCharge,
+                                                2,
+                                                new Boolean(true)
+                                            });
                                 } else if (precursorMass == -1 &&
                                         precursorCharge != -1) {
                                     ((DefaultTableModel) spectraJTable.getModel()).addRow(
                                             new Object[]{
-                                        file.getName(),
-                                        scan.getNum(),
-                                        null, precursorCharge,
-                                        2,
-                                        new Boolean(true)
-                                    });
+                                                file.getName(),
+                                                scan.getNum(),
+                                                null, precursorCharge,
+                                                2,
+                                                new Boolean(true)
+                                            });
                                 } else if (precursorMass != -1 &&
                                         precursorCharge == -1) {
                                     ((DefaultTableModel) spectraJTable.getModel()).addRow(
                                             new Object[]{
-                                        file.getName(),
-                                        scan.getNum(),
-                                        precursorMass, null,
-                                        2,
-                                        new Boolean(true)
-                                    });
+                                                file.getName(),
+                                                scan.getNum(),
+                                                precursorMass, null,
+                                                2,
+                                                new Boolean(true)
+                                            });
                                 } else {
                                     ((DefaultTableModel) spectraJTable.getModel()).addRow(
                                             new Object[]{
-                                        file.getName(),
-                                        scan.getNum(),
-                                        null, null,
-                                        2,
-                                        new Boolean(true)
-                                    });
+                                                file.getName(),
+                                                scan.getNum(),
+                                                null, null,
+                                                2,
+                                                new Boolean(true)
+                                            });
                                 }
 
                                 numberOfSelectedSpectra++;
@@ -722,21 +762,21 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                                 ((DefaultTableModel) spectraJTable.getModel()).addRow(
                                         new Object[]{
-                                    file.getName(),
-                                    spectraMzMl.get(i).getId(),//.getIndex().toString(),
-                                    //spectraMzMl.get(i).getSpectrumDescription().getPrecursorList().getPrecursor().get(0).getSelectedIonList().getSelectedIon().get(0).getCvParam().get(0).getValue(),
-                                    null,
-                                    null,
-                                    2,
-                                    new Boolean(true)
-                                });
+                                            file.getName(),
+                                            spectraMzMl.get(i).getId(),//.getIndex().toString(),
+                                            //spectraMzMl.get(i).getSpectrumDescription().getPrecursorList().getPrecursor().get(0).getSelectedIonList().getSelectedIon().get(0).getCvParam().get(0).getValue(),
+                                            null,
+                                            null,
+                                            2,
+                                            new Boolean(true)
+                                        });
 
                                 numberOfSelectedSpectra++;
 
                                 numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
                                         "/" + numberOfSelectedSpectra);
                             }
-                            
+
                             prideConverter.getProperties().setDataFileHasBeenLoaded(true);
                         } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
 
@@ -753,12 +793,12 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                                 ((DefaultTableModel) spectraJTable.getModel()).addRow(
                                         new Object[]{
-                                    file.getName(),
-                                    "" + currentSpectrum.getSpectrumId(),
-                                    null, null,
-                                    2,
-                                    new Boolean(true)
-                                });
+                                            file.getName(),
+                                            "" + currentSpectrum.getSpectrumId(),
+                                            null, null,
+                                            2,
+                                            new Boolean(true)
+                                        });
 
                                 numberOfSelectedSpectra++;
                                 numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
@@ -805,12 +845,12 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                                     ((DefaultTableModel) spectraJTable.getModel()).addRow(
                                             new Object[]{
-                                        file.getName(),
-                                        null,
-                                        precursorMass, precursorCharge,
-                                        2,
-                                        new Boolean(true)
-                                    });
+                                                file.getName(),
+                                                null,
+                                                precursorMass, precursorCharge,
+                                                2,
+                                                new Boolean(true)
+                                            });
 
                                     numberOfSelectedSpectra++;
                                     numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
@@ -897,12 +937,12 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                                     ((DefaultTableModel) spectraJTable.getModel()).addRow(
                                             new Object[]{
-                                        file.getName(),
-                                        null,
-                                        precursorMass, precursorCharge,
-                                        2,
-                                        new Boolean(true)
-                                    });
+                                                file.getName(),
+                                                null,
+                                                precursorMass, precursorCharge,
+                                                2,
+                                                new Boolean(true)
+                                            });
 
                                     numberOfSelectedSpectra++;
                                     numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
@@ -1113,12 +1153,12 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                     prideConverter.getProperties().getSelectedSpectraNames().add(
                             new Object[]{
-                        spectraJTable.getValueAt(i, 0),
-                        spectraJTable.getValueAt(i, 1),
-                        spectraJTable.getValueAt(i, 2),
-                        spectraJTable.getValueAt(i, 3),
-                        spectraJTable.getValueAt(i, 4)
-                    });
+                                spectraJTable.getValueAt(i, 0),
+                                spectraJTable.getValueAt(i, 1),
+                                spectraJTable.getValueAt(i, 2),
+                                spectraJTable.getValueAt(i, 3),
+                                spectraJTable.getValueAt(i, 4)
+                            });
                 }
             }
 

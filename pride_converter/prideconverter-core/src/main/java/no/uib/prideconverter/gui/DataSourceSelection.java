@@ -1094,7 +1094,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         this.nextJButton.setEnabled(true);
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
                 "<b>MS2</b><br><br>" +
-                "MS2 files stores MS/MS data and replaces a folder of thousands of DTA files<br>" +
+                "MS2 files stores MS/MS data and can replace a folder of thousands of DTA files.<br>" +
                 "It contains all the spectral information necessary for database searching algorithms.<br><br>" +
                 "File Extension: .ms2<br><br>" +
                 "More Information: <a href=\"http://doi.wiley.com/10.1002/rcm.1603\">" +
