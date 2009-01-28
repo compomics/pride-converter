@@ -12,6 +12,7 @@ import java.awt.Toolkit;
 public class NewUserParameter extends javax.swing.JDialog {
 
     private UserParameters userParametersFrame;
+    private SpectrumDetails spectrumDetails;
     private int modifiedRow = -1;
 
     /**
@@ -29,7 +30,7 @@ public class NewUserParameter extends javax.swing.JDialog {
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
                 getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
-        
+
         setLocationRelativeTo(userParametersFrame);
         setVisible(true);
     }
@@ -59,6 +60,54 @@ public class NewUserParameter extends javax.swing.JDialog {
         valueJTextField.setText(value);
 
         setLocationRelativeTo(userParametersFrame);
+        setVisible(true);
+    }
+
+    /**
+     * Opens a new NewUserParameter dialog.
+     *
+     * @param spectrumDetails a reference to the SpectrumDetails dialog
+     * @param modal
+     */
+    public NewUserParameter(SpectrumDetails spectrumDetails, boolean modal) {
+        super(spectrumDetails, modal);
+
+        this.spectrumDetails = spectrumDetails;
+
+        initComponents();
+
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
+
+        setLocationRelativeTo(spectrumDetails);
+        setVisible(true);
+    }
+
+    /**
+     * Opens a new NewUserParameter dialog.
+     *
+     * @param spectrumDetails a reference to the SpectrumDetails dialog
+     * @param modal
+     * @param name
+     * @param value
+     * @param modifiedRow the row to edit, -1 if adding new row
+     */
+    public NewUserParameter(SpectrumDetails spectrumDetails, boolean modal,
+            String name, String value, int modifiedRow) {
+        super(spectrumDetails, modal);
+
+        this.spectrumDetails = spectrumDetails;
+        this.modifiedRow = modifiedRow;
+
+        initComponents();
+
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
+
+        nameJTextField.setText(name);
+        valueJTextField.setText(value);
+
+        setLocationRelativeTo(spectrumDetails);
         setVisible(true);
     }
 
@@ -201,6 +250,7 @@ public class NewUserParameter extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     /**
      * Insert the parameter into the UserParameters frame and close the dialog.
      * 
@@ -208,8 +258,15 @@ public class NewUserParameter extends javax.swing.JDialog {
      */
     private void insertJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        userParametersFrame.addUserParameter(this.nameJTextField.getText(),
-                this.valueJTextField.getText(), modifiedRow);
+
+        if (userParametersFrame != null) {
+            userParametersFrame.addUserParameter(this.nameJTextField.getText(),
+                    this.valueJTextField.getText(), modifiedRow);
+        } else if (spectrumDetails != null) {
+            spectrumDetails.addUserParameter(this.nameJTextField.getText(),
+                    this.valueJTextField.getText(), modifiedRow);
+        }
+
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         formWindowClosing(null);
     }//GEN-LAST:event_insertJButtonActionPerformed

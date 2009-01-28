@@ -424,7 +424,7 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
     }//GEN-LAST:event_editJMenuItemActionPerformed
 
     /**
-     * Moved the selected row one step up in the table.
+     * Moves the selected row one step up in the table.
      * 
      * @param evt
      */
@@ -449,7 +449,7 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
     }//GEN-LAST:event_moveUpJMenuItemActionPerformed
 
     /**
-     * Moved the selected row one step down in the table.
+     * Moves the selected row one step down in the table.
      * 
      * @param evt
      */
