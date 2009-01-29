@@ -122,6 +122,7 @@ public class PRIDEConverter {
     private static int emptySpectraCounter = 0;
     private static int peptideIdCount = 0;
     private static String currentFileName = "";
+    private static String spectrumKey = "";
     private static OutputDetails outputFrame;
     private static UserProperties userProperties;
     private static Properties properties;
@@ -3699,9 +3700,11 @@ public class PRIDEConverter {
                                     if (temp[3] != null) {
                                         if (((Integer) temp[3]).intValue() == precursorCharge) {
                                             matchFound = true;
+                                            spectrumKey = generateSpectrumKey(temp);
                                         }
                                     } else {
                                         matchFound = true;
+                                        spectrumKey = generateSpectrumKey(temp);
                                     }
                                 }
                             }
@@ -3784,7 +3787,9 @@ public class PRIDEConverter {
                                     null,
                                     spectraCounter, precursors,
                                     spectrumDescriptionComments,
-                                    null, null, null, null);
+                                    properties.getSpectrumCvParams().get(spectrumKey),
+                                    properties.getSpectrumUserParams().get(spectrumKey),
+                                    null, null);
 
                             // Store (spectrumfileid, spectrumid) mapping.
                             mapping.put(new Long(spectraCounter),
@@ -4050,7 +4055,6 @@ public class PRIDEConverter {
                             int id = -1;
 
                             // First check if we have already encountered this spectrum.
-                            String spectrumKey;
 
                             // have to be handled differently for mzXML and mgf files
                             if (lQuery.getSpectrumTitle() != null) { // MGF
@@ -7132,5 +7136,24 @@ public class PRIDEConverter {
         userParams.add(new UserParamImpl("117_117", 15, iTraqRatios[3][3]));
 
         return userParams;
+    }
+
+    /**
+     * Generates the spectrum key by combining all the elements in the
+     * provided array of objects. Each element is separated by '_'.
+     *
+     * @param subKeys the array of elements to combine
+     * @return the generated spectrum key
+     */
+    private static String generateSpectrumKey(Object[] subKeys) {
+        spectrumKey = "";
+
+        for (int i = 0; i < subKeys.length; i++) {
+            spectrumKey += subKeys[i] + "_";
+        }
+
+        spectrumKey = spectrumKey.substring(0, spectrumKey.length() - 1);
+
+        return spectrumKey;
     }
 }

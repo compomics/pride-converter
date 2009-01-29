@@ -3,10 +3,13 @@ package no.uib.prideconverter.util;
 import be.proteomics.mascotdatfile.util.mascot.ProteinHit;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import javax.swing.table.DefaultTableModel;
 import uk.ac.ebi.jmzml.model.mzml.MzML;
+import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
 import uk.ac.ebi.pride.model.interfaces.mzdata.MzData;
 import uk.ac.ebi.pride.model.interfaces.mzdata.SourceFile;
+import uk.ac.ebi.pride.model.interfaces.mzdata.UserParam;
 
 /**
  * This class contains many of the properties that are used during the 
@@ -65,6 +68,9 @@ public class Properties {
     private MzData mzDataFile;
     private MzML mzML;
     private boolean isGelFree = true;
+
+    private HashMap<String, ArrayList<CvParam>> spectrumCvParams;
+    private HashMap<String, ArrayList<UserParam>> spectrumUserParams;
     
     // contact information
     private Collection contacts;
@@ -148,6 +154,8 @@ public class Properties {
         analyzerList = new ArrayList();
         references = new ArrayList();
         selectedSourceFiles = new ArrayList();
+        spectrumCvParams = new HashMap<String, ArrayList<CvParam>>();
+        spectrumUserParams = new HashMap<String, ArrayList<UserParam>>();
     }
 
     /**
@@ -1507,5 +1515,41 @@ public class Properties {
      */
     public void setGelFree(boolean isGelFree) {
         this.isGelFree = isGelFree;
+    }
+
+    /**
+     * Returns the spectrum cv parameters
+     *
+     * @return the spectrumCvParams
+     */
+    public HashMap<String, ArrayList<CvParam>> getSpectrumCvParams() {
+        return spectrumCvParams;
+    }
+
+    /**
+     * Sets the spectrum cv parameters
+     *
+     * @param spectrumCvParams the spectrumCvParams to set
+     */
+    public void setSpectrumCvParams(HashMap<String, ArrayList<CvParam>> spectrumCvParams) {
+        this.spectrumCvParams = spectrumCvParams;
+    }
+
+    /**
+     * Returns the spectrum user parameters
+     *
+     * @return the spectrumUserParams
+     */
+    public HashMap<String, ArrayList<UserParam>> getSpectrumUserParams() {
+        return spectrumUserParams;
+    }
+
+    /**
+     * Sets the spectrum user parameters
+     *
+     * @param spectrumUserParams the spectrumUserParams to set
+     */
+    public void setSpectrumUserParams(HashMap<String, ArrayList<UserParam>> spectrumUserParams) {
+        this.spectrumUserParams = spectrumUserParams;
     }
 }

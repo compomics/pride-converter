@@ -1160,7 +1160,12 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
     }//GEN-LAST:event_selectAllJCheckBoxActionPerformed
 
     private void viewSpectrumParametersJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSpectrumParametersJMenuItemActionPerformed
-        new SpectrumDetails(this, true, prideConverter);
+        new SpectrumDetails(this, true, prideConverter,
+                                "" + spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 0) + "_" +
+                                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 1) +  "_" +
+                                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 2) + "_" +
+                                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 3) + "_" +
+                                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 4));
     }//GEN-LAST:event_viewSpectrumParametersJMenuItemActionPerformed
 
     /**
