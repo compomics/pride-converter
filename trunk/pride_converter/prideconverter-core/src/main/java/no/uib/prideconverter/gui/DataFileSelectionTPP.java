@@ -582,6 +582,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
             prideConverter.getProperties().setDataFileHasBeenLoaded(false);
             prideConverter.getProperties().setSampleDetailsExtracted(false);
             prideConverter.getProperties().setContactInfoExtracted(false);
+            prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
         }
 
         mandatoryFieldsCheck();

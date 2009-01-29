@@ -117,7 +117,8 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         }
 
         // for mzXML, mzData and TPP information about the instrument is extraced from the file
-        if ((prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") || prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) &&
+        if ((prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")
+                || prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) &&
                 !prideConverter.getProperties().areInstrumentDetailsExtracted()) {
             extractInstrumentDetailsFromFile();
         } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP") &&
@@ -210,6 +211,8 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             instrumentName = prideConverter.getProperties().getMzDataFile().getInstrumentName();
         }
 
+        instrumentName = instrumentName.replaceAll("/", "");
+
         if (mzXmlFileFound || prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
 
             String newName =
@@ -246,7 +249,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                                 "Please provide the name of the new instrument:",
                                 instrumentName);
 
-                        while (instrumentName == null) {
+                        while (instrumentName == null || instrumentName.lastIndexOf("\\") != -1) {
                             instrumentName = JOptionPane.showInputDialog(this, "Please provide a valid name:",
                                     instrumentName);
                         }
@@ -258,7 +261,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                                     "This name is also in use. Please choose a different name: ",
                                     instrumentName);
 
-                            while (instrumentName == null) {
+                            while (instrumentName == null || instrumentName.lastIndexOf("\\") != -1) {
                                 instrumentName = JOptionPane.showInputDialog(this, "Please provide a valid name:",
                                         instrumentName);
                             }

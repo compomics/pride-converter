@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
@@ -147,12 +146,14 @@ public class ExperimentProperties extends javax.swing.JFrame {
 
                 try {
                     MzDataXMLUnmarshaller unmarshallerMzData = new MzDataXMLUnmarshaller();
+
                     prideConverter.getProperties().setMzDataFile(unmarshallerMzData.unMarshall(
                             new FileReader(prideConverter.getProperties().getSelectedSourceFiles().get(0))));
                     prideConverter.getProperties().setDataFileHasBeenLoaded(true);
 
                     prideConverter.getProperties().setContacts(
                             prideConverter.getProperties().getMzDataFile().getContactCollection());
+
                     insertStoredInformation();
                     mandatoryFieldsCheck();
 
@@ -305,13 +306,11 @@ public class ExperimentProperties extends javax.swing.JFrame {
 
             ((DefaultTableModel) contactsJTable.getModel()).addRow(
                     new Object[]{
-                new Integer(contactsJTable.getRowCount() + 1),
-                tempContact.getContactName(),
-                tempContact.getContactInfo(),
-                tempContact.getInstitution(),
-                new ImageIcon("copy16.gif"),
-                new ImageIcon("copy16.gif")
-            });
+                        new Integer(contactsJTable.getRowCount() + 1),
+                        tempContact.getContactName(),
+                        tempContact.getContactInfo(),
+                        tempContact.getInstitution()
+                    });
         }
 
         Iterator ids;
@@ -357,28 +356,28 @@ public class ExperimentProperties extends javax.swing.JFrame {
                 }
 
                 ((DefaultTableModel) referencesJTable.getModel()).addRow(new Object[]{
-                    new Integer(referencesJTable.getRowCount() + 1),
-                    tempRef.getReferenceLine(),
-                    pubMed,
-                    doi
-                });
+                            new Integer(referencesJTable.getRowCount() + 1),
+                            tempRef.getReferenceLine(),
+                            pubMed,
+                            doi
+                        });
             } else {
                 ((DefaultTableModel) referencesJTable.getModel()).addRow(new Object[]{
-                    new Integer(referencesJTable.getRowCount() + 1),
-                    tempRef.getReferenceLine(),
-                    null,
-                    null
-                });
+                            new Integer(referencesJTable.getRowCount() + 1),
+                            tempRef.getReferenceLine(),
+                            null,
+                            null
+                        });
             }
         }
     }
 
     /**
      * Returns a reference the PRIDEConverter.
-     * 
+     *
      * @return a reference the PRIDEConverter
      */
-    public PRIDEConverter getPRIDEConverter_ref() {
+    public PRIDEConverter getPRIDEConverterReference() {
         return prideConverter;
     }
 
@@ -390,7 +389,16 @@ public class ExperimentProperties extends javax.swing.JFrame {
         if (experimentTitleJTextArea.getText().length() > 0 &&
                 experimentLabelJTextField.getText().length() > 0 &&
                 contactsJTable.getRowCount() > 0) {
-            nextJButton.setEnabled(true);
+
+            boolean allContactDetailsFilledIn = true;
+
+            for (int i = 0; i < contactsJTable.getRowCount(); i++) {
+                if (contactsJTable.getValueAt(i, 1) == null || contactsJTable.getValueAt(i, 2) == null || contactsJTable.getValueAt(i, 3) == null) {
+                    allContactDetailsFilledIn = false;
+                }
+            }
+
+            nextJButton.setEnabled(allContactDetailsFilledIn);
         } else {
             nextJButton.setEnabled(false);
         }
@@ -433,11 +441,11 @@ public class ExperimentProperties extends javax.swing.JFrame {
         if (selectedRow == -1) {
             ((DefaultTableModel) contactsJTable.getModel()).addRow(
                     new Object[]{
-                new Integer(contactsJTable.getRowCount() + 1),
-                contact.getContactName(),
-                contact.getContactInfo(),
-                contact.getInstitution()
-            });
+                        new Integer(contactsJTable.getRowCount() + 1),
+                        contact.getContactName(),
+                        contact.getContactInfo(),
+                        contact.getInstitution()
+                    });
         } else {
             contactsJTable.setValueAt(contact.getInstitution(), selectedRow, 3);
             contactsJTable.setValueAt(contact.getContactName(), selectedRow, 1);
@@ -486,11 +494,11 @@ public class ExperimentProperties extends javax.swing.JFrame {
 
         if (selectedRow == -1) {
             ((DefaultTableModel) referencesJTable.getModel()).addRow(new Object[]{
-                new Integer(referencesJTable.getRowCount() + 1),
-                reference,
-                pmid,
-                doi
-            });
+                        new Integer(referencesJTable.getRowCount() + 1),
+                        reference,
+                        pmid,
+                        doi
+                    });
 
             prideConverter.getProperties().getReferences().add(new ReferenceImpl(
                     reference,
@@ -956,6 +964,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     /**
      * Opens a NewContact dialog, where information about a new contact 
      * can be given.
@@ -965,8 +974,26 @@ public class ExperimentProperties extends javax.swing.JFrame {
     private void conEditJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conEditJMenuItemActionPerformed
         int selectedRow = contactsJTable.getSelectedRow();
 
-        new NewContact(this, true, selectedRow,
-                (String) contactsJTable.getValueAt(selectedRow, 1));
+        String contactPath = "" +
+                this.getClass().getProtectionDomain().getCodeSource().getLocation();
+        contactPath = contactPath.substring(5, contactPath.lastIndexOf("/"));
+        contactPath = contactPath.substring(0, contactPath.lastIndexOf("/") +
+                1) + "Properties/Contacts/";
+        contactPath = contactPath.replace("%20", " ");
+
+        String fileName = contactPath + (String) contactsJTable.getValueAt(selectedRow, 1) + ".con";
+
+        if (!new File(fileName).exists()) {
+
+            new NewContactNoMenu(this, true, selectedRow,
+                    (String) contactsJTable.getValueAt(selectedRow, 1),
+                    (String) contactsJTable.getValueAt(selectedRow, 2),
+                    (String) contactsJTable.getValueAt(selectedRow, 3));
+
+        } else {
+            new NewContact(this, true, selectedRow,
+                    (String) contactsJTable.getValueAt(selectedRow, 1));
+        }
     }//GEN-LAST:event_conEditJMenuItemActionPerformed
 
     /**

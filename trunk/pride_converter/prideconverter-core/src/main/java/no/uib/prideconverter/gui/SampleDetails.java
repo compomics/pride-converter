@@ -28,7 +28,6 @@ import javax.swing.table.JTableHeader;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.StringTokenizer;
-import no.uib.prideconverter.gui.ComboBoxInputDialog;
 import no.uib.prideconverter.util.ComboBoxInputable;
 import no.uib.prideconverter.util.MyComboBoxRenderer;
 import no.uib.prideconverter.util.Util;
@@ -167,25 +166,29 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     private void extractSampleDetailsFromFile() {
 
         String sampleName;
+        Iterator<CvParam> iterator;
 
         Collection<CvParam> cvParams = prideConverter.getProperties().getMzDataFile().getSampleDescriptionCvParams();
 
         prideConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
 
-        Iterator<CvParam> iterator = cvParams.iterator();
+        if (cvParams != null) {
 
-        long orderIndex = 0;
+            iterator = cvParams.iterator();
 
-        while (iterator.hasNext()) {
+            long orderIndex = 0;
 
-            CvParam tempCvParam = iterator.next();
+            while (iterator.hasNext()) {
 
-            prideConverter.getProperties().getSampleDescriptionCVParams().add(
-                    new CvParamImpl(tempCvParam.getAccession(),
-                    tempCvParam.getCVLookup(),
-                    tempCvParam.getName(),
-                    new Long(orderIndex++),
-                    "SUBSAMPLE_1"));
+                CvParam tempCvParam = iterator.next();
+
+                prideConverter.getProperties().getSampleDescriptionCVParams().add(
+                        new CvParamImpl(tempCvParam.getAccession(),
+                        tempCvParam.getCVLookup(),
+                        tempCvParam.getName(),
+                        new Long(orderIndex++),
+                        "SUBSAMPLE_1"));
+            }
         }
 
         sampleName = prideConverter.getProperties().getMzDataFile().getSampleName();
@@ -1362,8 +1365,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
                         for (int i = 0; i <
                                 prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().size(); i++) {
-                            bw.write(prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(i) +
-                                    "\n");
+                            bw.write(prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(i) + "\n");
                         }
 
                         bw.write("#\n");
@@ -1445,10 +1447,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
                                 bw.write(prideConverter.getProperties().getSampleDescriptionCVParams().size() + "\n");
 
-                                for (int i = 0; i <
-                                        prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().size(); i++) {
-                                    bw.write(prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(i) +
-                                            "\n");
+                                for (int i = 0; i < prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().size(); i++) {
+                                    bw.write(prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(i) + "\n");
                                 }
 
                                 bw.write("#\n");
@@ -1610,8 +1610,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                     }
 
                     if (prideConverter.getProperties().getCurrentQuantificationSelection().size() > 0) {
-                        for (int i = 0; i <
-                                prideConverter.getProperties().getCurrentQuantificationSelection().size(); i++) {
+                        for (int i = 0; i < prideConverter.getProperties().getCurrentQuantificationSelection().size(); i++) {
                             sampleDetailsJTable.setValueAt(prideConverter.getProperties().getCurrentQuantificationSelection().get(i), i, 2);
                         }
                     }

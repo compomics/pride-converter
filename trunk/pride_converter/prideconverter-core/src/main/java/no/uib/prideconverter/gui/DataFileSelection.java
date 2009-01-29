@@ -488,6 +488,7 @@ public class DataFileSelection extends javax.swing.JFrame {
             prideConverter.getProperties().setDataFileHasBeenLoaded(false);
             prideConverter.getProperties().setSampleDetailsExtracted(false);
             prideConverter.getProperties().setContactInfoExtracted(false);
+            prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
 
             while (selectedFilesJTable.getRowCount() > 0) {
                 ((DefaultTableModel) selectedFilesJTable.getModel()).removeRow(0);

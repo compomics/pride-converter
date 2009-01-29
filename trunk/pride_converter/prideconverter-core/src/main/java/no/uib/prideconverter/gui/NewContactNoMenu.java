@@ -12,10 +12,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
-import no.uib.prideconverter.util.ComboBoxInputable;
 import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.implementation.mzData.ContactImpl;
 
@@ -26,47 +24,13 @@ import uk.ac.ebi.pride.model.implementation.mzData.ContactImpl;
  * 
  * Created March 2008
  */
-public class NewContact extends javax.swing.JDialog implements ComboBoxInputable {
+public class NewContactNoMenu extends javax.swing.JDialog {
 
     private ExperimentProperties experimentPropertiesFrame;
     private int selectedRow = -1;
     private String contactPath;
     private String currentContactName;
-    private String lastSelectedContact;
     private boolean valuesChanged = false;
-
-    /**
-     * Opens a new NewContact dialog
-     * 
-     * @param experimentProperties a reference to the ExperimentProperties frame
-     * @param modal
-     */
-    public NewContact(ExperimentProperties experimentProperties, boolean modal) {
-        super(experimentProperties, modal);
-        this.experimentPropertiesFrame = experimentProperties;
-        initComponents();
-
-        // alters the usage if TAB so that it can be used to move between fields
-        KeyStroke ctrlTab = KeyStroke.getKeyStroke("ctrl TAB");
-        KeyStroke tab = KeyStroke.getKeyStroke("TAB");
-        Set set = new HashSet(institutionJTextArea.getFocusTraversalKeys(
-                KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
-        set.remove(ctrlTab);
-        set.add(tab);
-        institutionJTextArea.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, set);
-        institutionJTextArea.getInputMap().put(ctrlTab, "insert-tab");
-
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
-                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
-
-        institutionJTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
-
-        currentContactName = null;
-        readContactsFromFile();
-
-        setLocationRelativeTo(experimentPropertiesFrame);
-        setVisible(true);
-    }
 
     /**
      * Opens a new NewContact dialog
@@ -76,12 +40,18 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
      * @param selectedRow the row to edit, -1 if adding new row
      * @param name
      */
-    public NewContact(ExperimentProperties experimentProperties, boolean modal,
-            int selectedRow, String name) {
+    public NewContactNoMenu(ExperimentProperties experimentProperties, boolean modal, int selectedRow,
+            String name, String eMail, String institution) {
         super(experimentProperties, modal);
         this.experimentPropertiesFrame = experimentProperties;
-        this.selectedRow = selectedRow;
+
         initComponents();
+
+        this.selectedRow = selectedRow;
+
+        contactNameJTextField.setText(name);
+        contactInfoJTextField.setText(eMail);
+        institutionJTextArea.setText(institution);
 
         // alters the usage if TAB so that it can be used to move between fields
         KeyStroke ctrlTab = KeyStroke.getKeyStroke("ctrl TAB");
@@ -154,20 +124,6 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
                     f.close();
                 }
             }
-
-            java.util.Collections.sort(contactNames);
-
-            contactNames.add("   Create a new contact...");
-            contactNames.insertElementAt("- Please select a contact -", 0);
-            namesJComboBox.setModel(new DefaultComboBoxModel(contactNames));
-
-            lastSelectedContact = "" + namesJComboBox.getSelectedItem();
-
-            if (currentContactName != null) {
-                namesJComboBox.setSelectedItem(currentContactName);
-            }
-
-            namesJComboBoxActionPerformed(null);
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(
                     this, "The file " + tempContactName + " could not be found.",
@@ -190,23 +146,12 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
      * the "Add Contact" button.
      */
     public void mandatoryFieldsCheck() {
-        if ((namesJComboBox.getSelectedIndex() != 0 &&
-                namesJComboBox.getSelectedIndex() !=
-                namesJComboBox.getModel().getSize() - 1) &&
+        if (contactNameJTextField.getText().length() > 0 &&
                 contactInfoJTextField.getText().length() > 0 &&
                 institutionJTextArea.getText().length() > 0) {
             addJButton.setEnabled(true);
         } else {
             addJButton.setEnabled(false);
-        }
-
-        if (namesJComboBox.getSelectedIndex() != 0 &&
-                namesJComboBox.getSelectedIndex() !=
-                namesJComboBox.getModel().getSize() - 1 &&
-                namesJComboBox.getSelectedIndex() != -1) {
-            deleteJButton.setEnabled(true);
-        } else {
-            deleteJButton.setEnabled(false);
         }
     }
 
@@ -218,29 +163,18 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        popupMenu = new javax.swing.JPopupMenu();
-        deleteJMenuItem = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         contactInfoJTextField = new javax.swing.JTextField();
-        namesJComboBox = new javax.swing.JComboBox();
         jScrollPane2 = new javax.swing.JScrollPane();
         institutionJTextArea = new javax.swing.JTextArea();
-        deleteJButton = new javax.swing.JButton();
+        contactNameJTextField = new javax.swing.JTextField();
         addJButton = new javax.swing.JButton();
         cancelJButton = new javax.swing.JButton();
         helpJButton = new javax.swing.JButton();
         aboutJButton = new javax.swing.JButton();
-
-        deleteJMenuItem.setText("Delete Contact");
-        deleteJMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteJMenuItemActionPerformed(evt);
-            }
-        });
-        popupMenu.add(deleteJMenuItem);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("New Contact");
@@ -251,7 +185,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Contact", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Contact", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
         jLabel6.setText("Institution:");
 
@@ -262,24 +196,6 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
         contactInfoJTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 contactInfoJTextFieldKeyReleased(evt);
-            }
-        });
-
-        namesJComboBox.setMaximumSize(new java.awt.Dimension(32767, 20));
-        namesJComboBox.setMinimumSize(new java.awt.Dimension(23, 20));
-        namesJComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                namesJComboBoxMouseClicked(evt);
-            }
-        });
-        namesJComboBox.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                namesJComboBoxItemStateChanged(evt);
-            }
-        });
-        namesJComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                namesJComboBoxActionPerformed(evt);
             }
         });
 
@@ -297,15 +213,9 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
         });
         jScrollPane2.setViewportView(institutionJTextArea);
 
-        deleteJButton.setFont(new java.awt.Font("Arial", 1, 11));
-        deleteJButton.setText("X");
-        deleteJButton.setToolTipText("Delete Selected Contact");
-        deleteJButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        deleteJButton.setIconTextGap(0);
-        deleteJButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
-        deleteJButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteJButtonActionPerformed(evt);
+        contactNameJTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                contactNameJTextFieldKeyReleased(evt);
             }
         });
 
@@ -320,13 +230,10 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
                     .addComponent(jLabel7)
                     .addComponent(jLabel6))
                 .addGap(16, 16, 16)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
-                    .addComponent(contactInfoJTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(namesJComboBox, 0, 397, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(deleteJButton)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(contactNameJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                    .addComponent(contactInfoJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -334,8 +241,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(namesJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(deleteJButton))
+                    .addComponent(contactNameJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(9, 9, 9)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
@@ -406,7 +312,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cancelJButton)
                             .addComponent(addJButton))
@@ -436,7 +342,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
         boolean alreadyInTable = false;
 
         if (selectedRow == -1) {
-            alreadyInTable = experimentPropertiesFrame.contactAlreadyInTable((String) namesJComboBox.getSelectedItem());
+            alreadyInTable = experimentPropertiesFrame.contactAlreadyInTable(contactNameJTextField.getText());
         }
 
         if (!alreadyInTable) {
@@ -456,13 +362,13 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
                 tempInstitution = tempInstitution.substring(0, tempInstitution.length() - 1);
             }
 
-            String newName = contactPath + currentContactName + ".con";
+            String newName = contactPath + contactNameJTextField.getText() + ".con";
 
             try {
                 FileWriter r = new FileWriter(newName);
                 BufferedWriter bw = new BufferedWriter(r);
 
-                bw.write("Name: " + currentContactName + "\n");
+                bw.write("Name: " + contactNameJTextField.getText() + "\n");
                 bw.write("E-mail: " + contactInfoJTextField.getText() + "\n");
                 bw.write("Institution: " + tempInstitution + "\n");
 
@@ -486,7 +392,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
             experimentPropertiesFrame.addContact(
                     new ContactImpl(
                     tempInstitution,
-                    (String) namesJComboBox.getSelectedItem(),
+                    contactNameJTextField.getText(),
                     contactInfoJTextField.getText()),
                     selectedRow);
 
@@ -525,7 +431,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
      */
     private void helpJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpJButtonActionPerformed
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new HelpWindow(this, getClass().getResource("/no/uib/prideconverter/helpfiles/NewContact.html"));
+        new HelpWindow(this, getClass().getResource("/no/uib/prideconverter/helpfiles/NewContactNoMenu.html"));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_helpJButtonActionPerformed
 
@@ -546,149 +452,6 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
      * 
      * @param evt
      */
-    private void namesJComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_namesJComboBoxActionPerformed
-
-        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-
-        String selectedContactName = (String) namesJComboBox.getSelectedItem();
-
-        boolean cancel = false;
-
-        if (valuesChanged) {
-            int value = JOptionPane.showConfirmDialog(this,
-                    "The contact has been changed. Do you want to save this for later use?",
-                    "Contact Changed", JOptionPane.YES_NO_CANCEL_OPTION);
-
-            if (value == JOptionPane.YES_OPTION) {
-
-                String newName = contactPath + lastSelectedContact + ".con";
-
-                try {
-
-                    FileWriter r = new FileWriter(newName);
-                    BufferedWriter bw = new BufferedWriter(r);
-
-                    bw.write("Name: " + lastSelectedContact + "\n");
-                    bw.write("E-mail: " + contactInfoJTextField.getText() + "\n");
-                    bw.write("Institution: " + institutionJTextArea.getText() +
-                            "\n");
-
-                    bw.close();
-                    r.close();
-
-                } catch (FileNotFoundException ex) {
-                    JOptionPane.showMessageDialog(
-                            this, "The file " + newName + " could not be found.",
-                            "File Not Found", JOptionPane.ERROR_MESSAGE);
-                    Util.writeToErrorLog("Error when trying to save file: ");
-                    ex.printStackTrace();
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(
-                            this, "An error occured when trying to save the file " + newName + ".",
-                            "File Error", JOptionPane.ERROR_MESSAGE);
-                    Util.writeToErrorLog("Error when trying to save file: ");
-                    ex.printStackTrace();
-                }
-            } else if (value == JOptionPane.CANCEL_OPTION) {
-                cancel = true;
-            }
-        }
-
-        if (!cancel) {
-
-            lastSelectedContact = "" + namesJComboBox.getSelectedItem();
-
-            contactInfoJTextField.setText("");
-            institutionJTextArea.setText("");
-
-            if (namesJComboBox.getSelectedIndex() == 0) {
-
-                institutionJTextArea.setEnabled(false);
-                contactInfoJTextField.setEnabled(false);
-                institutionJTextArea.setEditable(false);
-                contactInfoJTextField.setEditable(false);
-
-            } else if (namesJComboBox.getSelectedIndex() ==
-                    namesJComboBox.getItemCount() - 1) {
-
-                ComboBoxInputDialog input = new ComboBoxInputDialog(this, this, true);
-                input.setTitle("Create New Contact");
-                input.setBorderTitle("New Contact");
-                input.setVisible(true);
-
-            } else {
-
-                institutionJTextArea.setEnabled(true);
-                contactInfoJTextField.setEnabled(true);
-                institutionJTextArea.setEditable(true);
-                contactInfoJTextField.setEditable(true);
-
-                selectedContactName = contactPath + selectedContactName + ".con";
-
-                try {
-                    String temp, institution = "";
-
-                    FileReader f = new FileReader(selectedContactName);
-                    BufferedReader b = new BufferedReader(f);
-
-                    b.readLine();
-                    temp = b.readLine();
-                    contactInfoJTextField.setText(temp.substring(temp.indexOf(": ") + 2));
-
-                    temp = b.readLine();
-
-                    while (temp != null) {
-                        if (temp.indexOf(": ") != -1) {
-                            institution += temp.substring(temp.indexOf(": ") + 2) + ", ";
-                        } else {
-                            institution += temp + ", ";
-                        }
-
-                        temp = b.readLine();
-                    }
-
-                    if (institution.endsWith(", ")) {
-                        institution = institution.substring(0, institution.length() -
-                                2);
-                    }
-
-
-                    institutionJTextArea.setText(institution);
-
-                    institutionJTextArea.setEnabled(true);
-                    contactInfoJTextField.setEnabled(true);
-                    institutionJTextArea.setEditable(true);
-                    contactInfoJTextField.setEditable(true);
-
-
-                    b.close();
-                    f.close();
-
-                } catch (FileNotFoundException ex) {
-                    JOptionPane.showMessageDialog(
-                            this, "The file " + selectedContactName + " could not be found.",
-                            "File Not Found", JOptionPane.ERROR_MESSAGE);
-                    Util.writeToErrorLog("Error when trying to read file: ");
-                    ex.printStackTrace();
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(
-                            this, "An error occured when trying to read the file " + selectedContactName + ".",
-                            "File Error", JOptionPane.ERROR_MESSAGE);
-                    Util.writeToErrorLog("Error when trying to read file: ");
-                    ex.printStackTrace();
-                }
-            }
-
-            valuesChanged = false;
-        } else {
-            namesJComboBox.setSelectedItem(lastSelectedContact);
-        }
-
-        mandatoryFieldsCheck();
-
-        this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-    }//GEN-LAST:event_namesJComboBoxActionPerformed
-
     /**
      * See mandatoryFieldsCheck
      * 
@@ -705,58 +468,17 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
      * 
      * @param evt
      */
-    private void namesJComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_namesJComboBoxItemStateChanged
-        currentContactName = (String) namesJComboBox.getSelectedItem();
-    }//GEN-LAST:event_namesJComboBoxItemStateChanged
-
     /**
      * Delete the selected contact.
      * 
      * @param evt
      */
-    private void deleteJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteJMenuItemActionPerformed
-
-        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-
-        int option = JOptionPane.showConfirmDialog(this, "This will delete the selected contact. Continue?");
-
-        if (option == JOptionPane.YES_OPTION) {
-            currentContactName = (String) namesJComboBox.getSelectedItem();
-
-            String newName = contactPath + currentContactName + ".con";
-
-            boolean deleted = new File(newName).delete();
-
-            if (!deleted) {
-                JOptionPane.showMessageDialog(this, "The file could not be deleted!");
-            } else {
-                currentContactName = null;
-                readContactsFromFile();
-            }
-        }
-
-        this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-    }//GEN-LAST:event_deleteJMenuItemActionPerformed
-
     /**
      * Right clicking in the combo box opens a popup menu where one can 
      * delete the selected contact.
      * 
      * @param evt
      */
-    private void namesJComboBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_namesJComboBoxMouseClicked
-
-        if (evt.getButton() == 3) {
-
-            if (namesJComboBox.getSelectedIndex() != 0 &&
-                    namesJComboBox.getSelectedIndex() !=
-                    namesJComboBox.getItemCount() - 1) {
-
-                popupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-            }
-        }
-    }//GEN-LAST:event_namesJComboBoxMouseClicked
-
     /**
      * Opens an About PRIDE Converter dialog.
      * 
@@ -768,28 +490,21 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_aboutJButtonActionPerformed
 
+    private void contactNameJTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contactNameJTextFieldKeyReleased
+        // TODO add your handling code here:
+}//GEN-LAST:event_contactNameJTextFieldKeyReleased
+
     /**
      * Deletes the currently selected contact.
      * 
      * @param evt
      */
-    private void deleteJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteJButtonActionPerformed
-        if (namesJComboBox.getSelectedIndex() != 0 &&
-                namesJComboBox.getSelectedIndex() !=
-                namesJComboBox.getItemCount() - 1 &&
-                namesJComboBox.getSelectedIndex() != -1) {
-
-            deleteJMenuItemActionPerformed(null);
-        }
-    }//GEN-LAST:event_deleteJButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutJButton;
     private javax.swing.JButton addJButton;
     private javax.swing.JButton cancelJButton;
     private javax.swing.JTextField contactInfoJTextField;
-    private javax.swing.JButton deleteJButton;
-    private javax.swing.JMenuItem deleteJMenuItem;
+    private javax.swing.JTextField contactNameJTextField;
     private javax.swing.JButton helpJButton;
     private javax.swing.JTextArea institutionJTextArea;
     private javax.swing.JLabel jLabel6;
@@ -797,8 +512,6 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JComboBox namesJComboBox;
-    private javax.swing.JPopupMenu popupMenu;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -844,20 +557,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
         }
     }
 
-    /**
-     * See ComboBoxInputable
-     */
-    public void resetComboBox() {
 
-        currentContactName = null;
-        namesJComboBox.setSelectedItem(null);
-        namesJComboBox.setSelectedIndex(0);
-        institutionJTextArea.setEnabled(false);
-        contactInfoJTextField.setEnabled(false);
-        institutionJTextArea.setEditable(false);
-        contactInfoJTextField.setEditable(false);
-        namesJComboBoxActionPerformed(null);
-    }
 
     /**
      * See ComboBoxInputable
