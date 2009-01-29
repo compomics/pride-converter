@@ -551,8 +551,13 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
             String path;
 
             prideConverter.getProperties().setSpectrumTableModel(null);
+            prideConverter.getProperties().setInstrumentDetailsExtracted(false);
             prideConverter.getProperties().setSelectedSourceFiles(new ArrayList());
             prideConverter.getProperties().setSpectraSelectionCriteria(null);
+            prideConverter.getProperties().setDataFileHasBeenLoaded(false);
+            prideConverter.getProperties().setSampleDetailsExtracted(false);
+            prideConverter.getProperties().setContactInfoExtracted(false);
+            prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
 
             while (selectedSpectraFilesJTable.getRowCount() > 0) {
                 ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).removeRow(0);
