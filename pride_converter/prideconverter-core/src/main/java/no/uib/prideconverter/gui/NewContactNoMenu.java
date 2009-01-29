@@ -18,11 +18,12 @@ import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.implementation.mzData.ContactImpl;
 
 /**
- * A dialog for inserting information about a contact.
+ * A dialog for inserting information about a contact that is extracted
+ * from a data file.
  *
  * @author  Harald Barsnes
  * 
- * Created March 2008
+ * Created Januar 2009
  */
 public class NewContactNoMenu extends javax.swing.JDialog {
 
@@ -33,7 +34,7 @@ public class NewContactNoMenu extends javax.swing.JDialog {
     private boolean valuesChanged = false;
 
     /**
-     * Opens a new NewContact dialog
+     * Opens a new NewContactNoMenu dialog
      * 
      * @param experimentProperties a reference to the ExperimentProperties frame
      * @param modal
@@ -77,9 +78,7 @@ public class NewContactNoMenu extends javax.swing.JDialog {
     }
 
     /**
-     * Read all contacts from file and insert the contact names into the 
-     * names combo box. Then inserts the information about the selected 
-     * contact.
+     * Read all contacts from file.
      */
     public void readContactsFromFile() {
 
@@ -442,16 +441,9 @@ public class NewContactNoMenu extends javax.swing.JDialog {
      */
     private void contactInfoJTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contactInfoJTextFieldKeyReleased
         valuesChanged = true;
-
         mandatoryFieldsCheck();
     }//GEN-LAST:event_contactInfoJTextFieldKeyReleased
 
-    /**
-     * Updates the contact information shown, or creates a new contact if 
-     * the first row is selected.
-     * 
-     * @param evt
-     */
     /**
      * See mandatoryFieldsCheck
      * 
@@ -459,26 +451,9 @@ public class NewContactNoMenu extends javax.swing.JDialog {
      */
     private void institutionJTextAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_institutionJTextAreaKeyReleased
         valuesChanged = true;
-
         mandatoryFieldsCheck();
     }//GEN-LAST:event_institutionJTextAreaKeyReleased
 
-    /**
-     * Sets the current contact name to the one selected in the combo box
-     * 
-     * @param evt
-     */
-    /**
-     * Delete the selected contact.
-     * 
-     * @param evt
-     */
-    /**
-     * Right clicking in the combo box opens a popup menu where one can 
-     * delete the selected contact.
-     * 
-     * @param evt
-     */
     /**
      * Opens an About PRIDE Converter dialog.
      * 
@@ -490,15 +465,16 @@ public class NewContactNoMenu extends javax.swing.JDialog {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_aboutJButtonActionPerformed
 
-    private void contactNameJTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contactNameJTextFieldKeyReleased
-        // TODO add your handling code here:
-}//GEN-LAST:event_contactNameJTextFieldKeyReleased
-
     /**
-     * Deletes the currently selected contact.
-     * 
+     * See mandatoryFieldsCheck
+     *
      * @param evt
      */
+    private void contactNameJTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contactNameJTextFieldKeyReleased
+        valuesChanged = true;
+        mandatoryFieldsCheck();
+}//GEN-LAST:event_contactNameJTextFieldKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutJButton;
     private javax.swing.JButton addJButton;
@@ -556,8 +532,6 @@ public class NewContactNoMenu extends javax.swing.JDialog {
             ex.printStackTrace();
         }
     }
-
-
 
     /**
      * See ComboBoxInputable

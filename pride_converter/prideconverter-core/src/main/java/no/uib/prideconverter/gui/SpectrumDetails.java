@@ -2,9 +2,15 @@ package no.uib.prideconverter.gui;
 
 import java.awt.Window;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.table.DefaultTableModel;
 import no.uib.prideconverter.PRIDEConverter;
 import no.uib.prideconverter.util.OLSInputable;
+import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
+import uk.ac.ebi.pride.model.implementation.mzData.UserParamImpl;
+import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
+import uk.ac.ebi.pride.model.interfaces.mzdata.UserParam;
 
 /**
  * A dialog for inserting CV and user parameters for a given spectrum.
@@ -16,6 +22,7 @@ import no.uib.prideconverter.util.OLSInputable;
 public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable {
 
     private PRIDEConverter prideConverter;
+    private String spectrumKey;
 
     /**
      * Opens a new SpectrumDetails dialog.
@@ -24,12 +31,55 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
      * @param modal
      * @param prideConverter a reference to the PRIDEConverter class
      */
-    public SpectrumDetails(java.awt.Frame parent, boolean modal, PRIDEConverter prideConverter) {
+    public SpectrumDetails(java.awt.Frame parent, boolean modal, PRIDEConverter prideConverter, String spectrumKey) {
         super(parent, modal);
 
         this.prideConverter = prideConverter;
+        this.spectrumKey = spectrumKey;
 
         initComponents();
+
+        // insert the stored CV params for this spectrum
+        ArrayList<CvParam> cvParams = prideConverter.getProperties().getSpectrumCvParams().get(spectrumKey);
+
+        if (cvParams != null) {
+
+            Iterator<CvParam> iterator = cvParams.iterator();
+
+            while (iterator.hasNext()) {
+
+                CvParam currentCvTerm = iterator.next();
+
+                ((DefaultTableModel) cvTermsJTable.getModel()).insertRow(
+                        cvTermsJTable.getRowCount(), new Object[]{
+                            cvTermsJTable.getRowCount()+1,
+                            currentCvTerm.getName(),
+                            currentCvTerm.getAccession(),
+                            currentCvTerm.getCVLookup(),
+                            currentCvTerm.getValue()
+                        });
+            }
+        }
+
+        // insert the stored user params for this spectrum
+        ArrayList<UserParam> userParams = prideConverter.getProperties().getSpectrumUserParams().get(spectrumKey);
+
+        if (userParams != null) {
+
+            Iterator<UserParam> iterator = userParams.iterator();
+
+            while (iterator.hasNext()) {
+
+                UserParam currentUserParam = iterator.next();
+
+                ((DefaultTableModel) userParametersJTable.getModel()).insertRow(
+                        userParametersJTable.getRowCount(), new Object[]{
+                            userParametersJTable.getRowCount()+1,
+                            currentUserParam.getName(),
+                            currentUserParam.getValue()
+                        });
+            }
+        }
 
         cvTermsJTable.getColumn(" ").setMinWidth(40);
         cvTermsJTable.getColumn(" ").setMaxWidth(40);
@@ -299,6 +349,11 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
         okJButton.setMaximumSize(new java.awt.Dimension(65, 23));
         okJButton.setMinimumSize(new java.awt.Dimension(65, 23));
         okJButton.setPreferredSize(new java.awt.Dimension(65, 23));
+        okJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okJButtonActionPerformed(evt);
+            }
+        });
 
         cancelJButton.setText("Cancel");
         cancelJButton.addActionListener(new java.awt.event.ActionListener() {
@@ -677,6 +732,41 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
         new HelpWindow(this, getClass().getResource("/no/uib/prideconverter/helpfiles/SpectrumDetails.html"));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_helpJButtonActionPerformed
+
+    /**
+     * Stores the inserted CV and user parameters and closes the dialog.
+     *
+     * @param evt
+     */
+    private void okJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okJButtonActionPerformed
+
+        ArrayList<CvParam> cvParams = new ArrayList<CvParam>();
+
+        for (int i = 0; i < cvTermsJTable.getRowCount(); i++) {
+            cvParams.add(new CvParamImpl(
+                    (String) cvTermsJTable.getValueAt(i, 2),
+                    (String) cvTermsJTable.getValueAt(i, 3),
+                    (String) cvTermsJTable.getValueAt(i, 1),
+                    i,
+                    (String) cvTermsJTable.getValueAt(i, 4)));
+        }
+
+        prideConverter.getProperties().getSpectrumCvParams().put(spectrumKey, cvParams);
+
+        ArrayList<UserParam> userParams = new ArrayList<UserParam>();
+
+        for (int i = 0; i < userParametersJTable.getRowCount(); i++) {
+            userParams.add(new UserParamImpl(
+                    (String) userParametersJTable.getValueAt(i, 1),
+                    i,
+                    (String) userParametersJTable.getValueAt(i, 2)));
+        }
+
+        prideConverter.getProperties().getSpectrumUserParams().put(spectrumKey, userParams);
+
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_okJButtonActionPerformed
 
     /**
      * Fixes the indices so that they are in accending order starting from one
