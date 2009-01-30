@@ -625,17 +625,29 @@ public class PRIDEConverter {
                                     peptideIdentification.getSpectrumFileId() + "'!\n");
                         }
 
-                        innerId.addPeptide(spectrumRef,
-                                peptideIdentification.getSequence(),
-                                tempStartIndex,
-                                new Double(peptideIdentification.getScore()),
-                                peptideIdentification.getThreshold(),
-                                peptideIdentification.getModifications(),
-                                peptideIdentification.getCvParams(),
-                                peptideIdentification.getUserParams());
+                        boolean addIdentification = false;
 
-                        // Add the new or re-store the modified protein ID to the hash.
-                        groupedIds.put(accession, innerId);
+                        if (properties.getProteinIdentificationFilter().length() > 0) {
+                            if (!accession.startsWith(properties.getProteinIdentificationFilter())) {
+                                addIdentification = true;
+                            }
+                        } else {
+                            addIdentification = true;
+                        }
+
+                        if (addIdentification) {
+                            innerId.addPeptide(spectrumRef,
+                                    peptideIdentification.getSequence(),
+                                    tempStartIndex,
+                                    new Double(peptideIdentification.getScore()),
+                                    peptideIdentification.getThreshold(),
+                                    peptideIdentification.getModifications(),
+                                    peptideIdentification.getCvParams(),
+                                    peptideIdentification.getUserParams());
+
+                            // Add the new or re-store the modified protein ID to the hash.
+                            groupedIds.put(accession, innerId);
+                        }
                     }
 
                     if (debug) {
@@ -4385,7 +4397,13 @@ public class PRIDEConverter {
                             new Double(properties.getProteinProphetThreshold())); // threshold
                 }
 
-                identifications.add(PRIDE_protein);
+                if (properties.getProteinIdentificationFilter().length() > 0) {
+                    if (!protein.getAccession().startsWith(properties.getProteinIdentificationFilter())) {
+                        identifications.add(PRIDE_protein);
+                    }
+                } else {
+                    identifications.add(PRIDE_protein);
+                }
             }
 
             if (!cancelConversion) {

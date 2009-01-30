@@ -71,6 +71,7 @@ public class Properties {
 
     private HashMap<String, ArrayList<CvParam>> spectrumCvParams;
     private HashMap<String, ArrayList<UserParam>> spectrumUserParams;
+    private String proteinIdentificationFilter = "";
     
     // contact information
     private Collection contacts;
@@ -1551,5 +1552,23 @@ public class Properties {
      */
     public void setSpectrumUserParams(HashMap<String, ArrayList<UserParam>> spectrumUserParams) {
         this.spectrumUserParams = spectrumUserParams;
+    }
+
+    /**
+     * Returne the proteinIdentificationFilter
+     *
+     * @return the proteinIdentificationFilter
+     */
+    public String getProteinIdentificationFilter() {
+        return proteinIdentificationFilter;
+    }
+
+    /**
+     * Sets the proteinIdentificationFilter
+     *
+     * @param proteinIdentificationFilter the proteinIdentificationFilter to set
+     */
+    public void setProteinIdentificationFilter(String proteinIdentificationFilter) {
+        this.proteinIdentificationFilter = proteinIdentificationFilter;
     }
 }

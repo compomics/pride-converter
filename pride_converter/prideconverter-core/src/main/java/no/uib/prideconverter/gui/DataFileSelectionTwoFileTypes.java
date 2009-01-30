@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -15,6 +16,8 @@ import no.uib.prideconverter.filefilters.DtaFileFilter;
 import no.uib.prideconverter.filefilters.OutFileFilter;
 import no.uib.prideconverter.filefilters.PklFileFilter;
 import no.uib.prideconverter.filefilters.PklSpoFileFilter;
+import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
+import uk.ac.ebi.pride.model.interfaces.mzdata.UserParam;
 
 /**
  * This frame handles the selection of the data files to be converted for 
@@ -558,6 +561,8 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
             prideConverter.getProperties().setSampleDetailsExtracted(false);
             prideConverter.getProperties().setContactInfoExtracted(false);
             prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+            prideConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
+            prideConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
 
             while (selectedSpectraFilesJTable.getRowCount() > 0) {
                 ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).removeRow(0);
@@ -700,8 +705,15 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
             String path;
 
             prideConverter.getProperties().setSpectrumTableModel(null);
-            prideConverter.getProperties().setSelectedIdentificationFiles(new ArrayList());
+            prideConverter.getProperties().setInstrumentDetailsExtracted(false);
+            prideConverter.getProperties().setSelectedSourceFiles(new ArrayList());
             prideConverter.getProperties().setSpectraSelectionCriteria(null);
+            prideConverter.getProperties().setDataFileHasBeenLoaded(false);
+            prideConverter.getProperties().setSampleDetailsExtracted(false);
+            prideConverter.getProperties().setContactInfoExtracted(false);
+            prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+            prideConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
+            prideConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
 
             while (selectedIdentificationFilesJTable.getRowCount() > 0) {
                 ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).removeRow(0);

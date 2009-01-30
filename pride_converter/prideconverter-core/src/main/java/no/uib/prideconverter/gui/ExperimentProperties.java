@@ -1352,8 +1352,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
                 prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData") ||
                 prideConverter.getProperties().getDataSource().equalsIgnoreCase("VEMS") ||
                 prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Generic File") ||
-                prideConverter.getProperties().getDataSource().equalsIgnoreCase("MS2") ||
-                prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
+                prideConverter.getProperties().getDataSource().equalsIgnoreCase("MS2")) {
             new SpectraSelectionNoIdentifications(prideConverter, this.getLocation());
         } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem") ||
                 prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill") ||
@@ -1362,6 +1361,8 @@ public class ExperimentProperties extends javax.swing.JFrame {
                 prideConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims") ||
                 prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
             new SpectraSelectionWithIdentifications(prideConverter, this.getLocation());
+        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")){
+            new DataFileSelectionTPP(prideConverter, this.getLocation());
         }
 
         this.setVisible(false);
