@@ -108,8 +108,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         selectAllSpectraJRadioButton.setSelected(prideConverter.getProperties().selectAllSpectra());
         selectIdentifiedJRadioButton.setSelected(prideConverter.getProperties().selectAllIdentifiedSpectra());
 
-        peptideScoreJTextField.setText("" +
-                prideConverter.getProperties().getPeptideScoreThreshold());
+        peptideScoreJTextField.setText("" + prideConverter.getProperties().getPeptideScoreThreshold());
+        proteinIdFilterJTextField.setText("" + prideConverter.getProperties().getProteinIdentificationFilter());
 
         if (prideConverter.getProperties().getSpectraSelectionCriteria() != null) {
             advancedSelectionJTextArea.setText(prideConverter.getProperties().getSpectraSelectionCriteria());
@@ -225,6 +225,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         peptideScoreJTextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         mascotConfidenceLevelJSpinner = new javax.swing.JSpinner();
+        jLabel6 = new javax.swing.JLabel();
+        proteinIdFilterJTextField = new javax.swing.JTextField();
 
         selectAllJMenuItem.setMnemonic('A');
         selectAllJMenuItem.setText("Select All");
@@ -304,7 +306,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
             }
         });
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Manual Spectra Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Manual Spectra Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
         loadSpectraJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/load2.GIF"))); // NOI18N
         loadSpectraJButton.setText("Load Spectra");
@@ -373,7 +375,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(numberOfSelectedSpectraJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -383,7 +385,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Simple Spectra Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Simple Spectra Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
         simpleSelectionButtonGroup.add(selectAllSpectraJRadioButton);
         selectAllSpectraJRadioButton.setSelected(true);
@@ -401,33 +403,32 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(selectAllSpectraJRadioButton)
-                    .addComponent(selectIdentifiedJRadioButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 120, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(10, 10, 10))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(selectAllSpectraJRadioButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE)
+                        .addComponent(jLabel1))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(selectIdentifiedJRadioButton)
+                        .addContainerGap(132, Short.MAX_VALUE))))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(selectAllSpectraJRadioButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                        .addContainerGap(19, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
-                        .addGap(27, 27, 27)))
-                .addComponent(selectIdentifiedJRadioButton)
-                .addContainerGap())
+                .addGap(15, 15, 15)
+                .addComponent(selectAllSpectraJRadioButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(selectIdentifiedJRadioButton))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(67, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(27, 27, 27))
         );
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Advanced Spectra Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Advanced Spectra Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
         advancedSelectionJTextArea.setColumns(20);
         advancedSelectionJTextArea.setLineWrap(true);
-        advancedSelectionJTextArea.setRows(3);
+        advancedSelectionJTextArea.setRows(2);
         advancedSelectionJTextArea.setWrapStyleWord(true);
         advancedSelectionJTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -514,13 +515,13 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                         .addComponent(jLabel5))
                     .addComponent(findOutPutFileJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(applyAdvancedSelectionButton)
                 .addContainerGap())
         );
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Peptide Identifications", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Peptide and Protein Identifications", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
         jLabel2.setText("Peptide Score Threshold:");
         jLabel2.setToolTipText("Only include identifications with peptide scores higher than this value");
@@ -537,6 +538,11 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
             }
         });
 
+        jLabel6.setText("Protein Identification Filter:");
+        jLabel6.setToolTipText("Ignore All Protein Identifications Starting With This Tag");
+
+        proteinIdFilterJTextField.setToolTipText("Ignore All Protein Identifications Starting With This Tag");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -545,17 +551,19 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(mascotConfidenceLevelJSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                    .addComponent(peptideScoreJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel6))
+                .addGap(14, 14, 14)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(peptideScoreJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                    .addComponent(mascotConfidenceLevelJSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                    .addComponent(proteinIdFilterJTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(peptideScoreJTextField))
@@ -563,18 +571,27 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(mascotConfidenceLevelJSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(proteinIdFilterJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(helpJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(aboutJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -584,26 +601,21 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                         .addComponent(nextJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(cancelJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
+                    .addComponent(jLabel3))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1653,6 +1665,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         prideConverter.getProperties().setSelectAllSpectra(selectAllSpectraJRadioButton.isSelected());
         prideConverter.getProperties().setSelectAllIdentifiedSpectra(selectIdentifiedJRadioButton.isSelected());
         prideConverter.getProperties().setMascotConfidenceLevel((Integer) mascotConfidenceLevelJSpinner.getValue());
+        prideConverter.getProperties().setProteinIdentificationFilter(proteinIdFilterJTextField.getText());
 
         boolean saveOk = true;
 
@@ -1718,6 +1731,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -1730,6 +1744,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
     private javax.swing.JButton nextJButton;
     private javax.swing.JTextField numberOfSelectedSpectraJTextField;
     private javax.swing.JTextField peptideScoreJTextField;
+    private javax.swing.JTextField proteinIdFilterJTextField;
     private javax.swing.JMenuItem selectAllJMenuItem;
     private javax.swing.JPopupMenu selectAllJPopupMenu;
     private javax.swing.JRadioButton selectAllSpectraJRadioButton;
