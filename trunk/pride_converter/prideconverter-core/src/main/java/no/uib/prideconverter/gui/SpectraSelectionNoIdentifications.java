@@ -146,6 +146,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
             loadSpectraJButton.setEnabled(false);
             selectedSpectraJLabel.setEnabled(true);
             numberOfSelectedSpectraJTextField.setEnabled(true);
+            spectrumAnnotationJLabel.setEnabled(true);
 
             selectAllJCheckBox.setEnabled(false);
 
@@ -220,6 +221,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         };
         selectedSpectraJLabel = new javax.swing.JLabel();
         numberOfSelectedSpectraJTextField = new javax.swing.JTextField();
+        spectrumAnnotationJLabel = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         selectAllJCheckBox = new javax.swing.JCheckBox();
 
@@ -351,6 +353,10 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         numberOfSelectedSpectraJTextField.setToolTipText("Number of Selected Spectra");
         numberOfSelectedSpectraJTextField.setEnabled(false);
 
+        spectrumAnnotationJLabel.setFont(spectrumAnnotationJLabel.getFont().deriveFont((spectrumAnnotationJLabel.getFont().getStyle() | java.awt.Font.ITALIC)));
+        spectrumAnnotationJLabel.setText("Right click on a row to add spectrum annotation.");
+        spectrumAnnotationJLabel.setEnabled(false);
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -361,6 +367,8 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
                     .addComponent(loadSpectraJButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(spectrumAnnotationJLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
                         .addComponent(selectedSpectraJLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(numberOfSelectedSpectraJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -374,7 +382,8 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(numberOfSelectedSpectraJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(selectedSpectraJLabel))
+                    .addComponent(selectedSpectraJLabel)
+                    .addComponent(spectrumAnnotationJLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(loadSpectraJButton)
                 .addContainerGap())
@@ -997,6 +1006,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                 if (spectraJTable.getRowCount() > 0) {
                     selectedSpectraJLabel.setEnabled(true);
                     numberOfSelectedSpectraJTextField.setEnabled(true);
+                    spectrumAnnotationJLabel.setEnabled(true);
 
                     loadSpectraJButton.setEnabled(false);
                     selectAllJCheckBox.setEnabled(false);
@@ -1266,6 +1276,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
     private javax.swing.JPopupMenu selectAllJPopupMenu;
     private javax.swing.JLabel selectedSpectraJLabel;
     private javax.swing.JTable spectraJTable;
+    private javax.swing.JLabel spectrumAnnotationJLabel;
     private javax.swing.JPopupMenu spectrumDetailsJPopupMenu;
     private javax.swing.JMenuItem viewSpectrumParametersJMenuItem;
     // End of variables declaration//GEN-END:variables

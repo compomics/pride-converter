@@ -91,7 +91,9 @@ import uk.ac.ebi.pride.model.implementation.core.MonoMassDeltaImpl;
 import uk.ac.ebi.pride.model.implementation.core.TwoDimensionalIdentificationImpl;
 import uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum;
 import uk.ac.ebi.pride.model.interfaces.core.Experiment;
+import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
 import uk.ac.ebi.pride.model.interfaces.mzdata.MzData;
+import uk.ac.ebi.pride.model.interfaces.mzdata.UserParam;
 import uk.ac.ebi.pride.xml.MzDataXMLUnmarshaller;
 import uk.ac.ebi.pride.xml.XMLMarshaller;
 import uk.ac.ebi.pride.xml.validation.PrideXmlValidator;
@@ -1660,6 +1662,7 @@ public class PRIDEConverter {
 
                 if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
                     isSelected = true;
+                    spectrumKey = generateSpectrumKey(temp);
 
                     if (properties.getDataSource().equalsIgnoreCase("Sequest DTA File")) {
                         // ms level
@@ -2652,7 +2655,9 @@ public class PRIDEConverter {
                                     null,
                                     spectraCounter, precursors,
                                     spectrumDescriptionComments,
-                                    null, null, null, null);
+                                    properties.getSpectrumCvParams().get(spectrumKey),
+                                    properties.getSpectrumUserParams().get(spectrumKey),
+                                    null, null);
 
                             if (properties.getDataSource().equalsIgnoreCase("Spectrum Mill") ||
                                     properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
@@ -2880,9 +2885,16 @@ public class PRIDEConverter {
                                 Object[] temp = (Object[]) properties.getSelectedSpectraNames().get(k);
 
                                 if (((String) temp[0]).equalsIgnoreCase(fileName)) {
-                                    if (((Double) temp[2]).doubleValue() ==
-                                            precursorMass) {
-                                        matchFound = true;
+                                    if (((Double) temp[2]).doubleValue() == precursorMass) {
+                                        if (temp[3] != null) {
+                                            if (((Integer) temp[3]).intValue() == precursorCharge) {
+                                                matchFound = true;
+                                                spectrumKey = generateSpectrumKey(temp);
+                                            }
+                                        } else {
+                                            matchFound = true;
+                                            spectrumKey = generateSpectrumKey(temp);
+                                        }
 
                                         // ms level
                                         if (temp[4] != null) {
@@ -2989,7 +3001,8 @@ public class PRIDEConverter {
                                         null,
                                         spectraCounter, precursors,
                                         spectrumDescriptionComments,
-                                        null, null,
+                                        properties.getSpectrumCvParams().get(spectrumKey),
+                                        properties.getSpectrumUserParams().get(spectrumKey),
                                         null,
                                         supDescArrays);
 
@@ -3042,9 +3055,16 @@ public class PRIDEConverter {
                         Object[] temp = (Object[]) properties.getSelectedSpectraNames().get(k);
 
                         if (((String) temp[0]).equalsIgnoreCase(fileName)) {
-                            if (((Double) temp[2]).doubleValue() ==
-                                    precursorMass) {
-                                matchFound = true;
+                            if (((Double) temp[2]).doubleValue() == precursorMass) {
+                                if (temp[3] != null) {
+                                    if (((Integer) temp[3]).intValue() == precursorCharge) {
+                                        matchFound = true;
+                                        spectrumKey = generateSpectrumKey(temp);
+                                    }
+                                } else {
+                                    matchFound = true;
+                                    spectrumKey = generateSpectrumKey(temp);
+                                }
 
                                 // ms level
                                 if (temp[4] != null) {
@@ -3147,7 +3167,9 @@ public class PRIDEConverter {
                                 null,
                                 spectraCounter, precursors,
                                 spectrumDescriptionComments,
-                                null, null, null, supDescArrays);
+                                properties.getSpectrumCvParams().get(spectrumKey),
+                                properties.getSpectrumUserParams().get(spectrumKey),
+                                null, supDescArrays);
 
                         mapping.put((new File(properties.getSelectedSourceFiles().
                                 get(j)).getName() +
@@ -3480,11 +3502,12 @@ public class PRIDEConverter {
                 if (properties.getSelectedSpectraNames().size() > 0) {
                     for (int k = 0; k < properties.getSelectedSpectraNames().size() && !matchFound; k++) {
 
-                        if (((String) ((Object[]) properties.getSelectedSpectraNames().
-                                get(k))[0]).equalsIgnoreCase(fileName)) {
-                            if (((Integer) ((Object[]) properties.getSelectedSpectraNames().
-                                    get(k))[1]).intValue() == scan.getNum()) {
+                        Object[] temp = (Object[]) properties.getSelectedSpectraNames().get(k);
+
+                        if (((String) temp[0]).equalsIgnoreCase(fileName)) {
+                            if (((Integer) temp[1]).intValue() == scan.getNum()) {
                                 matchFound = true;
+                                spectrumKey = generateSpectrumKey(temp);
                             }
                         }
                     }
@@ -3540,7 +3563,10 @@ public class PRIDEConverter {
                                     new Double(arraysFloat[properties.MZ_ARRAY][arraysFloat[properties.MZ_ARRAY].length -
                                     1]), //null, 
                                     null,
-                                    spectraCounter, null, null, null, null, null,
+                                    spectraCounter, null, null,
+                                    properties.getSpectrumCvParams().get(spectrumKey),
+                                    properties.getSpectrumUserParams().get(spectrumKey),
+                                    null,
                                     null);
                         } else {//msLevel == 2){
                             spectrum = new SpectrumImpl(
@@ -3553,7 +3579,10 @@ public class PRIDEConverter {
                                     mzRangeStop,
                                     null,
                                     spectraCounter, precursors,
-                                    spectrumDescriptionComments, null, null, null,
+                                    spectrumDescriptionComments,
+                                    properties.getSpectrumCvParams().get(spectrumKey),
+                                    properties.getSpectrumUserParams().get(spectrumKey),
+                                    null,
                                     null);
                         }
 
@@ -4607,9 +4636,11 @@ public class PRIDEConverter {
                                         if (temp[3] != null) {
                                             if (((Integer) temp[3]).intValue() == precursorCharge) {
                                                 matchFound = true;
+                                                spectrumKey = generateSpectrumKey(temp);
                                             }
                                         } else {
                                             matchFound = true;
+                                            spectrumKey = generateSpectrumKey(temp);
                                         }
 
                                         // ms level
@@ -4691,7 +4722,9 @@ public class PRIDEConverter {
                                         null,
                                         spectraCounter, precursors,
                                         spectrumDescriptionComments,
-                                        null, null, null, null);
+                                        properties.getSpectrumCvParams().get(spectrumKey),
+                                        properties.getSpectrumUserParams().get(spectrumKey),
+                                        null, null);
 
                                 // Store (spectrumfileid, spectrumid) mapping.
                                 mapping.put(new Long(spectraCounter),
@@ -4782,9 +4815,11 @@ public class PRIDEConverter {
                                     if (temp[3] != null) {
                                         if (((Integer) temp[3]).intValue() == precursorCharge) {
                                             matchFound = true;
+                                            spectrumKey = generateSpectrumKey(temp);
                                         }
                                     } else {
                                         matchFound = true;
+                                        spectrumKey = generateSpectrumKey(temp);
                                     }
                                 }
                             }
@@ -4857,7 +4892,9 @@ public class PRIDEConverter {
                                     null,
                                     spectraCounter, precursors,
                                     spectrumDescriptionComments,
-                                    null, null, null, null);
+                                    properties.getSpectrumCvParams().get(spectrumKey),
+                                    properties.getSpectrumUserParams().get(spectrumKey),
+                                    null, null);
 
                             // Store (spectrumfileid, spectrumid) mapping.
                             mapping.put(new Long(spectraCounter),
@@ -7053,6 +7090,54 @@ public class PRIDEConverter {
         totalNumberOfSpectra = mzData.getSpectrumCollection().size();
 
         return mzData;
+    }
+
+    /**
+     * Adds the spectrum CV terms to a CV param list.
+     *
+     * @param cvParams the CV param list to be extended
+     * @param cvParamsToAdd the values to add
+     * @return the updated CV param list
+     */
+    private static ArrayList combineCVTermsArrays(ArrayList<CvParam> existingCvParams,
+            ArrayList<CvParam> cvParamsToAdd) {
+
+        for (int i = 0; i < cvParamsToAdd.size(); i++) {
+
+            CvParam tempCvParam = cvParamsToAdd.get(i);
+
+            existingCvParams.add(new CvParamImpl(
+                    tempCvParam.getAccession(),
+                    tempCvParam.getCVLookup(),
+                    tempCvParam.getName(),
+                    existingCvParams.size(),
+                    tempCvParam.getValue()));
+        }
+
+        return existingCvParams;
+    }
+
+    /**
+     * Adds the spectrum user terms to a user param list.
+     *
+     * @param userParams the user param list to be extended
+     * @param userParamsToAdd the values to add
+     * @return the updated user param list
+     */
+    private static ArrayList combineUserParamArrays(ArrayList<UserParam> existingUserParams,
+            ArrayList<UserParam> userParamsToAdd) {
+
+        for (int i = 0; i < userParamsToAdd.size(); i++) {
+
+            UserParam tempUserParam = userParamsToAdd.get(i);
+
+            existingUserParams.add(new UserParamImpl(
+                    tempUserParam.getName(),
+                    existingUserParams.size(),
+                    tempUserParam.getValue()));
+        }
+
+        return existingUserParams;
     }
 
     /**
