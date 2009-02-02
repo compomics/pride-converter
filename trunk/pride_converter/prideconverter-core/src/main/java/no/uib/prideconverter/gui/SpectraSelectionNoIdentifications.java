@@ -591,8 +591,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                     if (prideConverter.isConversionCanceled()) {
 
-                        while (((DefaultTableModel) spectraJTable.getModel()).getRowCount() >
-                                0) {
+                        while (((DefaultTableModel) spectraJTable.getModel()).getRowCount() > 0) {
                             ((DefaultTableModel) spectraJTable.getModel()).removeRow(0);
                         }
 
@@ -606,8 +605,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                         file = new File(prideConverter.getProperties().getSelectedSourceFiles().get(j));
 
                         progressDialog.setString(file.getName() + " (" + (j + 1) +
-                                "/" + prideConverter.getProperties().getSelectedSourceFiles().size() +
-                                ")");
+                                "/" + prideConverter.getProperties().getSelectedSourceFiles().size() + ")");
 
                         if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File")) {
 
@@ -889,7 +887,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                         value = value.replaceAll(",", ".");
                                         //}
 
-                                        values = value.split("\t");
+                                        values = value.split("\\s");
                                         precursorMass = Double.parseDouble(values[0]);
 
                                     } else if (line.startsWith("CHARGE")) {
@@ -934,7 +932,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                         line = line.replaceAll(",", ".");
                                     }
 
-                                    values = line.split("\t");
+                                    values = line.split("\\s");
 
                                     precursorMass = new Double(values[3]);
 
@@ -949,7 +947,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                     if (nextLine.startsWith("Z")) {
                                         precursorCharge = null;
                                     } else {
-                                        values = line.split("\t");
+                                        values = line.split("\\s");
                                         precursorCharge = new Integer(values[1]);
                                     }
 
