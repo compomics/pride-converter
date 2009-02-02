@@ -218,7 +218,7 @@
                       <Component id="loadSpectraJButton" alignment="0" pref="524" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="spectrumAnnotationJLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="90" max="32767" attributes="0"/>
+                          <EmptySpace pref="85" max="32767" attributes="0"/>
                           <Component id="selectedSpectraJLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="numberOfSelectedSpectraJTextField" min="-2" pref="113" max="-2" attributes="0"/>
@@ -274,7 +274,7 @@
                     <Column editable="false" title="ID" type="java.lang.String"/>
                     <Column editable="false" title="Mass" type="java.lang.Double"/>
                     <Column editable="false" title="Charge" type="java.lang.Integer"/>
-                    <Column editable="true" title="Level" type="java.lang.Integer"/>
+                    <Column editable="true" title="MS Level" type="java.lang.Integer"/>
                     <Column editable="true" title="Selected" type="java.lang.Boolean"/>
                   </Table>
                 </Property>
@@ -310,7 +310,7 @@
                 <Font component="spectrumAnnotationJLabel" italic="true" property="font" relativeSize="true" size="0"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="Right click on a row to add spectrum annotation."/>
+            <Property name="text" type="java.lang.String" value="Right click on a row to add spectrum annotations."/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>

@@ -540,9 +540,9 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         });
 
         jLabel6.setText("Protein Identification Filter:");
-        jLabel6.setToolTipText("Ignore All Protein Identifications Starting With This Tag");
+        jLabel6.setToolTipText("Ignore All Protein Identifications Including This Tag");
 
-        proteinIdFilterJTextField.setToolTipText("Ignore All Protein Identifications Starting With This Tag");
+        proteinIdFilterJTextField.setToolTipText("Ignore All Protein Identifications Including This Tag");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

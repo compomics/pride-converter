@@ -607,12 +607,12 @@
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
             <Property name="text" type="java.lang.String" value="Protein Identification Filter:"/>
-            <Property name="toolTipText" type="java.lang.String" value="Ignore All Protein Identifications Starting With This Tag"/>
+            <Property name="toolTipText" type="java.lang.String" value="Ignore All Protein Identifications Including This Tag"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="proteinIdFilterJTextField">
           <Properties>
-            <Property name="toolTipText" type="java.lang.String" value="Ignore All Protein Identifications Starting With This Tag"/>
+            <Property name="toolTipText" type="java.lang.String" value="Ignore All Protein Identifications Including This Tag"/>
           </Properties>
         </Component>
       </SubComponents>
