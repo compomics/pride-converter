@@ -84,8 +84,8 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         spectraJTable.getColumn("Mass").setMinWidth(75);
         spectraJTable.getColumn("ID").setMaxWidth(75);
         spectraJTable.getColumn("ID").setMinWidth(75);
-        spectraJTable.getColumn("Level").setMaxWidth(75);
-        spectraJTable.getColumn("Level").setMinWidth(75);
+        spectraJTable.getColumn("MS Level").setMaxWidth(75);
+        spectraJTable.getColumn("MS Level").setMinWidth(75);
 
         columnToolTips = new Vector();
         columnToolTips.add("Filename of Spectrum File");
@@ -319,7 +319,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Filename", "ID", "Mass", "Charge", "Level", "Selected"
+                "Filename", "ID", "Mass", "Charge", "MS Level", "Selected"
             }
         ) {
             Class[] types = new Class [] {
@@ -354,7 +354,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         numberOfSelectedSpectraJTextField.setEnabled(false);
 
         spectrumAnnotationJLabel.setFont(spectrumAnnotationJLabel.getFont().deriveFont((spectrumAnnotationJLabel.getFont().getStyle() | java.awt.Font.ITALIC)));
-        spectrumAnnotationJLabel.setText("Right click on a row to add spectrum annotation.");
+        spectrumAnnotationJLabel.setText("Right click on a row to add spectrum annotations.");
         spectrumAnnotationJLabel.setEnabled(false);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -368,7 +368,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                     .addComponent(loadSpectraJButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(spectrumAnnotationJLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
                         .addComponent(selectedSpectraJLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(numberOfSelectedSpectraJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))

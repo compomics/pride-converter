@@ -630,7 +630,7 @@ public class PRIDEConverter {
                         boolean addIdentification = false;
 
                         if (properties.getProteinIdentificationFilter().length() > 0) {
-                            if (!accession.startsWith(properties.getProteinIdentificationFilter())) {
+                            if (accession.lastIndexOf(properties.getProteinIdentificationFilter()) == -1) {
                                 addIdentification = true;
                             }
                         } else {
@@ -3865,7 +3865,7 @@ public class PRIDEConverter {
                             value = value.replaceAll(",", ".");
                         }
 
-                        values = value.split("\t");
+                        values = value.split("\\s");
                         precursorMass = Double.parseDouble(values[0]);
 
                         if (values.length > 1) {
@@ -4427,7 +4427,7 @@ public class PRIDEConverter {
                 }
 
                 if (properties.getProteinIdentificationFilter().length() > 0) {
-                    if (!protein.getAccession().startsWith(properties.getProteinIdentificationFilter())) {
+                    if (protein.getAccession().lastIndexOf(properties.getProteinIdentificationFilter()) == -1) {
                         identifications.add(PRIDE_protein);
                     }
                 } else {
@@ -4747,7 +4747,7 @@ public class PRIDEConverter {
                         line = line.replaceAll(",", ".");
                     }
 
-                    values = line.split("\t");
+                    values = line.split("\\s");
 
                     precursorMass = new Double(values[3]);
 
@@ -4758,7 +4758,7 @@ public class PRIDEConverter {
                             line = line.replaceAll(",", ".");
                         }
 
-                        values = line.split("\t");
+                        values = line.split("\\s");
 
                         precursorRetentionTime = new Double(values[2]);
                     }
@@ -4768,7 +4768,7 @@ public class PRIDEConverter {
                         multipleCharges = true;
                         precursorCharge = 0;
                     } else {
-                        values = line.split("\t");
+                        values = line.split("\\s");
                         precursorCharge = new Integer(values[1]).intValue();
                     }
                 } else { // read the peaks
@@ -4777,7 +4777,7 @@ public class PRIDEConverter {
                         line = line.replaceAll(",", ".");
                     }
 
-                    values = line.split(" ");
+                    values = line.split("\\s");
 
                     int count = values.length;
 
