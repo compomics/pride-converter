@@ -15,6 +15,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -37,14 +38,14 @@
                       <Component id="helpJButton" min="-2" pref="23" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="aboutJButton" min="-2" pref="25" max="-2" attributes="0"/>
-                      <EmptySpace pref="283" max="32767" attributes="0"/>
+                      <EmptySpace pref="309" max="32767" attributes="0"/>
                       <Component id="backJButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="convertJButton" min="-2" pref="81" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="cancelJButton" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jSeparator1" alignment="0" pref="604" max="32767" attributes="0"/>
+                  <Component id="jSeparator1" alignment="0" pref="630" max="32767" attributes="0"/>
                   <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -142,7 +143,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="outPutJLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="outPutPathJTextField" pref="446" max="32767" attributes="1"/>
+                  <Component id="outPutPathJTextField" pref="472" max="32767" attributes="1"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="findOutPutFileJButton" min="-2" pref="27" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -205,25 +206,22 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="resubmissionJCheckBox" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="accessionJTextField" pref="238" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jLabel2" pref="439" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="165" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel2" pref="439" max="32767" attributes="0"/>
-                          <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
+                          <Component id="resubmissionJCheckBox" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="81" max="32767" attributes="0"/>
+                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="accessionJTextField" min="-2" pref="233" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -232,10 +230,9 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="resubmissionJCheckBox" alignment="3" min="-2" pref="14" max="-2" attributes="0"/>
-                      <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="resubmissionJCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="accessionJTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
@@ -268,15 +265,10 @@
             <Property name="text" type="java.lang.String" value="* When resubmitting a PRIDE XML file please provide the original accession number"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel4">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="*"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JCheckBox" name="resubmissionJCheckBox">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Resubmission:"/>
-            <Property name="horizontalTextPosition" type="int" value="10"/>
+            <Property name="text" type="java.lang.String" value="Resubmission *"/>
+            <Property name="iconTextGap" type="int" value="10"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="resubmissionJCheckBoxActionPerformed"/>
@@ -298,7 +290,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Submitting to PRIDE">
+            <TitledBorder title="PRIDE Submission">
               <Color PropertyName="color" blue="0" green="0" red="0" type="rgb"/>
             </TitledBorder>
           </Border>
@@ -320,7 +312,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="fileNameJLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="fileNameJTextField" pref="476" max="32767" attributes="0"/>
+                          <Component id="fileNameJTextField" pref="502" max="32767" attributes="0"/>
                       </Group>
                       <Component id="referenceJLabel" alignment="1" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -338,7 +330,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="fileContentsJLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="7" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="referenceJLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -455,18 +447,18 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
-                          <Component id="omssaInstallationFolderJTextField" pref="445" max="32767" attributes="0"/>
+                          <Component id="omssaInstallationFolderJTextField" pref="471" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="findOmssaFolderJButton" min="-2" pref="27" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="roundDownScoreAndThresholdJCheckBox" min="-2" max="-2" attributes="1"/>
-                          <EmptySpace pref="25" max="32767" attributes="0"/>
+                          <EmptySpace pref="44" max="32767" attributes="0"/>
                           <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="useCommaAsDecimalSymbolJCheckBox" min="-2" max="-2" attributes="1"/>
-                          <EmptySpace pref="33" max="32767" attributes="0"/>
+                          <EmptySpace pref="175" max="32767" attributes="0"/>
                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -505,8 +497,8 @@
       <SubComponents>
         <Component class="javax.swing.JCheckBox" name="roundDownScoreAndThresholdJCheckBox">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Round Score and Threshold Down to the Nearest Integer Before Comparison:"/>
-            <Property name="horizontalTextPosition" type="int" value="10"/>
+            <Property name="text" type="java.lang.String" value="Round Score and Threshold Down to the Nearest Integer Before Comparison"/>
+            <Property name="iconTextGap" type="int" value="10"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="roundDownScoreAndThresholdJCheckBoxActionPerformed"/>
@@ -517,7 +509,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="2"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="(Emulates Mascot web results)"/>
+            <Property name="text" type="java.lang.String" value="(Emulates Mascot Web Results)"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
@@ -546,8 +538,8 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="useCommaAsDecimalSymbolJCheckBox">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Use comma as decimal symbol:"/>
-            <Property name="horizontalTextPosition" type="int" value="10"/>
+            <Property name="text" type="java.lang.String" value="Use Comma As Decimal Symbol"/>
+            <Property name="iconTextGap" type="int" value="10"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="useCommaAsDecimalSymbolJCheckBoxActionPerformed"/>
@@ -558,7 +550,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="2"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="(Supported for Mascot Generic Files, PKL/PKX Files, MS2 Files and DTA Files)"/>
+            <Property name="text" type="java.lang.String" value="(Supported for MGF, PKL/PKX, MS2 and DTA Files)"/>
           </Properties>
         </Component>
       </SubComponents>
