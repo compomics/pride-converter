@@ -3,12 +3,33 @@
 
 ----
 
+*Changes in PRIDE Converter v1.15 - (Feb. 02. 2009):*
+ * Added the possibility of converting more than one mzData file at the time.
+ * Made it possible to add cv and user terms to given spectra (currently only for data formats without identifications).
+ * Added a decoy protein identification accession number filter.
+ * Fixed a bug that resulted in all spectra refering to itself as its precursor spectrum when no precursor spectrum was given. Is now replaced by "Precursor spectrum not submitted."
+ * Removed unused dependencies: 49 dep -> 39 dep. Zip file size: 15.7 mb -> 13.2 mb.
+ * Added a reference to changing the firewall settings if connecting to OLS fails.
+ * Added dialogs whenever an exception can be thrown and a message is written to the ErrorLog.
+ * pep xml and prot xml files can now be just xml files (no pep.xml or pepxml requirements).
+ * Peptide-/ProteinProphet support extended: if the "spectrum, path" tag is missing, use the <msms_run_summary ... raw_data=".mzXML"> tag instead.
+ * The JavaOptions file (the memory settings) is now included when importing old user settings.
+ * Fixed a bug that could occur when importing instrument details from mzData and mzXML files.
+ * Made it possible to add MS level for given spectra. (Added an `MS Level` column to Spectra Selection without identifications table (MS level is otherwise assumed to be MS2).)
+ * Fixed a bug that made it impossible to convert mzData files without at least one sample description cv term.
+ * Fixed a bug that resulted in problems if the instrument names in mzData files was "N/A".
+ * Made the spectrum selection for PKL files more robust by adding charge to the key.
+ * Replaced the splitting of data lines on tab by splitting on tab _and_ white space.
+
+
+----
 
 *Changes in PRIDE Converter v1.14.2 - (Dec. 15. 2008):*
  * Fixed a bug where OMSSA data values was divided by 1000 to get the real value. Now the `MSResponse_scale` and the `MSSpectrum_iscale` values from the OMSSA file are used.
  * Upgraded to `omssaparser-0.9.4`.
  * Replaced `Gel Free` identifications by `Other`, to be able to support 1D Gel identifications.
 
+Download Count: 74
 
 ----
 
