@@ -57,6 +57,7 @@ import de.proteinms.omxparser.util.MSModHit;
 import de.proteinms.omxparser.util.MSPepHit;
 import de.proteinms.omxparser.util.MSSpectrum;
 
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.util.Collection;
 import java.util.HashMap;
@@ -239,6 +240,9 @@ public class PRIDEConverter {
 
                 // check if a newer version of the PRIDE Converter is available
                 try {
+
+                    boolean deprecatedOrDeleted = false;
+
                     URL downloadPage = new URL(
                             "http://code.google.com/p/pride-converter/downloads/detail?name=PRIDE_Converter_" +
                             prideConverterVersionNumber + ".zip");
@@ -249,8 +253,31 @@ public class PRIDEConverter {
                     // the running version is no longer available for download, 
                     // which again means that a never version is available.
                     if (respons == 404) {
+                        deprecatedOrDeleted = true;
+                        //JOptionPane.showMessageDialog(null, "Deleted!!!!");
+                    } else {
+
+                        // also need to check if the available running version has been
+                        // deprecated (but not deleted)
+                        BufferedReader in = new BufferedReader(
+                                new InputStreamReader(downloadPage.openStream()));
+
+                        String inputLine;
+
+                        while ((inputLine = in.readLine()) != null && !deprecatedOrDeleted) {
+                            if (inputLine.lastIndexOf("Deprecated") != -1 &&
+                                    inputLine.lastIndexOf("Deprecated Downloads") == -1) {
+                                deprecatedOrDeleted = true;
+                                //JOptionPane.showMessageDialog(null, "Deprecated!!!!");
+                            }
+                        }
+
+                        in.close();
+                    }
+
+                    if (deprecatedOrDeleted) {
                         int option = JOptionPane.showConfirmDialog(null,
-                                "A newer version of the PRIDE Converter is available. \n" +
+                                "A newer version of PRIDE Converter is available. \n" +
                                 "Do you want to upgrade?\n\n" +
                                 "Selecting \'Yes\' will open the PRIDE Converter web page\n" +
                                 "where you can download the latest version.",
