@@ -3,6 +3,14 @@
 
 ----
 
+*Changes in PRIDE Converter v1.15.1 - (Feb. 04. 2009):*
+ * Adding spectrum cv and user parameters is now also supported for data formats with identifications.
+ * Fixed a bug in the advanced spectra selection that resulted in the selection not being correct unless the spectra had been loaded into the table first.
+ * The spectra count shown for ms_lims data sets in the dialog appearing after the conversion was incorrect. Has now been fixed.
+
+
+----
+
 *Changes in PRIDE Converter v1.15 - (Feb. 02. 2009):*
  * Added the possibility of converting more than one mzData file at the time.
  * Made it possible to add cv and user terms to given spectra (currently only for data formats without identifications).
@@ -21,6 +29,7 @@
  * Made the spectrum selection for PKL files more robust by adding charge to the key.
  * Replaced the splitting of data lines on tab by splitting on tab _and_ white space.
 
+Download Count: 3
 
 ----
 
