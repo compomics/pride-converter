@@ -118,7 +118,7 @@ import uk.ac.ebi.tpp_to_pride.wrappers.peptideprophet.*;
 public class PRIDEConverter {
 
     private static String wizardName = "PRIDE Converter";
-    private static String prideConverterVersionNumber = "v1.15";
+    private static String prideConverterVersionNumber = "v1.15.1";
     private static ArrayList<IdentificationGeneral> ids;
     private static Collection identifications;
     private static int totalNumberOfSpectra = 0;
@@ -254,7 +254,7 @@ public class PRIDEConverter {
                     // which again means that a never version is available.
                     if (respons == 404) {
                         deprecatedOrDeleted = true;
-                        //JOptionPane.showMessageDialog(null, "Deleted!!!!");
+                    //JOptionPane.showMessageDialog(null, "Deleted!!!!");
                     } else {
 
                         // also need to check if the available running version has been
@@ -268,7 +268,7 @@ public class PRIDEConverter {
                             if (inputLine.lastIndexOf("Deprecated") != -1 &&
                                     inputLine.lastIndexOf("Deprecated Downloads") == -1) {
                                 deprecatedOrDeleted = true;
-                                //JOptionPane.showMessageDialog(null, "Deprecated!!!!");
+                            //JOptionPane.showMessageDialog(null, "Deprecated!!!!");
                             }
                         }
 
@@ -277,7 +277,7 @@ public class PRIDEConverter {
 
                     if (deprecatedOrDeleted) {
                         int option = JOptionPane.showConfirmDialog(null,
-                                "A newer version of PRIDE Converter is available. \n" +
+                                "A newer version of PRIDE Converter is available.\n" +
                                 "Do you want to upgrade?\n\n" +
                                 "Selecting \'Yes\' will open the PRIDE Converter web page\n" +
                                 "where you can download the latest version.",
@@ -891,16 +891,13 @@ public class PRIDEConverter {
                                 properties.getDataSource().equalsIgnoreCase("VEMS") ||
                                 properties.getDataSource().equalsIgnoreCase("MS2") ||
                                 properties.getDataSource().equalsIgnoreCase("mzData")) {
-                            spectraCount = totalNumberOfSpectra -
-                                    emptySpectraCounter;
+                            spectraCount = totalNumberOfSpectra - emptySpectraCounter;
                             peptideIdentificationsCount = omitDuplicates.size();
                         } else if (properties.getDataSource().equalsIgnoreCase("ms_lims")) {
-                            spectraCount = unidentifedSpectraCounter +
-                                    omitDuplicates.size();
+                            spectraCount = mzDataSpectra.size();
                             peptideIdentificationsCount = omitDuplicates.size();
                         } else if (properties.getDataSource().equalsIgnoreCase("TPP")) {
-                            spectraCount = totalNumberOfSpectra -
-                                    emptySpectraCounter;
+                            spectraCount = totalNumberOfSpectra - emptySpectraCounter;
                             peptideIdentificationsCount = peptideIdCount;
                         }
 
@@ -1231,20 +1228,51 @@ public class PRIDEConverter {
                                 }
 
                                 matchFound = false;
+                                spectrumKey = fileName + "_" + spectrumID;
 
-                                if (properties.getSelectedSpectraNames().size() > 0) {
-                                    for (int k = 0; k < properties.getSelectedSpectraNames().size() &&
-                                            !matchFound; k++) {
-                                        if (((String) ((Object[]) properties.getSelectedSpectraNames().
-                                                get(k))[0]).equalsIgnoreCase(fileName)) {
-                                            if (((Integer) ((Object[]) properties.getSelectedSpectraNames().
-                                                    get(k))[1]).intValue() == spectrumID) {
+                                if (properties.getSelectedSpectraKeys().size() > 0) {
+                                    for (int k = 0; k < properties.getSelectedSpectraKeys().size() && !matchFound; k++) {
+
+                                        Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
+
+                                        if (((String) temp[0]).equalsIgnoreCase(fileName)) {
+                                            if (((Integer) temp[1]).intValue() == spectrumID) {
                                                 matchFound = true;
                                             }
                                         }
                                     }
                                 } else {
-                                    matchFound = true;
+                                    if (properties.getSpectraSelectionCriteria() != null) {
+
+                                        StringTokenizer tok;
+
+                                        if (userProperties.getCurrentFileNameSelectionCriteriaSeparator().length() == 0) {
+                                            tok = new StringTokenizer(properties.getSpectraSelectionCriteria());
+                                        } else {
+                                            tok = new StringTokenizer(properties.getSpectraSelectionCriteria(),
+                                                    userProperties.getCurrentFileNameSelectionCriteriaSeparator());
+                                        }
+
+                                        String tempToken;
+
+                                        while (tok.hasMoreTokens() && !matchFound) {
+
+                                            tempToken = tok.nextToken();
+                                            tempToken = tempToken.trim();
+
+                                            if (properties.isSelectionCriteriaFileName()) {
+                                                if (fileName.lastIndexOf(tempToken) != -1) {
+                                                    matchFound = true;
+                                                }
+                                            } else {
+                                                if (("" + spectrumID).lastIndexOf(tempToken) != -1) {
+                                                    matchFound = true;
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        matchFound = true;
+                                    }
                                 }
 
                                 if (matchFound) {
@@ -1536,7 +1564,9 @@ public class PRIDEConverter {
                                                 null,
                                                 spectraCounter, precursors,
                                                 spectrumDescriptionComments,
-                                                null, null, null, null);
+                                                properties.getSpectrumCvParams().get(spectrumKey),
+                                                properties.getSpectrumUserParams().get(spectrumKey),
+                                                null, null);
 
                                         // Store (spectrumfileid, spectrumid) mapping.
                                         mapping.put("" + spectraCounter,
@@ -1681,31 +1711,57 @@ public class PRIDEConverter {
             errorDetected = false;
 
             boolean isSelected = false;
+            msLevel = 2;
 
-            for (int k = 0; k < properties.getSelectedSpectraNames().size() &&
-                    !isSelected && !cancelConversion; k++) {
+            if (properties.getSelectedSpectraKeys().size() > 0) {
+                for (int k = 0; k < properties.getSelectedSpectraKeys().size() &&
+                        !isSelected && !cancelConversion; k++) {
 
-                Object[] temp = (Object[]) properties.getSelectedSpectraNames().get(k);
+                    Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
 
-                if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
-                    isSelected = true;
-                    spectrumKey = generateSpectrumKey(temp);
+                    if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
+                        isSelected = true;
+                        spectrumKey = generateSpectrumKey(temp);
 
-                    if (properties.getDataSource().equalsIgnoreCase("Sequest DTA File")) {
-                        // ms level
-                        if (temp[4] != null) {
-                            msLevel = (Integer) temp[4];
-                        } else {
-                            // defaults to MS2
-                            msLevel = 2;
+                        if (properties.getDataSource().equalsIgnoreCase("Sequest DTA File")) {
+                            // ms level
+                            if (temp[4] != null) {
+                                msLevel = (Integer) temp[4];
+                            } else {
+                                // defaults to MS2
+                                msLevel = 2;
+                            }
                         }
                     }
                 }
-            }
+            } else {
+                if (properties.getSpectraSelectionCriteria() != null) {
+                    if (userProperties.getCurrentFileNameSelectionCriteriaSeparator().length() == 0) {
+                        tok = new StringTokenizer(properties.getSpectraSelectionCriteria());
+                    } else {
+                        tok = new StringTokenizer(properties.getSpectraSelectionCriteria(),
+                                userProperties.getCurrentFileNameSelectionCriteriaSeparator());
+                    }
 
-            if (properties.getSelectedSpectraNames().size() == 0) {
-                isSelected = true;
-                msLevel = 2;
+                    String tempToken;
+
+                    while (tok.hasMoreTokens() && !isSelected) {
+
+                        tempToken = tok.nextToken();
+                        tempToken = tempToken.trim();
+
+                        if (properties.isSelectionCriteriaFileName()) {
+                            if (fileName.lastIndexOf(tempToken) != -1) {
+                                isSelected = true;
+                            }
+                        } else {
+                            isSelected = false; // sequest don't have identification ids
+                            break;
+                        }
+                    }
+                } else {
+                    isSelected = true;
+                }
             }
 
             if (isSelected) {
@@ -2665,10 +2721,8 @@ public class PRIDEConverter {
                         spectrumDescriptionComments.add(new SpectrumDescCommentImpl(identified));
 
                         if (arrays[properties.MZ_ARRAY].length > 0) {
-                            mzRangeStart =
-                                    new Double(arrays[properties.MZ_ARRAY][0]);
-                            mzRangeStop = new Double(arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length -
-                                    1]);
+                            mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
+                            mzRangeStop = new Double(arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
 
                             // Create new mzData spectrum for the fragmentation spectrum.
                             fragmentation = new SpectrumImpl(
@@ -2711,10 +2765,10 @@ public class PRIDEConverter {
 
                                     boolean spectraSelected = false;
 
-                                    for (int k = 0; k < properties.getSelectedSpectraNames().size() &&
+                                    for (int k = 0; k < properties.getSelectedSpectraKeys().size() &&
                                             !spectraSelected && !cancelConversion; k++) {
 
-                                        Object[] temp = (Object[]) properties.getSelectedSpectraNames().get(k);
+                                        Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
 
                                         if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
                                             spectraSelected = true;
@@ -2906,10 +2960,10 @@ public class PRIDEConverter {
                         // check if the spectra is selected or not
                         matchFound = false;
 
-                        if (properties.getSelectedSpectraNames().size() > 0) {
-                            for (int k = 0; k < properties.getSelectedSpectraNames().size() && !matchFound; k++) {
+                        if (properties.getSelectedSpectraKeys().size() > 0) {
+                            for (int k = 0; k < properties.getSelectedSpectraKeys().size() && !matchFound; k++) {
 
-                                Object[] temp = (Object[]) properties.getSelectedSpectraNames().get(k);
+                                Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
 
                                 if (((String) temp[0]).equalsIgnoreCase(fileName)) {
                                     if (((Double) temp[2]).doubleValue() == precursorMass) {
@@ -3033,10 +3087,8 @@ public class PRIDEConverter {
                                         null,
                                         supDescArrays);
 
-                                mapping.put((new File(properties.getSelectedSourceFiles().
-                                        get(j)).getName() +
-                                        "_" + precursorMass),
-                                        new Long(spectraCounter));
+                                mapping.put((new File(properties.getSelectedSourceFiles().get(j)).getName() +
+                                        "_" + precursorMass), new Long(spectraCounter));
                                 spectraCounter++;
 
                                 // Store the transformed spectrum.
@@ -3076,10 +3128,10 @@ public class PRIDEConverter {
                 // check if the spectra is selected or not
                 matchFound = false;
 
-                if (properties.getSelectedSpectraNames().size() > 0) {
-                    for (int k = 0; k < properties.getSelectedSpectraNames().size() && !matchFound; k++) {
+                if (properties.getSelectedSpectraKeys().size() > 0) {
+                    for (int k = 0; k < properties.getSelectedSpectraKeys().size() && !matchFound; k++) {
 
-                        Object[] temp = (Object[]) properties.getSelectedSpectraNames().get(k);
+                        Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
 
                         if (((String) temp[0]).equalsIgnoreCase(fileName)) {
                             if (((Double) temp[2]).doubleValue() == precursorMass) {
@@ -3526,10 +3578,10 @@ public class PRIDEConverter {
 
                 matchFound = false;
 
-                if (properties.getSelectedSpectraNames().size() > 0) {
-                    for (int k = 0; k < properties.getSelectedSpectraNames().size() && !matchFound; k++) {
+                if (properties.getSelectedSpectraKeys().size() > 0) {
+                    for (int k = 0; k < properties.getSelectedSpectraKeys().size() && !matchFound; k++) {
 
-                        Object[] temp = (Object[]) properties.getSelectedSpectraNames().get(k);
+                        Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
 
                         if (((String) temp[0]).equalsIgnoreCase(fileName)) {
                             if (((Integer) temp[1]).intValue() == scan.getNum()) {
@@ -3757,11 +3809,11 @@ public class PRIDEConverter {
 
                     matchFound = false;
 
-                    if (properties.getSelectedSpectraNames().size() > 0) {
-                        for (int k = 0; k < properties.getSelectedSpectraNames().size() &&
+                    if (properties.getSelectedSpectraKeys().size() > 0) {
+                        for (int k = 0; k < properties.getSelectedSpectraKeys().size() &&
                                 !matchFound && !cancelConversion; k++) {
 
-                            Object[] temp = (Object[]) properties.getSelectedSpectraNames().get(k);
+                            Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
 
                             if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
                                 if (((Double) temp[2]).doubleValue() == precursorMass) {
@@ -4650,11 +4702,11 @@ public class PRIDEConverter {
 
                         matchFound = false;
 
-                        if (properties.getSelectedSpectraNames().size() > 0) {
-                            for (int k = 0; k < properties.getSelectedSpectraNames().size() &&
+                        if (properties.getSelectedSpectraKeys().size() > 0) {
+                            for (int k = 0; k < properties.getSelectedSpectraKeys().size() &&
                                     !matchFound && !cancelConversion; k++) {
 
-                                Object[] temp = (Object[]) properties.getSelectedSpectraNames().get(k);
+                                Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
 
                                 if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
 
@@ -4829,11 +4881,11 @@ public class PRIDEConverter {
 
                     matchFound = false;
 
-                    if (properties.getSelectedSpectraNames().size() > 0) {
-                        for (int k = 0; k < properties.getSelectedSpectraNames().size() &&
+                    if (properties.getSelectedSpectraKeys().size() > 0) {
+                        for (int k = 0; k < properties.getSelectedSpectraKeys().size() &&
                                 !matchFound && !cancelConversion; k++) {
 
-                            Object[] temp = (Object[]) properties.getSelectedSpectraNames().get(k);
+                            Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
 
                             if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
 
@@ -5006,7 +5058,6 @@ public class PRIDEConverter {
         for (int k = 0; k < properties.getSelectedSourceFiles().size() && !cancelConversion; k++) {
 
             tempFile = new File(properties.getSelectedSourceFiles().get(k));
-
             currentFileName = tempFile.getName();
 
             progressDialog.setIntermidiate(true);
@@ -5086,10 +5137,11 @@ public class PRIDEConverter {
                 currentQuery = queries.nextElement();
                 matchFound = false;
                 fileName = currentQuery.getFilename();
+                spectrumKey = fileName + "_null";
 
-                if (properties.getSelectedSpectraNames().size() > 0) {
-                    for (int i = 0; i < properties.getSelectedSpectraNames().size() && !matchFound; i++) {
-                        if (((String) ((Object[]) properties.getSelectedSpectraNames().get(i))[0]).equalsIgnoreCase(
+                if (properties.getSelectedSpectraKeys().size() > 0) {
+                    for (int i = 0; i < properties.getSelectedSpectraKeys().size() && !matchFound; i++) {
+                        if (((String) ((Object[]) properties.getSelectedSpectraKeys().get(i))[0]).equalsIgnoreCase(
                                 fileName)) {
                             matchFound = true;
                         } else {
@@ -5098,12 +5150,28 @@ public class PRIDEConverter {
                     }
                 } else {
                     if (properties.getSpectraSelectionCriteria() != null) {
-                        if (userProperties.getCurrentFileNameSelectionCriteriaSeparator().
-                                length() == 0) {
+                        if (userProperties.getCurrentFileNameSelectionCriteriaSeparator().length() == 0) {
                             tok = new StringTokenizer(properties.getSpectraSelectionCriteria());
                         } else {
                             tok = new StringTokenizer(properties.getSpectraSelectionCriteria(),
                                     userProperties.getCurrentFileNameSelectionCriteriaSeparator());
+                        }
+
+                        String tempToken;
+
+                        while (tok.hasMoreTokens() && !matchFound) {
+
+                            tempToken = tok.nextToken();
+                            tempToken = tempToken.trim();
+
+                            if (properties.isSelectionCriteriaFileName()) {
+                                if (fileName.lastIndexOf(tempToken) != -1) {
+                                    matchFound = true;
+                                }
+                            } else {
+                                matchFound = false; // mascot dat files don't have identification ids
+                                break;
+                            }
                         }
                     } else {
                         matchFound = true;
@@ -5211,7 +5279,9 @@ public class PRIDEConverter {
                                     null,
                                     idCounter, precursors,
                                     spectrumDescriptionComments,
-                                    null, null, null, null);
+                                    properties.getSpectrumCvParams().get(spectrumKey),
+                                    properties.getSpectrumUserParams().get(spectrumKey),
+                                    null, null);
 
                             // Store (spectrumfileid, spectrumid) mapping.
                             //mapping.put(new Long(idCounter), new Long(idCounter++));
@@ -5455,8 +5525,7 @@ public class PRIDEConverter {
         ids = new ArrayList<IdentificationGeneral>();
 
         int start;
-        String accession,
-                peptideSequence, upstreamFlankingSequence, downstreamFlankingSequence;
+        String accession, peptideSequence, upstreamFlankingSequence, downstreamFlankingSequence;
         String database;
 
         MSPepHit currentMSPepHit;
@@ -5482,16 +5551,14 @@ public class PRIDEConverter {
         DocumentBuilder db;
         Document dom;
         Element docEle;
-        NodeList nodes,
-                modNodes, residueNodes, tempNodes;
+        NodeList nodes, modNodes, residueNodes, tempNodes;
         String modName = "";
         Vector modResidues;
 
         Integer modNumber = -1;
         Double modMonoMass = 0.0;
 
-        HashMap<Integer, OmssaModification> omssaModificationDetails =
-                new HashMap();
+        HashMap<Integer, OmssaModification> omssaModificationDetails = new HashMap();
 
         OmssaOmxFile omxFile;
         List<Integer> fixedModifications;
@@ -5739,9 +5806,11 @@ public class PRIDEConverter {
 
                 matchFound = false;
 
-                if (properties.getSelectedSpectraNames().size() > 0) {
-                    for (int i = 0; i < properties.getSelectedSpectraNames().size() && !matchFound; i++) {
-                        if (((String) ((Object[]) properties.getSelectedSpectraNames().get(i))[0]).equalsIgnoreCase(
+                spectrumKey = fileName + "_" + tempSpectrum.MSSpectrum_number;
+
+                if (properties.getSelectedSpectraKeys().size() > 0) {
+                    for (int i = 0; i < properties.getSelectedSpectraKeys().size() && !matchFound; i++) {
+                        if (((String) ((Object[]) properties.getSelectedSpectraKeys().get(i))[0]).equalsIgnoreCase(
                                 fileName)) {
                             matchFound = true;
                         } else {
@@ -5755,6 +5824,24 @@ public class PRIDEConverter {
                         } else {
                             tok = new StringTokenizer(properties.getSpectraSelectionCriteria(),
                                     userProperties.getCurrentFileNameSelectionCriteriaSeparator());
+                        }
+
+                        String tempToken;
+
+                        while (tok.hasMoreTokens() && !matchFound) {
+
+                            tempToken = tok.nextToken();
+                            tempToken = tempToken.trim();
+
+                            if (properties.isSelectionCriteriaFileName()) {
+                                if (fileName.lastIndexOf(tempToken) != -1) {
+                                    matchFound = true;
+                                }
+                            } else {
+                                if (("" + tempSpectrum.MSSpectrum_number).lastIndexOf(tempToken) != -1) {
+                                    matchFound = true;
+                                }
+                            }
                         }
                     } else {
                         matchFound = true;
@@ -5792,8 +5879,7 @@ public class PRIDEConverter {
 
                     // OMSSA question: possible with more than one charge per spectrum??
                     chargeString = "" + tempSpectrum.MSSpectrum_charge.MSSpectrum_charge_E.get(0);
-                    chargeString =
-                            chargeString.replaceFirst("\\+", "");
+                    chargeString = chargeString.replaceFirst("\\+", "");
 
                     if (!chargeString.equalsIgnoreCase("0")) {
                         ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
@@ -6041,7 +6127,9 @@ public class PRIDEConverter {
                                 mzRangeStop,
                                 null,
                                 idCounter, precursors, spectrumDescriptionComments,
-                                null, null, null, null);
+                                properties.getSpectrumCvParams().get(spectrumKey),
+                                properties.getSpectrumUserParams().get(spectrumKey),
+                                null, null);
 
                         // Store (spectrumfileid, spectrumid) mapping.
                         //mapping.put(new Long(idCounter), new Long(idCounter++));
@@ -6112,6 +6200,10 @@ public class PRIDEConverter {
             dbSpectrum = (Spectrumfile) iter.next();
             filename = dbSpectrum.getFilename();
 
+            spectrumKey = filename + "_null";
+
+            //JOptionPane.showMessageDialog(null, "spectrumKey: " + spectrumKey);
+
             progressDialog.setValue(progressCounter++);
             progressDialog.setString(filename + " (" + (progressCounter) + "/" + selectedSpectra.size() + ")");
 
@@ -6157,22 +6249,21 @@ public class PRIDEConverter {
 
             if (arrays[properties.MZ_ARRAY].length > 0) {
                 mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
-                mzRangeStop = new Double(
-                        arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+                mzRangeStop = new Double(arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
 
                 fragmentation =
                         new SpectrumImpl(
-                        new BinaryArrayImpl(arrays[properties.INTENSITIES_ARRAY],
-                        BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                        new BinaryArrayImpl(arrays[properties.INTENSITIES_ARRAY], BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
                         mzRangeStart,
-                        new BinaryArrayImpl(arrays[properties.MZ_ARRAY],
-                        BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                        new BinaryArrayImpl(arrays[properties.MZ_ARRAY], BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
                         2,
                         null,
                         mzRangeStop,
                         null,
                         idCounter, precursors, spectrumDescriptionComments,
-                        null, null, null, null);
+                        properties.getSpectrumCvParams().get(spectrumKey),
+                        properties.getSpectrumUserParams().get(spectrumKey),
+                        null, null);
 
                 // Store (spectrumfileid, spectrumid) mapping.
                 mapping.put("" + dbSpectrum.getSpectrumfileid(),
@@ -6216,7 +6307,6 @@ public class PRIDEConverter {
                         cVParams = new ArrayList(1);
                         cVParams.add(new CvParamImpl("PRIDE:0000069", "PRIDE", "Mascot Score", 0, "" +
                                 tempIdentification.getScore()));
-
 
                         // iTraq calculations
                         if (calculateITraq) {
@@ -6414,7 +6504,6 @@ public class PRIDEConverter {
                                 tempIdentification.getConfidence().doubleValue()) * 100));
                     }
                 }
-
             } catch (java.sql.SQLException e) {
                 JOptionPane.showMessageDialog(null, "An error occured when accessing the database.\n" +
                         "See ../Properties/ErrorLog.txt for more details.",
@@ -6676,11 +6765,11 @@ public class PRIDEConverter {
         ArrayList selectedFileNames = new ArrayList();
 
         try {
-            if (properties.getSelectedSpectraNames().size() > 0) {
+            if (properties.getSelectedSpectraKeys().size() > 0) {
 
-                progressDialog.setMax(properties.getSelectedSpectraNames().size());
+                progressDialog.setMax(properties.getSelectedSpectraKeys().size());
 
-                for (int i = 0; i < properties.getSelectedSpectraNames().size(); i++) {
+                for (int i = 0; i < properties.getSelectedSpectraKeys().size(); i++) {
 
                     if (cancelConversion) {
                         outputFrame.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -6690,7 +6779,7 @@ public class PRIDEConverter {
 
                     progressDialog.setValue(i);
                     selectedSpectra.add(Spectrumfile.getFromName(
-                            (String) ((Object[]) properties.getSelectedSpectraNames().get(i))[0], conn));
+                            (String) ((Object[]) properties.getSelectedSpectraKeys().get(i))[0], conn));
                 }
             } else {
 
@@ -7120,11 +7209,13 @@ public class PRIDEConverter {
     }
 
     /**
-     * Adds the spectrum CV terms to a CV param list.
+     * Combines two spectrum cv param arrays into one cv param array.
+     * The first array is assumed to be ordered (the order indices are in
+     * increasing order).
      *
-     * @param cvParams the CV param list to be extended
+     * @param existingCvParams the cv param list to be extended
      * @param cvParamsToAdd the values to add
-     * @return the updated CV param list
+     * @return the updated cv param list
      */
     private static ArrayList combineCVTermsArrays(ArrayList<CvParam> existingCvParams,
             ArrayList<CvParam> cvParamsToAdd) {
@@ -7145,9 +7236,11 @@ public class PRIDEConverter {
     }
 
     /**
-     * Adds the spectrum user terms to a user param list.
+     * Combines two spectrum user param arrays into one user param array.
+     * The first array is assumed to be ordered (the order indices are in
+     * increasing order).
      *
-     * @param userParams the user param list to be extended
+     * @param existingUserParams the user param list to be extended
      * @param userParamsToAdd the values to add
      * @return the updated user param list
      */

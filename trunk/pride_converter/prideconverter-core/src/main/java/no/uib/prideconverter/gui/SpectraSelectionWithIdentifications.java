@@ -104,6 +104,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         spectraJTable.getTableHeader().setReorderingAllowed(false);
         spectraJTable.setAutoCreateColumnsFromModel(false);
         spectraJTable.setAutoCreateRowSorter(true);
+        spectraJTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         selectAllSpectraJRadioButton.setSelected(prideConverter.getProperties().selectAllSpectra());
         selectIdentifiedJRadioButton.setSelected(prideConverter.getProperties().selectAllIdentifiedSpectra());
@@ -136,6 +137,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
             loadSpectraJButton.setEnabled(false);
             selectedSpectraJLabel.setEnabled(true);
             numberOfSelectedSpectraJTextField.setEnabled(true);
+            spectrumAnnotationJLabel.setEnabled(true);
             selectAllSpectraJRadioButton.setEnabled(false);
             selectIdentifiedJRadioButton.setEnabled(false);
             applyAdvancedSelectionButton.setEnabled(true);
@@ -180,6 +182,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         invertSelectionJMenuItem = new javax.swing.JMenuItem();
         simpleSelectionButtonGroup = new javax.swing.ButtonGroup();
         advancedSelectionButtonGroup = new javax.swing.ButtonGroup();
+        spectrumDetailsJPopupMenu = new javax.swing.JPopupMenu();
+        viewSpectrumParametersJMenuItem = new javax.swing.JMenuItem();
         nextJButton = new javax.swing.JButton();
         backJButton = new javax.swing.JButton();
         cancelJButton = new javax.swing.JButton();
@@ -206,6 +210,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         };
         selectedSpectraJLabel = new javax.swing.JLabel();
         numberOfSelectedSpectraJTextField = new javax.swing.JTextField();
+        spectrumAnnotationJLabel = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         selectAllSpectraJRadioButton = new javax.swing.JRadioButton();
         selectIdentifiedJRadioButton = new javax.swing.JRadioButton();
@@ -252,6 +257,14 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
             }
         });
         selectAllJPopupMenu.add(invertSelectionJMenuItem);
+
+        viewSpectrumParametersJMenuItem.setText("View/Change Spectrum Parameters");
+        viewSpectrumParametersJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewSpectrumParametersJMenuItemActionPerformed(evt);
+            }
+        });
+        spectrumDetailsJPopupMenu.add(viewSpectrumParametersJMenuItem);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Spectra Selection - Step 2 of 8");
@@ -356,6 +369,10 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         numberOfSelectedSpectraJTextField.setToolTipText("Number of Selected Spectra");
         numberOfSelectedSpectraJTextField.setEnabled(false);
 
+        spectrumAnnotationJLabel.setFont(spectrumAnnotationJLabel.getFont().deriveFont((spectrumAnnotationJLabel.getFont().getStyle() | java.awt.Font.ITALIC)));
+        spectrumAnnotationJLabel.setText("Right click on a row to add spectrum annotations.");
+        spectrumAnnotationJLabel.setEnabled(false);
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -366,6 +383,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE)
                     .addComponent(loadSpectraJButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(spectrumAnnotationJLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 155, Short.MAX_VALUE)
                         .addComponent(selectedSpectraJLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(numberOfSelectedSpectraJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -379,7 +398,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(numberOfSelectedSpectraJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(selectedSpectraJLabel))
+                    .addComponent(selectedSpectraJLabel)
+                    .addComponent(spectrumAnnotationJLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(loadSpectraJButton)
                 .addContainerGap())
@@ -542,6 +562,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         jLabel6.setText("Protein Identification Filter:");
         jLabel6.setToolTipText("Ignore All Protein Identifications Including This Tag");
 
+        proteinIdFilterJTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         proteinIdFilterJTextField.setToolTipText("Ignore All Protein Identifications Including This Tag");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -774,7 +795,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                 Iterator<MSSpectrum> iterator;
                 MSSpectrum tempSpectrum;
 
-                prideConverter.getProperties().setSelectedSpectraNames(new ArrayList());
+                prideConverter.getProperties().setSelectedSpectraKeys(new ArrayList());
 
                 MascotDatfileInf tempMascotDatfile;
                 QueryToPeptideMapInf queryToPeptideMap;
@@ -824,13 +845,11 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                                 nodes = docEle.getChildNodes();
 
-                                for (int i = 0; i <
-                                        nodes.getLength(); i++) {
+                                for (int i = 0; i < nodes.getLength(); i++) {
 
                                     if (!progressDialog.isVisible()) {
 
-                                        while (((DefaultTableModel) spectraJTable.getModel()).getRowCount() >
-                                                0) {
+                                        while (((DefaultTableModel) spectraJTable.getModel()).getRowCount() > 0) {
                                             ((DefaultTableModel) spectraJTable.getModel()).removeRow(0);
                                         }
 
@@ -842,14 +861,12 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                                     if (nodes.item(i).getAttributes() != null) {
 
-                                        if (nodes.item(i).getAttributes().getNamedItem("type") !=
-                                                null) {
+                                        if (nodes.item(i).getAttributes().getNamedItem("type") != null) {
 
                                             if (nodes.item(i).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase(
                                                     "model")) {
 
-                                                if (nodes.item(i).getAttributes().getNamedItem("id") !=
-                                                        null) {
+                                                if (nodes.item(i).getAttributes().getNamedItem("id") != null) {
                                                     spectrumID = new Integer(nodes.item(i).getAttributes().getNamedItem("id").getNodeValue()).intValue();
                                                 }
 
@@ -1031,8 +1048,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                     if (selectAllSpectraJRadioButton.isSelected()) {
                                         selected = true;
                                         numberOfSelectedSpectra++;
-                                    } else if (results.get(tempSpectrum).MSHitSet_hits.MSHits.size() >
-                                            0) {
+                                    } else if (results.get(tempSpectrum).MSHitSet_hits.MSHits.size() > 0) {
                                         selected = true;
                                         numberOfSelectedSpectra++;
                                     }
@@ -1042,8 +1058,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                         null,
                                         tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.get(0),
                                         tempSpectrum.MSSpectrum_number,
-                                        new Boolean(results.get(tempSpectrum).MSHitSet_hits.MSHits.size() >
-                                        0),
+                                        new Boolean(results.get(tempSpectrum).MSHitSet_hits.MSHits.size() > 0),
                                         new Boolean(selected)
                                     });
 
@@ -1085,10 +1100,10 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                     (double) prideConverter.getProperties().getMascotConfidenceLevel()) /
                                     100;
 
-                            double size = (double) file.length() / 1048576;
+                            double size = (double) file.length() / 
+                                    prideConverter.getProperties().NUMBER_OF_BYTES_PER_MEGABYTE;
 
-                            if (size >
-                                    prideConverter.getProperties().MAX_MASCOT_DAT_FILESIZE_BEFORE_INDEXING) {
+                            if (size > prideConverter.getProperties().MAX_MASCOT_DAT_FILESIZE_BEFORE_INDEXING) {
 
                                 //if the file is large
                                 tempMascotDatfile = MascotDatfileFactory.create(
@@ -1282,6 +1297,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                 selectedSpectraJLabel.setEnabled(true);
                 numberOfSelectedSpectraJTextField.setEnabled(true);
+                spectrumAnnotationJLabel.setEnabled(true);
                 loadSpectraJButton.setEnabled(false);
                 selectAllSpectraJRadioButton.setEnabled(false);
                 selectIdentifiedJRadioButton.setEnabled(false);
@@ -1319,6 +1335,13 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
      * @param evt
      */
     private void spectraJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_spectraJTableMouseClicked
+
+        if(spectraJTable.columnAtPoint(evt.getPoint()) != -1
+                && spectraJTable.rowAtPoint(evt.getPoint()) != -1){
+            spectraJTable.changeSelection(spectraJTable.rowAtPoint(evt.getPoint()),
+                    spectraJTable.columnAtPoint(evt.getPoint()), false, false);
+        }
+
         if (spectraJTable.columnAtPoint(evt.getPoint()) == 4) {
 
             this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
@@ -1347,6 +1370,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
         if (evt.getButton() == java.awt.event.MouseEvent.BUTTON3 && column == 4) {
             selectAllJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+        } else if (evt.getButton() == java.awt.event.MouseEvent.BUTTON3) {
+            spectrumDetailsJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
         }
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -1657,6 +1682,12 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_mascotConfidenceLevelJSpinnerStateChanged
 
+    private void viewSpectrumParametersJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSpectrumParametersJMenuItemActionPerformed
+        new SpectrumDetails(this, true, prideConverter,
+                "" + spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 1) + "_" +
+                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 2));
+}//GEN-LAST:event_viewSpectrumParametersJMenuItemActionPerformed
+
     /**
      * Saves the inserted information in the Properties object.
      * 
@@ -1682,13 +1713,13 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
         if (saveOk) {
 
-            prideConverter.getProperties().setSelectedSpectraNames(new ArrayList());
+            prideConverter.getProperties().setSelectedSpectraKeys(new ArrayList());
 
             if (spectraJTable.getRowCount() > 0) {
 
                 for (int i = 0; i < spectraJTable.getRowCount(); i++) {
                     if (((Boolean) spectraJTable.getValueAt(i, 4)).booleanValue()) {
-                        prideConverter.getProperties().getSelectedSpectraNames().add(
+                        prideConverter.getProperties().getSelectedSpectraKeys().add(
                                 new Object[]{
                             spectraJTable.getValueAt(i, 1),
                             spectraJTable.getValueAt(i, 2)
@@ -1758,5 +1789,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
     private javax.swing.JTextField separatorJTextField;
     private javax.swing.ButtonGroup simpleSelectionButtonGroup;
     private javax.swing.JTable spectraJTable;
+    private javax.swing.JLabel spectrumAnnotationJLabel;
+    private javax.swing.JPopupMenu spectrumDetailsJPopupMenu;
+    private javax.swing.JMenuItem viewSpectrumParametersJMenuItem;
     // End of variables declaration//GEN-END:variables
 }
