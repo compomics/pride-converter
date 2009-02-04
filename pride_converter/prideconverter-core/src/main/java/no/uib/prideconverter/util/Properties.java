@@ -50,7 +50,7 @@ public class Properties {
     private String proteinProphetFileName = null;
     private String peptideProphetFileName = null;
     private String tppSpectrumFilesFolderName = null;
-    private ArrayList selectedSpectraNames;
+    private ArrayList selectedSpectraKeys;
     private ArrayList selectedIsoformAccessions;
     private ArrayList selectedIsoformPeptideSequences;
     private int proteinIsoformSelectionType;
@@ -144,7 +144,7 @@ public class Properties {
      */
     public Properties() {
         projectIds = new ArrayList();
-        selectedSpectraNames = new ArrayList();
+        selectedSpectraKeys = new ArrayList();
         processingMethod = new ArrayList();
         sampleDescriptionCVParams = new ArrayList();
         sampleDescriptionCVParamsQuantification = new ArrayList();
@@ -456,21 +456,21 @@ public class Properties {
     }
 
     /**
-     * Returns the selected spectra names.
-     * 
-     * @return the selected spectra names
+     * Returns the selected spectra keys.
+     *
+     * @return the selected spectra keys
      */
-    public ArrayList getSelectedSpectraNames() {
-        return selectedSpectraNames;
+    public ArrayList getSelectedSpectraKeys() {
+        return selectedSpectraKeys;
     }
 
     /**
-     * Sets the selected spectra names.
+     * Sets the selected spectra keys.
      * 
      * @param aSelectedSpectraNames
      */
-    public void setSelectedSpectraNames(ArrayList aSelectedSpectraNames) {
-        selectedSpectraNames = aSelectedSpectraNames;
+    public void setSelectedSpectraKeys(ArrayList aSelectedSpectraKeys) {
+        selectedSpectraKeys = aSelectedSpectraKeys;
     }
 
     /**

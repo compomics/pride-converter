@@ -1032,12 +1032,11 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
      */
     private void spectraJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_spectraJTableMouseClicked
 
-        if(spectraJTable.columnAtPoint(evt.getPoint()) != -1
-                && spectraJTable.rowAtPoint(evt.getPoint()) != -1){
+        if (spectraJTable.columnAtPoint(evt.getPoint()) != -1 && spectraJTable.rowAtPoint(evt.getPoint()) != -1) {
             spectraJTable.changeSelection(spectraJTable.rowAtPoint(evt.getPoint()),
                     spectraJTable.columnAtPoint(evt.getPoint()), false, false);
         }
-        
+
         if (spectraJTable.columnAtPoint(evt.getPoint()) == 5) {
 
             this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
@@ -1065,10 +1064,8 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
         if (evt.getButton() == java.awt.event.MouseEvent.BUTTON3 && column == 5) {
             selectAllJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-        } else {
-            if (evt.getButton() == java.awt.event.MouseEvent.BUTTON3) {
-                spectrumDetailsJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-            }
+        } else if (evt.getButton() == java.awt.event.MouseEvent.BUTTON3) {
+            spectrumDetailsJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
         }
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -1169,11 +1166,11 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
     private void viewSpectrumParametersJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSpectrumParametersJMenuItemActionPerformed
         new SpectrumDetails(this, true, prideConverter,
-                                "" + spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 0) + "_" +
-                                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 1) +  "_" +
-                                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 2) + "_" +
-                                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 3) + "_" +
-                                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 4));
+                "" + spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 0) + "_" +
+                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 1) + "_" +
+                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 2) + "_" +
+                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 3) + "_" +
+                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 4));
     }//GEN-LAST:event_viewSpectrumParametersJMenuItemActionPerformed
 
     /**
@@ -1182,7 +1179,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
     private void saveInsertedInformation() {
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        prideConverter.getProperties().setSelectedSpectraNames(new ArrayList());
+        prideConverter.getProperties().setSelectedSpectraKeys(new ArrayList());
         prideConverter.getProperties().setSelectAllSpectra(selectAllJCheckBox.isSelected());
 
         if (spectraJTable.getRowCount() > 0) {
@@ -1190,7 +1187,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
             for (int i = 0; i < spectraJTable.getRowCount(); i++) {
                 if (((Boolean) spectraJTable.getValueAt(i, 5)).booleanValue()) {
 
-                    prideConverter.getProperties().getSelectedSpectraNames().add(
+                    prideConverter.getProperties().getSelectedSpectraKeys().add(
                             new Object[]{
                                 spectraJTable.getValueAt(i, 0),
                                 spectraJTable.getValueAt(i, 1),

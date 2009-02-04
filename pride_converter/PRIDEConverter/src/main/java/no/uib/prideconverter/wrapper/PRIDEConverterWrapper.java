@@ -21,8 +21,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class PRIDEConverterWrapper {
 
     private boolean debug = false;
-    private String jarFileName = "PRIDEConverter-1.15.jar";
-    private String prideConverterSourceJarFileName = "prideconverter-core-1.15.jar";
+    private String jarFileName = "PRIDEConverter-1.15.1.jar";
+    private String prideConverterSourceJarFileName = "prideconverter-core-1.15.1.jar";
 
     /**
      * Starts the launcher by calling the launch method. Use this as the 
@@ -71,7 +71,7 @@ public class PRIDEConverterWrapper {
 
             int option = javax.swing.JOptionPane.showConfirmDialog(null,
                     "You are using Java " + javaVersion + ".\n\n" +
-                    "The PRIDE Converter requires Java 1.6 or newer.\n\n" +
+                    "PRIDE Converter requires Java 1.6 or newer.\n\n" +
                     "Do you want to upgrade your Java version now?",
                     "PRIDE Converter - Java Version Test",
                     javax.swing.JOptionPane.YES_NO_OPTION,
@@ -180,8 +180,8 @@ public class PRIDEConverterWrapper {
                 if (error) {
 
                     javax.swing.JOptionPane.showMessageDialog(null,
-                            "Failed to start the PRIDE Converter.\n\n" +
-                            "Make sure that the PRIDE Converter is installed in a path not containing\n" +
+                            "Failed to start PRIDE Converter.\n\n" +
+                            "Make sure that PRIDE Converter is installed in a path not containing\n" +
                             "special characters. On Linux it has to be run from a path without spaces.\n\n" +
                             "The upper memory limit used may be too high for you computer to handle.\n" +
                             "Try reducing it and see if this helps.\n\n" +
