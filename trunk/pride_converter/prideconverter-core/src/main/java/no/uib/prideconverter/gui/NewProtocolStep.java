@@ -358,7 +358,9 @@ public class NewProtocolStep extends javax.swing.JDialog implements OLSInputable
     private void insertJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertJButtonActionPerformed
 
         if (cvTermsJTable.isEditing()) {
-            JOptionPane.showMessageDialog(this, "The table is still beeing edited. Please complete the editing before inserting.", "The table is beeing edited", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, 
+                    "The table is still beeing edited. Please complete the editing before inserting.",
+                    "The table is beeing edited", JOptionPane.INFORMATION_MESSAGE);
         } else {
             Vector terms, accessions, values, ontologies;
 

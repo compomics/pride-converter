@@ -1,5 +1,6 @@
 package no.uib.prideconverter.gui;
 
+import java.awt.Window;
 import no.uib.prideconverter.PRIDEConverter;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -28,8 +29,11 @@ import javax.swing.table.JTableHeader;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.StringTokenizer;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import no.uib.prideconverter.util.ComboBoxInputable;
 import no.uib.prideconverter.util.MyComboBoxRenderer;
+import no.uib.prideconverter.util.OLSInputable;
 import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
 
@@ -40,7 +44,7 @@ import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
  * 
  * Created March 2008
  */
-public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputable {
+public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputable, OLSInputable {
 
     private PRIDEConverter prideConverter;
     private String lastSelectedSampleName;
@@ -48,6 +52,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     private boolean valuesChanged = false;
     private Vector columnToolTips;
     private boolean keepQuantificationSelection = false;
+    private Vector tempSampleCvParameters;
 
     /**
      * Opens a new SampleDetails frame.
@@ -70,7 +75,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
         initComponents();
 
-        TableColumn quantificationColumn = sampleDetailsJTable.getColumnModel().getColumn(2);
+        TableColumn quantificationColumn = multipleSamplesDetailsJTable.getColumnModel().getColumn(2);
 
         JComboBox comboBox = new JComboBox();
         comboBox.addItem("iTRAQ reagent 114");
@@ -81,6 +86,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
         comboBox.addActionListener(new java.awt.event.ActionListener() {
 
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 quantificationComboBoxActionPerformed(evt);
             }
@@ -88,24 +94,38 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
         quantificationColumn.setCellEditor(new DefaultCellEditor(comboBox));
 
-        DefaultTableCellRenderer renderer =
-                new DefaultTableCellRenderer();
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setToolTipText("Click to choose quantification method");
         quantificationColumn.setCellRenderer(renderer);
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
                 getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
 
-        sampleDetailsJTable.getTableHeader().setReorderingAllowed(false);
-        sampleDetailsJTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        singleSampleDetailsJTable.getTableHeader().setReorderingAllowed(false);
+        singleSampleDetailsJTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+        multipleSamplesDetailsJTable.getTableHeader().setReorderingAllowed(false);
+        multipleSamplesDetailsJTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+        ((DefaultTableModel) singleSampleDetailsJTable.getModel()).addTableModelListener(
+                new TableModelListener() {
+
+                    @Override
+                    public void tableChanged(TableModelEvent e) {
+                        valuesChanged = true;
+                    }
+                });
 
         setTitle(prideConverter.getWizardName() + " " +
                 prideConverter.getPrideConverterVersionNumber() + " - " + getTitle());
 
-        sampleDetailsJTable.getColumn(" ").setMaxWidth(40);
-        sampleDetailsJTable.getColumn(" ").setMinWidth(40);
-        sampleDetailsJTable.getColumn("Quantification").setMaxWidth(110);
-        sampleDetailsJTable.getColumn("Quantification").setMinWidth(110);
+        singleSampleDetailsJTable.getColumn(" ").setMaxWidth(40);
+        singleSampleDetailsJTable.getColumn(" ").setMinWidth(40);
+
+        multipleSamplesDetailsJTable.getColumn(" ").setMaxWidth(40);
+        multipleSamplesDetailsJTable.getColumn(" ").setMinWidth(40);
+        multipleSamplesDetailsJTable.getColumn("Quantification").setMaxWidth(110);
+        multipleSamplesDetailsJTable.getColumn("Quantification").setMinWidth(110);
 
         columnToolTips = new Vector();
         columnToolTips.add(null);
@@ -171,6 +191,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         Collection<CvParam> cvParams = prideConverter.getProperties().getMzDataFile().getSampleDescriptionCvParams();
 
         prideConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
+        tempSampleCvParameters = new Vector();
 
         if (cvParams != null) {
 
@@ -182,21 +203,17 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
                 CvParam tempCvParam = iterator.next();
 
-                prideConverter.getProperties().getSampleDescriptionCVParams().add(
+                tempSampleCvParameters.add(
                         new CvParamImpl(tempCvParam.getAccession(),
                         tempCvParam.getCVLookup(),
                         tempCvParam.getName(),
                         new Long(orderIndex++),
-                        "SUBSAMPLE_1"));
+                        tempCvParam.getValue()));
             }
         }
 
         sampleName = prideConverter.getProperties().getMzDataFile().getSampleName();
-
-        ArrayList sampleNames = new ArrayList();
-        sampleNames.add(sampleName);
-        prideConverter.getProperties().setSampleDescriptionUserSubSampleNames(sampleNames);
-
+        prideConverter.getProperties().setSampleDescriptionUserSubSampleNames(new ArrayList());
         prideConverter.getUserProperties().setCurrentSampleSet(sampleName);
 
         String newName = samplePath + sampleName + ".sam";
@@ -253,25 +270,14 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
                         bw.write("Name: " + sampleName + "\n");
 
-                        if (prideConverter.getProperties().getSampleDescriptionCVParams() != null) {
+                        if (tempSampleCvParameters.size() > 0) {
 
-                            iterator = prideConverter.getProperties().getSampleDescriptionCVParams().iterator();
+                            bw.write(tempSampleCvParameters.size() + "\n");
 
-                            CvParamImpl tempCv;
+                            bw.write(sampleName + "\n#\n");
 
-                            bw.write(prideConverter.getProperties().getSampleDescriptionCVParams().size() +
-                                    "\n");
-
-                            for (int i = 0; i <
-                                    prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().size(); i++) {
-                                bw.write(prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(i) +
-                                        "\n");
-                            }
-
-                            bw.write("#\n");
-
-                            while (iterator.hasNext()) {
-                                tempCv = ((CvParamImpl) iterator.next());
+                            for (int i = 0; i < tempSampleCvParameters.size(); i++) {
+                                CvParamImpl tempCv = (CvParamImpl) tempSampleCvParameters.get(i);
 
                                 bw.write("Accession: " + tempCv.getAccession() + "\n");
                                 bw.write("CVLookup: " + tempCv.getCVLookup() + "\n");
@@ -312,26 +318,14 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
                 bw.write("Name: " + sampleName + "\n");
 
-                if (prideConverter.getProperties().getSampleDescriptionCVParams() != null) {
+                if (tempSampleCvParameters.size() > 0) {
 
-                    iterator = prideConverter.getProperties().getSampleDescriptionCVParams().iterator();
+                    bw.write(tempSampleCvParameters.size() + "\n");
 
-                    CvParamImpl tempCv;
+                    bw.write(sampleName + "\n#\n");
 
-                    bw.write(prideConverter.getProperties().getSampleDescriptionCVParams().size() +
-                            "\n");
-
-                    for (int i = 0; i <
-                            prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().size(); i++) {
-                        bw.write(prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(i) +
-                                "\n");
-                    }
-
-                    bw.write("#\n");
-
-
-                    while (iterator.hasNext()) {
-                        tempCv = ((CvParamImpl) iterator.next());
+                    for (int i = 0; i < tempSampleCvParameters.size(); i++) {
+                        CvParamImpl tempCv = (CvParamImpl) tempSampleCvParameters.get(i);
 
                         bw.write("Accession: " + tempCv.getAccession() + "\n");
                         bw.write("CVLookup: " + tempCv.getCVLookup() + "\n");
@@ -378,10 +372,10 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
         boolean quantificationSelected = false;
 
-        for (int i = 0; i < sampleDetailsJTable.getRowCount(); i++) {
+        for (int i = 0; i < multipleSamplesDetailsJTable.getRowCount(); i++) {
 
-            if (sampleDetailsJTable.getValueAt(i, 2) != null) {
-                if (!((String) sampleDetailsJTable.getValueAt(i, 2)).equalsIgnoreCase("None")) {
+            if (multipleSamplesDetailsJTable.getValueAt(i, 2) != null) {
+                if (!((String) multipleSamplesDetailsJTable.getValueAt(i, 2)).equalsIgnoreCase("None")) {
                     quantificationSelected = true;
                 }
             }
@@ -474,7 +468,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
      * Enables the Next button if a valid sample set is selected.
      */
     private void mandatoryFieldsCheck() {
-        if (sampleDetailsJTable.getRowCount() > 0) {
+        if (singleSampleDetailsJTable.getRowCount() > 0 || multipleSamplesDetailsJTable.getRowCount() > 0) {
             nextJButton.setEnabled(true);
         } else {
             nextJButton.setEnabled(false);
@@ -507,12 +501,27 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         deleteSelectedRowJMenuItem = new javax.swing.JMenuItem();
         popupMenu = new javax.swing.JPopupMenu();
         deleteJMenuItem = new javax.swing.JMenuItem();
+        popupMultipleSamplesJMenu = new javax.swing.JPopupMenu();
+        editMultipleSamplesJMenuItem = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JSeparator();
+        moveUpMultipleSamplesJMenuItem = new javax.swing.JMenuItem();
+        moveDownMultipleSamplesJMenuItem = new javax.swing.JMenuItem();
+        jSeparator6 = new javax.swing.JSeparator();
+        deleteSelectedRowMultipleSamplesJMenuItem = new javax.swing.JMenuItem();
+        popupDeleteMultipleSamplesJMenu = new javax.swing.JPopupMenu();
+        deleteMultipleSamplesJMenuItem = new javax.swing.JMenuItem();
         nextJButton = new javax.swing.JButton();
         backJButton = new javax.swing.JButton();
         cancelJButton = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
+        jLabel32 = new javax.swing.JLabel();
+        namesJComboBox = new javax.swing.JComboBox();
+        deleteJButton = new javax.swing.JButton();
+        sampleJTabbedPane = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        sampleDetailsJTable = new JTable() {
+        singleSampleDetailsJTable = new JTable() {
             protected JTableHeader createDefaultTableHeader() {
                 return new JTableHeader(columnModel) {
                     public String getToolTipText(MouseEvent e) {
@@ -527,14 +536,24 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             }
         };
         sampleDetailsJButton = new javax.swing.JButton();
-        jLabel32 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        namesJComboBox = new javax.swing.JComboBox();
-        deleteJButton = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        helpJButton = new javax.swing.JButton();
-        aboutJButton = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        multipleSamplesDetailsJTable = new JTable() {
+            protected JTableHeader createDefaultTableHeader() {
+                return new JTableHeader(columnModel) {
+                    public String getToolTipText(MouseEvent e) {
+                        String tip = null;
+                        java.awt.Point p = e.getPoint();
+                        int index = columnModel.getColumnIndexAtX(p.x);
+                        int realIndex = columnModel.getColumn(index).getModelIndex();
+                        tip = (String) columnToolTips.get(realIndex);
+                        return tip;
+                    }
+                };
+            }
+        };
+        addSampleJButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         lowerRangeJLabel = new javax.swing.JLabel();
         lowerRangeJTextField = new javax.swing.JTextField();
@@ -545,6 +564,10 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         intensityThresholdJTextField = new javax.swing.JTextField();
         purityCorrectionsJLabel = new javax.swing.JLabel();
         purityCorrectionsJTextField = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        helpJButton = new javax.swing.JButton();
+        aboutJButton = new javax.swing.JButton();
 
         editJMenuItem.setMnemonic('E');
         editJMenuItem.setText("Edit");
@@ -591,6 +614,51 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         });
         popupMenu.add(deleteJMenuItem);
 
+        editMultipleSamplesJMenuItem.setMnemonic('E');
+        editMultipleSamplesJMenuItem.setText("Edit");
+        editMultipleSamplesJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editMultipleSamplesJMenuItemActionPerformed(evt);
+            }
+        });
+        popupMultipleSamplesJMenu.add(editMultipleSamplesJMenuItem);
+        popupMultipleSamplesJMenu.add(jSeparator5);
+
+        moveUpMultipleSamplesJMenuItem.setMnemonic('U');
+        moveUpMultipleSamplesJMenuItem.setText("Move Up");
+        moveUpMultipleSamplesJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                moveUpMultipleSamplesJMenuItemActionPerformed(evt);
+            }
+        });
+        popupMultipleSamplesJMenu.add(moveUpMultipleSamplesJMenuItem);
+
+        moveDownMultipleSamplesJMenuItem.setMnemonic('D');
+        moveDownMultipleSamplesJMenuItem.setText("Move Down");
+        moveDownMultipleSamplesJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                moveDownMultipleSamplesJMenuItemActionPerformed(evt);
+            }
+        });
+        popupMultipleSamplesJMenu.add(moveDownMultipleSamplesJMenuItem);
+        popupMultipleSamplesJMenu.add(jSeparator6);
+
+        deleteSelectedRowMultipleSamplesJMenuItem.setText("Delete");
+        deleteSelectedRowMultipleSamplesJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteSelectedRowMultipleSamplesJMenuItemActionPerformed(evt);
+            }
+        });
+        popupMultipleSamplesJMenu.add(deleteSelectedRowMultipleSamplesJMenuItem);
+
+        deleteMultipleSamplesJMenuItem.setText("Delete Sample Set");
+        deleteMultipleSamplesJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteMultipleSamplesJMenuItemActionPerformed(evt);
+            }
+        });
+        popupDeleteMultipleSamplesJMenu.add(deleteMultipleSamplesJMenuItem);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Sample Properties - Step 4 of 8");
         setResizable(false);
@@ -624,58 +692,9 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             }
         });
 
-        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Samples Set", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
-
-        sampleDetailsJTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                " ", "CV Terms", "Quantification"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, true
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        sampleDetailsJTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                sampleDetailsJTableMouseClicked(evt);
-            }
-        });
-        sampleDetailsJTable.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                sampleDetailsJTableKeyReleased(evt);
-            }
-        });
-        jScrollPane3.setViewportView(sampleDetailsJTable);
-
-        sampleDetailsJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/ols_transparent.GIF"))); // NOI18N
-        sampleDetailsJButton.setText("Add Sample");
-        sampleDetailsJButton.setEnabled(false);
-        sampleDetailsJButton.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        sampleDetailsJButton.setPreferredSize(new java.awt.Dimension(159, 23));
-        sampleDetailsJButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sampleDetailsJButtonActionPerformed(evt);
-            }
-        });
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Samples Set", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
         jLabel32.setText("Name:");
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 2, 11));
-        jLabel2.setText("Preferred Ontologies are: NEWT for species, BTO for tissue, CTO for cell type, GO and DO for disease state");
 
         namesJComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -705,60 +724,131 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             }
         });
 
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+        jLabel2.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jLabel2.setText("Preferred Ontologies are: NEWT for species, BTO for tissue, CTO for cell type, GO and DO for disease state");
+
+        singleSampleDetailsJTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                " ", "CV Terms", "Values"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        singleSampleDetailsJTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                singleSampleDetailsJTableMouseClicked(evt);
+            }
+        });
+        singleSampleDetailsJTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                singleSampleDetailsJTableKeyReleased(evt);
+            }
+        });
+        jScrollPane3.setViewportView(singleSampleDetailsJTable);
+
+        sampleDetailsJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/ols_transparent.GIF"))); // NOI18N
+        sampleDetailsJButton.setText("Add Sample CV Term");
+        sampleDetailsJButton.setEnabled(false);
+        sampleDetailsJButton.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        sampleDetailsJButton.setPreferredSize(new java.awt.Dimension(159, 23));
+        sampleDetailsJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sampleDetailsJButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
-                    .addComponent(sampleDetailsJButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel8Layout.createSequentialGroup()
-                        .addComponent(jLabel32)
-                        .addGap(18, 18, 18)
-                        .addComponent(namesJComboBox, 0, 446, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(deleteJButton))
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(sampleDetailsJButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel32)
-                    .addComponent(deleteJButton)
-                    .addComponent(namesJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(sampleDetailsJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 2, 11));
-        jLabel3.setText("Select a sample set from the list, or create your own, and click on 'Next' to continue.");
+        sampleJTabbedPane.addTab("Single Sample", jPanel1);
 
-        helpJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/help.GIF"))); // NOI18N
-        helpJButton.setToolTipText("Help");
-        helpJButton.addActionListener(new java.awt.event.ActionListener() {
+        jLabel4.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jLabel4.setText("Preferred Ontologies are: NEWT for species, BTO for tissue, CTO for cell type, GO and DO for disease state");
+
+        multipleSamplesDetailsJTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                " ", "CV Terms", "Quantification"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        multipleSamplesDetailsJTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                multipleSamplesDetailsJTableMouseClicked(evt);
+            }
+        });
+        multipleSamplesDetailsJTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                multipleSamplesDetailsJTableKeyReleased(evt);
+            }
+        });
+        jScrollPane4.setViewportView(multipleSamplesDetailsJTable);
+
+        addSampleJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/ols_transparent.GIF"))); // NOI18N
+        addSampleJButton.setText("Add Sample");
+        addSampleJButton.setEnabled(false);
+        addSampleJButton.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        addSampleJButton.setPreferredSize(new java.awt.Dimension(159, 23));
+        addSampleJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                helpJButtonActionPerformed(evt);
+                addSampleJButtonActionPerformed(evt);
             }
         });
 
-        aboutJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF"))); // NOI18N
-        aboutJButton.setToolTipText("About");
-        aboutJButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                aboutJButtonActionPerformed(evt);
-            }
-        });
-
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Quantification Parameters", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Quantification Parameters", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
         lowerRangeJLabel.setText("Peak Integration Range Lower:");
         lowerRangeJLabel.setEnabled(false);
@@ -809,14 +899,14 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(intensityThresholdJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
-                            .addComponent(upperRangeJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
-                            .addComponent(lowerRangeJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))
+                            .addComponent(intensityThresholdJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                            .addComponent(upperRangeJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                            .addComponent(lowerRangeJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addComponent(peakRangeJLabel)
                         .addGap(90, 90, 90))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(purityCorrectionsJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
+                        .addComponent(purityCorrectionsJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
                         .addContainerGap())))
         );
         jPanel2Layout.setVerticalGroup(
@@ -841,6 +931,82 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
+                    .addComponent(addSampleJButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(addSampleJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        sampleJTabbedPane.addTab("Multiple Samples", jPanel3);
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(sampleJTabbedPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(jLabel32)
+                        .addGap(18, 18, 18)
+                        .addComponent(namesJComboBox, 0, 559, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteJButton)))
+                .addContainerGap())
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel32)
+                    .addComponent(deleteJButton)
+                    .addComponent(namesJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(sampleJTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jLabel3.setText("Select a sample set from the list, or create your own, and click on 'Next' to continue.");
+
+        helpJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/help.GIF"))); // NOI18N
+        helpJButton.setToolTipText("Help");
+        helpJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                helpJButtonActionPerformed(evt);
+            }
+        });
+
+        aboutJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF"))); // NOI18N
+        aboutJButton.setToolTipText("About");
+        aboutJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutJButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -848,19 +1014,18 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(helpJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(aboutJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 239, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 352, Short.MAX_VALUE)
                         .addComponent(backJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(nextJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(cancelJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
                 .addContainerGap())
         );
@@ -869,8 +1034,6 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -901,18 +1064,18 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
      * 
      * @param evt
      */
-    private void sampleDetailsJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sampleDetailsJTableMouseClicked
+    private void singleSampleDetailsJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_singleSampleDetailsJTableMouseClicked
         if (evt.getButton() == 3) {
 
-            int row = sampleDetailsJTable.rowAtPoint(evt.getPoint());
-            int column = sampleDetailsJTable.columnAtPoint(evt.getPoint());
+            int row = singleSampleDetailsJTable.rowAtPoint(evt.getPoint());
+            int column = singleSampleDetailsJTable.columnAtPoint(evt.getPoint());
 
-            sampleDetailsJTable.changeSelection(row, column, false, false);
+            singleSampleDetailsJTable.changeSelection(row, column, false, false);
 
             this.moveUpJMenuItem.setEnabled(true);
             this.moveDownJMenuItem.setEnabled(true);
 
-            if (row == sampleDetailsJTable.getRowCount() - 1) {
+            if (row == singleSampleDetailsJTable.getRowCount() - 1) {
                 this.moveDownJMenuItem.setEnabled(false);
             }
 
@@ -924,7 +1087,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         } else if (evt.getButton() == 1 && evt.getClickCount() == 2) {
             editJMenuItemActionPerformed(null);
         }
-    }//GEN-LAST:event_sampleDetailsJTableMouseClicked
+}//GEN-LAST:event_singleSampleDetailsJTableMouseClicked
 
     /**
      * Delete the selected sample.
@@ -933,56 +1096,42 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
      */
     private void deleteSelectedRowJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSelectedRowJMenuItemActionPerformed
 
-        int selectedRow = sampleDetailsJTable.getSelectedRow();
+        int selectedRow = singleSampleDetailsJTable.getSelectedRow();
 
         if (selectedRow != -1) {
 
-            prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().remove(selectedRow);
+            //prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().remove(selectedRow);
 
-            ((DefaultTableModel) sampleDetailsJTable.getModel()).removeRow(selectedRow);
+            ((DefaultTableModel) singleSampleDetailsJTable.getModel()).removeRow(selectedRow);
 
             //remove from datastructure as well
-            Object[] sampleDetails = prideConverter.getProperties().getSampleDescriptionCVParams().toArray();
+            Object[] sampleCvParameters = tempSampleCvParameters.toArray();
 
-            prideConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
+            tempSampleCvParameters = new Vector();
 
-            String tempRow;
-            Vector subSampleNumbers = new Vector();
+            CvParamImpl tempCvParam;
 
-            for (int i = 0; i < sampleDetailsJTable.getRowCount(); i++) {
-                tempRow = (String) sampleDetailsJTable.getValueAt(i, 1);
-
-                for (int j = 0; j < tempRow.length(); j++) {
-                    if (tempRow.charAt(j) == ']') {
-                        subSampleNumbers.add("SUBSAMPLE_" + (i + 1));
-                    //System.out.println("SUBSAMPLE_" + (i+1));
-                    }
-                }
-            }
-
-            CvParamImpl tempCvParamImpl;
             int counter = 0;
 
-            for (int i = 0; i < sampleDetails.length; i++) {
+            for (int i = 0; i <
+                    sampleCvParameters.length; i++) {
 
-                tempCvParamImpl = (CvParamImpl) sampleDetails[i];
+                if (i != selectedRow) {
+                    tempCvParam = (CvParamImpl) sampleCvParameters[i];
+                    tempCvParam =
+                            new CvParamImpl(tempCvParam.getAccession(),
+                            tempCvParam.getCVLookup(),
+                            tempCvParam.getName(),
+                            new Long(counter++),
+                            tempCvParam.getValue());
 
-                if (!tempCvParamImpl.getValue().endsWith("_" +
-                        (selectedRow + 1))) {
-
-                    tempCvParamImpl = new CvParamImpl(tempCvParamImpl.getAccession(),
-                            tempCvParamImpl.getCVLookup(),
-                            tempCvParamImpl.getName(),
-                            new Long(counter),
-                            (String) subSampleNumbers.get(counter++));
-
-                    prideConverter.getProperties().getSampleDescriptionCVParams().add(tempCvParamImpl);
+                    tempSampleCvParameters.add(tempCvParam);
                 }
             }
 
             valuesChanged = true;
 
-            fixIndices();
+            fixIndicesSingleSampleTable();
             mandatoryFieldsCheck();
         }
     }//GEN-LAST:event_deleteSelectedRowJMenuItemActionPerformed
@@ -993,10 +1142,24 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
      * @param evt
      */
     private void nextJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextJButtonActionPerformed
-        if (saveInsertedInformation()) {
-            new ProtocolDetails(prideConverter, this.getLocation());
-            this.setVisible(false);
-            this.dispose();
+
+        if (singleSampleDetailsJTable.getRowCount() > 0 &&
+                multipleSamplesDetailsJTable.getRowCount() > 0) {
+            JOptionPane.showMessageDialog(this,
+                    "It seems as if you have inserted elements into both\n" +
+                    "the single and multiple samples tables. You can only\n" +
+                    "use one of the sample types at the time. Please delete\n" +
+                    "all rows in the table from the sample type you do not\n" +
+                    "want to use before continuing to the next step.",
+                    "Verify Inserted Sample Details",
+                    JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            if (saveInsertedInformation()) {
+                new ProtocolDetails(prideConverter, this.getLocation());
+                this.setVisible(false);
+                this.dispose();
+            }
         }
     }//GEN-LAST:event_nextJButtonActionPerformed
 
@@ -1031,7 +1194,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
      */
     private void sampleDetailsJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleDetailsJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new NewSample(this, true, prideConverter);
+        new OLSDialog(this, true, "singleSample", prideConverter.getUserProperties().getLastSelectedSampleOntology(), null);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_sampleDetailsJButtonActionPerformed
 
@@ -1041,10 +1204,24 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
      * @param evt
      */
     private void editJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editJMenuItemActionPerformed
-        int selectedRow = sampleDetailsJTable.getSelectedRow();
+        int selectedRow = singleSampleDetailsJTable.getSelectedRow();
+
+        String searchTerm = (String) singleSampleDetailsJTable.getValueAt(selectedRow, 1);
+        searchTerm = searchTerm.substring(0, searchTerm.indexOf("[") - 1);
+
+        searchTerm = searchTerm.replaceAll("-", " ");
+        searchTerm = searchTerm.replaceAll(":", " ");
+        searchTerm = searchTerm.replaceAll("\\(", " ");
+        searchTerm = searchTerm.replaceAll("\\)", " ");
+        searchTerm = searchTerm.replaceAll("&", " ");
+        searchTerm = searchTerm.replaceAll("\\+", " ");
+        searchTerm = searchTerm.replaceAll("\\[", " ");
+        searchTerm = searchTerm.replaceAll("\\]", " ");
+
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new NewSample(this, true, prideConverter, selectedRow);
+        new OLSDialog(this, true, "singleSample", prideConverter.getUserProperties().getLastSelectedSampleOntology(), selectedRow, searchTerm);
+        //new NewSample(this, true, prideConverter, selectedRow);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_editJMenuItemActionPerformed
 
@@ -1054,21 +1231,624 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
      * @param evt
      */
     private void moveUpJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveUpJMenuItemActionPerformed
-        int selectedRow = sampleDetailsJTable.getSelectedRow();
-        int selectedColumn = sampleDetailsJTable.getSelectedColumn();
+        int selectedRow = singleSampleDetailsJTable.getSelectedRow();
+        int selectedColumn = singleSampleDetailsJTable.getSelectedColumn();
 
         Object[] tempRow = new Object[]{
-            sampleDetailsJTable.getValueAt(selectedRow - 1, 0),
-            sampleDetailsJTable.getValueAt(selectedRow - 1, 1),
-            sampleDetailsJTable.getValueAt(selectedRow - 1, 2)
+            singleSampleDetailsJTable.getValueAt(selectedRow - 1, 0),
+            singleSampleDetailsJTable.getValueAt(selectedRow - 1, 1),
+            singleSampleDetailsJTable.getValueAt(selectedRow - 1, 2)
         };
 
-        ((DefaultTableModel) sampleDetailsJTable.getModel()).removeRow(selectedRow - 1);
-        ((DefaultTableModel) sampleDetailsJTable.getModel()).insertRow(selectedRow, tempRow);
+        ((DefaultTableModel) singleSampleDetailsJTable.getModel()).removeRow(selectedRow - 1);
+        ((DefaultTableModel) singleSampleDetailsJTable.getModel()).insertRow(selectedRow, tempRow);
 
-        sampleDetailsJTable.changeSelection(selectedRow - 1, selectedColumn, false, false);
+        singleSampleDetailsJTable.changeSelection(selectedRow - 1, selectedColumn, false, false);
 
-        fixIndices();
+        fixIndicesSingleSampleTable();
+
+        valuesChanged = true;
+
+        //move in data structure as well
+        CvParamImpl temp = (CvParamImpl) tempSampleCvParameters.get(selectedRow - 1);
+        tempSampleCvParameters.setElementAt(tempSampleCvParameters.get(selectedRow), selectedRow - 1);
+        tempSampleCvParameters.setElementAt(temp, selectedRow);
+}//GEN-LAST:event_moveUpJMenuItemActionPerformed
+
+    /**
+     * Moves the selected sample down one position in the table.
+     * 
+     * @param evt
+     */
+    private void moveDownJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveDownJMenuItemActionPerformed
+        int selectedRow = singleSampleDetailsJTable.getSelectedRow();
+        int selectedColumn = singleSampleDetailsJTable.getSelectedColumn();
+
+        Object[] tempRow = new Object[]{
+            singleSampleDetailsJTable.getValueAt(selectedRow + 1, 0),
+            singleSampleDetailsJTable.getValueAt(selectedRow + 1, 1),
+            singleSampleDetailsJTable.getValueAt(selectedRow + 1, 2)
+        };
+
+        ((DefaultTableModel) singleSampleDetailsJTable.getModel()).removeRow(selectedRow + 1);
+        ((DefaultTableModel) singleSampleDetailsJTable.getModel()).insertRow(selectedRow, tempRow);
+
+        singleSampleDetailsJTable.changeSelection(selectedRow + 1, selectedColumn, false, false);
+
+        fixIndicesSingleSampleTable();
+
+        valuesChanged = true;
+
+        //move in data structure as well
+        CvParamImpl temp = (CvParamImpl) tempSampleCvParameters.get(selectedRow + 1);
+        tempSampleCvParameters.setElementAt(tempSampleCvParameters.get(selectedRow), selectedRow + 1);
+        tempSampleCvParameters.setElementAt(temp, selectedRow);
+}//GEN-LAST:event_moveDownJMenuItemActionPerformed
+
+    /**
+     * See cancelJButtonActionPerformed
+     * 
+     * @param evt
+     */
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        cancelJButtonActionPerformed(null);
+    }//GEN-LAST:event_formWindowClosing
+
+    /**
+     * Opens a help frame.
+     * 
+     * @param evt
+     */
+    private void helpJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpJButtonActionPerformed
+        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        new HelpWindow(this, getClass().getResource("/no/uib/prideconverter/helpfiles/SampleDetails.html"));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_helpJButtonActionPerformed
+
+    /**
+     * Right clicking in the combo box opens a popup menu where the selected 
+     * sample set can be deleted.
+     * 
+     * @param evt
+     */
+    private void namesJComboBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_namesJComboBoxMouseClicked
+        if (evt.getButton() == 3) {
+
+            if (namesJComboBox.getSelectedIndex() != 0 &&
+                    namesJComboBox.getSelectedIndex() !=
+                    namesJComboBox.getItemCount() - 1) {
+
+                popupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+            }
+        }
+    }//GEN-LAST:event_namesJComboBoxMouseClicked
+
+    /**
+     * Sets the current sample set to the set selected in the combo box.
+     * 
+     * @param evt
+     */
+    private void namesJComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_namesJComboBoxItemStateChanged
+        prideConverter.getUserProperties().setCurrentSampleSet((String) namesJComboBox.getSelectedItem());
+        mandatoryFieldsCheck();
+    }//GEN-LAST:event_namesJComboBoxItemStateChanged
+
+    private void saveSample(String filePath, String sampleName) {
+
+        try {
+
+            FileWriter r = new FileWriter(filePath);
+            BufferedWriter bw = new BufferedWriter(r);
+
+            bw.write("Name: " + sampleName + "\n");
+
+            if (multipleSamplesDetailsJTable.getRowCount() > 0) { // multiple samples
+
+                Iterator iterator = prideConverter.getProperties().getSampleDescriptionCVParams().iterator();
+
+                CvParamImpl temp;
+
+                bw.write(prideConverter.getProperties().getSampleDescriptionCVParams().size() + "\n");
+
+                for (int i = 0; i < prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().size(); i++) {
+                    bw.write(prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(i) + "\n");
+                }
+
+                bw.write("#\n");
+
+                while (iterator.hasNext()) {
+                    temp = ((CvParamImpl) iterator.next());
+
+                    bw.write("Accession: " + temp.getAccession() + "\n");
+                    bw.write("CVLookup: " + temp.getCVLookup() + "\n");
+                    bw.write("Name: " + temp.getName() + "\n");
+                    bw.write("Value: " + temp.getValue() + "\n\n");
+                }
+            } else { // single sample
+
+                prideConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
+                prideConverter.getProperties().setSampleDescriptionUserSubSampleNames(new ArrayList());
+
+                bw.write(tempSampleCvParameters.size() + "\n");
+                bw.write("Name: " + sampleName + "\n");
+                bw.write("#\n");
+
+                for (int i = 0; i < tempSampleCvParameters.size(); i++) {
+
+                    CvParamImpl temp = ((CvParamImpl) tempSampleCvParameters.get(i));
+
+                    String value = null;
+
+                    if (singleSampleDetailsJTable.getValueAt(i, 2) != null) {
+                        value = (String) singleSampleDetailsJTable.getValueAt(i, 2);
+                    }
+
+                    bw.write("Accession: " + temp.getAccession() + "\n");
+                    bw.write("CVLookup: " + temp.getCVLookup() + "\n");
+                    bw.write("Name: " + temp.getName() + "\n");
+                    bw.write("Value: " + value + "\n\n");
+
+                    prideConverter.getProperties().getSampleDescriptionCVParams().add(
+                            new CvParamImpl(temp.getAccession(),
+                            temp.getCVLookup(),
+                            temp.getName(),
+                            i,
+                            value));
+                }
+            }
+
+            bw.close();
+            r.close();
+
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "The file " + filePath + " could not be found.",
+                    "File Not Found", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to save file: ");
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this, "An error occured when trying to save the file " + filePath + ".",
+                    "File Error", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error when trying to save file: ");
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * If the information as been altered, the option to store the data will 
+     * be given. Then the information about the selected sample set will be 
+     * retrieved.
+     * 
+     * @param evt
+     */
+    private void namesJComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_namesJComboBoxActionPerformed
+
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+
+        boolean cancel = false;
+
+        if (valuesChanged) {
+
+            int value = JOptionPane.showConfirmDialog(this,
+                    "The sample set has been changed. Do you want to save this for later use?",
+                    "Sample Set Changed", JOptionPane.YES_NO_CANCEL_OPTION);
+
+            if (value == JOptionPane.YES_OPTION) {
+
+                value = JOptionPane.showConfirmDialog(this,
+                        "Overwrite existing sample set?",
+                        "Overwrite?", JOptionPane.YES_NO_CANCEL_OPTION);
+
+                if (value == JOptionPane.YES_OPTION) {
+
+                    String newName;
+                    newName = samplePath + lastSelectedSampleName + ".sam";
+
+                    saveSample(newName, lastSelectedSampleName);
+
+                } else if (value == JOptionPane.CANCEL_OPTION) {
+                    cancel = true;
+
+                    namesJComboBox.setSelectedItem(lastSelectedSampleName);
+
+                } else { //value == NO
+
+                    String newSampleName = JOptionPane.showInputDialog(this,
+                            "Please provide the name of the new sample set: ",
+                            "Sample Set Name", JOptionPane.PLAIN_MESSAGE);
+
+                    if (newSampleName != null) {
+
+                        String newName;
+                        newName = samplePath + newSampleName + ".sam";
+
+                        while (new File(newName).exists()) {
+                            newSampleName = JOptionPane.showInputDialog(this,
+                                    "This name is already in use. Please provide a different name: ",
+                                    "Sample Set Name", JOptionPane.PLAIN_MESSAGE);
+
+                            newName = samplePath + newSampleName + ".sam";
+                        }
+
+                        if (newSampleName != null) {
+
+                            prideConverter.getProperties().setSampleDescriptionCVParamsQuantification(new ArrayList());
+                            prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+
+                            saveSample(newName, newSampleName);
+
+                            valuesChanged = false;
+
+                            namesJComboBox.insertItemAt(newSampleName, namesJComboBox.getItemCount() - 2);
+                        } else {
+                            cancel = true;
+                            namesJComboBox.setSelectedItem(lastSelectedSampleName);
+                            prideConverter.getUserProperties().setCurrentSampleSet(lastSelectedSampleName);
+                        }
+                    } else {
+                        cancel = true;
+                        namesJComboBox.setSelectedItem(lastSelectedSampleName);
+                        prideConverter.getUserProperties().setCurrentSampleSet(lastSelectedSampleName);
+                    }
+                }
+            } else if (value == JOptionPane.CANCEL_OPTION) {
+                cancel = true;
+                namesJComboBox.setSelectedItem(lastSelectedSampleName);
+                prideConverter.getUserProperties().setCurrentSampleSet(lastSelectedSampleName);
+            }
+        }
+
+        if (!cancel) {
+
+            lastSelectedSampleName = (String) namesJComboBox.getSelectedItem();
+            String selectedSampleName = (String) namesJComboBox.getSelectedItem();
+
+            prideConverter.getUserProperties().setCurrentSampleSet(selectedSampleName);
+
+            //empty the tables
+            while (singleSampleDetailsJTable.getRowCount() > 0) {
+                ((DefaultTableModel) singleSampleDetailsJTable.getModel()).removeRow(0);
+            }
+
+            while (multipleSamplesDetailsJTable.getRowCount() > 0) {
+                ((DefaultTableModel) multipleSamplesDetailsJTable.getModel()).removeRow(0);
+            }
+
+            prideConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
+            prideConverter.getProperties().setSampleDescriptionUserSubSampleNames(new ArrayList());
+
+            if (namesJComboBox.getSelectedIndex() == 0) {
+                sampleDetailsJButton.setEnabled(false);
+                addSampleJButton.setEnabled(false);
+                valuesChanged = false;
+                prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+            } else if (namesJComboBox.getSelectedIndex() == namesJComboBox.getItemCount() - 1) {
+
+                sampleDetailsJButton.setEnabled(false);
+                addSampleJButton.setEnabled(false);
+                valuesChanged = false;
+                prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+
+                ComboBoxInputDialog input = new ComboBoxInputDialog(this, this, true);
+                input.setTitle("Create New Sample Set");
+                input.setBorderTitle("New Sample Set");
+                input.setVisible(true);
+            } else {
+
+                if (!keepQuantificationSelection) {
+                    prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+                }
+
+                sampleDetailsJButton.setEnabled(true);
+                addSampleJButton.setEnabled(true);
+
+                selectedSampleName = samplePath + selectedSampleName + ".sam";
+
+                try {
+                    String temp;
+
+                    FileReader f = new FileReader(selectedSampleName);
+                    BufferedReader b = new BufferedReader(f);
+
+                    tempSampleCvParameters = new Vector();
+
+                    String line = b.readLine();
+
+                    boolean multipleSamples = false;
+
+                    while (line != null && !multipleSamples) {
+
+                        if (line.lastIndexOf("SUBSAMPLE_2") != -1) {
+                            multipleSamples = true;
+                        }
+
+                        line = b.readLine();
+                    }
+
+                    if (multipleSamples) {
+                        sampleJTabbedPane.setSelectedIndex(1);
+                    } else {
+                        sampleJTabbedPane.setSelectedIndex(0);
+                    }
+
+
+                    f = new FileReader(selectedSampleName);
+                    b = new BufferedReader(f);
+
+                    b.readLine();
+
+                    int numberOfCVTerms;
+
+                    Vector names, accessions, ontologies, values;
+                    String subSampleName;
+
+                    numberOfCVTerms = new Integer(b.readLine()).intValue();
+
+                    subSampleName = b.readLine();
+
+                    if (subSampleName != null) {
+                        while (!subSampleName.equalsIgnoreCase("#")) {
+
+                            if (multipleSamples) {
+                                prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().add(subSampleName);
+                            }
+
+                            subSampleName = b.readLine();
+                        }
+                    }
+
+                    names = new Vector();
+                    accessions = new Vector();
+                    ontologies = new Vector();
+                    values = new Vector();
+                    String name, accession, ontology, value;
+
+                    String subSampleNumber = "SUBSAMPLE_1";
+                    //String currentSubSampleNumber = "";
+
+                    for (int i = 0; i < numberOfCVTerms; i++) {
+
+                        temp = b.readLine();
+                        accession = temp.substring(temp.indexOf(": ") + 2);
+                        temp = b.readLine();
+                        ontology = temp.substring(temp.indexOf(": ") + 2);
+                        temp = b.readLine();
+                        name = temp.substring(temp.indexOf(": ") + 2);
+                        temp = b.readLine();
+                        value = temp.substring(temp.indexOf(": ") + 2);
+                        b.readLine();
+
+                        if (multipleSamples) {
+                            if (!value.equalsIgnoreCase(subSampleNumber)) {
+                                addSampleDetails(null, names, accessions, ontologies, -1);
+
+                                names = new Vector();
+                                accessions = new Vector();
+                                ontologies = new Vector();
+                                values = new Vector();
+
+                                names.add(name);
+                                accessions.add(accession);
+                                ontologies.add(ontology);
+                                values.add(value);
+
+                                subSampleNumber = value;
+                            } else {
+                                names.add(name);
+                                accessions.add(accession);
+                                ontologies.add(ontology);
+                                values.add(value);
+                            }
+                        } else {
+
+                            if (value.lastIndexOf("SUBSAMPLE_") != -1) {
+                                value = null;
+                            } else if (value.equalsIgnoreCase("null")) {
+                                value = null;
+                            }
+
+                            addSampleDetails(name, accession, ontology, value, -1);
+                        }
+                    }
+
+                    if (names.size() > 0) {
+                        addSampleDetails(null, names, accessions, ontologies, -1);
+                    }
+
+                    if (prideConverter.getProperties().getCurrentQuantificationSelection().size() > 0) {
+                        for (int i = 0; i < prideConverter.getProperties().getCurrentQuantificationSelection().size(); i++) {
+                            multipleSamplesDetailsJTable.setValueAt(prideConverter.getProperties().getCurrentQuantificationSelection().get(i), i, 2);
+                        }
+                    }
+
+                    quantificationComboBoxActionPerformed(null);
+
+                    b.close();
+                    f.close();
+
+                } catch (FileNotFoundException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "The file " + selectedSampleName + " could not be found.",
+                            "File Not Found", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to read file: ");
+                    ex.printStackTrace();
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(
+                            this, "An error occured when trying to read the file " + selectedSampleName + ".",
+                            "File Error", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when trying to read file: ");
+                    ex.printStackTrace();
+                }
+
+                valuesChanged = false;
+            }
+
+            mandatoryFieldsCheck();
+        }
+
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_namesJComboBoxActionPerformed
+
+    /**
+     * Delete the selected sample set.
+     * 
+     * @param evt
+     */
+    private void deleteJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteJMenuItemActionPerformed
+
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+
+        int option = JOptionPane.showConfirmDialog(this, "This will delete the selected sample set. Continue?");
+
+        if (option == JOptionPane.YES_OPTION) {
+
+            String newName = samplePath +
+                    (String) namesJComboBox.getSelectedItem() + ".sam";
+
+            boolean deleted = new File(newName).delete();
+
+            prideConverter.getProperties().setSampleDescriptionCVParamsQuantification(new ArrayList());
+
+            if (!deleted) {
+                JOptionPane.showMessageDialog(this, "The file could not be deleted!");
+                System.out.println("newName: " + newName);
+            } else {
+                lastSelectedSampleName = null;
+                valuesChanged = false;
+                readSamplesFromFile();
+            }
+        }
+
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_deleteJMenuItemActionPerformed
+
+    /**
+     * Opens an About PRIDE Converter dialog.
+     * 
+     * @param evt
+     */
+    private void aboutJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutJButtonActionPerformed
+        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        new HelpWindow(this, getClass().getResource("/no/uib/prideconverter/helpfiles/AboutPRIDE_Converter.html"));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_aboutJButtonActionPerformed
+
+    /**
+     * Deletes the selected sample set.
+     * 
+     * @param evt
+     */
+    private void deleteJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteJButtonActionPerformed
+        if (namesJComboBox.getSelectedIndex() != 0 &&
+                namesJComboBox.getSelectedIndex() !=
+                namesJComboBox.getItemCount() - 1 &&
+                namesJComboBox.getSelectedIndex() != -1) {
+
+            deleteJMenuItemActionPerformed(null);
+        }
+    }//GEN-LAST:event_deleteJButtonActionPerformed
+
+    /**
+     * If the delete key is pressed the selected row in the table are deleted.
+     * 
+     * @param evt
+     */
+    private void singleSampleDetailsJTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_singleSampleDetailsJTableKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
+            deleteSelectedRowJMenuItemActionPerformed(null);
+        }
+}//GEN-LAST:event_singleSampleDetailsJTableKeyReleased
+
+    /**
+     * If the user double clicks on a row in the table the OLS
+     * dialog is shown where the information about the given sample can be
+     * altered. If the user right clicks a pop up menu is shown for editing,
+     * moving or delting the selected sample.
+     *
+     * @param evt
+     */
+    private void multipleSamplesDetailsJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_multipleSamplesDetailsJTableMouseClicked
+        if (evt.getButton() == 3) {
+
+            int row = multipleSamplesDetailsJTable.rowAtPoint(evt.getPoint());
+            int column = multipleSamplesDetailsJTable.columnAtPoint(evt.getPoint());
+
+            multipleSamplesDetailsJTable.changeSelection(row, column, false, false);
+
+            this.moveUpMultipleSamplesJMenuItem.setEnabled(true);
+            this.moveDownMultipleSamplesJMenuItem.setEnabled(true);
+
+            if (row == multipleSamplesDetailsJTable.getRowCount() - 1) {
+                this.moveDownMultipleSamplesJMenuItem.setEnabled(false);
+            }
+
+            if (row == 0) {
+                this.moveUpMultipleSamplesJMenuItem.setEnabled(false);
+            }
+
+            popupMultipleSamplesJMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+        } else if (evt.getButton() == 1 && evt.getClickCount() == 2) {
+            editMultipleSamplesJMenuItemActionPerformed(null);
+        }
+}//GEN-LAST:event_multipleSamplesDetailsJTableMouseClicked
+
+    /**
+     * If the delete key is pressed the selected row in the table are deleted.
+     *
+     * @param evt
+     */
+    private void multipleSamplesDetailsJTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_multipleSamplesDetailsJTableKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
+            deleteSelectedRowMultipleSamplesJMenuItemActionPerformed(null);
+        }
+}//GEN-LAST:event_multipleSamplesDetailsJTableKeyReleased
+
+    /**
+     * Opens a dialog where informaton about a sample can be inserted.
+     *
+     * @param evt
+     */
+    private void addSampleJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSampleJButtonActionPerformed
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        new NewSample(this, true, prideConverter);
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+}//GEN-LAST:event_addSampleJButtonActionPerformed
+
+    /**
+     * Opens a dialog where informaton about the selected sample can be edited.
+     *
+     * @param evt
+     */
+    private void editMultipleSamplesJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMultipleSamplesJMenuItemActionPerformed
+        int selectedRow = multipleSamplesDetailsJTable.getSelectedRow();
+
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        new NewSample(this, true, prideConverter, selectedRow);
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+}//GEN-LAST:event_editMultipleSamplesJMenuItemActionPerformed
+
+    /**
+     * Moves the selected sample up one position in the table.
+     *
+     * @param evt
+     */
+    private void moveUpMultipleSamplesJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveUpMultipleSamplesJMenuItemActionPerformed
+        int selectedRow = multipleSamplesDetailsJTable.getSelectedRow();
+        int selectedColumn = multipleSamplesDetailsJTable.getSelectedColumn();
+
+        Object[] tempRow = new Object[]{
+            multipleSamplesDetailsJTable.getValueAt(selectedRow - 1, 0),
+            multipleSamplesDetailsJTable.getValueAt(selectedRow - 1, 1),
+            multipleSamplesDetailsJTable.getValueAt(selectedRow - 1, 2)
+        };
+
+        ((DefaultTableModel) multipleSamplesDetailsJTable.getModel()).removeRow(selectedRow - 1);
+        ((DefaultTableModel) multipleSamplesDetailsJTable.getModel()).insertRow(selectedRow, tempRow);
+
+        multipleSamplesDetailsJTable.changeSelection(selectedRow - 1, selectedColumn, false, false);
+
+        fixIndicesMultipleSamplesTable();
 
         valuesChanged = true;
 
@@ -1136,8 +1916,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         String tempTableRow;
         Vector subSampleNumbers = new Vector();
 
-        for (int i = 0; i < sampleDetailsJTable.getRowCount(); i++) {
-            tempTableRow = (String) sampleDetailsJTable.getValueAt(i, 1);
+        for (int i = 0; i < multipleSamplesDetailsJTable.getRowCount(); i++) {
+            tempTableRow = (String) multipleSamplesDetailsJTable.getValueAt(i, 1);
 
             for (int j = 0; j < tempTableRow.length(); j++) {
                 if (tempTableRow.charAt(j) == ']') {
@@ -1158,29 +1938,29 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
             prideConverter.getProperties().getSampleDescriptionCVParams().add(tempCvParamImpl);
         }
-}//GEN-LAST:event_moveUpJMenuItemActionPerformed
+}//GEN-LAST:event_moveUpMultipleSamplesJMenuItemActionPerformed
 
     /**
      * Moves the selected sample down one position in the table.
-     * 
+     *
      * @param evt
      */
-    private void moveDownJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveDownJMenuItemActionPerformed
-        int selectedRow = sampleDetailsJTable.getSelectedRow();
-        int selectedColumn = sampleDetailsJTable.getSelectedColumn();
+    private void moveDownMultipleSamplesJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveDownMultipleSamplesJMenuItemActionPerformed
+        int selectedRow = multipleSamplesDetailsJTable.getSelectedRow();
+        int selectedColumn = multipleSamplesDetailsJTable.getSelectedColumn();
 
         Object[] tempRow = new Object[]{
-            sampleDetailsJTable.getValueAt(selectedRow + 1, 0),
-            sampleDetailsJTable.getValueAt(selectedRow + 1, 1),
-            sampleDetailsJTable.getValueAt(selectedRow + 1, 2)
+            multipleSamplesDetailsJTable.getValueAt(selectedRow + 1, 0),
+            multipleSamplesDetailsJTable.getValueAt(selectedRow + 1, 1),
+            multipleSamplesDetailsJTable.getValueAt(selectedRow + 1, 2)
         };
 
-        ((DefaultTableModel) sampleDetailsJTable.getModel()).removeRow(selectedRow + 1);
-        ((DefaultTableModel) sampleDetailsJTable.getModel()).insertRow(selectedRow, tempRow);
+        ((DefaultTableModel) multipleSamplesDetailsJTable.getModel()).removeRow(selectedRow + 1);
+        ((DefaultTableModel) multipleSamplesDetailsJTable.getModel()).insertRow(selectedRow, tempRow);
 
-        sampleDetailsJTable.changeSelection(selectedRow + 1, selectedColumn, false, false);
+        multipleSamplesDetailsJTable.changeSelection(selectedRow + 1, selectedColumn, false, false);
 
-        fixIndices();
+        fixIndicesMultipleSamplesTable();
 
         valuesChanged = true;
 
@@ -1248,8 +2028,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         String tempTableRow;
         Vector subSampleNumbers = new Vector();
 
-        for (int i = 0; i < sampleDetailsJTable.getRowCount(); i++) {
-            tempTableRow = (String) sampleDetailsJTable.getValueAt(i, 1);
+        for (int i = 0; i < multipleSamplesDetailsJTable.getRowCount(); i++) {
+            tempTableRow = (String) multipleSamplesDetailsJTable.getValueAt(i, 1);
 
             for (int j = 0; j < tempTableRow.length(); j++) {
                 if (tempTableRow.charAt(j) == ']') {
@@ -1270,385 +2050,75 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
             prideConverter.getProperties().getSampleDescriptionCVParams().add(tempCvParamImpl);
         }
-}//GEN-LAST:event_moveDownJMenuItemActionPerformed
+}//GEN-LAST:event_moveDownMultipleSamplesJMenuItemActionPerformed
 
     /**
-     * See cancelJButtonActionPerformed
-     * 
+     * Deletes the selected sample from the table.
+     *
      * @param evt
      */
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        cancelJButtonActionPerformed(null);
-    }//GEN-LAST:event_formWindowClosing
+    private void deleteSelectedRowMultipleSamplesJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSelectedRowMultipleSamplesJMenuItemActionPerformed
 
-    /**
-     * Opens a help frame.
-     * 
-     * @param evt
-     */
-    private void helpJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpJButtonActionPerformed
-        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new HelpWindow(this, getClass().getResource("/no/uib/prideconverter/helpfiles/SampleDetails.html"));
-        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-    }//GEN-LAST:event_helpJButtonActionPerformed
+        int selectedRow = multipleSamplesDetailsJTable.getSelectedRow();
 
-    /**
-     * Right clicking in the combo box opens a popup menu where the selected 
-     * sample set can be deleted.
-     * 
-     * @param evt
-     */
-    private void namesJComboBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_namesJComboBoxMouseClicked
-        if (evt.getButton() == 3) {
+        if (selectedRow != -1) {
 
-            if (namesJComboBox.getSelectedIndex() != 0 &&
-                    namesJComboBox.getSelectedIndex() !=
-                    namesJComboBox.getItemCount() - 1) {
+            prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().remove(selectedRow);
 
-                popupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-            }
-        }
-    }//GEN-LAST:event_namesJComboBoxMouseClicked
+            ((DefaultTableModel) multipleSamplesDetailsJTable.getModel()).removeRow(selectedRow);
 
-    /**
-     * Sets the current sample set to the set selected in the combo box.
-     * 
-     * @param evt
-     */
-    private void namesJComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_namesJComboBoxItemStateChanged
-        prideConverter.getUserProperties().setCurrentSampleSet((String) namesJComboBox.getSelectedItem());
-        mandatoryFieldsCheck();
-    }//GEN-LAST:event_namesJComboBoxItemStateChanged
-
-    /**
-     * If the information as been altered, the option to store the data will 
-     * be given. Then the information about the selected sample set will be 
-     * retrieved.
-     * 
-     * @param evt
-     */
-    private void namesJComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_namesJComboBoxActionPerformed
-
-        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-
-        boolean cancel = false;
-
-        if (valuesChanged) {
-
-            int value = JOptionPane.showConfirmDialog(this,
-                    "The sample set has been changed. Do you want to save this for later use?",
-                    "Sample Set Changed", JOptionPane.YES_NO_CANCEL_OPTION);
-
-            if (value == JOptionPane.YES_OPTION) {
-
-                value = JOptionPane.showConfirmDialog(this,
-                        "Overwrite existing sample set?",
-                        "Overwrite?", JOptionPane.YES_NO_CANCEL_OPTION);
-
-                if (value == JOptionPane.YES_OPTION) {
-
-                    String newName;
-                    newName = samplePath + lastSelectedSampleName + ".sam";
-
-                    try {
-
-                        FileWriter r = new FileWriter(newName);
-                        BufferedWriter bw = new BufferedWriter(r);
-
-                        bw.write("Name: " + lastSelectedSampleName + "\n");
-                        Iterator iterator = prideConverter.getProperties().getSampleDescriptionCVParams().iterator();
-
-                        CvParamImpl temp;
-
-                        bw.write(prideConverter.getProperties().getSampleDescriptionCVParams().size() +
-                                "\n");
-
-                        for (int i = 0; i <
-                                prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().size(); i++) {
-                            bw.write(prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(i) + "\n");
-                        }
-
-                        bw.write("#\n");
-
-                        while (iterator.hasNext()) {
-                            temp = ((CvParamImpl) iterator.next());
-
-                            bw.write("Accession: " + temp.getAccession() + "\n");
-                            bw.write("CVLookup: " + temp.getCVLookup() + "\n");
-                            bw.write("Name: " + temp.getName() + "\n");
-                            bw.write("Value: " + temp.getValue() + "\n\n");
-                        }
-
-                        valuesChanged = false;
-
-                        bw.close();
-                        r.close();
-
-                        prideConverter.getProperties().setSampleDescriptionCVParamsQuantification(new ArrayList());
-                        prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
-
-                    } catch (FileNotFoundException ex) {
-                        JOptionPane.showMessageDialog(
-                                this, "The file " + newName + " could not be found.",
-                                "File Not Found", JOptionPane.ERROR_MESSAGE);
-                        Util.writeToErrorLog("Error when trying to save file: ");
-                        ex.printStackTrace();
-                    } catch (IOException ex) {
-                        JOptionPane.showMessageDialog(
-                                this, "An error occured when trying to save the file " + newName + ".",
-                                "File Error", JOptionPane.ERROR_MESSAGE);
-                        Util.writeToErrorLog("Error when trying to save file: ");
-                        ex.printStackTrace();
-                    }
-                } else if (value == JOptionPane.CANCEL_OPTION) {
-                    cancel = true;
-
-                    namesJComboBox.setSelectedItem(lastSelectedSampleName);
-
-                } else { //value == NO
-
-                    String newSampleName = JOptionPane.showInputDialog(this,
-                            "Please provide the name of the new sample set: ",
-                            "Sample Set Name", JOptionPane.PLAIN_MESSAGE);
-
-                    try {
-
-                        if (newSampleName != null) {
-
-                            String newName;
-                            newName = samplePath +
-                                    newSampleName +
-                                    ".sam";
-
-                            while (new File(newName).exists()) {
-                                newSampleName = JOptionPane.showInputDialog(this,
-                                        "This name is already in use. Please provide a new name: ",
-                                        "Sample Set Name", JOptionPane.PLAIN_MESSAGE);
-
-                                newName = samplePath +
-                                        newSampleName +
-                                        ".sam";
-                            }
-
-                            if (newSampleName != null) {
-
-                                prideConverter.getProperties().setSampleDescriptionCVParamsQuantification(new ArrayList());
-                                prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
-
-                                FileWriter r = new FileWriter(newName);
-                                BufferedWriter bw = new BufferedWriter(r);
-
-                                bw.write("Name: " + newSampleName +
-                                        "\n");
-
-                                Iterator iterator = prideConverter.getProperties().getSampleDescriptionCVParams().iterator();
-
-                                CvParamImpl temp;
-
-                                bw.write(prideConverter.getProperties().getSampleDescriptionCVParams().size() + "\n");
-
-                                for (int i = 0; i < prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().size(); i++) {
-                                    bw.write(prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(i) + "\n");
-                                }
-
-                                bw.write("#\n");
-
-                                while (iterator.hasNext()) {
-                                    temp = ((CvParamImpl) iterator.next());
-
-                                    bw.write("Accession: " + temp.getAccession() +
-                                            "\n");
-                                    bw.write("CVLookup: " + temp.getCVLookup() +
-                                            "\n");
-                                    bw.write("Name: " + temp.getName() + "\n");
-                                    bw.write("Value: " + temp.getValue() +
-                                            "\n\n");
-                                }
-
-                                bw.close();
-                                r.close();
-
-                                valuesChanged = false;
-
-                                namesJComboBox.insertItemAt(newSampleName, namesJComboBox.getItemCount() -
-                                        2);
-                            } else {
-                                cancel = true;
-                                namesJComboBox.setSelectedItem(lastSelectedSampleName);
-                                prideConverter.getUserProperties().setCurrentSampleSet(lastSelectedSampleName);
-                            }
-                        } else {
-                            cancel = true;
-                            namesJComboBox.setSelectedItem(lastSelectedSampleName);
-                            prideConverter.getUserProperties().setCurrentSampleSet(lastSelectedSampleName);
-                        }
-                    } catch (FileNotFoundException ex) {
-                        JOptionPane.showMessageDialog(
-                                this, "The file " + newSampleName + " could not be found.",
-                                "File Not Found", JOptionPane.ERROR_MESSAGE);
-                        Util.writeToErrorLog("Error when trying to save file: ");
-                        ex.printStackTrace();
-                    } catch (IOException ex) {
-                        JOptionPane.showMessageDialog(
-                                this, "An error occured when trying to save the file " + newSampleName + ".",
-                                "File Error", JOptionPane.ERROR_MESSAGE);
-                        Util.writeToErrorLog("Error when trying to save file: ");
-                        ex.printStackTrace();
-                    }
-                }
-            } else if (value == JOptionPane.CANCEL_OPTION) {
-                cancel = true;
-                namesJComboBox.setSelectedItem(lastSelectedSampleName);
-                prideConverter.getUserProperties().setCurrentSampleSet(lastSelectedSampleName);
-            }
-        }
-        if (!cancel) {
-
-            lastSelectedSampleName = (String) namesJComboBox.getSelectedItem();
-            String selectedSampleName = (String) namesJComboBox.getSelectedItem();
-
-            prideConverter.getUserProperties().setCurrentSampleSet(selectedSampleName);
-
-            //empty the table
-            while (sampleDetailsJTable.getRowCount() > 0) {
-                ((DefaultTableModel) sampleDetailsJTable.getModel()).removeRow(0);
-            }
+            //remove from datastructure as well
+            Object[] sampleDetails = prideConverter.getProperties().getSampleDescriptionCVParams().toArray();
 
             prideConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
-            prideConverter.getProperties().setSampleDescriptionUserSubSampleNames(new ArrayList());
 
-            if (namesJComboBox.getSelectedIndex() == 0) {
-                sampleDetailsJButton.setEnabled(false);
-                valuesChanged = false;
-                prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
-            } else if (namesJComboBox.getSelectedIndex() ==
-                    namesJComboBox.getItemCount() - 1) {
+            String tempRow;
+            Vector subSampleNumbers = new Vector();
 
-                sampleDetailsJButton.setEnabled(false);
-                valuesChanged = false;
-                prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+            for (int i = 0; i < multipleSamplesDetailsJTable.getRowCount(); i++) {
+                tempRow = (String) multipleSamplesDetailsJTable.getValueAt(i, 1);
 
-                ComboBoxInputDialog input = new ComboBoxInputDialog(this, this, true);
-                input.setTitle("Create New Sample Set");
-                input.setBorderTitle("New Sample Set");
-                input.setVisible(true);
-            } else {
-
-                if (!keepQuantificationSelection) {
-                    prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+                for (int j = 0; j < tempRow.length(); j++) {
+                    if (tempRow.charAt(j) == ']') {
+                        subSampleNumbers.add("SUBSAMPLE_" + (i + 1));
+                    //System.out.println("SUBSAMPLE_" + (i+1));
+                    }
                 }
-
-                sampleDetailsJButton.setEnabled(true);
-
-                selectedSampleName = samplePath + selectedSampleName + ".sam";
-
-                try {
-                    String temp;
-
-                    FileReader f = new FileReader(selectedSampleName);
-                    BufferedReader b = new BufferedReader(f);
-
-                    b.readLine();
-
-                    int numberOfCVTerms;
-
-                    Vector names, accessions, ontologies;
-                    String subSampleName;
-
-                    numberOfCVTerms = new Integer(b.readLine()).intValue();
-
-                    subSampleName = b.readLine();
-
-                    if (subSampleName != null) {
-                        while (!subSampleName.equalsIgnoreCase("#")) {
-                            prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().add(subSampleName);
-                            subSampleName = b.readLine();
-                        }
-                    }
-
-                    names = new Vector();
-                    accessions = new Vector();
-                    ontologies = new Vector();
-                    String name, accession, ontology;
-
-                    String subSampleNumber = "SUBSAMPLE_1";
-                    String currentSubSampleNumber = "";
-
-                    for (int i = 0; i < numberOfCVTerms; i++) {
-
-                        temp = b.readLine();
-                        accession = temp.substring(temp.indexOf(": ") + 2);
-                        temp = b.readLine();
-                        ontology = temp.substring(temp.indexOf(": ") + 2);
-                        temp = b.readLine();
-                        name = temp.substring(temp.indexOf(": ") + 2);
-                        temp = b.readLine();
-                        currentSubSampleNumber = temp.substring(temp.indexOf(": ") + 2);
-                        b.readLine();
-
-                        if (!currentSubSampleNumber.equalsIgnoreCase(subSampleNumber)) {
-                            addSampleDetails(null, names, accessions, ontologies, -1);
-
-                            names = new Vector();
-                            accessions = new Vector();
-                            ontologies = new Vector();
-
-                            names.add(name);
-                            accessions.add(accession);
-                            ontologies.add(ontology);
-
-                            subSampleNumber = currentSubSampleNumber;
-                        } else {
-                            names.add(name);
-                            accessions.add(accession);
-                            ontologies.add(ontology);
-                        }
-                    }
-
-                    if (names.size() > 0) {
-                        addSampleDetails(null, names, accessions, ontologies, -1);
-                    }
-
-                    if (prideConverter.getProperties().getCurrentQuantificationSelection().size() > 0) {
-                        for (int i = 0; i < prideConverter.getProperties().getCurrentQuantificationSelection().size(); i++) {
-                            sampleDetailsJTable.setValueAt(prideConverter.getProperties().getCurrentQuantificationSelection().get(i), i, 2);
-                        }
-                    }
-
-                    quantificationComboBoxActionPerformed(null);
-
-                    b.close();
-                    f.close();
-
-                } catch (FileNotFoundException ex) {
-                    JOptionPane.showMessageDialog(
-                            this, "The file " + selectedSampleName + " could not be found.",
-                            "File Not Found", JOptionPane.ERROR_MESSAGE);
-                    Util.writeToErrorLog("Error when trying to read file: ");
-                    ex.printStackTrace();
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(
-                            this, "An error occured when trying to read the file " + selectedSampleName + ".",
-                            "File Error", JOptionPane.ERROR_MESSAGE);
-                    Util.writeToErrorLog("Error when trying to read file: ");
-                    ex.printStackTrace();
-                }
-
-                valuesChanged = false;
             }
 
+            CvParamImpl tempCvParamImpl;
+            int counter = 0;
+
+            for (int i = 0; i < sampleDetails.length; i++) {
+
+                tempCvParamImpl = (CvParamImpl) sampleDetails[i];
+
+                if (!tempCvParamImpl.getValue().endsWith("_" +
+                        (selectedRow + 1))) {
+
+                    tempCvParamImpl = new CvParamImpl(tempCvParamImpl.getAccession(),
+                            tempCvParamImpl.getCVLookup(),
+                            tempCvParamImpl.getName(),
+                            new Long(counter),
+                            (String) subSampleNumbers.get(counter++));
+
+                    prideConverter.getProperties().getSampleDescriptionCVParams().add(tempCvParamImpl);
+                }
+            }
+
+            valuesChanged = true;
+
+            fixIndicesMultipleSamplesTable();
             mandatoryFieldsCheck();
         }
-
-        this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-    }//GEN-LAST:event_namesJComboBoxActionPerformed
+}//GEN-LAST:event_deleteSelectedRowMultipleSamplesJMenuItemActionPerformed
 
     /**
-     * Delete the selected sample set.
-     * 
+     * Deletes the selected sample set.
+     *
      * @param evt
      */
-    private void deleteJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteJMenuItemActionPerformed
+    private void deleteMultipleSamplesJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteMultipleSamplesJMenuItemActionPerformed
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
@@ -1674,44 +2144,62 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         }
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-    }//GEN-LAST:event_deleteJMenuItemActionPerformed
+}//GEN-LAST:event_deleteMultipleSamplesJMenuItemActionPerformed
 
     /**
-     * Opens an About PRIDE Converter dialog.
-     * 
-     * @param evt
+     * Add a sample set to the table.
+     *
+     * @param sampleName
+     * @param names
+     * @param accessions
+     * @param ontologies
+     * @param modifiedRow the row to modify, use -1 if adding a new row
      */
-    private void aboutJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutJButtonActionPerformed
-        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new HelpWindow(this, getClass().getResource("/no/uib/prideconverter/helpfiles/AboutPRIDE_Converter.html"));
-        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-    }//GEN-LAST:event_aboutJButtonActionPerformed
+    public void addSampleDetails(String name, String accession, String ontology, int modifiedRow) {
+        addSampleDetails(name, accession, ontology, null, modifiedRow);
+    }
 
     /**
-     * Deletes the selected sample set.
-     * 
-     * @param evt
+     * Add a sample set to the table.
+     *
+     * @param sampleName
+     * @param names
+     * @param accessions
+     * @param ontologies
+     * @param modifiedRow the row to modify, use -1 if adding a new row
      */
-    private void deleteJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteJButtonActionPerformed
-        if (namesJComboBox.getSelectedIndex() != 0 &&
-                namesJComboBox.getSelectedIndex() !=
-                namesJComboBox.getItemCount() - 1 &&
-                namesJComboBox.getSelectedIndex() != -1) {
+    public void addSampleDetails(String name, String accession, String ontology, String value, int modifiedRow) {
 
-            deleteJMenuItemActionPerformed(null);
+        valuesChanged = true;
+
+        if (modifiedRow == -1) {
+
+            ((DefaultTableModel) this.singleSampleDetailsJTable.getModel()).addRow(
+                    new Object[]{
+                        new Integer(singleSampleDetailsJTable.getRowCount() + 1),
+                        name + " [" + accession + "]", value
+                    });
+
+            tempSampleCvParameters.add(new CvParamImpl(
+                    accession,
+                    ontology,
+                    name,
+                    new Long(singleSampleDetailsJTable.getRowCount() - 1),
+                    value));
+        } else {
+            singleSampleDetailsJTable.setValueAt(name + " [" + accession + "]", modifiedRow, 1);
+            singleSampleDetailsJTable.setValueAt(null, modifiedRow, 2);
+
+            CvParamImpl cvParam = new CvParamImpl(
+                    accession,
+                    ontology,
+                    name,
+                    new Long(modifiedRow),
+                    value);
+
+            tempSampleCvParameters.setElementAt(cvParam, modifiedRow);
         }
-    }//GEN-LAST:event_deleteJButtonActionPerformed
-
-    /**
-     * If the delete key is pressed the selected row in the table are deleted.
-     * 
-     * @param evt
-     */
-    private void sampleDetailsJTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sampleDetailsJTableKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
-            deleteSelectedRowJMenuItemActionPerformed(null);
-        }
-    }//GEN-LAST:event_sampleDetailsJTableKeyReleased
+    }
 
     /**
      * Add a sample set to the table.
@@ -1730,21 +2218,20 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
             String temp = "";
 
-            for (int i = 0; i <
-                    names.size(); i++) {
+            for (int i = 0; i < names.size(); i++) {
+
                 prideConverter.getProperties().getSampleDescriptionCVParams().add(new CvParamImpl(
                         (String) accessions.get(i),
                         (String) ontologies.get(i),
                         (String) names.get(i),
-                        new Long(sampleDetailsJTable.getRowCount() - 1),
-                        ("SUBSAMPLE_" + (sampleDetailsJTable.getRowCount() + 1))));
+                        new Long(multipleSamplesDetailsJTable.getRowCount() - 1),
+                        ("SUBSAMPLE_" + (multipleSamplesDetailsJTable.getRowCount() + 1))));
 
                 temp += "[" + (String) names.get(i) + "]";
             }
 
-            ((DefaultTableModel) sampleDetailsJTable.getModel()).addRow(
-                    new Object[]{new Integer(sampleDetailsJTable.getRowCount() + 1), temp
-                    });
+            ((DefaultTableModel) multipleSamplesDetailsJTable.getModel()).addRow(
+                    new Object[]{new Integer(multipleSamplesDetailsJTable.getRowCount() + 1), temp});
 
             if (sampleName != null) {
                 prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().add(sampleName);
@@ -1764,31 +2251,28 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
                 cvParam = (CvParamImpl) cvParams[i];
 
-                if (cvParam.getValue().equalsIgnoreCase("SUBSAMPLE_" +
-                        (modifiedRow + 1))) {
+
+                if (cvParam.getValue().equalsIgnoreCase("SUBSAMPLE_" + (modifiedRow + 1))) {
                     if (!valuesAdded) {
                         for (int j = 0; j < names.size(); j++) {
                             prideConverter.getProperties().getSampleDescriptionCVParams().add(new CvParamImpl(
                                     (String) accessions.get(j),
                                     (String) ontologies.get(j),
                                     (String) names.get(j),
-                                    new Long(sampleDetailsJTable.getRowCount() -
-                                    1),
-                                    ("SUBSAMPLE_" +
-                                    (modifiedRow + 1))));
+                                    new Long(multipleSamplesDetailsJTable.getRowCount() - 1),
+                                    ("SUBSAMPLE_" + (modifiedRow + 1))));
 
-                            temp += "[" + (String) names.get(j) + "]";
+                            temp += "[" + (String) names.get(i) + "]";
                         }
 
                         valuesAdded = true;
                     }
-
                 } else {
                     prideConverter.getProperties().getSampleDescriptionCVParams().add(cvParam);
                 }
             }
 
-            sampleDetailsJTable.setValueAt(temp, modifiedRow, 1);
+            multipleSamplesDetailsJTable.setValueAt(temp, modifiedRow, 1);
 
             prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().set(modifiedRow, sampleName);
         }
@@ -1799,11 +2283,18 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     /**
      * Fixes the indices so that they are in accending order starting from one
      */
-    private void fixIndices() {
-        for (int row = 0; row <
-                ((DefaultTableModel) sampleDetailsJTable.getModel()).getRowCount(); row++) {
-            ((DefaultTableModel) sampleDetailsJTable.getModel()).setValueAt(new Integer(row +
-                    1), row, 0);
+    private void fixIndicesSingleSampleTable() {
+        for (int row = 0; row < ((DefaultTableModel) singleSampleDetailsJTable.getModel()).getRowCount(); row++) {
+            ((DefaultTableModel) singleSampleDetailsJTable.getModel()).setValueAt(new Integer(row + 1), row, 0);
+        }
+    }
+
+    /**
+     * Fixes the indices so that they are in accending order starting from one
+     */
+    private void fixIndicesMultipleSamplesTable() {
+        for (int row = 0; row < ((DefaultTableModel) multipleSamplesDetailsJTable.getModel()).getRowCount(); row++) {
+            ((DefaultTableModel) multipleSamplesDetailsJTable.getModel()).setValueAt(new Integer(row + 1), row, 0);
         }
     }
 
@@ -1821,30 +2312,30 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
         int counter = prideConverter.getProperties().getSampleDescriptionCVParams().size();
 
-        for (int i = 0; i < sampleDetailsJTable.getRowCount(); i++) {
+        for (int i = 0; i < multipleSamplesDetailsJTable.getRowCount(); i++) {
 
-            if (sampleDetailsJTable.getValueAt(i, 2) != null) {
+            if (multipleSamplesDetailsJTable.getValueAt(i, 2) != null) {
 
-                if (((String) sampleDetailsJTable.getValueAt(i, 2)).equalsIgnoreCase("iTRAQ reagent 114")) {
+                if (((String) multipleSamplesDetailsJTable.getValueAt(i, 2)).equalsIgnoreCase("iTRAQ reagent 114")) {
                     prideConverter.getProperties().getSampleDescriptionCVParamsQuantification().add(
                             new CvParamImpl("PRIDE:0000114", "PRIDE", "iTRAQ reagent 114", counter++, "SUBSAMPLE_" +
                             (i + 1)));
-                } else if (((String) sampleDetailsJTable.getValueAt(i, 2)).equalsIgnoreCase("iTRAQ reagent 115")) {
+                } else if (((String) multipleSamplesDetailsJTable.getValueAt(i, 2)).equalsIgnoreCase("iTRAQ reagent 115")) {
                     prideConverter.getProperties().getSampleDescriptionCVParamsQuantification().add(
                             new CvParamImpl("PRIDE:0000115", "PRIDE", "iTRAQ reagent 115", counter++, "SUBSAMPLE_" +
                             (i + 1)));
-                } else if (((String) sampleDetailsJTable.getValueAt(i, 2)).equalsIgnoreCase("iTRAQ reagent 116")) {
+                } else if (((String) multipleSamplesDetailsJTable.getValueAt(i, 2)).equalsIgnoreCase("iTRAQ reagent 116")) {
                     prideConverter.getProperties().getSampleDescriptionCVParamsQuantification().add(
                             new CvParamImpl("PRIDE:0000116", "PRIDE", "iTRAQ reagent 116", counter++, "SUBSAMPLE_" +
                             (i + 1)));
-                } else if (((String) sampleDetailsJTable.getValueAt(i, 2)).equalsIgnoreCase("iTRAQ reagent 117")) {
+                } else if (((String) multipleSamplesDetailsJTable.getValueAt(i, 2)).equalsIgnoreCase("iTRAQ reagent 117")) {
                     prideConverter.getProperties().getSampleDescriptionCVParamsQuantification().add(
                             new CvParamImpl("PRIDE:0000117", "PRIDE", "iTRAQ reagent 117", counter++, "SUBSAMPLE_" +
                             (i + 1)));
                 }
             }
 
-            prideConverter.getProperties().getCurrentQuantificationSelection().add((String) sampleDetailsJTable.getValueAt(i, 2));
+            prideConverter.getProperties().getCurrentQuantificationSelection().add((String) multipleSamplesDetailsJTable.getValueAt(i, 2));
         }
 
         boolean cancel = false;
@@ -1863,56 +2354,10 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 if (value == JOptionPane.YES_OPTION) {
 
                     String newName;
-                    newName = samplePath +
-                            prideConverter.getUserProperties().getCurrentSampleSet() +
-                            ".sam";
+                    newName = samplePath + prideConverter.getUserProperties().getCurrentSampleSet() + ".sam";
 
-                    try {
+                    saveSample(newName, prideConverter.getUserProperties().getCurrentSampleSet());
 
-                        FileWriter r = new FileWriter(newName);
-                        BufferedWriter bw = new BufferedWriter(r);
-
-                        bw.write("Name: " + prideConverter.getUserProperties().getCurrentSampleSet() + "\n");
-
-                        Iterator iterator = prideConverter.getProperties().getSampleDescriptionCVParams().iterator();
-
-                        CvParamImpl temp;
-
-                        bw.write(prideConverter.getProperties().getSampleDescriptionCVParams().size() + "\n");
-
-                        for (int i = 0; i <
-                                prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().size(); i++) {
-                            bw.write(prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(i) +
-                                    "\n");
-                        }
-
-                        bw.write("#\n");
-
-                        while (iterator.hasNext()) {
-                            temp = ((CvParamImpl) iterator.next());
-
-                            bw.write("Accession: " + temp.getAccession() + "\n");
-                            bw.write("CVLookup: " + temp.getCVLookup() + "\n");
-                            bw.write("Name: " + temp.getName() + "\n");
-                            bw.write("Value: " + temp.getValue() + "\n\n");
-                        }
-
-                        bw.close();
-                        r.close();
-
-                    } catch (FileNotFoundException ex) {
-                        JOptionPane.showMessageDialog(
-                                this, "The file " + newName + " could not be found.",
-                                "File Not Found", JOptionPane.ERROR_MESSAGE);
-                        Util.writeToErrorLog("Error when trying to save file: ");
-                        ex.printStackTrace();
-                    } catch (IOException ex) {
-                        JOptionPane.showMessageDialog(
-                                this, "An error occured when trying to save the file " + newName + ".",
-                                "File Error", JOptionPane.ERROR_MESSAGE);
-                        Util.writeToErrorLog("Error when trying to save file: ");
-                        ex.printStackTrace();
-                    }
                 } else if (value == JOptionPane.CANCEL_OPTION) {
                     cancel = true;
                 } else { //value == NO
@@ -1921,84 +2366,65 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                             "Please provide the name of the new sample set: ",
                             "Sample Set Name", JOptionPane.PLAIN_MESSAGE);
 
-                    try {
+                    if (newSampleName != null) {
 
-                        if (newSampleName != null) {
+                        String newName;
 
-                            String newName;
+                        newName = samplePath +
+                                newSampleName +
+                                ".sam";
+
+                        while (new File(newName).exists()) {
+                            newSampleName = JOptionPane.showInputDialog(this,
+                                    "This name is already in use. Please provide a new name: ",
+                                    "Sample Set Name", JOptionPane.PLAIN_MESSAGE);
 
                             newName = samplePath +
                                     newSampleName +
                                     ".sam";
+                        }
 
-                            while (new File(newName).exists()) {
-                                newSampleName = JOptionPane.showInputDialog(this,
-                                        "This name is already in use. Please provide a new name: ",
-                                        "Sample Set Name", JOptionPane.PLAIN_MESSAGE);
+                        if (newSampleName != null) {
 
-                                newName = samplePath +
-                                        newSampleName +
-                                        ".sam";
-                            }
+                            prideConverter.getUserProperties().setCurrentSampleSet(newSampleName);
 
-                            if (newSampleName != null) {
+                            saveSample(newName, newSampleName);
 
-                                prideConverter.getUserProperties().setCurrentSampleSet(newSampleName);
-
-                                FileWriter r = new FileWriter(newName);
-                                BufferedWriter bw = new BufferedWriter(r);
-
-                                bw.write("Name: " + newSampleName + "\n");
-
-                                Iterator iterator = prideConverter.getProperties().getSampleDescriptionCVParams().iterator();
-
-                                CvParamImpl temp;
-
-                                bw.write(prideConverter.getProperties().getSampleDescriptionCVParams().size() + "\n");
-
-                                for (int i = 0; i <
-                                        prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().size(); i++) {
-                                    bw.write(prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(i) +
-                                            "\n");
-                                }
-
-                                bw.write("#\n");
-
-                                while (iterator.hasNext()) {
-                                    temp = ((CvParamImpl) iterator.next());
-
-                                    bw.write("Accession: " + temp.getAccession() + "\n");
-                                    bw.write("CVLookup: " + temp.getCVLookup() + "\n");
-                                    bw.write("Name: " + temp.getName() + "\n");
-                                    bw.write("Value: " + temp.getValue() + "\n\n");
-                                }
-
-                                bw.close();
-                                r.close();
-                            } else {
-                                cancel = true;
-                            }
                         } else {
                             cancel = true;
                         }
-                    } catch (FileNotFoundException ex) {
-                        JOptionPane.showMessageDialog(
-                                this, "The file " + newSampleName + " could not be found.",
-                                "File Not Found", JOptionPane.ERROR_MESSAGE);
-                        Util.writeToErrorLog("Error when trying to save file: ");
-                        ex.printStackTrace();
-                    } catch (IOException ex) {
-                        JOptionPane.showMessageDialog(
-                                this, "An error occured when trying to save the file " + newSampleName + ".",
-                                "File Error", JOptionPane.ERROR_MESSAGE);
-                        Util.writeToErrorLog("Error when trying to save file: ");
-                        ex.printStackTrace();
+                    } else {
+                        cancel = true;
                     }
                 }
             } else if (value == JOptionPane.CANCEL_OPTION) {
                 cancel = true;
             }
         }
+
+        if (singleSampleDetailsJTable.getRowCount() > 0) {
+
+            prideConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
+
+            for (int i = 0; i < tempSampleCvParameters.size(); i++) {
+
+                CvParamImpl temp = ((CvParamImpl) tempSampleCvParameters.get(i));
+
+                String value = null;
+
+                if (singleSampleDetailsJTable.getValueAt(i, 2) != null) {
+                    value = (String) singleSampleDetailsJTable.getValueAt(i, 2);
+                }
+
+                prideConverter.getProperties().getSampleDescriptionCVParams().add(
+                        new CvParamImpl(temp.getAccession(),
+                        temp.getCVLookup(),
+                        temp.getName(),
+                        i,
+                        value));
+            }
+        }
+
 
         if (lowerRangeJTextField.isEnabled()) {
             try {
@@ -2082,37 +2508,53 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutJButton;
+    private javax.swing.JButton addSampleJButton;
     private javax.swing.JButton backJButton;
     private javax.swing.JButton cancelJButton;
     private javax.swing.JButton deleteJButton;
     private javax.swing.JMenuItem deleteJMenuItem;
+    private javax.swing.JMenuItem deleteMultipleSamplesJMenuItem;
     private javax.swing.JMenuItem deleteSelectedRowJMenuItem;
+    private javax.swing.JMenuItem deleteSelectedRowMultipleSamplesJMenuItem;
     private javax.swing.JMenuItem editJMenuItem;
+    private javax.swing.JMenuItem editMultipleSamplesJMenuItem;
     private javax.swing.JButton helpJButton;
     private javax.swing.JLabel intensityThresholdJLabel;
     private javax.swing.JTextField intensityThresholdJTextField;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
     private javax.swing.JLabel lowerRangeJLabel;
     private javax.swing.JTextField lowerRangeJTextField;
     private javax.swing.JMenuItem moveDownJMenuItem;
+    private javax.swing.JMenuItem moveDownMultipleSamplesJMenuItem;
     private javax.swing.JMenuItem moveUpJMenuItem;
+    private javax.swing.JMenuItem moveUpMultipleSamplesJMenuItem;
+    private javax.swing.JTable multipleSamplesDetailsJTable;
     private javax.swing.JComboBox namesJComboBox;
     private javax.swing.JButton nextJButton;
     private javax.swing.JLabel peakRangeJLabel;
+    private javax.swing.JPopupMenu popupDeleteMultipleSamplesJMenu;
     private javax.swing.JPopupMenu popupJMenu;
     private javax.swing.JPopupMenu popupMenu;
+    private javax.swing.JPopupMenu popupMultipleSamplesJMenu;
     private javax.swing.JLabel purityCorrectionsJLabel;
     private javax.swing.JTextField purityCorrectionsJTextField;
     private javax.swing.JButton sampleDetailsJButton;
-    private javax.swing.JTable sampleDetailsJTable;
+    private javax.swing.JTabbedPane sampleJTabbedPane;
+    private javax.swing.JTable singleSampleDetailsJTable;
     private javax.swing.JLabel upperRangeJLabel;
     private javax.swing.JTextField upperRangeJTextField;
     // End of variables declaration//GEN-END:variables
@@ -2172,5 +2614,22 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         File newFile = new File(newName);
 
         return newFile.exists();
+    }
+
+    @Override
+    public void insertOLSResult(String field, String selectedValue, String accession, String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm) {
+
+        if (mappedTerm != null) {
+            prideConverter.getUserProperties().getCVTermMappings().put(
+                    mappedTerm, new CvParamImpl(accession, ontologyShort,
+                    selectedValue, 0, null));
+        }
+
+        addSampleDetails(selectedValue, accession, ontologyLong, modifiedRow);
+    }
+
+    @Override
+    public Window getWindow() {
+        return (Window) this;
     }
 }

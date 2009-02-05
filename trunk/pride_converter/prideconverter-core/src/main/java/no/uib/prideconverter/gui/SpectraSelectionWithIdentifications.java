@@ -805,21 +805,18 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                 numberOfSelectedSpectra = 0;
                 int totalNumberOfSpectra = 0;
 
-                while (((DefaultTableModel) spectraJTable.getModel()).getRowCount() >
-                        0) {
+                while (((DefaultTableModel) spectraJTable.getModel()).getRowCount() > 0) {
                     ((DefaultTableModel) spectraJTable.getModel()).removeRow(0);
                 }
 
                 if (prideConverter.getProperties().getSelectedSourceFiles() != null) {
 
-                    for (int j = 0; j <
-                            prideConverter.getProperties().getSelectedSourceFiles().size(); j++) {
+                    for (int j = 0; j < prideConverter.getProperties().getSelectedSourceFiles().size(); j++) {
 
                         file = new File(prideConverter.getProperties().getSelectedSourceFiles().get(j));
 
                         progressDialog.setString(file.getName() + " (" + (j + 1) +
-                                "/" + prideConverter.getProperties().getSelectedSourceFiles().size() +
-                                ")");
+                                "/" + prideConverter.getProperties().getSelectedSourceFiles().size() + ")");
 
                         spectrumID = -1;
                         precursorMass = 0.0;
@@ -827,7 +824,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                         expect = 0.0;
 
                         // parse X!Tandem file
-                        // should be replaced by better and easier xml parsing
+                        // should be replaced by better and simpler xml parsing
                         if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
 
                             try {
