@@ -2591,6 +2591,12 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
         valuesChanged = true;
 
+        if(value != null){
+            if(value.equalsIgnoreCase("null")){
+                value = null;
+            }
+        }
+
         if (modifiedRow == -1) {
 
             ((DefaultTableModel) this.processingMethodsJTable.getModel()).addRow(
@@ -2641,8 +2647,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         int numberOfTerms = 0;
         Collection analyzerCVParams = new ArrayList(terms.size());
 
-        for (int i = 0; i <
-                terms.size(); i++) {
+        for (int i = 0; i < terms.size(); i++) {
             if (values.get(i) != null) {
                 temp += "[" + terms.get(i) + ": " + values.get(i) + "] ";
 
@@ -2683,18 +2688,14 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             analyzerJTable.setValueAt(temp, modifiedRow, 1);
             analyzerJTable.setValueAt(new Integer(numberOfTerms), modifiedRow, 2);
 
-            Object[] analyzers = prideConverter.getProperties().getAnalyzerList().
-                    toArray();
-            analyzers[modifiedRow] = new AnalyzerImpl(
-                    analyzerCVParams, null, modifiedRow);
+            Object[] analyzers = prideConverter.getProperties().getAnalyzerList().toArray();
+            analyzers[modifiedRow] = new AnalyzerImpl(analyzerCVParams, null, modifiedRow);
 
             prideConverter.getProperties().setAnalyzerList(new ArrayList());
 
-            for (int i = 0; i <
-                    analyzers.length; i++) {
+            for (int i = 0; i < analyzers.length; i++) {
                 prideConverter.getProperties().getAnalyzerList().add(analyzers[i]);
             }
-
         }
 
         mandatoryFieldsCheck();
@@ -2705,10 +2706,8 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
      * accending order starting from one
      */
     private void fixProcessingMethodsIndices() {
-        for (int row = 0; row <
-                ((DefaultTableModel) processingMethodsJTable.getModel()).getRowCount(); row++) {
-            ((DefaultTableModel) processingMethodsJTable.getModel()).setValueAt(new Integer(row +
-                    1), row, 0);
+        for (int row = 0; row < ((DefaultTableModel) processingMethodsJTable.getModel()).getRowCount(); row++) {
+            ((DefaultTableModel) processingMethodsJTable.getModel()).setValueAt(new Integer(row + 1), row, 0);
         }
     }
 
@@ -2717,10 +2716,8 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
      * accending order starting from one
      */
     private void fixAnalyzersIndices() {
-        for (int row = 0; row <
-                ((DefaultTableModel) analyzerJTable.getModel()).getRowCount(); row++) {
-            ((DefaultTableModel) analyzerJTable.getModel()).setValueAt(new Integer(row +
-                    1), row, 0);
+        for (int row = 0; row < ((DefaultTableModel) analyzerJTable.getModel()).getRowCount(); row++) {
+            ((DefaultTableModel) analyzerJTable.getModel()).setValueAt(new Integer(row + 1), row, 0);
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

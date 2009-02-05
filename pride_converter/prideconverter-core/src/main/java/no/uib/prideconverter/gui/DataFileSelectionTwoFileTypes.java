@@ -68,9 +68,9 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
 
                 ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).addRow(
                         new Object[]{
-                    new Integer(selectedSpectraFilesJTable.getRowCount() + 1),
-                    new File(prideConverter.getProperties().getSelectedSourceFiles().get(i)).getName()
-                });
+                            new Integer(selectedSpectraFilesJTable.getRowCount() + 1),
+                            new File(prideConverter.getProperties().getSelectedSourceFiles().get(i)).getName()
+                        });
             }
         } else {
             prideConverter.getProperties().setSelectedSourceFiles(new ArrayList());
@@ -81,10 +81,10 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
             for (int i = 0; i < prideConverter.getProperties().getSelectedIdentificationFiles().size(); i++) {
                 ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).addRow(
                         new Object[]{
-                    new Integer(selectedIdentificationFilesJTable.getRowCount() +
-                    1),
-                    new File(prideConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName()
-                });
+                            new Integer(selectedIdentificationFilesJTable.getRowCount() +
+                            1),
+                            new File(prideConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName()
+                        });
             }
 
             if (selectedIdentificationFilesJTable.getRowCount() > 0 &&
@@ -413,6 +413,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     /**
      * Closes the frame and the wizard.
      * 
@@ -550,6 +551,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
         }
 
         int returnVal = chooser.showOpenDialog(this);
+
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             String path;
 
@@ -578,7 +580,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
 
                 if (currentFile.isDirectory()) {
 
-                    File[] files = chooser.getSelectedFile().listFiles();
+                    File[] files = currentFile.listFiles();
                     File tempFile;
 
                     for (int i = 0; i < files.length; i++) {
@@ -587,55 +589,50 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                         if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
                             if (tempFile.getAbsolutePath().endsWith(".pkl") ||
                                     tempFile.getAbsolutePath().endsWith(".PKL")) {
-                                if (!prideConverter.getProperties().getSelectedSourceFiles().contains(
-                                        tempFile)) {
+                                if (!prideConverter.getProperties().getSelectedSourceFiles().contains(tempFile)) {
                                     ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).addRow(
                                             new Object[]{
-                                        new Integer(selectedSpectraFilesJTable.getRowCount() + 1),
-                                        tempFile.getName(),
-                                        new Boolean(true)
-                                    });
+                                                new Integer(selectedSpectraFilesJTable.getRowCount() + 1),
+                                                tempFile.getName(),
+                                                new Boolean(true)
+                                            });
 
                                     prideConverter.getProperties().getSelectedSourceFiles().add(tempFile.getPath());
                                 } else {
-                                    JOptionPane.showMessageDialog(this, "A file with the name " +
-                                            tempFile.getPath() +
-                                            " is already selected.\nThe same file can not be added twice.", "File Already Selected", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(this, "A file with the name " + tempFile.getPath() +
+                                            " is already selected.\nThe same file can not be added twice.",
+                                            "File Already Selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
-                        } else {
-                            if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
-                                if (tempFile.getAbsolutePath().endsWith(".dta") ||
-                                        tempFile.getAbsolutePath().endsWith(".DTA")) {
-                                    if (!prideConverter.getProperties().getSelectedSourceFiles().contains(
-                                            tempFile)) {
-                                        ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).addRow(
-                                                new Object[]{
-                                            new Integer(selectedSpectraFilesJTable.getRowCount() + 1),
-                                            tempFile.getName(),
-                                            new Boolean(true)
-                                        });
+                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                            if (tempFile.getAbsolutePath().endsWith(".dta") ||
+                                    tempFile.getAbsolutePath().endsWith(".DTA")) {
+                                if (!prideConverter.getProperties().getSelectedSourceFiles().contains(tempFile)) {
+                                    ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).addRow(
+                                            new Object[]{
+                                                new Integer(selectedSpectraFilesJTable.getRowCount() + 1),
+                                                tempFile.getName(),
+                                                new Boolean(true)
+                                            });
 
-                                        prideConverter.getProperties().getSelectedSourceFiles().add(tempFile.getPath());
-                                    } else {
-                                        JOptionPane.showMessageDialog(this, "A file with the name " +
-                                                tempFile.getPath() +
-                                                " is already selected.\nThe same file can not be added twice.", "File Already Selected", JOptionPane.ERROR_MESSAGE);
-                                    }
+                                    prideConverter.getProperties().getSelectedSourceFiles().add(tempFile.getPath());
+                                } else {
+                                    JOptionPane.showMessageDialog(this, "A file with the name " + tempFile.getPath() +
+                                            " is already selected.\nThe same file can not be added twice.",
+                                            "File Already Selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
                         }
                     }
                 } else {
-                    if (!prideConverter.getProperties().getSelectedSourceFiles().contains(
-                            currentFile.getPath())) {
+                    if (!prideConverter.getProperties().getSelectedSourceFiles().contains(currentFile.getPath())) {
                         ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).addRow(
                                 new Object[]{
-                            new Integer(selectedSpectraFilesJTable.getRowCount() +
-                            1),
-                            currentFile.getName(),
-                            new Boolean(true)
-                        });
+                                    new Integer(selectedSpectraFilesJTable.getRowCount() +
+                                    1),
+                                    currentFile.getName(),
+                                    new Boolean(true)
+                                });
 
                         prideConverter.getProperties().getSelectedSourceFiles().add(currentFile.getPath());
                     } else {
@@ -701,12 +698,13 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
         }
 
         int returnVal = chooser.showOpenDialog(this);
+
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             String path;
 
             prideConverter.getProperties().setSpectrumTableModel(null);
             prideConverter.getProperties().setInstrumentDetailsExtracted(false);
-            prideConverter.getProperties().setSelectedSourceFiles(new ArrayList());
+            prideConverter.getProperties().setSelectedIdentificationFiles(new ArrayList());
             prideConverter.getProperties().setSpectraSelectionCriteria(null);
             prideConverter.getProperties().setDataFileHasBeenLoaded(false);
             prideConverter.getProperties().setSampleDetailsExtracted(false);
@@ -738,14 +736,13 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                         if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
                             if (tempFile.getAbsolutePath().endsWith(".spo") ||
                                     tempFile.getAbsolutePath().endsWith(".SPO")) {
-                                if (!prideConverter.getProperties().getSelectedIdentificationFiles().contains(
-                                        tempFile)) {
+                                if (!prideConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile)) {
                                     ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).addRow(
                                             new Object[]{
-                                        new Integer(selectedIdentificationFilesJTable.getRowCount() + 1),
-                                        tempFile.getName(),
-                                        new Boolean(true)
-                                    });
+                                                new Integer(selectedIdentificationFilesJTable.getRowCount() + 1),
+                                                tempFile.getName(),
+                                                new Boolean(true)
+                                            });
 
                                     prideConverter.getProperties().getSelectedIdentificationFiles().add(tempFile.getPath());
                                 } else {
@@ -758,14 +755,13 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                         } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
                             if (tempFile.getAbsolutePath().endsWith(".out") ||
                                     tempFile.getAbsolutePath().endsWith(".OUT")) {
-                                if (!prideConverter.getProperties().getSelectedIdentificationFiles().contains(
-                                        tempFile)) {
+                                if (!prideConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile)) {
                                     ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).addRow(
                                             new Object[]{
-                                        new Integer(selectedIdentificationFilesJTable.getRowCount() + 1),
-                                        tempFile.getName(),
-                                        new Boolean(true)
-                                    });
+                                                new Integer(selectedIdentificationFilesJTable.getRowCount() + 1),
+                                                tempFile.getName(),
+                                                new Boolean(true)
+                                            });
 
                                     prideConverter.getProperties().getSelectedIdentificationFiles().add(tempFile.getPath());
                                 } else {
@@ -779,14 +775,13 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                     }
                 } else {
 
-                    if (!prideConverter.getProperties().getSelectedIdentificationFiles().contains(
-                            currentFile.getPath())) {
+                    if (!prideConverter.getProperties().getSelectedIdentificationFiles().contains(currentFile.getPath())) {
                         ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).addRow(
                                 new Object[]{
-                            new Integer(selectedIdentificationFilesJTable.getRowCount() + 1),
-                            currentFile.getName(),
-                            new Boolean(true)
-                        });
+                                    new Integer(selectedIdentificationFilesJTable.getRowCount() + 1),
+                                    currentFile.getName(),
+                                    new Boolean(true)
+                                });
 
                         prideConverter.getProperties().getSelectedIdentificationFiles().add(currentFile.getPath());
                     } else {
@@ -856,10 +851,8 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
      * accending order starting from one.
      */
     private void fixSpectraTableIndices() {
-        for (int row = 0; row <
-                ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).getRowCount(); row++) {
-            ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).setValueAt(new Integer(row +
-                    1), row, 0);
+        for (int row = 0; row < ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).getRowCount(); row++) {
+            ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).setValueAt(new Integer(row + 1), row, 0);
         }
     }
 
@@ -868,10 +861,8 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
      * accending order starting from one.
      */
     private void fixIdentificationTableIndices() {
-        for (int row = 0; row <
-                ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).getRowCount(); row++) {
-            ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).setValueAt(new Integer(row +
-                    1), row, 0);
+        for (int row = 0; row < ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).getRowCount(); row++) {
+            ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).setValueAt(new Integer(row + 1), row, 0);
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

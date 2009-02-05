@@ -213,7 +213,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
             }
         });
 
-        protocolStepJPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sample", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+        protocolStepJPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sample", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
         cvTermsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -290,7 +290,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
                     .addComponent(jLabel1)
                     .addComponent(sampleNameJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(olsSearchJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -331,10 +331,10 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(protocolStepJPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(protocolStepJPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(helpJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -350,7 +350,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(protocolStepJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(cancelJButton)
@@ -385,11 +385,10 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
                     "The table is still beeing edited. Please complete the editing before inserting.", 
                     "The table is beeing edited", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            Vector terms, accessions, ontologies;
 
-            terms = new Vector();
-            accessions = new Vector();
-            ontologies = new Vector();
+            Vector terms = new Vector();
+            Vector accessions = new Vector();
+            Vector ontologies = new Vector();
 
             for (int i = 0; i < cvTermsJTable.getRowCount(); i++) {
                 terms.add(cvTermsJTable.getValueAt(i, 1));
@@ -595,10 +594,8 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
      * Fixes the indices so that they are in accending order starting from one
      */
     private void fixIndices() {
-        for (int row = 0; row <
-                ((DefaultTableModel) cvTermsJTable.getModel()).getRowCount(); row++) {
-            ((DefaultTableModel) cvTermsJTable.getModel()).setValueAt(new Integer(row +
-                    1), row, 0);
+        for (int row = 0; row < ((DefaultTableModel) cvTermsJTable.getModel()).getRowCount(); row++) {
+            ((DefaultTableModel) cvTermsJTable.getModel()).setValueAt(new Integer(row + 1), row, 0);
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
