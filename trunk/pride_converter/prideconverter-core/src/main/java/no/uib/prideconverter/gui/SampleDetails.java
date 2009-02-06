@@ -1221,7 +1221,6 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
         new OLSDialog(this, true, "singleSample", prideConverter.getUserProperties().getLastSelectedSampleOntology(), selectedRow, searchTerm);
-        //new NewSample(this, true, prideConverter, selectedRow);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_editJMenuItemActionPerformed
 
@@ -1333,6 +1332,12 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         mandatoryFieldsCheck();
     }//GEN-LAST:event_namesJComboBoxItemStateChanged
 
+    /**
+     * Saves the given sample (set) to file.
+     *
+     * @param filePath the path to save to
+     * @param sampleName the name of the sample (set)
+     */
     private void saveSample(String filePath, String sampleName) {
 
         try {
@@ -2081,7 +2086,6 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 for (int j = 0; j < tempRow.length(); j++) {
                     if (tempRow.charAt(j) == ']') {
                         subSampleNumbers.add("SUBSAMPLE_" + (i + 1));
-                    //System.out.println("SUBSAMPLE_" + (i+1));
                     }
                 }
             }
@@ -2147,12 +2151,11 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 }//GEN-LAST:event_deleteMultipleSamplesJMenuItemActionPerformed
 
     /**
-     * Add a sample set to the table.
+     * Add a sample cv term to the table.
      *
-     * @param sampleName
-     * @param names
-     * @param accessions
-     * @param ontologies
+     * @param name
+     * @param accession
+     * @param ontology
      * @param modifiedRow the row to modify, use -1 if adding a new row
      */
     public void addSampleDetails(String name, String accession, String ontology, int modifiedRow) {
@@ -2160,12 +2163,12 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     }
 
     /**
-     * Add a sample set to the table.
+     * Add a sample cv term to the table.
      *
-     * @param sampleName
-     * @param names
-     * @param accessions
-     * @param ontologies
+     * @param name
+     * @param accession
+     * @param ontology
+     * @param value
      * @param modifiedRow the row to modify, use -1 if adding a new row
      */
     public void addSampleDetails(String name, String accession, String ontology, String value, int modifiedRow) {

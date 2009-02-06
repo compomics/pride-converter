@@ -467,7 +467,7 @@ public class Properties {
     /**
      * Sets the selected spectra keys.
      * 
-     * @param aSelectedSpectraNames
+     * @param aSelectedSpectraKeys
      */
     public void setSelectedSpectraKeys(ArrayList aSelectedSpectraKeys) {
         selectedSpectraKeys = aSelectedSpectraKeys;
