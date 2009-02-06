@@ -3,11 +3,19 @@
 
 ----
 
+*Changes in PRIDE Converter v1.15.2 - (Feb. 06. 2009):*
+- The Sample Details frame has been simplified, and it is now possible to add values to the added cv terms.
+- Fixed a minor bug in the File Selection frame for two data types, e.g., Sequest DTA and OUT files. The bug occured if a folder and not individual files was selected, and resulted in not being able to load the spectra in the Spectra Selection frame.
+
+
+----
+
 *Changes in PRIDE Converter v1.15.1 - (Feb. 04. 2009):*
  * Adding spectrum cv and user parameters is now also supported for data formats with identifications.
  * Fixed a bug in the advanced spectra selection that resulted in the selection not being correct unless the spectra had been loaded into the table first.
  * The spectra count shown for ms_lims data sets in the dialog appearing after the conversion was incorrect. Has now been fixed.
 
+Download Count: 2
 
 ----
 
