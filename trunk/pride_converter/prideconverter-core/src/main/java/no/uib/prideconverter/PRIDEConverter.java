@@ -4008,7 +4008,7 @@ public class PRIDEConverter {
      * This method transforms spectra from DTASelect projects, returning
      * a HashMap that maps the filenames to their mzData spectrumID.
      *
-     * When completed "identification" contains all the identifications, and mzDataFile will contain
+     * When completed "identification" contains all the identifications, and mzDataFile contains
      * the spectra as mzData.
      *
      * @param    aSpectra   Collection with the Spectrumfile instances to to transform.
@@ -4270,7 +4270,7 @@ public class PRIDEConverter {
 
                             //We create a new protein instance:
                             protein = new InnerID(accessionNumber, sequenceCount, spectrumCount, coverage, proteinLength,
-                                    molecularWeight, pI, validationStatus, proteinDescription, "Sequest", properties.getDatabaseName());
+                                    molecularWeight, pI, validationStatus, proteinDescription, "Sequest + DTASelect", properties.getDatabaseName());
                         }
 
                     // Now, the information for the PEPTIDES included in each protein identification (if(line.startsWith(" "))
@@ -4536,6 +4536,8 @@ public class PRIDEConverter {
 
             if (!cancelConversion) {
 
+                // adding the CV and user params inserted in the previous steps of the converter
+                
                 progressDialog.setString(null);
                 progressDialog.setTitle("Creating mzData File. Please Wait.");
                 progressDialog.setIntermidiate(true);
@@ -4628,9 +4630,8 @@ public class PRIDEConverter {
 
     /**
      * This method reads all the MS2 spectra from the harddrive, converts them to mzData spectra
-     * (complete with hardcoded annotations here...) and stores a mapping of filename to
-     * ID number in the mzData structure. The latter is used afterwards to connect the peptide identifications
-     * to their corresponding spectra.
+     * and stores a mapping of filename to ID number in the mzData structure. The latter is used
+     * afterwards to connect the peptide identifications to their corresponding spectra.
      * Note that the final Collection of spectra, as well as the mapping table are passed as
      * reference parameters here!
      *
@@ -4657,6 +4658,7 @@ public class PRIDEConverter {
 
                 Double precursorMZ = null;
                 String scanNumber = null;
+
                 // We do not haver precursor intensity
                 //double precursorIntensity = -1.0;
                 int precursorCharge = -1;
@@ -4667,44 +4669,56 @@ public class PRIDEConverter {
                 String currentLine = null;
                 boolean first = true;
                 int lineCount = 0;
+
                 // We don't know in advance how many m/z and intensity values we'll need to store,
                 // so use these in the interim.
                 ArrayList mz = new ArrayList();
                 ArrayList intensities = new ArrayList();
+
                 while ((currentLine = br.readLine()) != null) {
                     lineCount++;
                     if (!(currentLine.equals(""))) {
                         // Take the precursor mass
                         if (currentLine.startsWith("S")) {
                             if (precursorMZ != null) {
+
                                 // And process the m/z and intensities.
                                 int size = mz.size();
                                 mzArray = new double[size];
                                 intensityArray = new double[size];
+
                                 for (int j = 0; j < size; j++) {
                                     mzArray[j] = Double.parseDouble((String) mz.get(j));
                                     intensityArray[j] = Double.parseDouble((String) intensities.get(j));
                                 }
+
                                 // OK, all done. Create a mzData spectrum next!
                                 Spectrum mzdataSpectrum = transformSpectrum(idCount, mzArray, intensityArray, precursorCharge, precursorMZ);
 
                                 // Add the spectrum and its mapping to the collection and table.
                                 aSpectra.add(mzdataSpectrum);
+
                                 // We are going to use the file name and the scanNumber to build the HashMap
                                 aMappings.put(usedFileName + "_" + scanNumber, new Long(idCount));
+
                                 // If you'll look at the above method, you'll see that it consumes two ID's -
                                 // one for the spectrum and one for the precursor. So advance it by 2 here.
                                 idCount += 1;
+
                                 // That completes the cycle.
                                 mz = new ArrayList();
                                 intensities = new ArrayList();
                             }
                             String[] scanTokens = currentLine.split("\t");
+
                             if (!(scanTokens.length == 4)) {
+
                                 System.out.println("Current split scan line tokens:");
+
                                 for (int j = 0; j < scanTokens.length; j++) {
                                     System.out.println(scanTokens[j]);
                                 }
+
                                 throw new IOException("There were " + scanTokens.length +
                                         " elements (instead of the expected 4) on line " + lineCount + " in your file ('" + filename + "')!");
                             } else {
@@ -4712,7 +4726,6 @@ public class PRIDEConverter {
                                 scanNumber = scanTokens[1].trim();
                                 precursorMZ = new Double(scanTokens[3].trim());
                             }
-
 
                         // Read mz and intensities
                         } else if (!(currentLine.startsWith("H") || currentLine.startsWith("S") 
@@ -4732,16 +4745,20 @@ public class PRIDEConverter {
                     mzArray[j] = Double.parseDouble((String) mz.get(j));
                     intensityArray[j] = Double.parseDouble((String) intensities.get(j));
                 }
+
                 // OK, all done. Create a mzData spectrum next!
                 Spectrum mzdataSpectrum = transformSpectrum(idCount, mzArray, intensityArray, precursorCharge, precursorMZ);
 
                 // Add the spectrum and its mapping to the collection and table.
                 aSpectra.add(mzdataSpectrum);
+
                 // Note that the actual ID for the spectrum is the ID we passed in +1 - see the transforming method for details.
                 aMappings.put(usedFileName + "_" + scanNumber, new Long(idCount));
+
                 // If you'll look at the above method, you'll see that it consumes two ID's -
                 // one for the spectrum and one for the precursor. So advance it by 2 here.
                 idCount += 1;
+
                 // Ok, we're through the file. Close it.
                 br.close();
             // The .DS_Store file (Mac systems) will be not considered:
@@ -4783,6 +4800,7 @@ public class PRIDEConverter {
 
         // Note that the counter is used AND incremented here.
         aId++;
+
         // Create new mzData spectrum for the fragmentation spectrum.
         // Notice that certain collections and annotations are 'null' here.
         Spectrum fragmentation = new SpectrumImpl(
@@ -7417,7 +7435,7 @@ public class PRIDEConverter {
          * the accession version (if any) as well as the search engine that performed the identification and
          * the database name and version for the search.
          *
-         * @param iAccession
+         * @param iAccession   String with the accession number for the identification.
          * @param iSequenceCount
          * @param iSpectrumCount
          * @param iCoverage
@@ -7456,7 +7474,6 @@ public class PRIDEConverter {
                 Integer aStart, Double aScore, Double aThreshold,
                 Collection modifications, Collection cVParams,
                 Collection aUserParams) {
-            //iPeptides.add(new PeptideImpl(aSpectrumRef, aSequence, aStart, cVParams, aUserParams));
             iPeptides.add(new PeptideImpl(aSpectrumRef, aSequence, aStart,
                     modifications, cVParams, aUserParams));
             iScores.add(aScore);
@@ -7483,9 +7500,9 @@ public class PRIDEConverter {
          * @param aCvParams
          * @param aUserParams
          */
-        public void addPeptide(Long aSpectrumRef, Integer aCharge, Double aSequestXcorr, Double aSequestDelta, Double aPeptideMass,
-                Double aCalculatedPeptideMass, Double aTotalIntensity, Integer aSequestRSp, Double aSequestSp, Double aIonProportion,
-                Integer aRedundancy, String aSequence, String aPreAA,
+        public void addPeptide(Long aSpectrumRef, Integer aCharge, Double aSequestXcorr, Double aSequestDelta, 
+                Double aPeptideMass, Double aCalculatedPeptideMass, Double aTotalIntensity, Integer aSequestRSp,
+                Double aSequestSp, Double aIonProportion, Integer aRedundancy, String aSequence, String aPreAA,
                 String aPostAA, Collection aCvParams, Collection aUserParams) {
 
             // Add here the information that is specific for each peptide
@@ -7570,59 +7587,128 @@ public class PRIDEConverter {
             return new Double(bd.doubleValue());
         }
 
+        /**
+         * Returns the accession number
+         *
+         * @return the accession number
+         */
         public String getIAccession() {
             return iAccession;
         }
 
+        /**
+         * Returns the sequence count
+         *
+         * @return the sequence count
+         */
         public Integer getISequenceCount() {
             return iSequenceCount;
         }
 
+        /**
+         * Returns the spectrum count
+         *
+         * @return the spectrum count
+         */
         public Integer getISpectrumCount() {
             return iSpectrumCount;
         }
 
+        /**
+         * Returns the ion coverage
+         *
+         * @return the ion coverage
+         */
         public Double getICoverage() {
             return iCoverage;
         }
 
+        /**
+         * Returns the protein length
+         *
+         * @return the protein length
+         */
         public Integer getIProteinLength() {
             return iProteinLength;
         }
 
+        /**
+         * Returns the molecular weight
+         *
+         * @return the molecular weight
+         */
         public Double getIMolecularWeight() {
             return iMolecularWeight;
         }
 
+        /**
+         * Returns the PI
+         *
+         * @return the PI
+         */
         public Double getIPI() {
             return iPI;
         }
 
+        /**
+         * Returns the validation status
+         *
+         * @return the validation status
+         */
         public String getIValidationStatus() {
             return iValidationStatus;
         }
 
+        /**
+         * Returns the description
+         *
+         * @return the description
+         */
         public String getIDescription() {
             return iDescription;
         }
 
+        /**
+         * Returns the list of peptides
+         *
+         * @return list of peptides
+         */
         public ArrayList getIPeptides() {
             return iPeptides;
         }
 
+        /**
+         * Returns the search engine
+         *
+         * @return the search engine
+         */
         public String getISearchEngine() {
             return iSearchEngine;
         }
 
+        /**
+         * Returns the database
+         *
+         * @return the database
+         */
         public String getIDatabase() {
             return iDatabase;
         }
 
+        /**
+         * Returns the database version
+         *
+         * @return the database version
+         */
         public String getIDBVersion() {
             return iDBVersion;
         }
 
-        //This setter method is necessary
+        /**
+         * Sets the list of peptides. (This setter method is necessary.)
+         * 
+         * @return the list of peptides
+         */
         public void setIPeptides(ArrayList iPeptides) {
             this.iPeptides = iPeptides;
         }
@@ -7634,8 +7720,8 @@ public class PRIDEConverter {
          */
         public uk.ac.ebi.pride.model.interfaces.core.Identification getGelFreeIdentification() {
 
-            Collection userParams;
-            Collection cvParams;
+            Collection userParams = null;
+            Collection cvParams = null;
 
             if (properties.getDataSource().equalsIgnoreCase("Mascot Dat File")) {
 
@@ -7645,7 +7731,6 @@ public class PRIDEConverter {
 //                userParams.add(new UserParamImpl("PeptideIdentification", 2, "AboveOrEqualToIdentityThreshold"));
                 userParams.add(new UserParamImpl("MascotConfidenceLevel", 0, "" +
                         properties.getMascotConfidenceLevel()));
-                cvParams = null;
             } else if (properties.getDataSource().equalsIgnoreCase("DTASelect")) {
 
                 cvParams = new ArrayList(1);
@@ -7661,10 +7746,6 @@ public class PRIDEConverter {
                 userParams.add(new UserParamImpl("Spectrum count", 2, iSpectrumCount.toString()));
                 userParams.add(new UserParamImpl("pI", 3, iPI.toString()));
                 userParams.add(new UserParamImpl("Validation status", 4, iValidationStatus.toString()));
-
-            } else {
-                userParams = null;
-                cvParams = null;
             }
 
             Double threshold;
@@ -7735,8 +7816,8 @@ public class PRIDEConverter {
     }
 
     /**
-     * New class needed to wrap the peptide information: It has to be identical to PeptideImple. Otherwise we will get
-     * a CastException
+     * New class needed to wrap the peptide information: It has to be identical to PeptideImple. 
+     * Otherwise we will get a CastException
      */
     public static class InnerPeptide {
         private Integer scanNumber = null;
@@ -7745,8 +7826,18 @@ public class PRIDEConverter {
         private Collection cvParams = null;
         private Collection userParams = null;
 
-
-        public InnerPeptide(Integer scanNumber, String sequence, Integer aStart, Collection aModifications, Collection aCvParams, Collection aUserParams) {
+        /**
+         * Construct an InnerPeptide object.
+         *
+         * @param scanNumber
+         * @param sequence
+         * @param aStart
+         * @param aModifications
+         * @param aCvParams
+         * @param aUserParams
+         */
+        public InnerPeptide(Integer scanNumber, String sequence, Integer aStart, Collection aModifications,
+                Collection aCvParams, Collection aUserParams) {
             this.scanNumber = scanNumber;
             this.sequence = sequence;
             this.start = aStart;
@@ -7754,34 +7845,74 @@ public class PRIDEConverter {
             this.userParams = aUserParams;
         }
 
+        /**
+         * Returns the list of CV parameters
+         *
+         * @return the list of CV parameters
+         */
         public Collection getCvParams() {
             return cvParams;
         }
 
+        /**
+         * Sets the list of CV parameters
+         *
+         * @param the list of CV parameters
+         */
         public void setCvParams(Collection aCvParams) {
             this.cvParams = aCvParams;
         }
 
+        /**
+         * Returns the list of user parameters
+         *
+         * @return the list of user parameters
+         */
         public Collection getUserParams() {
             return userParams;
         }
 
+        /**
+         * Sets the list of user parameters
+         *
+         * @param the list of user parameters
+         */
         public void setUserParams(Collection aUserParams) {
             this.userParams = aUserParams;
         }
 
+        /**
+         * Returns the scan number
+         *
+         * @return the scan number
+         */
         public Integer getScanNumber() {
             return scanNumber;
         }
 
+        /**
+         * Sets the scan number
+         *
+         * @param the scan number
+         */
         public void setScanNumber(Integer scanNumber) {
             this.scanNumber = scanNumber;
         }
 
+        /**
+         * Returns the sequence
+         *
+         * @return the sequence
+         */
         public String getSequence() {
             return sequence;
         }
 
+        /**
+         * Sets the sequence
+         *
+         * @param the sequence
+         */
         public void setSequence(String sequence) {
             this.sequence = sequence;
         }
