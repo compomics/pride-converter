@@ -1363,6 +1363,8 @@ public class ExperimentProperties extends javax.swing.JFrame {
             new SpectraSelectionWithIdentifications(prideConverter, this.getLocation());
         } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")){
             new DataFileSelectionTPP(prideConverter, this.getLocation());
+        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("DTASelect")){
+            new DataFileSelectionDTASelect(prideConverter, this.getLocation());
         }
 
         this.setVisible(false);

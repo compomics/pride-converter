@@ -59,6 +59,7 @@ import de.proteinms.omxparser.util.MSSpectrum;
 
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -170,7 +171,7 @@ public class PRIDEConverter {
                     userProperties.getSchema(), props);
             connectionSuccessfull = true;
 
-            //test to check if the latest version if ms_lims is used
+            //test to check if the latest version of ms_lims is used
             try {
                 Identification.getIdentification(conn, "");
             } catch (MySQLSyntaxErrorException e) {
@@ -378,7 +379,7 @@ public class PRIDEConverter {
                     progressDialog.setTitle("Retrieving Spectra. Please Wait.");
                 } else {
                     progressDialog.setIntermidiate(true);
-                    progressDialog.setTitle("Please Wait.");
+                    progressDialog.setTitle("Transforming Spectra. Please Wait.");
                 }
 
                 progressDialog.setVisible(true);
@@ -445,12 +446,10 @@ public class PRIDEConverter {
                     } else if (properties.getDataSource().equalsIgnoreCase("MS2")) {
                         filenameToSpectrumID = transformSpectraFromMS2Files(mzDataSpectra);
                     } else if (properties.getDataSource().equalsIgnoreCase("TPP")) {
-                        filenameToSpectrumID = transformSpectraFromTPPFiles(mzDataSpectra);
+                        filenameToSpectrumID = transformSpectraFromTPPProjects(mzDataSpectra);
+                    } else if (properties.getDataSource().equalsIgnoreCase("DTASelect")) {
+                        filenameToSpectrumID = transformSpectraFromDTASelectProjects(mzDataSpectra);
                     }
-//                    else if (properties.getDataSource().equalsIgnoreCase("mzData")) {
-//                        transformSpectraFromMzDataFiles(mzDataSpectra);
-//                    }
-
 
                     if (debug) {
                         System.out.println("\nProcessed " + mzDataSpectra.size() + " spectra to mzData format.");
@@ -475,11 +474,11 @@ public class PRIDEConverter {
                     // create the mzData object
                     MzData mzData;
 
-                    if (properties.getDataSource().equalsIgnoreCase("TPP")) {
+                    if (properties.getDataSource().equalsIgnoreCase("TPP") ||
+                            properties.getDataSource().equalsIgnoreCase("DTASelect")) {
 
-                        // for TPP data the mzDataFile has already been created, we
-                        // just need to add/update the additional details
-                        mzData = updateMzData(properties.getMzDataFile());
+                        // for TPP and DTASelect the mzDataFile has already been created
+                        mzData = properties.getMzDataFile();
 
                     } else if (properties.getDataSource().equalsIgnoreCase("mzData")) {
 
@@ -507,9 +506,10 @@ public class PRIDEConverter {
                             properties.getDataSource().equalsIgnoreCase("VEMS") ||
                             properties.getDataSource().equalsIgnoreCase("MS2") ||
                             properties.getDataSource().equalsIgnoreCase("mzData") ||
-                            properties.getDataSource().equalsIgnoreCase("TPP")) {
+                            properties.getDataSource().equalsIgnoreCase("TPP") ||
+                            properties.getDataSource().equalsIgnoreCase("DTASelect")) {
                         // no identifications in mgf, dta, pkl, pkx and mzXML files
-                        // for TPP the identifications are already handled
+                        // for TPP and DTASelect the identifications are already handled
                         ids = new ArrayList<IdentificationGeneral>();
                     }
 
@@ -522,8 +522,7 @@ public class PRIDEConverter {
                         progressDialog.setIntermidiate(false);
                         progressDialog.setMax(ids.size());
                     } catch (NullPointerException e) {
-                        Util.writeToErrorLog("Progress bar: NullPointerException!!!\n" +
-                                e.toString());
+                        Util.writeToErrorLog("Progress bar: NullPointerException!!!\n" + e.toString());
                     }
 
                     for (int i = 0; i < ids.size(); i++) {
@@ -683,7 +682,8 @@ public class PRIDEConverter {
                         System.out.println("\nProcessed " + counter + " identifications.\n");
                     }
 
-                    if (!properties.getDataSource().equalsIgnoreCase("TPP")) {
+                    if (!properties.getDataSource().equalsIgnoreCase("TPP") &&
+                            !properties.getDataSource().equalsIgnoreCase("DTASelect")) {
                         identifications = new ArrayList(groupedIds.size());
                     }
 
@@ -802,6 +802,8 @@ public class PRIDEConverter {
                             dataSourceShort = "mzData";
                         } else if (properties.getDataSource().equalsIgnoreCase("TPP")) {
                             dataSourceShort = "tpp";
+                        } else if (properties.getDataSource().equalsIgnoreCase("DTASelect")) {
+                            dataSourceShort = "DTASelect";
                         }
 
                         completeFileName = userProperties.getOutputPath() +
@@ -899,6 +901,9 @@ public class PRIDEConverter {
                         } else if (properties.getDataSource().equalsIgnoreCase("TPP")) {
                             spectraCount = totalNumberOfSpectra - emptySpectraCounter;
                             peptideIdentificationsCount = peptideIdCount;
+                        } else if (properties.getDataSource().equalsIgnoreCase("DTASelect")) {
+                            spectraCount = mzDataSpectra.size();
+                            peptideIdentificationsCount = identifications.size();
                         }
 
                         // present a dialog with information about the created file
@@ -4000,6 +4005,802 @@ public class PRIDEConverter {
     }
 
     /**
+     * This method transforms spectra from DTASelect projects, returning
+     * a HashMap that maps the filenames to their mzData spectrumID.
+     *
+     * When completed "identification" contains all the identifications, and mzDataFile will contain
+     * the spectra as mzData.
+     *
+     * @param    aSpectra   Collection with the Spectrumfile instances to to transform.
+     * @param    aTransformedSpectra   ArrayList that will contain the transformed
+     *                                 mzData spectra. Please note that this is a
+     *                                 reference parameter.
+     */
+    private static HashMap transformSpectraFromDTASelectProjects(ArrayList aTransformedSpectra) {
+
+//        long timerStart = System.currentTimeMillis();
+
+        final String SEPARATOR = "\t";
+        final Pattern START_WITH_A_LETTER = Pattern.compile("^[a-zA-Z].*");
+
+        progressDialog.setString(null);
+        progressDialog.setTitle("Transforming Spectra. Please Wait.");
+        progressDialog.setIntermidiate(true);
+        progressDialog.setString(null);
+
+        HashMap<String, Long> filenameToMzDataIDMapping = new HashMap<String, Long>();
+
+        // get the list of spectrum files
+        File[] spectrumFiles = new File(properties.getSpectrumFilesFolderName()).listFiles();
+
+        try {
+            // The first thing we'll do is get all the spectra, read them in and transform them in mzData format.
+            // Since PRIDE is actually mzData grouped together with an identification part, we'll also have to
+            // be able to linke the spectra to the corresponding identifications. For this, we'll give each
+            // spectrum a number, and we'll create a lookup table with 'filename -> number' on the way.
+            //
+            // You'll also notice a lot of hard-coded values here describing the instrument and sample; they
+            // are really important parts of mzData that allow you to thoroughly annotate your spectra, which is
+            // important for your colleagues to make sense of your data!
+
+            // But let us first load all the spectra from the input folder and transform them.
+            aTransformedSpectra = new ArrayList();
+
+            // At present only the array containing the files is not empty (the ArrayList and the HashMap were just created).
+            // The first thing is done in the program is to parse the peak lists and create the transformed spectra for the mzData file
+
+            readSpectra(spectrumFiles, aTransformedSpectra, filenameToMzDataIDMapping);
+
+            // Right. With the spectra done, we only need to do the identifications and we're through!
+            // We'll start by creating a HashMap that will hold all identifications
+            // (keyed by protein accession number in this case)
+            HashMap<String, InnerID> allIds = new HashMap<String, InnerID>();
+
+
+            //******************PARSING THE IDENTIFICATIONS FILE********************************************
+
+            progressDialog.setString(null);
+            progressDialog.setTitle("Parsing DTASelect File. Please Wait.");
+            progressDialog.setIntermidiate(true);
+            progressDialog.setString(null);
+
+            // Now we'll fil it out zhile reading the input file. PARSING THE TEXT FILE...
+            BufferedReader br = new BufferedReader(new FileReader(properties.getDtaSelectFileName()));
+            String line = null;
+
+            // In this particular case, it is also neccessary to get track of the previous line:
+
+            String previousLine = null;
+
+            // This counter counts every single line, used for reporting errors
+            // (as in: line x has an error).
+            int lineCount = 0;
+            // This boolean is used to detect the very first information-containing line.
+            // This is the header, so the boolean helps us to skip it.
+            boolean firstLine = true;// we do not need it here since we added # to the two first lines of the file
+            // Declarations of variables we may need later:
+
+            // Protein related data to be parsed:
+            String accessionNumber = null;// locus name
+            Integer sequenceCount = null;
+            Integer spectrumCount = null;
+
+            String initialCoverage = null;
+            Double coverage = null;
+
+            Integer proteinLength = null;
+            Double molecularWeight = null;
+            Double pI = null;
+            String validationStatus = null;
+            String proteinDescription = null;
+
+            // For the peptides:
+
+            String unique = null;
+
+            // Information taken from the file name:
+            String fileName = null;
+            String spectrumFile = null;
+            Long scanNumber = null;
+            Integer charge = null;
+
+            Double sequestXcorr = null;
+            Double sequestDelta = null;
+            Double peptideMass = null;
+            Double calculatedPeptideMass = null;
+            Double totalIntensity = null;
+            Integer sequestRSp = null;
+            Double sequestSp = null;
+            Double ionProportion = null;
+            Integer redundancy = null;
+
+            // Information about the peptides
+            String preDigSiteAA = null;
+            String peptideSequence = null;
+            String postDigSiteAA = null;
+
+            // We are creating a protein InnerID and initializing it to null.
+            InnerID protein = null;
+
+            // We have to create an ArrayList to be able to deal with multiple proteins that have the same peptides assigned
+            ArrayList<InnerID> proteins = new ArrayList<InnerID>();
+
+            //Flag to decide where the file is parsed
+            boolean startParsing = false;
+
+            while ((line = br.readLine()) != null && !cancelConversion) {
+
+                //For all the lines, do two things:
+                // 1. Count the line.
+                lineCount++;
+                //System.out.println("The line is: " +lineCount);// For debugging reasons only
+                // 2. Remove leading and trailing spaces.
+                line = line.trim();
+
+                // Switch the flag here:
+                if (previousLine != null && previousLine.startsWith("Unique")) {
+                    startParsing = true;
+                }
+                //We do not need the last lines of the file
+                if (line.contains("Proteins") && line.contains("Peptide IDs")) {
+                    startParsing = false;
+                }
+
+                //Start parsing here
+                if (startParsing) {
+
+                    // Skip the first line/s as it is the header line/s.
+                    // Okay, non-empty, non-comment, non-header line.
+                    // We need to process this.
+                    // If the line does not start with a */ " " (the lines that contain the PROTEIN information)
+
+                    // ** THIS WILL ONLY WORK IF THE GENE NAMES DO NOT START WITH A NUMBER!!
+
+                    if (START_WITH_A_LETTER.matcher(line).matches() || line.startsWith("2") || line.startsWith("3") || line.startsWith("4")) {
+                        // We have initialized InnedID (Protein) to 'null'. Unless it is the first 'protein' line in the file, the protein
+                        // will be different from 'null'.
+
+                        // There are times in the file that there are alternate proteins (alternate accession numbers or locus in this particular case).
+                        // In these case, thy will not have peptides
+                        if (protein != null && proteins.size() == 0) {
+                            // We were already assembling a protein. So we need to store that one before proceeding with a new one. We add it to the HashMap
+                            Object temp = allIds.put(protein.getIAccession(), protein);
+//                            if(temp != null) {
+//                                throw new RuntimeException("Protein '" + protein.getIAccession() + "' was reported twice in the file!." +
+//                                        "\nThe values for this protein are: Description: " + protein.getIDescription() +
+//                                        "\nCoverage: " + protein.getICoverage() +
+//                                        "\nMolecular Weight: " + protein.getIMolecularWeight());
+//                            }
+                        }
+
+                        // There will be already peptides here in this protein (getIPeptides().size()!=0)
+                        if (protein != null && proteins.size() != 0 && protein.getIPeptides().size() != 0) {
+                            // There will be already peptides here in this protein (getIPeptides().size()!=0)
+                            Object temp = allIds.put(protein.getIAccession(), protein);
+//                            if(temp != null) {
+//                                throw new RuntimeException("Protein '" + protein.getIAccession() + "' was reported twice in the file!." +
+//                                        "\nThe values for this protein are: Description: " + protein.getIDescription() +
+//                                        "\nCoverage: " + protein.getICoverage() +
+//                                        "\nMolecular Weight: " + protein.getIMolecularWeight());
+//                            }
+
+                            // We were already assembling a protein. So we need to store that one before proceeding with a new one. We add it to the HashMap
+                            for (InnerID prot : proteins) {
+                                prot.setIPeptides(protein.getIPeptides());
+                                allIds.put(prot.getIAccession(), prot);
+//                                if(allIds.containsKey(prot)) {
+//                                    throw new RuntimeException("Protein '" + protein.getIAccession() + "' was reported twice in the file!." +
+//                                            "\nThe values for this protein are: Description: " + protein.getIDescription() +
+//                                            "\nCoverage: " + protein.getICoverage() +
+//                                            "\nMolecular Weight: " + protein.getIMolecularWeight());
+//                                }
+                            }
+                            //Empty the collection till the next cycle
+                            proteins.clear();
+                        }
+
+                        //If they have not peptides, it will be necessary to copy the collection of proteins of the last created protein:
+
+                        if (protein != null && protein.getIPeptides().size() == 0) {
+                            proteins.add(protein);
+                        }
+
+
+
+                        //WE ARE NOT GOING TO USE STRINGTOKENIZER HERE SINCE THERE ARE MISSING VALUES THAT WILL BE
+                        //SKIPPED (EMPTY CELLS IN THE MIDDLE OF A LINE, FOR INSTANCE)
+                        //StringTokenizer st = new StringTokenizer(line, SEPARATOR);
+                        String[] proteinTokens = line.split(SEPARATOR);
+                        //We have to take into account as well if the last token is empty:
+                        if (!(proteinTokens.length == 9)) { // in fact this is erroneus since if the last token is empty proteinTokens[9] will give and IndexOutOfBoundsException. Here, it works since there is no case in which this happens.
+                            System.out.println("Current split protein tokens:");
+
+                            for (int i = 0; i < proteinTokens.length; i++) {
+                                System.out.println(proteinTokens[i]);
+                            }
+
+                            cancelConversion = true;
+                            throw new IOException("There were " + proteinTokens.length + 
+                                    " elements (instead of the expected 9) on line " + lineCount + " in your file ('"
+                                    + properties.getDtaSelectFileName() + "')!");
+                        } else {
+
+                            accessionNumber = proteinTokens[0].trim();//locus name is accession name
+                            try {
+                                sequenceCount = new Integer(proteinTokens[1].trim());
+                            } catch (NumberFormatException nfe) {
+                                System.out.println("Warning: The sequence count was not specified in the correct format!! The token was: '" + proteinTokens[1] + "'");
+                                // If there is no coverage, coverage will be null.
+                                sequenceCount = null;
+                            }
+
+                            try {
+                                spectrumCount = new Integer(proteinTokens[2].trim());
+                            } catch (NumberFormatException nfe) {
+                                System.out.println("Warning: The spectrum count count was not specified in the correct format!! The token was: '" + proteinTokens[2] + "'");
+                                // If there is no coverage, coverage will be null.
+                                spectrumCount = null;
+                            }
+
+                            initialCoverage = proteinTokens[3].trim();
+
+                            try {
+                                coverage = new Double(initialCoverage.substring(0, initialCoverage.indexOf("%")));
+                                // Coverage must be between 0 and 1 for the XML to be validated
+                                coverage = coverage / 100;
+                            } catch (NumberFormatException nfe) {
+                                System.out.println("Warning: The coverage was not specified in the correct format!! The token was: '" + proteinTokens[3] + "'");
+                                // If there is no coverage, coverage will be null.
+                                coverage = null;
+                            }
+
+                            try {
+                                proteinLength = new Integer(proteinTokens[4].trim());
+
+                            } catch (NumberFormatException nfe) {
+                                System.out.println("Warning: The protein length count was not specified in the correct format!! The token was: '" + proteinTokens[4] + "'");
+                                // If there is no coverage, coverage will be null.
+                                proteinLength = null;
+                            }
+
+                            molecularWeight = new Double(proteinTokens[5].trim());
+                            pI = new Double(proteinTokens[6].trim());
+                            validationStatus = proteinTokens[7].trim();
+                            proteinDescription = proteinTokens[8].trim();
+
+                            //We create a new protein instance:
+                            protein = new InnerID(accessionNumber, sequenceCount, spectrumCount, coverage, proteinLength,
+                                    molecularWeight, pI, validationStatus, proteinDescription, "Sequest", properties.getDatabaseName());
+                        }
+
+                    // Now, the information for the PEPTIDES included in each protein identification (if(line.startsWith(" "))
+                    } else {
+
+                        String[] peptidesTokens = line.split(SEPARATOR);
+                        // make sure we have the correct number of elements. As the first token is empty, we have to start
+                        // taking into account from what would be token 2 in principle (it is a bug in the string.split() method)
+                        // The method does not consider empty spaces at the beginning and at the end of each line
+                        // WE HAVE TO TAKE INTO ACCOUNT THE EXISTENCE OF 10 TOKENS FIRST (all of them since we are always going to skip the
+                        //first empty one, it is always empty). But WE HAVE TO CONSIDER AS WELL THE EXISTENCE OF 9 TOKENS,
+                        // SINCE EMPTY SPACES ARE FOUND SOMETIMES FOR THE LAST ONE ("Count").
+                        // Duplication of code exists here:
+                        if (peptidesTokens.length == 12) {
+                            // All seems to be OK. Let's parse the relevant information.
+                            unique = peptidesTokens[0].trim();// we do not really need this
+                            // we will need to get the fileName information
+                            fileName = peptidesTokens[1].trim();
+
+                            // In order to use "." in the String split() method, it is neccesary to escape it twice.
+                            String[] fileInfo = fileName.split("\\.");
+
+                            // In most cases the name of the files has an appended "-a"
+                            if (fileInfo[0].contains("-a")) {
+                                spectrumFile = fileInfo[0].substring(0, fileInfo[0].indexOf("-a")).trim();
+                            } else {
+                                spectrumFile = fileInfo[0].trim();
+                            }
+
+                            scanNumber = new Long(fileInfo[1].trim());
+
+                            // tokens 2 and 3 will be the same, we do not need this
+                            charge = new Integer(fileInfo[3].trim());
+
+                            sequestXcorr = new Double(peptidesTokens[2].trim());
+
+                            // Again, we have to handle here the existence of a missing value for that parameter in the text file
+                            try {
+                                sequestDelta = new Double(peptidesTokens[3].trim());
+                            } catch (NumberFormatException nfe) {
+                                System.out.println("Warning: The sequestDelta parameter was not specified in the correct format!! The token was: '" + peptidesTokens[3] + "'");
+                                sequestDelta = null;
+                            }
+
+                            peptideMass = new Double(peptidesTokens[4].trim());
+                            calculatedPeptideMass = new Double(peptidesTokens[5].trim());
+                            totalIntensity = new Double(peptidesTokens[6].trim());
+
+                            // The same again (possible missing value)
+                            try {
+                                sequestRSp = Integer.parseInt(peptidesTokens[7].trim());
+                            } catch (NumberFormatException nfe) {
+                                System.out.println("Warning: The RSp parameter was not specified in the correct format!! The token was: '" + peptidesTokens[7] + "'");
+                                sequestRSp = null;
+                            }
+
+                            sequestSp = new Double(peptidesTokens[8].trim());
+
+                            ionProportion = new Double(peptidesTokens[9].trim());
+                            redundancy = new Integer(peptidesTokens[10].trim());
+                            // Peptide sequence:
+                            String peptide = peptidesTokens[11].trim();
+
+                            // In order to use "." in the String split() method, it is neccesary to escape it twice.
+                            String[] peptideAA = peptide.split("\\.");
+                            preDigSiteAA = null;
+                            peptideSequence = null;
+                            postDigSiteAA = null;
+
+                            // In some cases the post aa after digestion is not indicated.
+                            preDigSiteAA = peptideAA[0].trim();
+                            peptideSequence = peptideAA[1].trim();
+                            if (peptideAA.length == 3) {
+                                postDigSiteAA = peptideAA[2].trim();
+                            } else {
+                                postDigSiteAA = "";
+                            }
+
+                            // Here the Link is done with the spectrum that corresponds to each peptide (fileName does not contain "-a").
+                            // It is necessary to add a 0.
+
+                            // *** HERE IT IS WHEN THE JOINT IS MADE WITH THE SPECTRA. I HAVE SEEN TWO POSSIBILITIES TO DO IT:
+                            //String key = spectrumFile + "_0" +scanNumber;
+                            //String key = spectrumFile + scanNumber;
+
+                            // In this case, it is the second one:
+
+                            String key = spectrumFile + "_" + scanNumber;
+                            Long specRef = filenameToMzDataIDMapping.get(key);
+
+//                            if(specRef !=null){
+//                                System.out.println("specRef= "+specRef);
+//                                System.out.println(spectrumFile+ "_0" +scanNumber);
+//                            }
+
+                            //Add information about each peptide to the protein instance
+                            protein.addPeptide(specRef, charge, sequestXcorr, sequestDelta, peptideMass, calculatedPeptideMass,
+                                    totalIntensity, sequestRSp, sequestSp, ionProportion, redundancy, peptideSequence,
+                                    preDigSiteAA, postDigSiteAA, null, null);
+
+                        // If the first token is empty, the split method will not take it into account
+                        } else if (peptidesTokens.length == 11) {
+                            // All seems to be OK. Let's parse the relevant information.
+                            //unique = peptidesTokens[0].trim();// we do not really need this
+                            // we will need to get the fileName information
+                            fileName = peptidesTokens[0].trim();
+
+                            // In order to use "." in the String split() method, it is neccesary to escape it twice.
+                            String[] fileInfo = fileName.split("\\.");
+
+                            // In most cases the name of the files has an appended "-a"
+                            if (fileInfo[0].contains("-a")) {
+                                spectrumFile = fileInfo[0].substring(0, fileInfo[0].indexOf("-a")).trim();
+                            } else {
+                                spectrumFile = fileInfo[0].trim();
+                            }
+                            scanNumber = new Long(fileInfo[1].trim());
+                            // tokens 2 and 3 will be the same, we do not need this
+                            charge = new Integer(fileInfo[3].trim());
+
+                            sequestXcorr = new Double(peptidesTokens[1].trim());
+
+                            // Again, we have to handle here the existence of a missing value for that parameter in the text file
+                            try {
+                                sequestDelta = new Double(peptidesTokens[2].trim());
+                            } catch (NumberFormatException nfe) {
+                                System.out.println("Warning: The sequestDelta parameter was not specified in the correct format!! The token was: '" + peptidesTokens[2] + "'");
+                                sequestDelta = null;
+                            }
+
+                            peptideMass = new Double(peptidesTokens[3].trim());
+                            calculatedPeptideMass = new Double(peptidesTokens[4].trim());
+                            totalIntensity = new Double(peptidesTokens[5].trim());
+
+                            // The same again (possible missing value)
+                            try {
+                                sequestRSp = Integer.parseInt(peptidesTokens[6].trim());
+                            } catch (NumberFormatException nfe) {
+                                System.out.println("Warning: The RSp parameter was not specified in the correct format!! The token was: '" + peptidesTokens[6] + "'");
+                                sequestRSp = null;
+                            }
+
+                            sequestSp = new Double(peptidesTokens[7].trim());
+
+                            ionProportion = new Double(peptidesTokens[8].trim());
+                            redundancy = new Integer(peptidesTokens[9].trim());
+                            // Peptide sequence:
+                            String peptide = peptidesTokens[10].trim();
+
+                            // In order to use "." in the String split() method, it is neccesary to escape it twice.
+                            String[] peptideAA = peptide.split("\\.");
+                            preDigSiteAA = null;
+                            peptideSequence = null;
+                            postDigSiteAA = null;
+
+                            // In some cases the post aa after digestion is not indicated.
+                            preDigSiteAA = peptideAA[0].trim();
+                            peptideSequence = peptideAA[1].trim();
+                            if (peptideAA.length == 3) {
+                                postDigSiteAA = peptideAA[2].trim();
+                            } else {
+                                postDigSiteAA = "";
+                            }
+
+                            // Here the Link is done with the spectrum that corresponds to each peptide (fileName does not contain "-a"):
+
+                            // *** HERE IT IS WHEN THE JOINT IS MADE WITH THE SPECTRA. I HAVE SEEN TWO POSSIBILITIES TO DO IT:
+                            //String key = spectrumFile + "_0" +scanNumber;
+                            //String key = spectrumFile + scanNumber;
+
+                            // In this case, it is the second one:
+
+                            String key = spectrumFile + "_" + scanNumber;
+                            Long specRef = filenameToMzDataIDMapping.get(key);
+
+//                            if(specRef !=null){
+//                                System.out.println("specRef= "+specRef);
+//                                System.out.println(spectrumFile+ "_0" +scanNumber);
+//                            }
+
+                            //Add information about each peptide to the protein instance
+                            protein.addPeptide(specRef, charge, sequestXcorr, sequestDelta, peptideMass, calculatedPeptideMass,
+                                    totalIntensity, sequestRSp, sequestSp, ionProportion, redundancy, peptideSequence,
+                                    preDigSiteAA, postDigSiteAA, null, null);
+
+                        } else {
+                            // In case the number of tokens is different:
+                            System.out.println("Current split peptide tokens: ");
+
+                            for (int i = 0; i < peptidesTokens.length; i++) {
+                                System.out.println(peptidesTokens[i]);
+                            }
+
+//                            throw new RuntimeException("Protein '" + protein.getIAccession() + "' was reported twice in the file!." +
+//                                    "\nThe values for this protein are: Description: " + protein.getIDescription() +
+//                                    "\nCoverage: " + protein.getICoverage() +
+//                                    "\nMolecular Weight: " + protein.getIMolecularWeight());
+
+                        }
+                    }
+                }
+
+                // This is necesasry to add peptides to proteins that have alternative locus names.
+                previousLine = line;
+            }
+
+            // FENCE-POST: fix last protein (which would be discarded otherwise).
+
+            if (protein != null && proteins.size() == 0) {
+                // We were already assembling a protein. So we need to store that one before proceeding with a new one. We add it to the HashMap
+                Object temp = allIds.put(protein.getIAccession(), protein);
+//                if(temp != null) {
+//                    throw new RuntimeException("Protein '" + protein.getIAccession() + "' was reported twice in the file!." +
+//                            "\nThe values for this protein are: Description: " + protein.getIDescription() +
+//                            "\nCoverage: " + protein.getICoverage() +
+//                            "\nMolecular Weight: " + protein.getIMolecularWeight());
+//                }
+            }
+
+            // There will be already peptides here in this protein (getIPeptides().size()!=0)
+            if (protein != null && proteins.size() != 0 && protein.getIPeptides().size() != 0) {
+                // There will be already peptides here in this protein (getIPeptides().size()!=0)
+                Object temp = allIds.put(protein.getIAccession(), protein);
+//                if(temp != null) {
+//                    throw new RuntimeException("Protein '" + protein.getIAccession() + "' was reported twice in the file!." +
+//                            "\nThe values for this protein are: Description: " + protein.getIDescription() +
+//                            "\nCoverage: " + protein.getICoverage() +
+//                            "\nMolecular Weight: " + protein.getIMolecularWeight());
+//                }
+
+                // We were already assembling a protein. So we need to store that one before proceeding with a new one. We add it to the HashMap
+                for (InnerID prot : proteins) {
+                    prot.setIPeptides(protein.getIPeptides());
+                    Object temp2 = allIds.put(prot.getIAccession(), prot);
+//                    if(temp2 != null) {
+//                        throw new RuntimeException("Protein '" + protein.getIAccession() + "' was reported twice in the file!." +
+//                                "\nThe values for this protein are: Description: " + protein.getIDescription() +
+//                                "\nCoverage: " + protein.getICoverage() +
+//                                "\nMolecular Weight: " + protein.getIMolecularWeight());
+//                    }
+                }
+
+                //Empty the collection
+                proteins.clear();
+            }
+
+            //If they have not peptides, it will be necessary to copy the collection of proteins of the last created protein:
+            if (protein != null && protein.getIPeptides().size() == 0) {
+                proteins.add(protein);
+            }
+
+            // Right, all done reading.
+            // Close reader.
+            br.close();
+
+            // Transform our temporary identifications into PRIDE Identification instances.
+            identifications = new ArrayList(allIds.size());
+            Iterator<InnerID> iter = allIds.values().iterator();
+            while (iter.hasNext()) {
+                InnerID lInnerID = iter.next();
+                identifications.add(lInnerID.getGelFreeIdentification());
+            }
+
+            if (!cancelConversion) {
+
+                progressDialog.setString(null);
+                progressDialog.setTitle("Creating mzData File. Please Wait.");
+                progressDialog.setIntermidiate(true);
+                progressDialog.setString(null);
+
+                // The CV lookup stuff. (NB: currently hardcoded to PSI only)
+                Collection cvLookups = new ArrayList(1);
+                cvLookups.add(new CVLookupImpl(properties.getCvVersion(),
+                        properties.getCvFullName(),
+                        properties.getCvLabel(),
+                        properties.getCvAddress()));
+
+                // Instrument source CV parameters.
+                Collection instrumentSourceCVParameters = new ArrayList(1);
+                instrumentSourceCVParameters.add(new CvParamImpl(
+                        properties.getAccessionInstrumentSourceParameter(),
+                        properties.getCVLookupInstrumentSourceParameter(),
+                        properties.getNameInstrumentSourceParameter(),
+                        0,
+                        properties.getValueInstrumentSourceParameter()));
+
+                // Instrument detector parameters.
+                Collection instrumentDetectorParamaters = new ArrayList(1);
+                instrumentDetectorParamaters.add(new CvParamImpl(
+                        properties.getAccessionInstrumentDetectorParamater(),
+                        properties.getCVLookupInstrumentDetectorParamater(),
+                        properties.getNameInstrumentDetectorParamater(),
+                        0,
+                        properties.getValueInstrumentDetectorParamater()));
+
+                // sample details
+                ArrayList sampleDescriptionUserParams = new ArrayList(
+                        properties.getSampleDescriptionUserSubSampleNames().size());
+
+                for (int i = 0; i < properties.getSampleDescriptionUserSubSampleNames().size(); i++) {
+                    sampleDescriptionUserParams.add(new UserParamImpl(
+                            "SUBSAMPLE_" + (i + 1),
+                            i, (String) properties.getSampleDescriptionUserSubSampleNames().
+                            get(i)));
+                }
+
+                for (int i = 0; i < properties.getSampleDescriptionCVParamsQuantification().size(); i++) {
+                    properties.getSampleDescriptionCVParams().add(
+                            properties.getSampleDescriptionCVParamsQuantification().get(i));
+                }
+
+                // Create mzData instance.
+                getProperties().setMzDataFile(
+                        new MzDataImpl(
+                        aTransformedSpectra,
+                        null, // software compeletion time
+                        properties.getContacts(),
+                        properties.getInstrumentName(),
+                        properties.getProcessingMethod(),
+                        properties.getProcessingMethodUserParams(),
+                        properties.getSourceFile(),
+                        userProperties.getCurrentSampleSet(),
+                        properties.getInstrumentAdditionalCvParams(),
+                        properties.getInstrumentAdditionalUserParams(),
+                        cvLookups,
+                        properties.getMzDataVersion(),
+                        instrumentDetectorParamaters,
+                        properties.getInstrumentDetectorUserParams(),
+                        properties.getSampleDescriptionComment(),
+                        properties.getMzDataAccessionNumber(),
+                        properties.getAnalyzerList(),
+                        properties.getSoftwareComments(),
+                        instrumentSourceCVParameters,
+                        properties.getInstrumentSourceUserParams(),
+                        properties.getSoftwareVersion(),
+                        properties.getSampleDescriptionCVParams(),
+                        sampleDescriptionUserParams,
+                        properties.getSoftwareName()));
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                    null, "An error occured when parsing a DTASelect project.\n" +
+                    "See ../Properties/ErrorLog.txt for more details.",
+                    "Error Parsing DTASelect Project", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error Parsing DTASelect Project: ");
+            e.printStackTrace();
+        }
+
+
+//        long end = System.currentTimeMillis();
+//        System.out.println("Transformation Done: " + (end - timerStart) + "\n");
+
+        return filenameToMzDataIDMapping;
+    }
+
+    /**
+     * This method reads all the MS2 spectra from the harddrive, converts them to mzData spectra
+     * (complete with hardcoded annotations here...) and stores a mapping of filename to
+     * ID number in the mzData structure. The latter is used afterwards to connect the peptide identifications
+     * to their corresponding spectra.
+     * Note that the final Collection of spectra, as well as the mapping table are passed as
+     * reference parameters here!
+     *
+     * @param aFiles    File[] with the spectra files to load.
+     * @param aSpectra  Collection in which the transformed mzData spectra will be stored.
+     * @param aMappings HashMap with the (filename --> mzData ID number) mapping.
+     * @throws java.io.IOException when one of the files could not be read.
+     */
+    private static void readSpectra(File[] aFiles, Collection aSpectra, HashMap aMappings) throws IOException {
+
+        // This counter is used to generate the ID numbers for the mzData spectra.
+
+        int idCount = 0;
+        for (int i = 0; i < aFiles.length; i++) {
+            // The current file.
+
+            File lFile = aFiles[i];
+            // Setting up the variables we'll collect.
+            String filename = lFile.getName();
+
+            // Delete non .txt files from the input folder (the file .DS_Store for Mac operating system):
+            if (filename.endsWith(".ms2")) {
+                String usedFileName = filename.substring(0, filename.indexOf("."));
+
+                Double precursorMZ = null;
+                String scanNumber = null;
+                // We do not haver precursor intensity
+                //double precursorIntensity = -1.0;
+                int precursorCharge = -1;
+                double[] mzArray = null;
+                double[] intensityArray = null;
+
+                BufferedReader br = new BufferedReader(new FileReader(lFile));
+                String currentLine = null;
+                boolean first = true;
+                int lineCount = 0;
+                // We don't know in advance how many m/z and intensity values we'll need to store,
+                // so use these in the interim.
+                ArrayList mz = new ArrayList();
+                ArrayList intensities = new ArrayList();
+                while ((currentLine = br.readLine()) != null) {
+                    lineCount++;
+                    if (!(currentLine.equals(""))) {
+                        // Take the precursor mass
+                        if (currentLine.startsWith("S")) {
+                            if (precursorMZ != null) {
+                                // And process the m/z and intensities.
+                                int size = mz.size();
+                                mzArray = new double[size];
+                                intensityArray = new double[size];
+                                for (int j = 0; j < size; j++) {
+                                    mzArray[j] = Double.parseDouble((String) mz.get(j));
+                                    intensityArray[j] = Double.parseDouble((String) intensities.get(j));
+                                }
+                                // OK, all done. Create a mzData spectrum next!
+                                Spectrum mzdataSpectrum = transformSpectrum(idCount, mzArray, intensityArray, precursorCharge, precursorMZ);
+
+                                // Add the spectrum and its mapping to the collection and table.
+                                aSpectra.add(mzdataSpectrum);
+                                // We are going to use the file name and the scanNumber to build the HashMap
+                                aMappings.put(usedFileName + "_" + scanNumber, new Long(idCount));
+                                // If you'll look at the above method, you'll see that it consumes two ID's -
+                                // one for the spectrum and one for the precursor. So advance it by 2 here.
+                                idCount += 1;
+                                // That completes the cycle.
+                                mz = new ArrayList();
+                                intensities = new ArrayList();
+                            }
+                            String[] scanTokens = currentLine.split("\t");
+                            if (!(scanTokens.length == 4)) {
+                                System.out.println("Current split scan line tokens:");
+                                for (int j = 0; j < scanTokens.length; j++) {
+                                    System.out.println(scanTokens[j]);
+                                }
+                                throw new IOException("There were " + scanTokens.length +
+                                        " elements (instead of the expected 4) on line " + lineCount + " in your file ('" + filename + "')!");
+                            } else {
+                                // we do not need the initial H, start and end scans, just  the precursor mass
+                                scanNumber = scanTokens[1].trim();
+                                precursorMZ = new Double(scanTokens[3].trim());
+                            }
+
+
+                        // Read mz and intensities
+                        } else if (!(currentLine.startsWith("H") || currentLine.startsWith("S") 
+                                || currentLine.startsWith("I") || currentLine.startsWith("Z"))) {
+                            String[] mzAndintensity = currentLine.split(" ");
+                            mz.add(mzAndintensity[0].trim());
+                            intensities.add(mzAndintensity[1].trim());
+                        }
+                    }
+                }
+
+                // FENCE-POST:
+                int size = mz.size();
+                mzArray = new double[size];
+                intensityArray = new double[size];
+                for (int j = 0; j < size; j++) {
+                    mzArray[j] = Double.parseDouble((String) mz.get(j));
+                    intensityArray[j] = Double.parseDouble((String) intensities.get(j));
+                }
+                // OK, all done. Create a mzData spectrum next!
+                Spectrum mzdataSpectrum = transformSpectrum(idCount, mzArray, intensityArray, precursorCharge, precursorMZ);
+
+                // Add the spectrum and its mapping to the collection and table.
+                aSpectra.add(mzdataSpectrum);
+                // Note that the actual ID for the spectrum is the ID we passed in +1 - see the transforming method for details.
+                aMappings.put(usedFileName + "_" + scanNumber, new Long(idCount));
+                // If you'll look at the above method, you'll see that it consumes two ID's -
+                // one for the spectrum and one for the precursor. So advance it by 2 here.
+                idCount += 1;
+                // Ok, we're through the file. Close it.
+                br.close();
+            // The .DS_Store file (Mac systems) will be not considered:
+            } else {
+                System.out.println("The file " + filename + " was not included among the processed files\n");
+            }
+        }
+    }
+
+    /**
+     * This method transform the information from a peaklist into an mzData spectrum.
+     *
+     * @param aId              int with the ID for the precurosr. The ID of the fragmentation spectrum itself will be this ID + 1.
+     * @param aMzArray         double[] with the m/z values for this spectrum.
+     * @param aIntensityArray  double[] with the intensity values for this spectrum.
+     * @param aPrecursorCharge int with the precursor charge.
+     * @param aPrecursorMZ     double with the precursor m/z.
+     * @return int with the current state of the counter.
+     */
+    private static Spectrum transformSpectrum(int aId, double[] aMzArray, double[] aIntensityArray,
+                                              int aPrecursorCharge, double aPrecursorMZ) {
+        // Sort this array (we'll need the range start and stop later).
+        Arrays.sort(aMzArray);
+
+        // Precursor annotation collection.
+        Collection precursors = new ArrayList(1);
+        // Ion selection annotation parameters.
+        Collection ionSelection = new ArrayList(4);
+
+        // See if we know the precursor charge, and if so, include it.
+        int charge = aPrecursorCharge;
+        if (charge > 0) {
+            ionSelection.add(new CvParamImpl("PSI:1000041", "PSI", "ChargeState", 0, Integer.toString(charge)));
+        }
+
+        // See if we know the precursor intensity (for the machine used here,
+        // intensity is always 'NumberOfCounts').
+        ionSelection.add(new CvParamImpl("PSI:1000040", "PSI", "MassToChargeRatio", 1, Double.toString(aPrecursorMZ)));
+
+        // Note that the counter is used AND incremented here.
+        aId++;
+        // Create new mzData spectrum for the fragmentation spectrum.
+        // Notice that certain collections and annotations are 'null' here.
+        Spectrum fragmentation = new SpectrumImpl(
+                new BinaryArrayImpl(aIntensityArray, BinaryArrayImpl.BIG_ENDIAN_LABEL),
+                new Double(aMzArray[0]), 
+                new BinaryArrayImpl(aMzArray, BinaryArrayImpl.BIG_ENDIAN_LABEL),
+                2,
+                null,
+                new Double(aMzArray[aMzArray.length - 1]),
+                null, 
+                aId,
+                precursors,
+                null, null, null, null, null);
+
+        return fragmentation;
+    }
+
+    /**
      * This method transforms spectra from TPP files, returning
      * a HashMap that maps the filenames to their mzData spectrumID.
      *
@@ -4008,7 +4809,7 @@ public class PRIDEConverter {
      *                                 mzData spectra. Please note that this is a
      *                                 reference parameter.
      */
-    private static HashMap transformSpectraFromTPPFiles(ArrayList aTransformedSpectra) {
+    private static HashMap transformSpectraFromTPPProjects(ArrayList aTransformedSpectra) {
 
 //        long timerStart = System.currentTimeMillis();
 
@@ -4037,7 +4838,7 @@ public class PRIDEConverter {
             XmlPullParserPlus xppp = new XmlPullParserPlus(xpp);
             currentFile = getProperties().getPeptideProphetFileName();
             PeptideProphetXMLParser ppxp = new PeptideProphetXMLParser(
-                    new File(getProperties().getTppSpectrumFilesFolderName()), true);
+                    new File(getProperties().getSpectrumFilesFolderName()), true);
 
             HashMap runs = ppxp.readPeptideProphet(xppp, properties.getPeptideProphetThreshold());
             br.close();
@@ -6582,6 +7383,14 @@ public class PRIDEConverter {
         private String iDBVersion = null;
         private ArrayList iScores = new ArrayList();
         private ArrayList iThresholds = new ArrayList();
+        private Integer iSequenceCount = null;
+        private Integer iSpectrumCount = null;
+        private Double iCoverage = null;
+        private Integer iProteinLength = null;
+        private Double iMolecularWeight = null;
+        private Double iPI = null;
+        private String iValidationStatus = null;
+        private String iDescription = null;
 
         /**
          * Constructor that the takes the accessionnumber for the future GelFreeIdentification and
@@ -6604,6 +7413,37 @@ public class PRIDEConverter {
         }
 
         /**
+         * Constructor that the takes the accessionnumber for the future GelFreeIdentification and
+         * the accession version (if any) as well as the search engine that performed the identification and
+         * the database name and version for the search.
+         *
+         * @param iAccession
+         * @param iSequenceCount
+         * @param iSpectrumCount
+         * @param iCoverage
+         * @param iProteinLength
+         * @param iMolecularWeight
+         * @param iPI
+         * @param iValidationStatus
+         * @param iDescription
+         */
+        private InnerID(String iAccession, Integer iSequenceCount, Integer iSpectrumCount, Double iCoverage,
+                Integer iProteinLength, Double iMolecularWeight, Double iPI, String iValidationStatus, 
+                String iDescription, String aSearchEngine, String aDatabase) {
+            this.iAccession = iAccession;
+            this.iSequenceCount = iSequenceCount;
+            this.iSpectrumCount = iSpectrumCount;
+            this.iCoverage = iCoverage;
+            this.iProteinLength = iProteinLength;
+            this.iMolecularWeight = iMolecularWeight;
+            this.iPI = iPI;
+            this.iValidationStatus = iValidationStatus;
+            this.iDescription = iDescription;
+            this.iSearchEngine = aSearchEngine;
+            this.iDatabase = aDatabase;
+        }
+
+        /**
          * This method adds a peptide identification to the protein identification.
          *
          * @param aSpectrumRef  Long with the reference to the relevant mzData spectrum.
@@ -6621,6 +7461,67 @@ public class PRIDEConverter {
                     modifications, cVParams, aUserParams));
             iScores.add(aScore);
             iThresholds.add(aThreshold);
+        }
+
+        /**
+         * This method adds a peptide identification to the protein identification.
+         *
+         * @param aSpectrumRef
+         * @param aCharge
+         * @param aSequestXcorr
+         * @param aSequestDelta
+         * @param aPeptideMass
+         * @param aCalculatedPeptideMass
+         * @param aTotalIntensity
+         * @param aSequestRSp
+         * @param aSequestSp
+         * @param aIonProportion
+         * @param aRedundancy
+         * @param aSequence
+         * @param aPreAA
+         * @param aPostAA
+         * @param aCvParams
+         * @param aUserParams
+         */
+        public void addPeptide(Long aSpectrumRef, Integer aCharge, Double aSequestXcorr, Double aSequestDelta, Double aPeptideMass,
+                Double aCalculatedPeptideMass, Double aTotalIntensity, Integer aSequestRSp, Double aSequestSp, Double aIonProportion,
+                Integer aRedundancy, String aSequence, String aPreAA,
+                String aPostAA, Collection aCvParams, Collection aUserParams) {
+
+            // Add here the information that is specific for each peptide
+            if (aCvParams == null) {
+                aCvParams = new ArrayList(8);
+            }
+
+            aCvParams.add(new CvParamImpl("PRIDE:0000065", "PRIDE", "Upstream flanking sequence", 1, aPreAA));
+            aCvParams.add(new CvParamImpl("PRIDE:0000066", "PRIDE", "Downstream flanking sequence", 2, aPostAA));
+            aCvParams.add(new CvParamImpl("PRIDE:0000013", "PRIDE", "X correlation", 3, aSequestXcorr.toString()));
+
+            // We have to take into account the existence of missing values in the text file that we are parsing
+            if (aSequestDelta != null) {
+                aCvParams.add(new CvParamImpl("PRIDE:0000012", "PRIDE", "Delta Cn", 4, aSequestDelta.toString()));
+            }
+
+            aCvParams.add(new CvParamImpl("PRIDE:0000054", "PRIDE", "Sp", 5, aSequestSp.toString()));
+
+            if (aSequestRSp != null) {
+                aCvParams.add(new CvParamImpl("PRIDE:0000062", "PRIDE", "RSp", 6, aSequestRSp.toString()));
+            }
+
+            aCvParams.add(new CvParamImpl("PSI:1000224", "PSI", "Charge State", 7, aCharge.toString()));
+
+            // Add individual additional user parameters.
+            if (aUserParams == null) {
+                aUserParams = new ArrayList(4);
+            }
+
+            aUserParams.add(new UserParamImpl("Peptide Mass", 1, aPeptideMass.toString()));
+            aUserParams.add(new UserParamImpl("CalcM+H+ Mass", 2, aCalculatedPeptideMass.toString()));
+            aUserParams.add(new UserParamImpl("Total Intensity", 3, aTotalIntensity.toString()));
+            aUserParams.add(new UserParamImpl("Ion Proportion", 4, aIonProportion.toString()));
+            aUserParams.add(new UserParamImpl("Redundancy", 5, aRedundancy.toString()));
+
+            iPeptides.add(new PeptideImpl(aSpectrumRef, aSequence, null, aCvParams, aUserParams));
         }
 
         /**
@@ -6669,13 +7570,72 @@ public class PRIDEConverter {
             return new Double(bd.doubleValue());
         }
 
+        public String getIAccession() {
+            return iAccession;
+        }
+
+        public Integer getISequenceCount() {
+            return iSequenceCount;
+        }
+
+        public Integer getISpectrumCount() {
+            return iSpectrumCount;
+        }
+
+        public Double getICoverage() {
+            return iCoverage;
+        }
+
+        public Integer getIProteinLength() {
+            return iProteinLength;
+        }
+
+        public Double getIMolecularWeight() {
+            return iMolecularWeight;
+        }
+
+        public Double getIPI() {
+            return iPI;
+        }
+
+        public String getIValidationStatus() {
+            return iValidationStatus;
+        }
+
+        public String getIDescription() {
+            return iDescription;
+        }
+
+        public ArrayList getIPeptides() {
+            return iPeptides;
+        }
+
+        public String getISearchEngine() {
+            return iSearchEngine;
+        }
+
+        public String getIDatabase() {
+            return iDatabase;
+        }
+
+        public String getIDBVersion() {
+            return iDBVersion;
+        }
+
+        //This setter method is necessary
+        public void setIPeptides(ArrayList iPeptides) {
+            this.iPeptides = iPeptides;
+        }
+
         /**
          * This method returns a PRIDE GelFreeIdentification based upon this instance.
          *
          * @return  GelFreeIdentification   with the PRIDE GelFreeIdentification object.
          */
         public uk.ac.ebi.pride.model.interfaces.core.Identification getGelFreeIdentification() {
+
             Collection userParams;
+            Collection cvParams;
 
             if (properties.getDataSource().equalsIgnoreCase("Mascot Dat File")) {
 
@@ -6685,8 +7645,26 @@ public class PRIDEConverter {
 //                userParams.add(new UserParamImpl("PeptideIdentification", 2, "AboveOrEqualToIdentityThreshold"));
                 userParams.add(new UserParamImpl("MascotConfidenceLevel", 0, "" +
                         properties.getMascotConfidenceLevel()));
+                cvParams = null;
+            } else if (properties.getDataSource().equalsIgnoreCase("DTASelect")) {
+
+                cvParams = new ArrayList(1);
+                // Add here the information that is common for each protein:
+                if (iDescription != null) {
+                    cvParams.add(new CvParamImpl("PRIDE:0000063", "pride", "Protein description line", 1, iDescription));
+                    cvParams.add(new CvParamImpl("PRIDE:0000172", "pride", "Search database protein sequence length", 2, iProteinLength.toString()));
+                    cvParams.add(new CvParamImpl("PRIDE:0000057", "pride", "Molecular Weight", 3, iMolecularWeight.toString()));
+                }
+
+                userParams = new ArrayList(1);
+                userParams.add(new UserParamImpl("Sequence count", 1, iSequenceCount.toString()));
+                userParams.add(new UserParamImpl("Spectrum count", 2, iSpectrumCount.toString()));
+                userParams.add(new UserParamImpl("pI", 3, iPI.toString()));
+                userParams.add(new UserParamImpl("Validation status", 4, iValidationStatus.toString()));
+
             } else {
                 userParams = null;
+                cvParams = null;
             }
 
             Double threshold;
@@ -6694,7 +7672,8 @@ public class PRIDEConverter {
             if (properties.getDataSource().equalsIgnoreCase("X!Tandem") ||
                     properties.getDataSource().equalsIgnoreCase("Spectrum Mill") ||
                     properties.getDataSource().equalsIgnoreCase("Sequest Result File") ||
-                    properties.getDataSource().equalsIgnoreCase("OMSSA")) {
+                    properties.getDataSource().equalsIgnoreCase("OMSSA") ||
+                    properties.getDataSource().equalsIgnoreCase("DTASelect")) {
                 threshold = null;
             } else {
                 threshold = this.getThreshold();
@@ -6703,7 +7682,8 @@ public class PRIDEConverter {
             Double score;
 
             if (properties.getDataSource().equalsIgnoreCase("Sequest Result File") ||
-                    properties.getDataSource().equalsIgnoreCase("OMSSA")) {
+                    properties.getDataSource().equalsIgnoreCase("OMSSA") ||
+                    properties.getDataSource().equalsIgnoreCase("DTASelect")) {
                 score = null;
             } else {
                 score = this.getScore();
@@ -6751,6 +7731,59 @@ public class PRIDEConverter {
             }
 
             return PRIDE_protein;
+        }
+    }
+
+    /**
+     * New class needed to wrap the peptide information: It has to be identical to PeptideImple. Otherwise we will get
+     * a CastException
+     */
+    public static class InnerPeptide {
+        private Integer scanNumber = null;
+        private String sequence = null;
+        private Integer start = null;
+        private Collection cvParams = null;
+        private Collection userParams = null;
+
+
+        public InnerPeptide(Integer scanNumber, String sequence, Integer aStart, Collection aModifications, Collection aCvParams, Collection aUserParams) {
+            this.scanNumber = scanNumber;
+            this.sequence = sequence;
+            this.start = aStart;
+            this.cvParams = aCvParams;
+            this.userParams = aUserParams;
+        }
+
+        public Collection getCvParams() {
+            return cvParams;
+        }
+
+        public void setCvParams(Collection aCvParams) {
+            this.cvParams = aCvParams;
+        }
+
+        public Collection getUserParams() {
+            return userParams;
+        }
+
+        public void setUserParams(Collection aUserParams) {
+            this.userParams = aUserParams;
+        }
+
+        public Integer getScanNumber() {
+            return scanNumber;
+        }
+
+        public void setScanNumber(Integer scanNumber) {
+            this.scanNumber = scanNumber;
+        }
+
+        public String getSequence() {
+            return sequence;
+        }
+
+        public void setSequence(String sequence) {
+            this.sequence = sequence;
         }
     }
 
@@ -7055,7 +8088,7 @@ public class PRIDEConverter {
      * @param mzDataSpectra
      * @return the mzData object
      */
-    private MzData createMzData(ArrayList mzDataSpectra) {
+    private static MzData createMzData(ArrayList mzDataSpectra) {
 
         // The CV lookup stuff. (NB: currently hardcoded to PSI only)
         Collection cvLookups = new ArrayList(1);

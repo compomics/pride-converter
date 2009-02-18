@@ -49,7 +49,8 @@ public class Properties {
     private ArrayList<String> selectedIdentificationFiles = null;
     private String proteinProphetFileName = null;
     private String peptideProphetFileName = null;
-    private String tppSpectrumFilesFolderName = null;
+    private String dtaSelectFileName = null;
+    private String spectrumFilesFolderName = null;
     private ArrayList selectedSpectraKeys;
     private ArrayList selectedIsoformAccessions;
     private ArrayList selectedIsoformPeptideSequences;
@@ -72,6 +73,7 @@ public class Properties {
     private HashMap<String, ArrayList<CvParam>> spectrumCvParams;
     private HashMap<String, ArrayList<UserParam>> spectrumUserParams;
     private String proteinIdentificationFilter = "";
+    private String databaseName = "";
     
     // contact information
     private Collection contacts;
@@ -1483,21 +1485,39 @@ public class Properties {
     }
 
     /**
-     * Returns the name of the TPP spectrum file folder.
-     * 
-     * @return the name of the TPP spectrum file folder
+     * Returns the name of the DTASelect file.
+     *
+     * @return the name of the DTASelect file
      */
-    public String getTppSpectrumFilesFolderName() {
-        return tppSpectrumFilesFolderName;
+    public String getDtaSelectFileName() {
+        return dtaSelectFileName;
     }
 
     /**
-     * Sets the name of the TPP spectrum file folder.
-     * 
-     * @param tppSpectrumFilesFolderName
+     * Sets the name of the DTASelect file.
+     *
+     * @param dtaSelectFileName
      */
-    public void setTppSpectrumFilesFolderName(String tppSpectrumFilesFolderName) {
-        this.tppSpectrumFilesFolderName = tppSpectrumFilesFolderName;
+    public void setDtaSelectFileName(String dtaSelectFileName) {
+        this.dtaSelectFileName = dtaSelectFileName;
+    }
+
+    /**
+     * Returns the name of the spectrum file folder (used for TPP and DTASelect).
+     *
+     * @return the name of the spectrum file folder
+     */
+    public String getSpectrumFilesFolderName() {
+        return spectrumFilesFolderName;
+    }
+
+    /**
+     * Sets the name of the spectrum file folder (used for TPP and DTASelect).
+     *
+     * @param spectrumFilesFolderName
+     */
+    public void setSpectrumFilesFolderName(String spectrumFilesFolderName) {
+        this.spectrumFilesFolderName = spectrumFilesFolderName;
     }
 
     /**
@@ -1570,5 +1590,23 @@ public class Properties {
      */
     public void setProteinIdentificationFilter(String proteinIdentificationFilter) {
         this.proteinIdentificationFilter = proteinIdentificationFilter;
+    }
+
+    /**
+     * Returne the database name (used for DTASelect)
+     *
+     * @return the proteinIdentificationFilter
+     */
+    public String getDatabaseName() {
+        return databaseName;
+    }
+
+    /**
+     * Sets the databaseName (used for DTASelect)
+     *
+     * @param databaseName the databaseName to set
+     */
+    public void setDatabaseName(String databaseName) {
+        this.databaseName = databaseName;
     }
 }
