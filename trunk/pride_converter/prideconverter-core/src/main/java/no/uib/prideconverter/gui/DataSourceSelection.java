@@ -111,6 +111,10 @@ public class DataSourceSelection extends javax.swing.JFrame {
             tppJRadioButton.setSelected(true);
             tppJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
+        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("DTASelect")) {
+            dtaSelectJRadioButton.setSelected(true);
+            dtaSelectJRadioButtonActionPerformed(null);
+            nextJButton.setEnabled(true);
         } else {
             ((TitledBorder) descriptionJPanel.getBorder()).setTitle("Welcome Message");
             descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br><b>PRIDE Converter</b><br><br>" +
@@ -128,8 +132,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         // sets the icon of the frame
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
                 getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
-
-
 
         //helpJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("../resources/icons/help.GIF")));
 
@@ -174,6 +176,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         vemsJRadioButton = new javax.swing.JRadioButton();
         ms2JRadioButton = new javax.swing.JRadioButton();
         mzDataJRadioButton = new javax.swing.JRadioButton();
+        dtaSelectJRadioButton = new javax.swing.JRadioButton();
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         helpJButton = new javax.swing.JButton();
@@ -333,6 +336,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         mzMLJRadioButton.setEnabled(false);
         mzMLJRadioButton.setIconTextGap(20);
         mzMLJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        mzMLJRadioButton.setPreferredSize(new java.awt.Dimension(0, 0));
         mzMLJRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mzMLJRadioButtonActionPerformed(evt);
@@ -399,6 +403,17 @@ public class DataSourceSelection extends javax.swing.JFrame {
             }
         });
 
+        buttonGroup1.add(dtaSelectJRadioButton);
+        dtaSelectJRadioButton.setText("DTASelect");
+        dtaSelectJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        dtaSelectJRadioButton.setIconTextGap(20);
+        dtaSelectJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        dtaSelectJRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dtaSelectJRadioButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -423,12 +438,15 @@ public class DataSourceSelection extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(71, 71, 71)
                         .addComponent(phenyxJRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(mzMLJRadioButton)
                     .addComponent(vemsJRadioButton)
-                    .addComponent(ms2JRadioButton)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(ms2JRadioButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(mzMLJRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(mzXMLJRadioButton)
-                    .addComponent(mzDataJRadioButton))
-                .addContainerGap(90, Short.MAX_VALUE))
+                    .addComponent(mzDataJRadioButton)
+                    .addComponent(dtaSelectJRadioButton))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -453,7 +471,8 @@ public class DataSourceSelection extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(sequestDTAFilesJRadioButton)
-                            .addComponent(ms2JRadioButton))
+                            .addComponent(ms2JRadioButton)
+                            .addComponent(mzMLJRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(omssaJRadioButton)
@@ -465,7 +484,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(ms_limsJRadioButton)
-                            .addComponent(mzMLJRadioButton))))
+                            .addComponent(dtaSelectJRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -634,6 +653,9 @@ public class DataSourceSelection extends javax.swing.JFrame {
         } else if (tppJRadioButton.isSelected()) {
             prideConverter.getProperties().setDataSource("TPP");
             new DataFileSelectionTPP(prideConverter, this.getLocation());
+        } else if (dtaSelectJRadioButton.isSelected()) {
+            prideConverter.getProperties().setDataSource("DTASelect");
+            new DataFileSelectionDTASelect(prideConverter, this.getLocation());
         }
 
         this.setVisible(false);
@@ -1107,6 +1129,29 @@ public class DataSourceSelection extends javax.swing.JFrame {
 }//GEN-LAST:event_ms2JRadioButtonActionPerformed
 
     /**
+     * See ms_limsJRadioButtonActionPerformed
+     * 
+     * @param evt
+     */
+    private void dtaSelectJRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtaSelectJRadioButtonActionPerformed
+        ((TitledBorder) descriptionJPanel.getBorder()).setTitle("Data Source Description");
+        repaint();
+
+        this.nextJButton.setEnabled(true);
+        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
+                "<b>DTASelect</b><br><br>" +
+                "DTASelect reassembles Sequest peptide information into protein information.<br><br>" +
+                "File Extension: .txt and .ms2<br><br>" +
+                "More Information: <a href=\"http://fields.scripps.edu/DTASelect\">" +
+                "http://fields.scripps.edu/DTASelect</a>");
+        descriptionJEditorPane.setCaretPosition(0);
+
+        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("DTASelect")) {
+            resetDataSourceProperties();
+        }
+}//GEN-LAST:event_dtaSelectJRadioButtonActionPerformed
+
+    /**
      * Resets all the data source properties. Like the list of selected files, 
      * the spectra table etc.
      */
@@ -1124,6 +1169,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
     private javax.swing.JButton cancelJButton;
     private javax.swing.JEditorPane descriptionJEditorPane;
     private javax.swing.JPanel descriptionJPanel;
+    private javax.swing.JRadioButton dtaSelectJRadioButton;
     private javax.swing.JButton helpJButton;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel4;

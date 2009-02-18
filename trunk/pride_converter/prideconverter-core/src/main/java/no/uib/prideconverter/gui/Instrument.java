@@ -126,7 +126,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
             // see if the spectrum files folder contains any mzXML files
             File[] mzXmlFiles =
-                    new File(prideConverter.getProperties().getTppSpectrumFilesFolderName()).listFiles();
+                    new File(prideConverter.getProperties().getSpectrumFilesFolderName()).listFiles();
 
             boolean mzXmlFileFound = false;
 
@@ -184,7 +184,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                 mzXmlFileFound = true;
             } else {
                 File[] mzXmlFiles =
-                        new File(prideConverter.getProperties().getTppSpectrumFilesFolderName()).listFiles();
+                        new File(prideConverter.getProperties().getSpectrumFilesFolderName()).listFiles();
 
                 mzXmlFileFound = false;
                 fileName = null;

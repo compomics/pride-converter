@@ -31,6 +31,7 @@ public class FileFilterUtils {
     public final static String protxml = "protxml";
     public final static String pep_xml = "pep.xml";
     public final static String pepxml = "pepxml";
+    public final static String txt = "txt";
     public final static String mzDATA = "mzDATA";
     public final static String omx = "omx";
     public final static String ms2 = "ms2";
@@ -52,6 +53,7 @@ public class FileFilterUtils {
     public final static String PROTXML = "PROTXML";
     public final static String PEP_XML = "PEP.XML";
     public final static String PEPXML = "PEPXML";
+    public final static String TXT = "TXT";
 
     /**
      * Get the extension of a file.
