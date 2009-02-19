@@ -902,8 +902,8 @@ public class PRIDEConverter {
                             spectraCount = totalNumberOfSpectra - emptySpectraCounter;
                             peptideIdentificationsCount = peptideIdCount;
                         } else if (properties.getDataSource().equalsIgnoreCase("DTASelect")) {
-                            spectraCount = mzDataSpectra.size();
-                            peptideIdentificationsCount = identifications.size();
+                            spectraCount = mzData.getSpectrumCollection().size();
+                            peptideIdentificationsCount = peptideIdCount;
                         }
 
                         // present a dialog with information about the created file
@@ -4029,6 +4029,7 @@ public class PRIDEConverter {
         progressDialog.setString(null);
 
         HashMap<String, Long> filenameToMzDataIDMapping = new HashMap<String, Long>();
+        peptideIdCount = 0;
 
         // get the list of spectrum files
         File[] spectrumFiles = new File(properties.getSpectrumFilesFolderName()).listFiles();
@@ -4038,50 +4039,35 @@ public class PRIDEConverter {
             // Since PRIDE is actually mzData grouped together with an identification part, we'll also have to
             // be able to linke the spectra to the corresponding identifications. For this, we'll give each
             // spectrum a number, and we'll create a lookup table with 'filename -> number' on the way.
-            //
-            // You'll also notice a lot of hard-coded values here describing the instrument and sample; they
-            // are really important parts of mzData that allow you to thoroughly annotate your spectra, which is
-            // important for your colleagues to make sense of your data!
 
-            // But let us first load all the spectra from the input folder and transform them.
+            // load all the spectra from the input folder and transform them
+            // (at present only the array containing the files is not empty)
             aTransformedSpectra = new ArrayList();
-
-            // At present only the array containing the files is not empty (the ArrayList and the HashMap were just created).
-            // The first thing is done in the program is to parse the peak lists and create the transformed spectra for the mzData file
-
             readSpectra(spectrumFiles, aTransformedSpectra, filenameToMzDataIDMapping);
 
-            // Right. With the spectra done, we only need to do the identifications and we're through!
+            //******************PARSING THE IDENTIFICATIONS FILE********************************************
+
             // We'll start by creating a HashMap that will hold all identifications
             // (keyed by protein accession number in this case)
             HashMap<String, InnerID> allIds = new HashMap<String, InnerID>();
-
-
-            //******************PARSING THE IDENTIFICATIONS FILE********************************************
 
             progressDialog.setString(null);
             progressDialog.setTitle("Parsing DTASelect File. Please Wait.");
             progressDialog.setIntermidiate(true);
             progressDialog.setString(null);
 
-            // Now we'll fil it out zhile reading the input file. PARSING THE TEXT FILE...
+            // Now we'll fill it out while reading the input file.
             BufferedReader br = new BufferedReader(new FileReader(properties.getDtaSelectFileName()));
             String line = null;
 
-            // In this particular case, it is also neccessary to get track of the previous line:
-
+            // In this particular case, it is also neccessary to get track of the previous line
             String previousLine = null;
 
-            // This counter counts every single line, used for reporting errors
-            // (as in: line x has an error).
+            // This counter counts every single line, used for reporting errors (as in: line x has an error).
             int lineCount = 0;
-            // This boolean is used to detect the very first information-containing line.
-            // This is the header, so the boolean helps us to skip it.
-            boolean firstLine = true;// we do not need it here since we added # to the two first lines of the file
-            // Declarations of variables we may need later:
 
             // Protein related data to be parsed:
-            String accessionNumber = null;// locus name
+            String accessionNumber = null; // locus name
             Integer sequenceCount = null;
             Integer spectrumCount = null;
 
@@ -4095,7 +4081,6 @@ public class PRIDEConverter {
             String proteinDescription = null;
 
             // For the peptides:
-
             String unique = null;
 
             // Information taken from the file name:
@@ -4133,7 +4118,11 @@ public class PRIDEConverter {
                 //For all the lines, do two things:
                 // 1. Count the line.
                 lineCount++;
-                //System.out.println("The line is: " +lineCount);// For debugging reasons only
+
+                if (debug) {
+                    System.out.println("The line is: " + lineCount);
+                }
+
                 // 2. Remove leading and trailing spaces.
                 line = line.trim();
 
@@ -4141,7 +4130,7 @@ public class PRIDEConverter {
                 if (previousLine != null && previousLine.startsWith("Unique")) {
                     startParsing = true;
                 }
-                //We do not need the last lines of the file
+                // We do not need the last lines of the file
                 if (line.contains("Proteins") && line.contains("Peptide IDs")) {
                     startParsing = false;
                 }
@@ -4160,9 +4149,10 @@ public class PRIDEConverter {
                         // We have initialized InnedID (Protein) to 'null'. Unless it is the first 'protein' line in the file, the protein
                         // will be different from 'null'.
 
-                        // There are times in the file that there are alternate proteins (alternate accession numbers or locus in this particular case).
-                        // In these case, thy will not have peptides
+                        // There are places in the file that contain alternate proteins (alternate accession numbers or locus in this particular case).
+                        // In these cases, they will not have peptides
                         if (protein != null && proteins.size() == 0) {
+
                             // We were already assembling a protein. So we need to store that one before proceeding with a new one. We add it to the HashMap
                             Object temp = allIds.put(protein.getIAccession(), protein);
 //                            if(temp != null) {
@@ -4175,7 +4165,7 @@ public class PRIDEConverter {
 
                         // There will be already peptides here in this protein (getIPeptides().size()!=0)
                         if (protein != null && proteins.size() != 0 && protein.getIPeptides().size() != 0) {
-                            // There will be already peptides here in this protein (getIPeptides().size()!=0)
+
                             Object temp = allIds.put(protein.getIAccession(), protein);
 //                            if(temp != null) {
 //                                throw new RuntimeException("Protein '" + protein.getIAccession() + "' was reported twice in the file!." +
@@ -4195,41 +4185,47 @@ public class PRIDEConverter {
 //                                            "\nMolecular Weight: " + protein.getIMolecularWeight());
 //                                }
                             }
+
                             //Empty the collection till the next cycle
                             proteins.clear();
                         }
 
-                        //If they have not peptides, it will be necessary to copy the collection of proteins of the last created protein:
-
+                        // If it has no peptides, it will be necessary to copy the collection of proteins of the last created protein:
                         if (protein != null && protein.getIPeptides().size() == 0) {
                             proteins.add(protein);
                         }
 
-
-
-                        //WE ARE NOT GOING TO USE STRINGTOKENIZER HERE SINCE THERE ARE MISSING VALUES THAT WILL BE
-                        //SKIPPED (EMPTY CELLS IN THE MIDDLE OF A LINE, FOR INSTANCE)
-                        //StringTokenizer st = new StringTokenizer(line, SEPARATOR);
+                        // WE ARE USEING STRINGTOKENIZER HERE SINCE THERE ARE MISSING VALUES THAT WILL BE
+                        // SKIPPED (EMPTY CELLS IN THE MIDDLE OF A LINE, FOR INSTANCE)
                         String[] proteinTokens = line.split(SEPARATOR);
-                        //We have to take into account as well if the last token is empty:
-                        if (!(proteinTokens.length == 9)) { // in fact this is erroneus since if the last token is empty proteinTokens[9] will give and IndexOutOfBoundsException. Here, it works since there is no case in which this happens.
-                            System.out.println("Current split protein tokens:");
 
-                            for (int i = 0; i < proteinTokens.length; i++) {
-                                System.out.println(proteinTokens[i]);
+                        // We have to take into account that the last token can be empty:
+                        // In fact this is erroneus since if the last token is empty proteinTokens[9] will give and
+                        // IndexOutOfBoundsException. Here, it works since there is no case in which this happens.
+                        if (!(proteinTokens.length == 9)) {
+
+                            if (debug) {
+                                System.out.println("Current split protein tokens:");
+
+                                for (int i = 0; i < proteinTokens.length; i++) {
+                                    System.out.println(proteinTokens[i]);
+                                }
+
+                                cancelConversion = true;
+                                throw new IOException("There were " + proteinTokens.length +
+                                        " elements (instead of the expected 9) on line " + lineCount + " in your file ('" + properties.getDtaSelectFileName() + "')!");
                             }
-
-                            cancelConversion = true;
-                            throw new IOException("There were " + proteinTokens.length + 
-                                    " elements (instead of the expected 9) on line " + lineCount + " in your file ('"
-                                    + properties.getDtaSelectFileName() + "')!");
                         } else {
 
-                            accessionNumber = proteinTokens[0].trim();//locus name is accession name
+                            accessionNumber = proteinTokens[0].trim(); //locus name is accession name
+
                             try {
                                 sequenceCount = new Integer(proteinTokens[1].trim());
                             } catch (NumberFormatException nfe) {
-                                System.out.println("Warning: The sequence count was not specified in the correct format!! The token was: '" + proteinTokens[1] + "'");
+                                Util.writeToErrorLog("Warning: The sequence count was not specified in the correct format!! " +
+                                        "The token was: '" + proteinTokens[1] + "'");
+                                nfe.printStackTrace();
+
                                 // If there is no coverage, coverage will be null.
                                 sequenceCount = null;
                             }
@@ -4237,7 +4233,10 @@ public class PRIDEConverter {
                             try {
                                 spectrumCount = new Integer(proteinTokens[2].trim());
                             } catch (NumberFormatException nfe) {
-                                System.out.println("Warning: The spectrum count count was not specified in the correct format!! The token was: '" + proteinTokens[2] + "'");
+                                Util.writeToErrorLog("Warning: The spectrum count count was not specified in the correct format!! " +
+                                        "The token was: '" + proteinTokens[2] + "'");
+                                nfe.printStackTrace();
+
                                 // If there is no coverage, coverage will be null.
                                 spectrumCount = null;
                             }
@@ -4246,10 +4245,14 @@ public class PRIDEConverter {
 
                             try {
                                 coverage = new Double(initialCoverage.substring(0, initialCoverage.indexOf("%")));
+
                                 // Coverage must be between 0 and 1 for the XML to be validated
                                 coverage = coverage / 100;
                             } catch (NumberFormatException nfe) {
-                                System.out.println("Warning: The coverage was not specified in the correct format!! The token was: '" + proteinTokens[3] + "'");
+                                Util.writeToErrorLog("Warning: The coverage was not specified in the correct format!! " +
+                                        "The token was: '" + proteinTokens[3] + "'");
+                                nfe.printStackTrace();
+
                                 // If there is no coverage, coverage will be null.
                                 coverage = null;
                             }
@@ -4258,7 +4261,10 @@ public class PRIDEConverter {
                                 proteinLength = new Integer(proteinTokens[4].trim());
 
                             } catch (NumberFormatException nfe) {
-                                System.out.println("Warning: The protein length count was not specified in the correct format!! The token was: '" + proteinTokens[4] + "'");
+                                Util.writeToErrorLog("Warning: The protein length count was not specified in the correct format!! " +
+                                        "The token was: '" + proteinTokens[4] + "'");
+                                nfe.printStackTrace();
+
                                 // If there is no coverage, coverage will be null.
                                 proteinLength = null;
                             }
@@ -4277,16 +4283,20 @@ public class PRIDEConverter {
                     } else {
 
                         String[] peptidesTokens = line.split(SEPARATOR);
+
                         // make sure we have the correct number of elements. As the first token is empty, we have to start
-                        // taking into account from what would be token 2 in principle (it is a bug in the string.split() method)
+                        // taking into account what would be token 2 in principle (it is a bug in the string.split() method)
                         // The method does not consider empty spaces at the beginning and at the end of each line
                         // WE HAVE TO TAKE INTO ACCOUNT THE EXISTENCE OF 10 TOKENS FIRST (all of them since we are always going to skip the
-                        //first empty one, it is always empty). But WE HAVE TO CONSIDER AS WELL THE EXISTENCE OF 9 TOKENS,
+                        // first empty one, it is always empty). But WE HAVE TO CONSIDER AS WELL THE EXISTENCE OF 9 TOKENS,
                         // SINCE EMPTY SPACES ARE FOUND SOMETIMES FOR THE LAST ONE ("Count").
-                        // Duplication of code exists here:
+
+                        // NB: Duplication of code exists here:
                         if (peptidesTokens.length == 12) {
+
                             // All seems to be OK. Let's parse the relevant information.
-                            unique = peptidesTokens[0].trim();// we do not really need this
+                            unique = peptidesTokens[0].trim(); // we do not really need this
+
                             // we will need to get the fileName information
                             fileName = peptidesTokens[1].trim();
 
@@ -4311,7 +4321,9 @@ public class PRIDEConverter {
                             try {
                                 sequestDelta = new Double(peptidesTokens[3].trim());
                             } catch (NumberFormatException nfe) {
-                                System.out.println("Warning: The sequestDelta parameter was not specified in the correct format!! The token was: '" + peptidesTokens[3] + "'");
+                                Util.writeToErrorLog("Warning: The sequestDelta parameter was not specified in the correct format!! " +
+                                        "The token was: '" + peptidesTokens[3] + "'");
+                                nfe.printStackTrace();
                                 sequestDelta = null;
                             }
 
@@ -4323,14 +4335,16 @@ public class PRIDEConverter {
                             try {
                                 sequestRSp = Integer.parseInt(peptidesTokens[7].trim());
                             } catch (NumberFormatException nfe) {
-                                System.out.println("Warning: The RSp parameter was not specified in the correct format!! The token was: '" + peptidesTokens[7] + "'");
+                                Util.writeToErrorLog("Warning: The RSp parameter was not specified in the correct format!! " +
+                                        "The token was: '" + peptidesTokens[7] + "'");
+                                nfe.printStackTrace();
                                 sequestRSp = null;
                             }
 
                             sequestSp = new Double(peptidesTokens[8].trim());
-
                             ionProportion = new Double(peptidesTokens[9].trim());
                             redundancy = new Integer(peptidesTokens[10].trim());
+
                             // Peptide sequence:
                             String peptide = peptidesTokens[11].trim();
 
@@ -4343,13 +4357,14 @@ public class PRIDEConverter {
                             // In some cases the post aa after digestion is not indicated.
                             preDigSiteAA = peptideAA[0].trim();
                             peptideSequence = peptideAA[1].trim();
+
                             if (peptideAA.length == 3) {
                                 postDigSiteAA = peptideAA[2].trim();
                             } else {
                                 postDigSiteAA = "";
                             }
 
-                            // Here the Link is done with the spectrum that corresponds to each peptide (fileName does not contain "-a").
+                            // Here the Link between the spectrum and the corresponding peptide is added (fileName does not contain "-a").
                             // It is necessary to add a 0.
 
                             // *** HERE IT IS WHEN THE JOINT IS MADE WITH THE SPECTRA. I HAVE SEEN TWO POSSIBILITIES TO DO IT:
@@ -4357,7 +4372,6 @@ public class PRIDEConverter {
                             //String key = spectrumFile + scanNumber;
 
                             // In this case, it is the second one:
-
                             String key = spectrumFile + "_" + scanNumber;
                             Long specRef = filenameToMzDataIDMapping.get(key);
 
@@ -4371,10 +4385,14 @@ public class PRIDEConverter {
                                     totalIntensity, sequestRSp, sequestSp, ionProportion, redundancy, peptideSequence,
                                     preDigSiteAA, postDigSiteAA, null, null);
 
+                            peptideIdCount++; // update the peptide counter
+
                         // If the first token is empty, the split method will not take it into account
                         } else if (peptidesTokens.length == 11) {
+
                             // All seems to be OK. Let's parse the relevant information.
-                            //unique = peptidesTokens[0].trim();// we do not really need this
+                            unique = peptidesTokens[0].trim(); // we do not really need this
+
                             // we will need to get the fileName information
                             fileName = peptidesTokens[0].trim();
 
@@ -4387,7 +4405,9 @@ public class PRIDEConverter {
                             } else {
                                 spectrumFile = fileInfo[0].trim();
                             }
+
                             scanNumber = new Long(fileInfo[1].trim());
+
                             // tokens 2 and 3 will be the same, we do not need this
                             charge = new Integer(fileInfo[3].trim());
 
@@ -4397,7 +4417,9 @@ public class PRIDEConverter {
                             try {
                                 sequestDelta = new Double(peptidesTokens[2].trim());
                             } catch (NumberFormatException nfe) {
-                                System.out.println("Warning: The sequestDelta parameter was not specified in the correct format!! The token was: '" + peptidesTokens[2] + "'");
+                                Util.writeToErrorLog("Warning: The sequestDelta parameter was not specified in the correct format!! " +
+                                        "The token was: '" + peptidesTokens[2] + "'");
+                                nfe.printStackTrace();
                                 sequestDelta = null;
                             }
 
@@ -4409,7 +4431,9 @@ public class PRIDEConverter {
                             try {
                                 sequestRSp = Integer.parseInt(peptidesTokens[6].trim());
                             } catch (NumberFormatException nfe) {
-                                System.out.println("Warning: The RSp parameter was not specified in the correct format!! The token was: '" + peptidesTokens[6] + "'");
+                                Util.writeToErrorLog("Warning: The RSp parameter was not specified in the correct format!! " +
+                                        "The token was: '" + peptidesTokens[6] + "'");
+                                nfe.printStackTrace();
                                 sequestRSp = null;
                             }
 
@@ -4417,8 +4441,7 @@ public class PRIDEConverter {
 
                             ionProportion = new Double(peptidesTokens[8].trim());
                             redundancy = new Integer(peptidesTokens[9].trim());
-                            // Peptide sequence:
-                            String peptide = peptidesTokens[10].trim();
+                            String peptide = peptidesTokens[10].trim(); // peptide sequence
 
                             // In order to use "." in the String split() method, it is neccesary to escape it twice.
                             String[] peptideAA = peptide.split("\\.");
@@ -4429,20 +4452,20 @@ public class PRIDEConverter {
                             // In some cases the post aa after digestion is not indicated.
                             preDigSiteAA = peptideAA[0].trim();
                             peptideSequence = peptideAA[1].trim();
+
                             if (peptideAA.length == 3) {
                                 postDigSiteAA = peptideAA[2].trim();
                             } else {
                                 postDigSiteAA = "";
                             }
 
-                            // Here the Link is done with the spectrum that corresponds to each peptide (fileName does not contain "-a"):
+                            // Here the Link between the spectrum and the corresponding peptide (fileName does not contain "-a"):
 
                             // *** HERE IT IS WHEN THE JOINT IS MADE WITH THE SPECTRA. I HAVE SEEN TWO POSSIBILITIES TO DO IT:
                             //String key = spectrumFile + "_0" +scanNumber;
                             //String key = spectrumFile + scanNumber;
 
                             // In this case, it is the second one:
-
                             String key = spectrumFile + "_" + scanNumber;
                             Long specRef = filenameToMzDataIDMapping.get(key);
 
@@ -4456,19 +4479,23 @@ public class PRIDEConverter {
                                     totalIntensity, sequestRSp, sequestSp, ionProportion, redundancy, peptideSequence,
                                     preDigSiteAA, postDigSiteAA, null, null);
 
-                        } else {
-                            // In case the number of tokens is different:
-                            System.out.println("Current split peptide tokens: ");
+                            peptideIdCount++; // update the peptide counter
 
-                            for (int i = 0; i < peptidesTokens.length; i++) {
-                                System.out.println(peptidesTokens[i]);
-                            }
+                        } else {
+
+                            // In case the number of tokens is different:
+                            if (debug) {
+                                System.out.println("Current split peptide tokens: ");
+
+                                for (int i = 0; i < peptidesTokens.length; i++) {
+                                    System.out.println(peptidesTokens[i]);
+                                }
 
 //                            throw new RuntimeException("Protein '" + protein.getIAccession() + "' was reported twice in the file!." +
 //                                    "\nThe values for this protein are: Description: " + protein.getIDescription() +
 //                                    "\nCoverage: " + protein.getICoverage() +
 //                                    "\nMolecular Weight: " + protein.getIMolecularWeight());
-
+                            }
                         }
                     }
                 }
@@ -4478,8 +4505,8 @@ public class PRIDEConverter {
             }
 
             // FENCE-POST: fix last protein (which would be discarded otherwise).
-
             if (protein != null && proteins.size() == 0) {
+
                 // We were already assembling a protein. So we need to store that one before proceeding with a new one. We add it to the HashMap
                 Object temp = allIds.put(protein.getIAccession(), protein);
 //                if(temp != null) {
@@ -4492,6 +4519,7 @@ public class PRIDEConverter {
 
             // There will be already peptides here in this protein (getIPeptides().size()!=0)
             if (protein != null && proteins.size() != 0 && protein.getIPeptides().size() != 0) {
+
                 // There will be already peptides here in this protein (getIPeptides().size()!=0)
                 Object temp = allIds.put(protein.getIAccession(), protein);
 //                if(temp != null) {
@@ -4534,10 +4562,13 @@ public class PRIDEConverter {
                 identifications.add(lInnerID.getGelFreeIdentification());
             }
 
+            //******************FINISHED PARSING THE IDENTIFICATIONS FILE********************************************
+
+
             if (!cancelConversion) {
 
                 // adding the CV and user params inserted in the previous steps of the converter
-                
+
                 progressDialog.setString(null);
                 progressDialog.setTitle("Creating mzData File. Please Wait.");
                 progressDialog.setIntermidiate(true);
@@ -4643,31 +4674,29 @@ public class PRIDEConverter {
     private static void readSpectra(File[] aFiles, Collection aSpectra, HashMap aMappings) throws IOException {
 
         // This counter is used to generate the ID numbers for the mzData spectra.
-
         int idCount = 0;
-        for (int i = 0; i < aFiles.length; i++) {
-            // The current file.
 
-            File lFile = aFiles[i];
+        for (int i = 0; i < aFiles.length; i++) {
+
+            File lFile = aFiles[i]; // the current file.
+
             // Setting up the variables we'll collect.
             String filename = lFile.getName();
 
-            // Delete non .txt files from the input folder (the file .DS_Store for Mac operating system):
-            if (filename.endsWith(".ms2")) {
+            // Ignore non .ms2 files from the input folder
+            if (filename.toLowerCase().endsWith(".ms2")) {
+
                 String usedFileName = filename.substring(0, filename.indexOf("."));
 
                 Double precursorMZ = null;
                 String scanNumber = null;
 
-                // We do not haver precursor intensity
-                //double precursorIntensity = -1.0;
                 int precursorCharge = -1;
                 double[] mzArray = null;
                 double[] intensityArray = null;
 
                 BufferedReader br = new BufferedReader(new FileReader(lFile));
                 String currentLine = null;
-                boolean first = true;
                 int lineCount = 0;
 
                 // We don't know in advance how many m/z and intensity values we'll need to store,
@@ -4678,6 +4707,7 @@ public class PRIDEConverter {
                 while ((currentLine = br.readLine()) != null) {
                     lineCount++;
                     if (!(currentLine.equals(""))) {
+
                         // Take the precursor mass
                         if (currentLine.startsWith("S")) {
                             if (precursorMZ != null) {
@@ -4709,27 +4739,30 @@ public class PRIDEConverter {
                                 mz = new ArrayList();
                                 intensities = new ArrayList();
                             }
+
                             String[] scanTokens = currentLine.split("\t");
 
                             if (!(scanTokens.length == 4)) {
 
-                                System.out.println("Current split scan line tokens:");
+                                if (debug) {
+                                    System.out.println("Current split scan line tokens:");
 
-                                for (int j = 0; j < scanTokens.length; j++) {
-                                    System.out.println(scanTokens[j]);
+                                    for (int j = 0; j < scanTokens.length; j++) {
+                                        System.out.println(scanTokens[j]);
+                                    }
+
+                                    throw new IOException("There were " + scanTokens.length +
+                                            " elements (instead of the expected 4) on line " + lineCount + " in your file ('" + filename + "')!");
                                 }
-
-                                throw new IOException("There were " + scanTokens.length +
-                                        " elements (instead of the expected 4) on line " + lineCount + " in your file ('" + filename + "')!");
                             } else {
-                                // we do not need the initial H, start and end scans, just  the precursor mass
+                                // we do not need the initial H, start and end scans, just the precursor mass
                                 scanNumber = scanTokens[1].trim();
                                 precursorMZ = new Double(scanTokens[3].trim());
                             }
 
                         // Read mz and intensities
-                        } else if (!(currentLine.startsWith("H") || currentLine.startsWith("S") 
-                                || currentLine.startsWith("I") || currentLine.startsWith("Z"))) {
+                        } else if (!(currentLine.startsWith("H") || currentLine.startsWith("S") ||
+                                currentLine.startsWith("I") || currentLine.startsWith("Z"))) {
                             String[] mzAndintensity = currentLine.split(" ");
                             mz.add(mzAndintensity[0].trim());
                             intensities.add(mzAndintensity[1].trim());
@@ -4741,6 +4774,7 @@ public class PRIDEConverter {
                 int size = mz.size();
                 mzArray = new double[size];
                 intensityArray = new double[size];
+
                 for (int j = 0; j < size; j++) {
                     mzArray[j] = Double.parseDouble((String) mz.get(j));
                     intensityArray[j] = Double.parseDouble((String) intensities.get(j));
@@ -4761,9 +4795,10 @@ public class PRIDEConverter {
 
                 // Ok, we're through the file. Close it.
                 br.close();
-            // The .DS_Store file (Mac systems) will be not considered:
             } else {
-                System.out.println("The file " + filename + " was not included among the processed files\n");
+                if(debug){
+                    System.out.println("The file " + filename + " was not included among the processed files\n");
+                }
             }
         }
     }
@@ -4779,17 +4814,20 @@ public class PRIDEConverter {
      * @return int with the current state of the counter.
      */
     private static Spectrum transformSpectrum(int aId, double[] aMzArray, double[] aIntensityArray,
-                                              int aPrecursorCharge, double aPrecursorMZ) {
+            int aPrecursorCharge, double aPrecursorMZ) {
+
         // Sort this array (we'll need the range start and stop later).
         Arrays.sort(aMzArray);
 
         // Precursor annotation collection.
         Collection precursors = new ArrayList(1);
+
         // Ion selection annotation parameters.
         Collection ionSelection = new ArrayList(4);
 
         // See if we know the precursor charge, and if so, include it.
         int charge = aPrecursorCharge;
+
         if (charge > 0) {
             ionSelection.add(new CvParamImpl("PSI:1000041", "PSI", "ChargeState", 0, Integer.toString(charge)));
         }
@@ -4798,19 +4836,18 @@ public class PRIDEConverter {
         // intensity is always 'NumberOfCounts').
         ionSelection.add(new CvParamImpl("PSI:1000040", "PSI", "MassToChargeRatio", 1, Double.toString(aPrecursorMZ)));
 
-        // Note that the counter is used AND incremented here.
-        aId++;
+        aId++; // Note that the counter is used AND incremented here.
 
         // Create new mzData spectrum for the fragmentation spectrum.
         // Notice that certain collections and annotations are 'null' here.
         Spectrum fragmentation = new SpectrumImpl(
                 new BinaryArrayImpl(aIntensityArray, BinaryArrayImpl.BIG_ENDIAN_LABEL),
-                new Double(aMzArray[0]), 
+                new Double(aMzArray[0]),
                 new BinaryArrayImpl(aMzArray, BinaryArrayImpl.BIG_ENDIAN_LABEL),
                 2,
                 null,
                 new Double(aMzArray[aMzArray.length - 1]),
-                null, 
+                null,
                 aId,
                 precursors,
                 null, null, null, null, null);
@@ -7446,7 +7483,7 @@ public class PRIDEConverter {
          * @param iDescription
          */
         private InnerID(String iAccession, Integer iSequenceCount, Integer iSpectrumCount, Double iCoverage,
-                Integer iProteinLength, Double iMolecularWeight, Double iPI, String iValidationStatus, 
+                Integer iProteinLength, Double iMolecularWeight, Double iPI, String iValidationStatus,
                 String iDescription, String aSearchEngine, String aDatabase) {
             this.iAccession = iAccession;
             this.iSequenceCount = iSequenceCount;
@@ -7500,7 +7537,7 @@ public class PRIDEConverter {
          * @param aCvParams
          * @param aUserParams
          */
-        public void addPeptide(Long aSpectrumRef, Integer aCharge, Double aSequestXcorr, Double aSequestDelta, 
+        public void addPeptide(Long aSpectrumRef, Integer aCharge, Double aSequestXcorr, Double aSequestDelta,
                 Double aPeptideMass, Double aCalculatedPeptideMass, Double aTotalIntensity, Integer aSequestRSp,
                 Double aSequestSp, Double aIonProportion, Integer aRedundancy, String aSequence, String aPreAA,
                 String aPostAA, Collection aCvParams, Collection aUserParams) {
@@ -7820,6 +7857,7 @@ public class PRIDEConverter {
      * Otherwise we will get a CastException
      */
     public static class InnerPeptide {
+
         private Integer scanNumber = null;
         private String sequence = null;
         private Integer start = null;
