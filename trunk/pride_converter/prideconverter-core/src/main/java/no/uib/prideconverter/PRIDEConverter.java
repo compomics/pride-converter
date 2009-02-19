@@ -4154,8 +4154,7 @@ public class PRIDEConverter {
                                             true, progressDialog, modificationSymbol,
                                             modifiedAminoAcid + " (fixed)",
                                             new Double(modificationMass),
-                                            (CvParamImpl) userProperties.getCVTermMappings().
-                                            get(modificationSymbol),
+                                            (CvParamImpl) userProperties.getCVTermMappings().get(modificationSymbol),
                                             true);
 
                                     properties.getAlreadyChoosenModifications().add(modificationSymbol);
@@ -4176,8 +4175,7 @@ public class PRIDEConverter {
                                                 true, progressDialog, currentModificationSymbol,
                                                 "" + currentAminoAcid,
                                                 new Double(modificationMass),
-                                                (CvParamImpl) userProperties.getCVTermMappings().
-                                                get(currentModificationSymbol),
+                                                (CvParamImpl) userProperties.getCVTermMappings().get(currentModificationSymbol),
                                                 false);
 
                                         properties.getAlreadyChoosenModifications().add(currentModificationSymbol);
@@ -4671,7 +4669,6 @@ public class PRIDEConverter {
                                             contains(peptideSequence.substring(i, i + 2))) {
                                         sequenceArray[index++] = peptideSequence.substring(i, i + 2);
                                         i++;
-
                                     } else {
                                         sequenceArray[index++] = peptideSequence.substring(i, i + 1);
                                     }
@@ -4905,8 +4902,7 @@ public class PRIDEConverter {
                 for (int i = 0; i < properties.getSampleDescriptionUserSubSampleNames().size(); i++) {
                     sampleDescriptionUserParams.add(new UserParamImpl(
                             "SUBSAMPLE_" + (i + 1),
-                            i, (String) properties.getSampleDescriptionUserSubSampleNames().
-                            get(i)));
+                            i, (String) properties.getSampleDescriptionUserSubSampleNames().get(i)));
                 }
 
                 for (int i = 0; i < properties.getSampleDescriptionCVParamsQuantification().size(); i++) {
@@ -4950,8 +4946,10 @@ public class PRIDEConverter {
             Util.writeToErrorLog("Error Parsing DTASelect Project: ");
             e.printStackTrace();
         }
+
 //        long end = System.currentTimeMillis();
 //        System.out.println("Transformation Done: " + (end - timerStart) + "\n");
+
         return filenameToMzDataIDMapping;
     }
 
@@ -5011,18 +5009,15 @@ public class PRIDEConverter {
 
                                 // And process the m/z and intensities.
                                 int size = mz.size();
-                                mzArray =
-                                        new double[size];
-                                intensityArray =
-                                        new double[size];
+                                mzArray = new double[size];
+                                intensityArray = new double[size];
 
-                                for (int j = 0; j <
-                                        size; j++) {
+                                for (int j = 0; j < size; j++) {
                                     mzArray[j] = Double.parseDouble((String) mz.get(j));
                                     intensityArray[j] = Double.parseDouble((String) intensities.get(j));
                                 }
 
-// OK, all done. Create a mzData spectrum next!
+                                // OK, all done. Create a mzData spectrum next!
                                 Spectrum mzdataSpectrum = transformSpectrum(idCount, mzArray, intensityArray, precursorCharge, precursorMZ);
 
                                 // Add the spectrum and its mapping to the collection and table.
@@ -5033,14 +5028,11 @@ public class PRIDEConverter {
 
                                 // If you'll look at the above method, you'll see that it consumes two ID's -
                                 // one for the spectrum and one for the precursor. So advance it by 2 here.
-                                idCount +=
-                                        1;
+                                idCount += 1;
 
                                 // That completes the cycle.
-                                mz =
-                                        new ArrayList();
-                                intensities =
-                                        new ArrayList();
+                                mz = new ArrayList();
+                                intensities = new ArrayList();
                             }
 
                             String[] scanTokens = currentLine.split("\t");
@@ -5050,47 +5042,40 @@ public class PRIDEConverter {
                                 if (debug) {
                                     System.out.println("Current split scan line tokens:");
 
-                                    for (int j = 0; j <
-                                            scanTokens.length; j++) {
+                                    for (int j = 0; j < scanTokens.length; j++) {
                                         System.out.println(scanTokens[j]);
                                     }
 
                                     throw new IOException("There were " + scanTokens.length +
                                             " elements (instead of the expected 4) on line " + lineCount + " in your file ('" + filename + "')!");
                                 }
-
                             } else {
                                 // we do not need the initial H, start and end scans, just the precursor mass
                                 scanNumber = scanTokens[1].trim();
-                                precursorMZ =
-                                        new Double(scanTokens[3].trim());
+                                precursorMZ = new Double(scanTokens[3].trim());
                             }
 
-// Read mz and intensities
+                        // Read mz and intensities
                         } else if (!(currentLine.startsWith("H") || currentLine.startsWith("S") ||
                                 currentLine.startsWith("I") || currentLine.startsWith("Z"))) {
                             String[] mzAndintensity = currentLine.split(" ");
                             mz.add(mzAndintensity[0].trim());
                             intensities.add(mzAndintensity[1].trim());
                         }
-
                     }
                 }
 
                 // FENCE-POST:
                 int size = mz.size();
-                mzArray =
-                        new double[size];
-                intensityArray =
-                        new double[size];
+                mzArray = new double[size];
+                intensityArray = new double[size];
 
-                for (int j = 0; j <
-                        size; j++) {
+                for (int j = 0; j < size; j++) {
                     mzArray[j] = Double.parseDouble((String) mz.get(j));
                     intensityArray[j] = Double.parseDouble((String) intensities.get(j));
                 }
 
-// OK, all done. Create a mzData spectrum next!
+                // OK, all done. Create a mzData spectrum next!
                 Spectrum mzdataSpectrum = transformSpectrum(idCount, mzArray, intensityArray, precursorCharge, precursorMZ);
 
                 // Add the spectrum and its mapping to the collection and table.
@@ -5101,16 +5086,141 @@ public class PRIDEConverter {
 
                 // If you'll look at the above method, you'll see that it consumes two ID's -
                 // one for the spectrum and one for the precursor. So advance it by 2 here.
-                idCount +=
-                        1;
+                idCount += 1;
 
                 // Ok, we're through the file. Close it.
                 br.close();
-            } else {
+            } else if (filename.toLowerCase().endsWith(".dta")) {
+
                 if (debug) {
                     System.out.println("The file " + filename + " was not included among the processed files\n");
                 }
 
+            // The part below has not been tested as we have no examples of DTASelect projects
+            // using dta files as spectrum files. But most of the code below should work.
+
+//                try {
+//                    FileReader f = new FileReader(new File(filename));
+//                    BufferedReader b = new BufferedReader(f);
+//
+//                    String currentLine = b.readLine();
+//
+//                    if (properties.isCommaTheDecimalSymbol()) {
+//                        currentLine = currentLine.replaceAll(",", ".");
+//                    }
+//
+//                    StringTokenizer tok = new StringTokenizer(currentLine);
+//
+//                    double precursorMass = new Double(tok.nextToken()).doubleValue();
+//                    int precursorCharge = new Integer(tok.nextToken()).intValue();
+//
+//                    currentLine = b.readLine();
+//
+//                    Vector masses = new Vector();
+//                    Vector intensities = new Vector();
+//
+//                    boolean emptyLineFound = false;
+//
+//                    while (currentLine != null && !emptyLineFound) {
+//
+//                        if (currentLine.equalsIgnoreCase("")) {
+//                            emptyLineFound = true;
+//                        } else {
+//
+//                            if (properties.isCommaTheDecimalSymbol()) {
+//                                currentLine = currentLine.replaceAll(",", ".");
+//                            }
+//
+//                            tok = new StringTokenizer(currentLine);
+//                            masses.add(new Double(tok.nextToken()));
+//                            intensities.add(new Double(tok.nextToken()));
+//
+//                            currentLine = b.readLine();
+//                        }
+//                    }
+//
+//                    double[][] arrays = new double[2][masses.size()];
+//
+//                    for (int j = 0; j < masses.size(); j++) {
+//                        arrays[0][j] = ((Double) masses.get(j)).doubleValue();
+//                        arrays[1][j] = ((Double) intensities.get(j)).doubleValue();
+//                    }
+//
+//                    b.close();
+//                    f.close();
+//
+//
+//                    // Precursor collection.
+//                    ArrayList precursors = new ArrayList(1);
+//
+//                    // Ion selection parameters.
+//                    ArrayList ionSelection = new ArrayList(4);
+//
+//                    // See if we know the precursor charge, and if so, include it.
+//                    if (precursorCharge > 0) {
+//                        ionSelection.add(new CvParamImpl("PSI:1000041",
+//                                "PSI", "ChargeState", 0,
+//                                Integer.toString(precursorCharge)));
+//                    }
+//
+//                    ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
+//                            "MassToChargeRatio", 1, Double.toString(
+//                            precursorMass)));
+//
+//                    precursors.add(new PrecursorImpl(null, null,
+//                            ionSelection, null, 2, 0, 0));
+//
+//                    if (arrays[properties.MZ_ARRAY].length > 0) {
+//                        Double mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
+//                        Double mzRangeStop = new Double(arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+//
+//                        // Create new mzData spectrum for the fragmentation spectrum.
+//                        SpectrumImpl fragmentation = new SpectrumImpl(
+//                                new BinaryArrayImpl(arrays[properties.INTENSITIES_ARRAY],
+//                                BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+//                                mzRangeStart,
+//                                new BinaryArrayImpl(arrays[properties.MZ_ARRAY],
+//                                BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+//                                2, null,
+//                                mzRangeStop,
+//                                null,
+//                                idCount++, precursors,
+//                                null,
+//                                null,
+//                                null,
+//                                null, null);
+//
+//                        // Store (spectrumfileid, spectrumid) mapping.
+//
+//                        String usedFileName = filename.substring(0, filename.indexOf("."));
+//
+//                        aMappings.put(usedFileName + "_" + scanNumber, new Long(idCount));
+//
+//                        // Store the transformed spectrum.
+//                        aSpectra.add(fragmentation);
+//                    }
+//                } catch (Exception e) {
+//
+//                    boolean errorDetected = true;
+//
+//                    if (!cancelConversion) {
+//
+//                        Util.writeToErrorLog("Error parsing Sequest DTA file: ");
+//                        e.printStackTrace();
+//
+//                        JOptionPane.showMessageDialog(null,
+//                                "The following file could not parsed as a " +
+//                                "Sequest DTA file:\n " +
+//                                filename +
+//                                "\n\n" +
+//                                "See ../Properties/ErrorLog.txt for more details.",
+//                                "Error Parsing File", JOptionPane.ERROR_MESSAGE);
+//                    }
+//                }
+            } else {
+                if (debug) {
+                    System.out.println("The file " + filename + " was not included among the processed files\n");
+                }
             }
         }
     }
@@ -5144,14 +5254,14 @@ public class PRIDEConverter {
             ionSelection.add(new CvParamImpl("PSI:1000041", "PSI", "ChargeState", 0, Integer.toString(charge)));
         }
 
-// See if we know the precursor intensity (for the machine used here,
-// intensity is always 'NumberOfCounts').
+        // See if we know the precursor intensity (for the machine used here,
+        // intensity is always 'NumberOfCounts').
         ionSelection.add(new CvParamImpl("PSI:1000040", "PSI", "MassToChargeRatio", 1, Double.toString(aPrecursorMZ)));
 
         aId++; // Note that the counter is used AND incremented here.
 
-// Create new mzData spectrum for the fragmentation spectrum.
-// Notice that certain collections and annotations are 'null' here.
+        // Create new mzData spectrum for the fragmentation spectrum.
+        // Notice that certain collections and annotations are 'null' here.
         Spectrum fragmentation = new SpectrumImpl(
                 new BinaryArrayImpl(aIntensityArray, BinaryArrayImpl.BIG_ENDIAN_LABEL),
                 new Double(aMzArray[0]),
@@ -8575,8 +8685,7 @@ public class PRIDEConverter {
 
                 progressDialog.setMax(properties.getSelectedSpectraKeys().size());
 
-                for (int i = 0; i <
-                        properties.getSelectedSpectraKeys().size(); i++) {
+                for (int i = 0; i < properties.getSelectedSpectraKeys().size(); i++) {
 
                     if (cancelConversion) {
                         outputFrame.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -8609,11 +8718,9 @@ public class PRIDEConverter {
                     while (tok.hasMoreTokens()) {
 
                         tempToken = tok.nextToken();
-                        tempToken =
-                                tempToken.trim();
+                        tempToken = tempToken.trim();
 
-                        for (int i = 0; i <
-                                properties.getProjectIds().size(); i++) {
+                        for (int i = 0; i < properties.getProjectIds().size(); i++) {
 
                             if (properties.isSelectionCriteriaFileName()) {
 
@@ -8644,8 +8751,7 @@ public class PRIDEConverter {
 
                                 progressDialog.setMax(dbSpectra.length);
 
-                                for (int j = 0; j <
-                                        dbSpectra.length; j++) {
+                                for (int j = 0; j < dbSpectra.length; j++) {
                                     if (cancelConversion) {
                                         outputFrame.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
                                         outputFrame.setConvertButtonEnabled(true);
@@ -8666,15 +8772,12 @@ public class PRIDEConverter {
                     }
                 } else {
 
-                    for (int i = 0; i <
-                            properties.getProjectIds().size(); i++) {
+                    for (int i = 0; i < properties.getProjectIds().size(); i++) {
 
                         if (properties.selectAllSpectra()) {
-                            dbSpectra = Spectrumfile.getAllSpectraForProject(properties.getProjectIds().
-                                    get(i), conn);
+                            dbSpectra = Spectrumfile.getAllSpectraForProject(properties.getProjectIds().get(i), conn);
                         } else { //selectAllIdentifiedSpectra
-                            dbSpectra = Spectrumfile.getAllSpectraForProject(properties.getProjectIds().
-                                    get(i), conn,
+                            dbSpectra = Spectrumfile.getAllSpectraForProject(properties.getProjectIds().get(i), conn,
                                     "identified > 0");
                         }
 
@@ -8692,7 +8795,6 @@ public class PRIDEConverter {
                             progressDialog.setValue(j);
                             selectedSpectra.add(dbSpectra[j]);
                         }
-
                     }
                 }
             }
@@ -8704,8 +8806,7 @@ public class PRIDEConverter {
                     "See ../Properties/ErrorLog.txt for more details.",
                     "Database Error", JOptionPane.ERROR_MESSAGE);
             Util.writeToErrorLog("Error accessing database: " + e.toString());
-            selectedSpectra =
-                    null;
+            selectedSpectra = null;
         }
 
         return selectedSpectra;
@@ -8748,16 +8849,13 @@ public class PRIDEConverter {
         ArrayList sampleDescriptionUserParams = new ArrayList(
                 properties.getSampleDescriptionUserSubSampleNames().size());
 
-        for (int i = 0; i <
-                properties.getSampleDescriptionUserSubSampleNames().size(); i++) {
+        for (int i = 0; i < properties.getSampleDescriptionUserSubSampleNames().size(); i++) {
             sampleDescriptionUserParams.add(new UserParamImpl(
                     "SUBSAMPLE_" + (i + 1),
-                    i, (String) properties.getSampleDescriptionUserSubSampleNames().
-                    get(i)));
+                    i, (String) properties.getSampleDescriptionUserSubSampleNames().get(i)));
         }
 
-        for (int i = 0; i <
-                properties.getSampleDescriptionCVParamsQuantification().size(); i++) {
+        for (int i = 0; i < properties.getSampleDescriptionCVParamsQuantification().size(); i++) {
             properties.getSampleDescriptionCVParams().add(
                     properties.getSampleDescriptionCVParamsQuantification().get(i));
         }
@@ -8824,8 +8922,7 @@ public class PRIDEConverter {
                         JOptionPane.ERROR_MESSAGE);
             } catch (IOException e) {
 
-                Util.writeToErrorLog("An error occured while trying to parse: " +
-                        filePath);
+                Util.writeToErrorLog("An error occured while trying to parse: " + filePath);
                 e.printStackTrace();
 
                 JOptionPane.showMessageDialog(null,
@@ -8835,7 +8932,6 @@ public class PRIDEConverter {
                         "Parsing Error",
                         JOptionPane.ERROR_MESSAGE);
             }
-
         }
 
         // Create the combinded mzData object.
@@ -8865,8 +8961,7 @@ public class PRIDEConverter {
                 sampleDescriptionUserParams,
                 properties.getSoftwareName());
 
-        totalNumberOfSpectra =
-                aTransformedSpectra.size();
+        totalNumberOfSpectra = aTransformedSpectra.size();
 
         return mzData;
     }
@@ -8907,21 +9002,18 @@ public class PRIDEConverter {
         ArrayList sampleDescriptionUserParams = new ArrayList(
                 properties.getSampleDescriptionUserSubSampleNames().size());
 
-        for (int i = 0; i <
-                properties.getSampleDescriptionUserSubSampleNames().size(); i++) {
+        for (int i = 0; i < properties.getSampleDescriptionUserSubSampleNames().size(); i++) {
             sampleDescriptionUserParams.add(new UserParamImpl(
                     "SUBSAMPLE_" + (i + 1),
-                    i, (String) properties.getSampleDescriptionUserSubSampleNames().
-                    get(i)));
+                    i, (String) properties.getSampleDescriptionUserSubSampleNames().get(i)));
         }
 
-        for (int i = 0; i <
-                properties.getSampleDescriptionCVParamsQuantification().size(); i++) {
+        for (int i = 0; i < properties.getSampleDescriptionCVParamsQuantification().size(); i++) {
             properties.getSampleDescriptionCVParams().add(
                     properties.getSampleDescriptionCVParamsQuantification().get(i));
         }
 
-// Create the mzData object.
+        // Create the mzData object.
         MzData mzData = new MzDataImpl(
                 mzDataSpectra,
                 properties.getSoftwareCompletionTime(),
@@ -8988,21 +9080,18 @@ public class PRIDEConverter {
         ArrayList sampleDescriptionUserParams = new ArrayList(
                 properties.getSampleDescriptionUserSubSampleNames().size());
 
-        for (int i = 0; i <
-                properties.getSampleDescriptionUserSubSampleNames().size(); i++) {
+        for (int i = 0; i < properties.getSampleDescriptionUserSubSampleNames().size(); i++) {
             sampleDescriptionUserParams.add(new UserParamImpl(
                     "SUBSAMPLE_" + (i + 1),
-                    i, (String) properties.getSampleDescriptionUserSubSampleNames().
-                    get(i)));
+                    i, (String) properties.getSampleDescriptionUserSubSampleNames().get(i)));
         }
 
-        for (int i = 0; i <
-                properties.getSampleDescriptionCVParamsQuantification().size(); i++) {
+        for (int i = 0; i < properties.getSampleDescriptionCVParamsQuantification().size(); i++) {
             properties.getSampleDescriptionCVParams().add(
                     properties.getSampleDescriptionCVParamsQuantification().get(i));
         }
 
-// Create the mzData object.
+        // Create the mzData object.
         mzData = new MzDataImpl(
                 mzData.getSpectrumCollection(),
                 properties.getSoftwareCompletionTime(),
@@ -9029,8 +9118,7 @@ public class PRIDEConverter {
                 sampleDescriptionUserParams,
                 properties.getSoftwareName());
 
-        totalNumberOfSpectra =
-                mzData.getSpectrumCollection().size();
+        totalNumberOfSpectra = mzData.getSpectrumCollection().size();
 
         return mzData;
     }
@@ -9047,8 +9135,7 @@ public class PRIDEConverter {
     private static ArrayList combineCVTermsArrays(ArrayList<CvParam> existingCvParams,
             ArrayList<CvParam> cvParamsToAdd) {
 
-        for (int i = 0; i <
-                cvParamsToAdd.size(); i++) {
+        for (int i = 0; i < cvParamsToAdd.size(); i++) {
 
             CvParam tempCvParam = cvParamsToAdd.get(i);
 
@@ -9075,8 +9162,7 @@ public class PRIDEConverter {
     private static ArrayList combineUserParamArrays(ArrayList<UserParam> existingUserParams,
             ArrayList<UserParam> userParamsToAdd) {
 
-        for (int i = 0; i <
-                userParamsToAdd.size(); i++) {
+        for (int i = 0; i < userParamsToAdd.size(); i++) {
 
             UserParam tempUserParam = userParamsToAdd.get(i);
 
@@ -9200,8 +9286,7 @@ public class PRIDEConverter {
     private static String generateSpectrumKey(Object[] subKeys) {
         spectrumKey = "";
 
-        for (int i = 0; i <
-                subKeys.length; i++) {
+        for (int i = 0; i < subKeys.length; i++) {
             spectrumKey += subKeys[i] + "_";
         }
 

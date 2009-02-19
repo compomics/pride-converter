@@ -1141,7 +1141,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
                 "<b>DTASelect</b><br><br>" +
                 "DTASelect reassembles Sequest peptide information into protein information.<br><br>" +
-                "File Extension: .txt and .ms2<br><br>" +
+                "File Extension: .txt for the identifications (the DTASelect file) and .ms2 for the spectra<br><br>" +
                 "More Information: <a href=\"http://fields.scripps.edu/DTASelect\">" +
                 "http://fields.scripps.edu/DTASelect</a>");
         descriptionJEditorPane.setCaretPosition(0);
