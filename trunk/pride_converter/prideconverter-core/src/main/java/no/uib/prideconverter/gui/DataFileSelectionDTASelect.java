@@ -4,12 +4,17 @@ import no.uib.prideconverter.PRIDEConverter;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import no.uib.prideconverter.filefilters.TxtFileFilter;
+import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
 import uk.ac.ebi.pride.model.interfaces.mzdata.UserParam;
 
@@ -36,13 +41,13 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
         this.prideConverter = prideConverter;
 
         // sets the default wizard frame size
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setSize(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
+        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
                 prideConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
@@ -56,13 +61,12 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
             spectrumFileFolderJTextField.setText(prideConverter.getProperties().getSpectrumFilesFolderName());
         }
 
-        proteinIdFilterJTextField.setText("" + prideConverter.getProperties().getProteinIdentificationFilter());
         databaseJTextField.setText("" + prideConverter.getProperties().getDatabaseName());
 
         // sets the icon of the frame
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
                 getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
-        
+
         setTitle(prideConverter.getWizardName() + " " +
                 prideConverter.getPrideConverterVersionNumber() + " - " + getTitle());
 
@@ -117,8 +121,6 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
         helpJButton = new javax.swing.JButton();
         aboutJButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        proteinIdFilterJTextField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         databaseJTextField = new javax.swing.JTextField();
 
@@ -253,12 +255,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
             }
         });
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Protein Identifications", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
-
-        jLabel6.setText("Protein Identification Filter:");
-        jLabel6.setToolTipText("Ignore All Protein Identifications Starting With This Tag");
-
-        proteinIdFilterJTextField.setToolTipText("Ignore All Protein Identifications Starting With This Tag");
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Peptide and Protein Identifications", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
         jLabel1.setText("Database:");
         jLabel1.setToolTipText("Name of the database used for identiification");
@@ -276,15 +273,9 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(99, 99, 99)
-                        .addComponent(databaseJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(18, 18, 18)
-                        .addComponent(proteinIdFilterJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jLabel1)
+                .addGap(99, 99, 99)
+                .addComponent(databaseJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
                 .addContainerGap(46, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -294,22 +285,19 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(databaseJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addGap(23, 23, 23)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(proteinIdFilterJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addGap(24, 24, 24))
+                .addGap(21, 21, 21))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fileSelectionJPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fileSelectionJPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(helpJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(aboutJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -319,9 +307,8 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
                         .addComponent(nextJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(cancelJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
-                    .addComponent(jLabel3)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -330,8 +317,8 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(fileSelectionJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 256, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 302, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -352,6 +339,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     /**
      * Closes the frame and the wizard.
      * 
@@ -374,11 +362,9 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
 
         boolean saveOk = true;
 
-        prideConverter.getProperties().setProteinIdentificationFilter(proteinIdFilterJTextField.getText());
-
         prideConverter.getProperties().setDatabaseName(databaseJTextField.getText());
 
-        if(new File(prideConverter.getProperties().getSpectrumFilesFolderName()).list().length == 0){
+        if (new File(prideConverter.getProperties().getSpectrumFilesFolderName()).list().length == 0) {
             JOptionPane.showMessageDialog(this,
                     "The spectrum folder is empty! Please verify that you have selected the correct folder.",
                     "Spectrum Folder Empty", JOptionPane.ERROR_MESSAGE);
@@ -439,8 +425,6 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
 
         boolean saveOk = true;
 
-        prideConverter.getProperties().setProteinIdentificationFilter(proteinIdFilterJTextField.getText());
-
         prideConverter.getProperties().setDatabaseName(databaseJTextField.getText());
 
         if (saveOk) {
@@ -490,6 +474,33 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
             prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
             prideConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
             prideConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
+
+            // try to extract the name of the database used for identification
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(
+                        prideConverter.getProperties().getDtaSelectFileName()));
+
+                br.readLine();
+                br.readLine();
+
+                String database = br.readLine();
+                database = database.substring(database.lastIndexOf("/") + 1);
+                databaseJTextField.setText(database);
+
+                br.close();
+            } catch (FileNotFoundException e) {
+                JOptionPane.showMessageDialog(this,
+                        "The file " + prideConverter.getProperties().getDtaSelectFileName()
+                        + "\ncould not be found.", "File Not Found", JOptionPane.ERROR_MESSAGE);
+                Util.writeToErrorLog("File not found: " + prideConverter.getProperties().getDtaSelectFileName());
+                e.printStackTrace();
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "An error occured while reading the file\n"
+                        + prideConverter.getProperties().getDtaSelectFileName()
+                        + ".", "Error Reading File", JOptionPane.ERROR_MESSAGE);
+                Util.writeToErrorLog("Error reading file: " + prideConverter.getProperties().getDtaSelectFileName());
+                e.printStackTrace();
+            }
         }
 
         mandatoryFieldsCheck();
@@ -518,7 +529,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
         String path;
 
         int returnVal = chooser.showOpenDialog(this);
-        
+
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             path = (chooser.getSelectedFile().getAbsoluteFile().getPath());
             spectrumFileFolderJTextField.setText(path);
@@ -563,12 +574,10 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton nextJButton;
-    private javax.swing.JTextField proteinIdFilterJTextField;
     private javax.swing.JTextField spectrumFileFolderJTextField;
     private javax.swing.JButton spectumFileFolderJButton;
     // End of variables declaration//GEN-END:variables
