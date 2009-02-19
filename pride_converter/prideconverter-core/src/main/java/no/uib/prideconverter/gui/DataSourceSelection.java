@@ -404,7 +404,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(dtaSelectJRadioButton);
-        dtaSelectJRadioButton.setText("DTASelect");
+        dtaSelectJRadioButton.setText("DTASelect (beta)");
         dtaSelectJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         dtaSelectJRadioButton.setIconTextGap(20);
         dtaSelectJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -446,7 +446,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                     .addComponent(mzXMLJRadioButton)
                     .addComponent(mzDataJRadioButton)
                     .addComponent(dtaSelectJRadioButton))
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
