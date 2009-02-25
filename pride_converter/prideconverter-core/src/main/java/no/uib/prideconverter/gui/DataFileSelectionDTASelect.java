@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import no.uib.prideconverter.filefilters.SequestParamsFileFilter;
 import no.uib.prideconverter.filefilters.TxtFileFilter;
 import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
@@ -61,7 +62,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
             spectrumFileFolderJTextField.setText(prideConverter.getProperties().getSpectrumFilesFolderName());
         }
 
-        databaseJTextField.setText("" + prideConverter.getProperties().getDatabaseName());
+        sequestParamFileJTextField.setText("" + prideConverter.getProperties().getSequestParamFile());
 
         // sets the icon of the frame
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
@@ -90,7 +91,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
     private void mandatoryFieldsCheck() {
 
         if (dtaSelectFileJTextField.getText().length() > 0 &&
-                databaseJTextField.getText().length() > 0 &&
+                sequestParamFileJTextField.getText().length() > 0 &&
                 spectrumFileFolderJTextField.getText().length() > 0) {
             nextJButton.setEnabled(true);
         } else {
@@ -122,7 +123,8 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
         aboutJButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        databaseJTextField = new javax.swing.JTextField();
+        sequestParamFileJTextField = new javax.swing.JTextField();
+        sequestParamFileJButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("File Selection - Step 1 of 8");
@@ -162,10 +164,10 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
         fileSelectionJPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "File Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
         jLabel8.setText("DTASelect File (txt version): ");
-        jLabel8.setToolTipText("The pep.xml file");
+        jLabel8.setToolTipText("The DTASelect.txt file");
 
         dtaSelectFileJTextField.setEditable(false);
-        dtaSelectFileJTextField.setToolTipText("The pep.xml file");
+        dtaSelectFileJTextField.setToolTipText("The DTASelect.txt file");
 
         findDtaSelectFileJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/Directory.gif"))); // NOI18N
         findDtaSelectFileJButton.setToolTipText("Select File");
@@ -179,6 +181,9 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
 
         jLabel10.setText("Spectrum File Folder: ");
         jLabel10.setToolTipText("The folder with the MS2 files");
+        jLabel10.setMaximumSize(new java.awt.Dimension(138, 14));
+        jLabel10.setMinimumSize(new java.awt.Dimension(138, 14));
+        jLabel10.setPreferredSize(new java.awt.Dimension(138, 14));
 
         spectrumFileFolderJTextField.setEditable(false);
         spectrumFileFolderJTextField.setToolTipText("The folder with the MS2 files");
@@ -199,40 +204,43 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
             fileSelectionJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(fileSelectionJPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(fileSelectionJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel10))
+                .addGroup(fileSelectionJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(12, 12, 12)
-                .addGroup(fileSelectionJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(fileSelectionJPanelLayout.createSequentialGroup()
-                        .addComponent(dtaSelectFileJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(findDtaSelectFileJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fileSelectionJPanelLayout.createSequentialGroup()
-                        .addComponent(spectrumFileFolderJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spectumFileFolderJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(fileSelectionJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(dtaSelectFileJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
+                    .addComponent(spectrumFileFolderJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(fileSelectionJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(findDtaSelectFileJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, Short.MAX_VALUE)
+                    .addComponent(spectumFileFolderJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, Short.MAX_VALUE))
                 .addContainerGap())
         );
+
+        fileSelectionJPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel10, jLabel8});
+
         fileSelectionJPanelLayout.setVerticalGroup(
             fileSelectionJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(fileSelectionJPanelLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(fileSelectionJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(fileSelectionJPanelLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
+                        .addGap(16, 16, 16)
                         .addGroup(fileSelectionJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
                             .addComponent(dtaSelectFileJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(findDtaSelectFileJButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addGroup(fileSelectionJPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(findDtaSelectFileJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(fileSelectionJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(fileSelectionJPanelLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
+                        .addGap(11, 11, 11)
                         .addGroup(fileSelectionJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(spectrumFileFolderJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(spectumFileFolderJButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(fileSelectionJPanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spectumFileFolderJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
@@ -255,15 +263,26 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
             }
         });
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Peptide and Protein Identifications", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Parameters", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
-        jLabel1.setText("Database:");
-        jLabel1.setToolTipText("Name of the database used for identiification");
+        jLabel1.setText("Sequest Params File:");
+        jLabel1.setPreferredSize(new java.awt.Dimension(138, 14));
 
-        databaseJTextField.setToolTipText("Name of the database used for identiification");
-        databaseJTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+        sequestParamFileJTextField.setEditable(false);
+        sequestParamFileJTextField.setToolTipText("The sequest.params file");
+        sequestParamFileJTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                databaseJTextFieldKeyReleased(evt);
+                sequestParamFileJTextFieldKeyReleased(evt);
+            }
+        });
+
+        sequestParamFileJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/Directory.gif"))); // NOI18N
+        sequestParamFileJButton.setToolTipText("Select File");
+        sequestParamFileJButton.setBorderPainted(false);
+        sequestParamFileJButton.setContentAreaFilled(false);
+        sequestParamFileJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sequestParamFileJButtonActionPerformed(evt);
             }
         });
 
@@ -273,19 +292,23 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(99, 99, 99)
-                .addComponent(databaseJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
-                .addContainerGap(46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addComponent(sequestParamFileJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(sequestParamFileJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(databaseJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(21, 21, 21))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(sequestParamFileJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(sequestParamFileJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -295,8 +318,6 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(fileSelectionJPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(helpJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -308,7 +329,9 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(cancelJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(fileSelectionJPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -317,8 +340,8 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(fileSelectionJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 302, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 274, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -362,7 +385,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
 
         boolean saveOk = true;
 
-        prideConverter.getProperties().setDatabaseName(databaseJTextField.getText());
+        prideConverter.getProperties().setSequestParamFile(sequestParamFileJTextField.getText());
 
         if (new File(prideConverter.getProperties().getSpectrumFilesFolderName()).list().length == 0) {
             JOptionPane.showMessageDialog(this,
@@ -425,7 +448,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
 
         boolean saveOk = true;
 
-        prideConverter.getProperties().setDatabaseName(databaseJTextField.getText());
+        prideConverter.getProperties().setSequestParamFile(sequestParamFileJTextField.getText());
 
         if (saveOk) {
 
@@ -474,33 +497,6 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
             prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
             prideConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
             prideConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
-
-            // try to extract the name of the database used for identification
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(
-                        prideConverter.getProperties().getDtaSelectFileName()));
-
-                br.readLine();
-                br.readLine();
-
-                String database = br.readLine();
-                database = database.substring(database.lastIndexOf("/") + 1);
-                databaseJTextField.setText(database);
-
-                br.close();
-            } catch (FileNotFoundException e) {
-                JOptionPane.showMessageDialog(this,
-                        "The file " + prideConverter.getProperties().getDtaSelectFileName()
-                        + "\ncould not be found.", "File Not Found", JOptionPane.ERROR_MESSAGE);
-                Util.writeToErrorLog("File not found: " + prideConverter.getProperties().getDtaSelectFileName());
-                e.printStackTrace();
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "An error occured while reading the file\n"
-                        + prideConverter.getProperties().getDtaSelectFileName()
-                        + ".", "Error Reading File", JOptionPane.ERROR_MESSAGE);
-                Util.writeToErrorLog("Error reading file: " + prideConverter.getProperties().getDtaSelectFileName());
-                e.printStackTrace();
-            }
         }
 
         mandatoryFieldsCheck();
@@ -558,15 +554,58 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
      * 
      * @param evt
      */
-    private void databaseJTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_databaseJTextFieldKeyReleased
+    private void sequestParamFileJTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sequestParamFileJTextFieldKeyReleased
         mandatoryFieldsCheck();
-    }//GEN-LAST:event_databaseJTextFieldKeyReleased
+}//GEN-LAST:event_sequestParamFileJTextFieldKeyReleased
+
+    /**
+     * Opens a filechooser where the sequest.params file can be selected.
+     * 
+     * @param evt
+     */
+    private void sequestParamFileJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sequestParamFileJButtonActionPerformed
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+
+        JFileChooser chooser = new JFileChooser(prideConverter.getUserProperties().getCurrentSourceFileLocation());
+
+        if (sequestParamFileJTextField.getText().length() > 0) {
+            chooser.setSelectedFile(new File(sequestParamFileJTextField.getText()));
+        }
+
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setDialogTitle("Select The sequest.params File");
+        chooser.setFileFilter(new SequestParamsFileFilter());
+
+        String path;
+
+        int returnVal = chooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            path = (chooser.getSelectedFile().getAbsoluteFile().getPath());
+            sequestParamFileJTextField.setText(path);
+            prideConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
+            prideConverter.getProperties().setSequestParamFile(path);
+
+            prideConverter.getProperties().setSpectrumTableModel(null);
+            prideConverter.getProperties().setInstrumentDetailsExtracted(false);
+            prideConverter.getProperties().setSelectedSourceFiles(new ArrayList());
+            prideConverter.getProperties().setSpectraSelectionCriteria(null);
+            prideConverter.getProperties().setDataFileHasBeenLoaded(false);
+            prideConverter.getProperties().setSampleDetailsExtracted(false);
+            prideConverter.getProperties().setContactInfoExtracted(false);
+            prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+            prideConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
+            prideConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
+        }
+
+        mandatoryFieldsCheck();
+
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+}//GEN-LAST:event_sequestParamFileJButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutJButton;
     private javax.swing.JButton backJButton;
     private javax.swing.JButton cancelJButton;
-    private javax.swing.JTextField databaseJTextField;
     private javax.swing.JTextField dtaSelectFileJTextField;
     private javax.swing.JPanel fileSelectionJPanel;
     private javax.swing.JButton findDtaSelectFileJButton;
@@ -578,6 +617,8 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton nextJButton;
+    private javax.swing.JButton sequestParamFileJButton;
+    private javax.swing.JTextField sequestParamFileJTextField;
     private javax.swing.JTextField spectrumFileFolderJTextField;
     private javax.swing.JButton spectumFileFolderJButton;
     // End of variables declaration//GEN-END:variables

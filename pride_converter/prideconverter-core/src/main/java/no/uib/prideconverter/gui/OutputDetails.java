@@ -402,7 +402,7 @@ public class OutputDetails extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 2, 11));
         jLabel5.setText("(Emulates Mascot Web Results)");
 
         jLabel7.setText("OMSSA Folder: ");
@@ -428,7 +428,7 @@ public class OutputDetails extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 2, 11));
         jLabel6.setText("(Supported for MGF, PKL/PKX, MS2 and DTA Files)");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
