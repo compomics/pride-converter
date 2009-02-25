@@ -73,7 +73,7 @@ public class Properties {
     private HashMap<String, ArrayList<CvParam>> spectrumCvParams;
     private HashMap<String, ArrayList<UserParam>> spectrumUserParams;
     private String proteinIdentificationFilter = "";
-    private String databaseName = "";
+    private String sequestParamFile = "";
     
     // contact information
     private Collection contacts;
@@ -1575,7 +1575,7 @@ public class Properties {
     }
 
     /**
-     * Returne the proteinIdentificationFilter
+     * Returns the proteinIdentificationFilter
      *
      * @return the proteinIdentificationFilter
      */
@@ -1593,20 +1593,20 @@ public class Properties {
     }
 
     /**
-     * Returne the database name (used for DTASelect)
+     * Returns the path to the sequest.param file (used for DTASelect)
      *
-     * @return the proteinIdentificationFilter
+     * @return the path to the sequest.param file
      */
-    public String getDatabaseName() {
-        return databaseName;
+    public String getSequestParamFile() {
+        return sequestParamFile;
     }
 
     /**
-     * Sets the databaseName (used for DTASelect)
+     * Sets the path to the sequest.param file (used for DTASelect)
      *
-     * @param databaseName the databaseName to set
+     * @param sequestParamFile path to the sequest.param file
      */
-    public void setDatabaseName(String databaseName) {
-        this.databaseName = databaseName;
+    public void setSequestParamFile(String sequestParamFile) {
+        this.sequestParamFile = sequestParamFile;
     }
 }

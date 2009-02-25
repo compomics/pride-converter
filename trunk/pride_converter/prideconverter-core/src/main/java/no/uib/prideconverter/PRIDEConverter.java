@@ -61,6 +61,7 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -134,8 +135,7 @@ public class PRIDEConverter {
     private static Connection conn = null;
     private static boolean cancelConversion = false;
     private static boolean useErrorLog = true;
-    // In the original code this was "false"
-    private static boolean debug = true;
+    private static boolean debug = false;
     private boolean useHardcodedPaths = false;
 
     /** 
@@ -4024,6 +4024,9 @@ public class PRIDEConverter {
         // get the list of spectrum files
         File[] spectrumFiles = new File(properties.getSpectrumFilesFolderName()).listFiles();
 
+        // the name of the database used for the peptide and protein identifications
+        String databaseName = "unknown";
+
         try {
             // The first thing we'll do is get all the spectra, read them in and transform them in mzData format.
             // Since PRIDE is actually mzData grouped together with an identification part, we'll also have to
@@ -4034,6 +4037,65 @@ public class PRIDEConverter {
             // (at present only the array containing the files is not empty)
             aTransformedSpectra = new ArrayList();
             readSpectra(spectrumFiles, aTransformedSpectra, filenameToMzDataIDMapping);
+
+
+            // extract the modification details and database name from sequest.params
+            BufferedReader br = new BufferedReader(new FileReader(properties.getSequestParamFile()));
+
+            properties.setAlreadyChoosenModifications(new ArrayList());
+
+            String line = br.readLine();
+
+            HashMap<String, Double> variableModifications = new HashMap<String, Double>();
+            HashMap<String, Double> fixedModifications = new HashMap<String, Double>();
+
+            while (line != null) {
+
+                // extract database name
+                if (line.startsWith("database_name = ")) {
+                    databaseName = line.substring(line.indexOf("= ") + 2);
+                }
+
+                // extract variable modifications
+                // NB: assumes that a given amino acid appears only once.
+                //     which seems to be in accordance with Sequest
+                if (line.startsWith("diff_search_options = ")) {
+
+                    String temp = line.substring(line.indexOf("= ") + 2);
+
+                    StringTokenizer tok = new StringTokenizer(temp);
+
+                    while (tok.hasMoreTokens()) {
+
+                        Double tempModificationMass = new Double(tok.nextToken());
+                        String tempModifiedAminoAcids = tok.nextToken();
+
+                        for (int i = 0; i < tempModifiedAminoAcids.length(); i++) {
+
+                            if (!tempModificationMass.toString().equalsIgnoreCase("0.0")) {
+                                variableModifications.put(
+                                        "" + tempModifiedAminoAcids.charAt(i), tempModificationMass);
+                            }
+                        }
+                    }
+                }
+
+                // extract fixed modifications.
+                // FIX ME: currently only extracts modified C's...
+                if (line.startsWith("add_C_Cysteine = ")) {
+
+                    String temp = line.substring(line.indexOf("= ") + 2);
+                    temp = temp.substring(0, temp.indexOf(";"));
+                    temp = temp.trim();
+
+                    fixedModifications.put("C", new Double(temp));
+                }
+
+                line = br.readLine();
+            }
+
+            br.close();
+
 
 
             //******************PARSING THE IDENTIFICATIONS FILE********************************************
@@ -4048,8 +4110,8 @@ public class PRIDEConverter {
             progressDialog.setString(null);
 
             // Now we'll fill it out while reading the input file.
-            BufferedReader br = new BufferedReader(new FileReader(properties.getDtaSelectFileName()));
-            String line = null;
+            br = new BufferedReader(new FileReader(properties.getDtaSelectFileName()));
+            line = null;
 
             // In this particular case, it is also neccessary to get track of the previous line
             String previousLine = null;
@@ -4127,72 +4189,6 @@ public class PRIDEConverter {
                     startParsing = false;
                 }
 
-                // extract the modification details and map to PSI-MOD modifications
-                // Note: this code assumes stuff about the DTASelect file that has not yet been confirmed
-                //       it's now based on this example http://fields.scripps.edu/DTASelect/DTASelect.html
-                if (line.contains("sequest.params modifications:")) {
-
-                    line = br.readLine();
-
-                    properties.setAlreadyChoosenModifications(new ArrayList());
-
-                    while (!line.contains("Use criteria")) {
-
-                        String[] modDetails = line.split("\\s");
-
-                        String modificationSymbol = modDetails[0];
-                        String modifiedAminoAcid = modDetails[1];
-                        String modificationMass = modDetails[2];
-
-                        if (!modificationMass.equalsIgnoreCase("0.0")) {
-
-                            if (modificationSymbol.equalsIgnoreCase("Static")) { // fixed modification
-
-                                modificationSymbol = modifiedAminoAcid;
-
-                                if (!properties.getAlreadyChoosenModifications().contains(modificationSymbol)) {
-                                    new ModificationMapping(outputFrame,
-                                            true, progressDialog, modificationSymbol,
-                                            modifiedAminoAcid + " (fixed)",
-                                            new Double(modificationMass),
-                                            (CvParamImpl) userProperties.getCVTermMappings().
-                                            get(modificationSymbol),
-                                            true);
-
-                                    properties.getAlreadyChoosenModifications().add(modificationSymbol);
-                                } else {
-                                    //do nothing, mapping already choosen
-                                }
-                            } else { // variable modification
-
-                                // may consist of more than one residue, have to cycle all possible residues
-                                for (int i = 0; i < modifiedAminoAcid.length(); i++) {
-
-                                    char currentAminoAcid = modifiedAminoAcid.charAt(i);
-
-                                    String currentModificationSymbol = currentAminoAcid + modificationSymbol;
-
-                                    if (!properties.getAlreadyChoosenModifications().contains(currentModificationSymbol)) {
-                                        new ModificationMapping(outputFrame,
-                                                true, progressDialog, currentModificationSymbol,
-                                                "" + currentAminoAcid,
-                                                new Double(modificationMass),
-                                                (CvParamImpl) userProperties.getCVTermMappings().
-                                                get(currentModificationSymbol),
-                                                false);
-
-                                        properties.getAlreadyChoosenModifications().add(currentModificationSymbol);
-                                    } else {
-                                        //do nothing, mapping already choosen
-                                    }
-                                }
-                            }
-                        }
-
-                        line = br.readLine();
-                    }
-                }
-
                 //Start parsing here
                 if (startParsing) {
 
@@ -4268,11 +4264,11 @@ public class PRIDEConverter {
                                 for (int i = 0; i < proteinTokens.length; i++) {
                                     System.out.println(proteinTokens[i]);
                                 }
-
-                                cancelConversion = true;
-                                throw new IOException("There were " + proteinTokens.length +
-                                        " elements (instead of the expected 9) on line " + lineCount + " in your file ('" + properties.getDtaSelectFileName() + "')!");
                             }
+                            cancelConversion = true;
+                            throw new IOException("There were " + proteinTokens.length +
+                                    " elements (instead of the expected 9) on line " + lineCount +
+                                    " in your file ('" + properties.getDtaSelectFileName() + "')!");
                         } else {
 
                             accessionNumber = proteinTokens[0].trim(); //locus name is accession name
@@ -4334,7 +4330,7 @@ public class PRIDEConverter {
 
                             //We create a new protein instance:
                             protein = new InnerID(accessionNumber, sequenceCount, spectrumCount, coverage, proteinLength,
-                                    molecularWeight, pI, validationStatus, proteinDescription, "Sequest + DTASelect", properties.getDatabaseName());
+                                    molecularWeight, pI, validationStatus, proteinDescription, "Sequest + DTASelect", databaseName);
                         }
 
                     // Now, the information for the PEPTIDES included in each protein identification (if(line.startsWith(" "))
@@ -4441,123 +4437,10 @@ public class PRIDEConverter {
                             // add the modifications
                             ArrayList peptideModifications = new ArrayList();
 
-                            String[] sequenceArray = new String[peptideSequence.length()];
-
-                            boolean modificationsDetected = false;
-                            int index = 0;
-
-                            for (int i = 0; i < peptideSequence.length() && !cancelConversion; i++) {
-
-                                if (i == peptideSequence.length() - 1) {
-                                    sequenceArray[index++] = peptideSequence.substring(peptideSequence.length() -
-                                            1, peptideSequence.length());
-                                } else {
-                                    if (properties.getAlreadyChoosenModifications().
-                                            contains(peptideSequence.substring(i, i + 2))) {
-                                        sequenceArray[index++] = peptideSequence.substring(i, i + 2);
-                                        i++;
-
-                                    } else {
-                                        sequenceArray[index++] = peptideSequence.substring(i, i + 1);
-                                    }
-                                }
-                            }
-
-                            peptideSequence = "";
-                            peptideModifications = null;
-
-                            for (int i = 0; i < sequenceArray.length && !cancelConversion; i++) {
-
-                                if (sequenceArray[i] != null) {
-
-                                    if (sequenceArray[i].length() == 2) {
-
-                                        if (properties.getAlreadyChoosenModifications().contains(sequenceArray[i])) {
-
-                                            if (peptideModifications == null) {
-                                                peptideModifications = new ArrayList();
-                                            }
-
-                                            CvParamImpl tempCvParam =
-                                                    (CvParamImpl) userProperties.getCVTermMappings().get(sequenceArray[i]);
-
-                                            ArrayList modificationCVParams = new ArrayList();
-                                            modificationCVParams.add(tempCvParam);
-
-                                            ArrayList monoMasses = new ArrayList();
-
-                                            // get the modification mass (DiffMono) retrieved from PSI-MOD
-                                            if (tempCvParam.getValue() != null) {
-                                                monoMasses.add(new MonoMassDeltaImpl(
-                                                        new Double(tempCvParam.getValue()).doubleValue()));
-                                            } else {
-                                                // it would be possible to use the mass from the data file
-                                                // but this is currently not used, as this could be incorrect
-                                                // relative to properties of the PSI-MOD modification
-//                                                    monoMasses.add(new MonoMassDeltaImpl(((Double) modifications.get(
-//                                                            sequenceArray[i])).doubleValue()));
-                                                monoMasses = null;
-                                            }
-
-                                            peptideModifications.add(new ModificationImpl(
-                                                    tempCvParam.getAccession(),
-                                                    new Integer(i + 1),
-                                                    tempCvParam.getCVLookup(),
-                                                    null,
-                                                    monoMasses,
-                                                    null,
-                                                    modificationCVParams,
-                                                    null));
-                                        }
-                                    }
-                                }
-
-                                // check if the current amino acid contains a fixed modification
-                                if (sequenceArray[i] != null) {
-                                    if (properties.getAlreadyChoosenModifications().contains(sequenceArray[i].substring(0, 1))) {
-
-                                        if (peptideModifications == null) {
-                                            peptideModifications = new ArrayList();
-                                        }
-
-                                        CvParamImpl tempCvParam =
-                                                (CvParamImpl) userProperties.getCVTermMappings().get(sequenceArray[i].substring(0, 1));
-
-                                        ArrayList modificationCVParams = new ArrayList();
-                                        modificationCVParams.add(tempCvParam);
-
-                                        ArrayList monoMasses = new ArrayList();
-
-                                        // get the modification mass (DiffMono) retrieved from PSI-MOD
-                                        if (tempCvParam.getValue() != null) {
-                                            monoMasses.add(new MonoMassDeltaImpl(
-                                                    new Double(tempCvParam.getValue()).doubleValue()));
-                                        } else {
-                                            // it would be possible to use the mass from the data file
-                                            // but this is currently not used, as this could be incorrect
-                                            // relative to properties of the PSI-MOD modification
-//                                                    monoMasses.add(new MonoMassDeltaImpl(((Double) modifications.get(
-//                                                            sequenceArray[i])).doubleValue()));
-                                            monoMasses = null;
-                                        }
-
-                                        peptideModifications.add(new ModificationImpl(
-                                                tempCvParam.getAccession(),
-                                                new Integer(i + 1),
-                                                tempCvParam.getCVLookup(),
-                                                null,
-                                                monoMasses,
-                                                null,
-                                                modificationCVParams,
-                                                null));
-                                    }
-                                }
-
-                                if (sequenceArray[i] != null) {
-                                    peptideSequence += sequenceArray[i].substring(0, 1);
-                                }
-                            }
-
+                            // adds the modification details to the peptideModifications list
+                            // and returns the unmodified sequence
+                            peptideSequence = addModificationDetails(peptideModifications, peptideSequence,
+                                    variableModifications, fixedModifications);
 
                             //Add information about each peptide to the protein instance
                             protein.addPeptide(specRef, charge, sequestXcorr, sequestDelta, peptideMass, calculatedPeptideMass,
@@ -4656,123 +4539,10 @@ public class PRIDEConverter {
                             // add the modifications
                             ArrayList peptideModifications = new ArrayList();
 
-                            String[] sequenceArray = new String[peptideSequence.length()];
-
-                            boolean modificationsDetected = false;
-
-                            int index = 0;
-
-                            for (int i = 0; i < peptideSequence.length() && !cancelConversion; i++) {
-
-                                if (i == peptideSequence.length() - 1) {
-                                    sequenceArray[index++] = peptideSequence.substring(peptideSequence.length() -
-                                            1, peptideSequence.length());
-                                } else {
-                                    if (properties.getAlreadyChoosenModifications().
-                                            contains(peptideSequence.substring(i, i + 2))) {
-                                        sequenceArray[index++] = peptideSequence.substring(i, i + 2);
-                                        i++;
-
-                                    } else {
-                                        sequenceArray[index++] = peptideSequence.substring(i, i + 1);
-                                    }
-                                }
-                            }
-
-                            peptideSequence = "";
-                            peptideModifications = null;
-
-                            for (int i = 0; i < sequenceArray.length && !cancelConversion; i++) {
-
-                                if (sequenceArray[i] != null) {
-
-                                    if (sequenceArray[i].length() == 2) {
-
-                                        if (properties.getAlreadyChoosenModifications().contains(sequenceArray[i])) {
-
-                                            if (peptideModifications == null) {
-                                                peptideModifications = new ArrayList();
-                                            }
-
-                                            CvParamImpl tempCvParam =
-                                                    (CvParamImpl) userProperties.getCVTermMappings().get(sequenceArray[i]);
-
-                                            ArrayList modificationCVParams = new ArrayList();
-                                            modificationCVParams.add(tempCvParam);
-
-                                            ArrayList monoMasses = new ArrayList();
-
-                                            // get the modification mass (DiffMono) retrieved from PSI-MOD
-                                            if (tempCvParam.getValue() != null) {
-                                                monoMasses.add(new MonoMassDeltaImpl(
-                                                        new Double(tempCvParam.getValue()).doubleValue()));
-                                            } else {
-                                                // it would be possible to use the mass from the data file
-                                                // but this is currently not used, as this could be incorrect
-                                                // relative to properties of the PSI-MOD modification
-//                                                    monoMasses.add(new MonoMassDeltaImpl(((Double) modifications.get(
-//                                                            sequenceArray[i])).doubleValue()));
-                                                monoMasses = null;
-                                            }
-
-                                            peptideModifications.add(new ModificationImpl(
-                                                    tempCvParam.getAccession(),
-                                                    new Integer(i + 1),
-                                                    tempCvParam.getCVLookup(),
-                                                    null,
-                                                    monoMasses,
-                                                    null,
-                                                    modificationCVParams,
-                                                    null));
-                                        }
-                                    }
-                                }
-
-                                // check if the current amino acid contains a fixed modification
-                                if (sequenceArray[i] != null) {
-                                    if (properties.getAlreadyChoosenModifications().contains(sequenceArray[i].substring(0, 1))) {
-
-                                        if (peptideModifications == null) {
-                                            peptideModifications = new ArrayList();
-                                        }
-
-                                        CvParamImpl tempCvParam =
-                                                (CvParamImpl) userProperties.getCVTermMappings().get(sequenceArray[i].substring(0, 1));
-
-                                        ArrayList modificationCVParams = new ArrayList();
-                                        modificationCVParams.add(tempCvParam);
-
-                                        ArrayList monoMasses = new ArrayList();
-
-                                        // get the modification mass (DiffMono) retrieved from PSI-MOD
-                                        if (tempCvParam.getValue() != null) {
-                                            monoMasses.add(new MonoMassDeltaImpl(
-                                                    new Double(tempCvParam.getValue()).doubleValue()));
-                                        } else {
-                                            // it would be possible to use the mass from the data file
-                                            // but this is currently not used, as this could be incorrect
-                                            // relative to properties of the PSI-MOD modification
-//                                                    monoMasses.add(new MonoMassDeltaImpl(((Double) modifications.get(
-//                                                            sequenceArray[i])).doubleValue()));
-                                            monoMasses = null;
-                                        }
-
-                                        peptideModifications.add(new ModificationImpl(
-                                                tempCvParam.getAccession(),
-                                                new Integer(i + 1),
-                                                tempCvParam.getCVLookup(),
-                                                null,
-                                                monoMasses,
-                                                null,
-                                                modificationCVParams,
-                                                null));
-                                    }
-                                }
-
-                                if (sequenceArray[i] != null) {
-                                    peptideSequence += sequenceArray[i].substring(0, 1);
-                                }
-                            }
+                            // adds the modification details to the peptideModifications list
+                            // and returns the unmodified sequence
+                            peptideSequence = addModificationDetails(peptideModifications, peptideSequence,
+                                    variableModifications, fixedModifications);
 
                             //Add information about each peptide to the protein instance
                             protein.addPeptide(specRef, charge, sequestXcorr, sequestDelta, peptideMass, calculatedPeptideMass,
@@ -4906,8 +4676,7 @@ public class PRIDEConverter {
                 for (int i = 0; i < properties.getSampleDescriptionUserSubSampleNames().size(); i++) {
                     sampleDescriptionUserParams.add(new UserParamImpl(
                             "SUBSAMPLE_" + (i + 1),
-                            i, (String) properties.getSampleDescriptionUserSubSampleNames().
-                            get(i)));
+                            i, (String) properties.getSampleDescriptionUserSubSampleNames().get(i)));
                 }
 
                 for (int i = 0; i < properties.getSampleDescriptionCVParamsQuantification().size(); i++) {
@@ -4954,6 +4723,242 @@ public class PRIDEConverter {
 //        long end = System.currentTimeMillis();
 //        System.out.println("Transformation Done: " + (end - timerStart) + "\n");
         return filenameToMzDataIDMapping;
+    }
+
+    /**
+     * Adds the extracted modifications to the given peptideModifications list and
+     * returns the unmodified peptide sequence
+     *
+     * @param peptideModifications the (most likely) empty list of peptide modifications
+     * @param peptideSequence the (modified) peptide sequence
+     * @param variableModifications the hashmap of variable modifications
+     * @param fixedModifications the hashmap of fixed modifications
+     * @return the unmodified peptide sequence
+     */
+    private static String addModificationDetails(ArrayList peptideModifications, String peptideSequence,
+            HashMap<String, Double> variableModifications, HashMap<String, Double> fixedModifications) {
+
+        String[] sequenceArray = new String[peptideSequence.length()];
+
+        int index = 0;
+
+        List<String> aminoAcids = new ArrayList<String>();
+        Collections.addAll(aminoAcids,
+                "G", "A", "S", "P", "V", "T", "C", "L", "I",
+                "X", "N", "O", "B", "D", "Q", "K", "Z", "E",
+                "M", "H", "F", "R", "Y", "W");
+
+        for (int i = 0; i < peptideSequence.length() && !cancelConversion; i++) {
+
+            if (i == peptideSequence.length() - 1) {
+                sequenceArray[index++] = peptideSequence.substring(peptideSequence.length() -
+                        1, peptideSequence.length());
+            } else {
+
+                String secondAminoAcid = peptideSequence.substring(i + 1, i + 2);
+
+                if (!aminoAcids.contains(secondAminoAcid)) {
+
+                    sequenceArray[index++] = peptideSequence.substring(i, i + 2);
+                    i++;
+
+                } else {
+                    sequenceArray[index++] = peptideSequence.substring(i, i + 1);
+                }
+            }
+        }
+
+        peptideSequence = "";
+
+        for (int i = 0; i < sequenceArray.length && !cancelConversion; i++) {
+
+            if (sequenceArray[i] != null) {
+
+                if (sequenceArray[i].length() == 2) {
+
+                    if (properties.getAlreadyChoosenModifications().contains(sequenceArray[i])) {
+
+                        CvParamImpl tempCvParam =
+                                (CvParamImpl) userProperties.getCVTermMappings().get(sequenceArray[i]);
+
+                        ArrayList modificationCVParams = new ArrayList();
+                        modificationCVParams.add(tempCvParam);
+
+                        ArrayList monoMasses = new ArrayList();
+
+                        // get the modification mass (DiffMono) retrieved from PSI-MOD
+                        if (tempCvParam.getValue() != null) {
+                            monoMasses.add(new MonoMassDeltaImpl(
+                                    new Double(tempCvParam.getValue()).doubleValue()));
+                        } else {
+                            // it would be possible to use the mass from the data file
+                            // but this is currently not used, as this could be incorrect
+                            // relative to properties of the PSI-MOD modification
+//                                                    monoMasses.add(new MonoMassDeltaImpl(((Double) modifications.get(
+//                                                            sequenceArray[i])).doubleValue()));
+                            monoMasses = null;
+                        }
+
+                        peptideModifications.add(new ModificationImpl(
+                                tempCvParam.getAccession(),
+                                new Integer(i + 1),
+                                tempCvParam.getCVLookup(),
+                                null,
+                                monoMasses,
+                                null,
+                                modificationCVParams,
+                                null));
+                    } else {
+
+                        String modificationName = sequenceArray[i];
+                        String modificationNameShort = sequenceArray[i].substring(0, 1);
+                        Double modificationMass = variableModifications.get(modificationNameShort);
+
+                        if (!properties.getAlreadyChoosenModifications().contains(modificationName)) {
+                            new ModificationMapping(outputFrame,
+                                    true, progressDialog, modificationName,
+                                    modificationNameShort,
+                                    modificationMass,
+                                    (CvParamImpl) userProperties.getCVTermMappings().get(modificationName),
+                                    false);
+
+                            properties.getAlreadyChoosenModifications().add(modificationName);
+                        } else {
+                            //do nothing, mapping already choosen
+                        }
+
+
+
+                        CvParamImpl tempCvParam =
+                                (CvParamImpl) userProperties.getCVTermMappings().get(sequenceArray[i]);
+
+                        ArrayList modificationCVParams = new ArrayList();
+                        modificationCVParams.add(tempCvParam);
+
+                        ArrayList monoMasses = new ArrayList();
+
+                        // get the modification mass (DiffMono) retrieved from PSI-MOD
+                        if (tempCvParam.getValue() != null) {
+                            monoMasses.add(new MonoMassDeltaImpl(
+                                    new Double(tempCvParam.getValue()).doubleValue()));
+                        } else {
+                            // it would be possible to use the mass from the data file
+                            // but this is currently not used, as this could be incorrect
+                            // relative to properties of the PSI-MOD modification
+//                                                    monoMasses.add(new MonoMassDeltaImpl(((Double) modifications.get(
+//                                                            sequenceArray[i])).doubleValue()));
+                            monoMasses = null;
+                        }
+
+                        peptideModifications.add(new ModificationImpl(
+                                tempCvParam.getAccession(),
+                                new Integer(i + 1),
+                                tempCvParam.getCVLookup(),
+                                null,
+                                monoMasses,
+                                null,
+                                modificationCVParams,
+                                null));
+                    }
+                }
+            }
+
+            // check if the current amino acid contains a fixed modification
+            if (sequenceArray[i] != null) {
+                if (properties.getAlreadyChoosenModifications().contains(sequenceArray[i].substring(0, 1))) {
+
+                    CvParamImpl tempCvParam =
+                            (CvParamImpl) userProperties.getCVTermMappings().get(sequenceArray[i].substring(0, 1));
+
+                    ArrayList modificationCVParams = new ArrayList();
+                    modificationCVParams.add(tempCvParam);
+
+                    ArrayList monoMasses = new ArrayList();
+
+                    // get the modification mass (DiffMono) retrieved from PSI-MOD
+                    if (tempCvParam.getValue() != null) {
+                        monoMasses.add(new MonoMassDeltaImpl(
+                                new Double(tempCvParam.getValue()).doubleValue()));
+                    } else {
+                        // it would be possible to use the mass from the data file
+                        // but this is currently not used, as this could be incorrect
+                        // relative to properties of the PSI-MOD modification
+//                                                    monoMasses.add(new MonoMassDeltaImpl(((Double) modifications.get(
+//                                                            sequenceArray[i])).doubleValue()));
+                        monoMasses = null;
+                    }
+
+                    peptideModifications.add(new ModificationImpl(
+                            tempCvParam.getAccession(),
+                            new Integer(i + 1),
+                            tempCvParam.getCVLookup(),
+                            null,
+                            monoMasses,
+                            null,
+                            modificationCVParams,
+                            null));
+                } else {
+
+                    if (fixedModifications.containsKey(sequenceArray[i].substring(0, 1))) {
+
+                        String modificationName = sequenceArray[i];
+                        String modificationNameShort = sequenceArray[i].substring(0, 1);
+                        Double modificationMass = fixedModifications.get(modificationNameShort);
+
+                        if (!properties.getAlreadyChoosenModifications().contains(modificationName)) {
+                            new ModificationMapping(outputFrame,
+                                    true, progressDialog, modificationName,
+                                    modificationNameShort,
+                                    modificationMass,
+                                    (CvParamImpl) userProperties.getCVTermMappings().get(modificationName),
+                                    true);
+
+                            properties.getAlreadyChoosenModifications().add(modificationName);
+                        } else {
+                            //do nothing, mapping already choosen
+                        }
+
+
+                        CvParamImpl tempCvParam =
+                                (CvParamImpl) userProperties.getCVTermMappings().get(sequenceArray[i]);
+
+                        ArrayList modificationCVParams = new ArrayList();
+                        modificationCVParams.add(tempCvParam);
+
+                        ArrayList monoMasses = new ArrayList();
+
+                        // get the modification mass (DiffMono) retrieved from PSI-MOD
+                        if (tempCvParam.getValue() != null) {
+                            monoMasses.add(new MonoMassDeltaImpl(
+                                    new Double(tempCvParam.getValue()).doubleValue()));
+                        } else {
+                            // it would be possible to use the mass from the data file
+                            // but this is currently not used, as this could be incorrect
+                            // relative to properties of the PSI-MOD modification
+//                                                    monoMasses.add(new MonoMassDeltaImpl(((Double) modifications.get(
+//                                                            sequenceArray[i])).doubleValue()));
+                            monoMasses = null;
+                        }
+
+                        peptideModifications.add(new ModificationImpl(
+                                tempCvParam.getAccession(),
+                                new Integer(i + 1),
+                                tempCvParam.getCVLookup(),
+                                null,
+                                monoMasses,
+                                null,
+                                modificationCVParams,
+                                null));
+                    }
+                }
+            }
+
+            if (sequenceArray[i] != null) {
+                peptideSequence += sequenceArray[i].substring(0, 1);
+            }
+        }
+
+        return peptideSequence;
     }
 
     /**
@@ -5012,18 +5017,15 @@ public class PRIDEConverter {
 
                                 // And process the m/z and intensities.
                                 int size = mz.size();
-                                mzArray =
-                                        new double[size];
-                                intensityArray =
-                                        new double[size];
+                                mzArray = new double[size];
+                                intensityArray = new double[size];
 
-                                for (int j = 0; j <
-                                        size; j++) {
+                                for (int j = 0; j < size; j++) {
                                     mzArray[j] = Double.parseDouble((String) mz.get(j));
                                     intensityArray[j] = Double.parseDouble((String) intensities.get(j));
                                 }
 
-// OK, all done. Create a mzData spectrum next!
+                                // OK, all done. Create a mzData spectrum next!
                                 Spectrum mzdataSpectrum = transformSpectrum(idCount, mzArray, intensityArray, precursorCharge, precursorMZ);
 
                                 // Add the spectrum and its mapping to the collection and table.
@@ -5032,7 +5034,7 @@ public class PRIDEConverter {
                                 // In one project the scanNumber had an extra "0" that has to be removed here in order
                                 // to map correctly the peptide to the spectra (for instance 011717 as scanNumber,
                                 //  11717 in the file)
-                                if(scanNumber.length() == 6){
+                                if (scanNumber.length() == 6) {
                                     scanNumber = scanNumber.substring(1, scanNumber.length());
                                 }
                                 // We are going to use the file name and the scanNumber to build the HashMap
@@ -5040,14 +5042,11 @@ public class PRIDEConverter {
 
                                 // If you'll look at the above method, you'll see that it consumes two ID's -
                                 // one for the spectrum and one for the precursor. So advance it by 2 here.
-                                idCount +=
-                                        1;
+                                idCount += 1;
 
                                 // That completes the cycle.
-                                mz =
-                                        new ArrayList();
-                                intensities =
-                                        new ArrayList();
+                                mz = new ArrayList();
+                                intensities = new ArrayList();
                             }
 
                             String[] scanTokens = currentLine.split("\t");
@@ -5057,8 +5056,7 @@ public class PRIDEConverter {
                                 if (debug) {
                                     System.out.println("Current split scan line tokens:");
 
-                                    for (int j = 0; j <
-                                            scanTokens.length; j++) {
+                                    for (int j = 0; j < scanTokens.length; j++) {
                                         System.out.println(scanTokens[j]);
                                     }
 
@@ -5069,11 +5067,10 @@ public class PRIDEConverter {
                             } else {
                                 // we do not need the initial H, start and end scans, just the precursor mass
                                 scanNumber = scanTokens[1].trim();
-                                precursorMZ =
-                                        new Double(scanTokens[3].trim());
+                                precursorMZ = new Double(scanTokens[3].trim());
                             }
 
-// Read mz and intensities
+                        // Read mz and intensities
                         } else if (!(currentLine.startsWith("H") || currentLine.startsWith("S") ||
                                 currentLine.startsWith("I") || currentLine.startsWith("Z"))) {
                             String[] mzAndintensity = currentLine.split(" ");
@@ -5086,18 +5083,15 @@ public class PRIDEConverter {
 
                 // FENCE-POST:
                 int size = mz.size();
-                mzArray =
-                        new double[size];
-                intensityArray =
-                        new double[size];
+                mzArray = new double[size];
+                intensityArray = new double[size];
 
-                for (int j = 0; j <
-                        size; j++) {
+                for (int j = 0; j < size; j++) {
                     mzArray[j] = Double.parseDouble((String) mz.get(j));
                     intensityArray[j] = Double.parseDouble((String) intensities.get(j));
                 }
 
-// OK, all done. Create a mzData spectrum next!
+                // OK, all done. Create a mzData spectrum next!
                 Spectrum mzdataSpectrum = transformSpectrum(idCount, mzArray, intensityArray, precursorCharge, precursorMZ);
 
                 // Add the spectrum and its mapping to the collection and table.
@@ -5108,11 +5102,137 @@ public class PRIDEConverter {
 
                 // If you'll look at the above method, you'll see that it consumes two ID's -
                 // one for the spectrum and one for the precursor. So advance it by 2 here.
-                idCount +=
-                        1;
+                idCount += 1;
 
                 // Ok, we're through the file. Close it.
                 br.close();
+            } else if (filename.toLowerCase().endsWith(".dta")) {
+
+                if (debug) {
+                    System.out.println("The file " + filename + " was not included among the processed files\n");
+                }
+
+            // The part below has not been tested as we have no examples of DTASelect projects
+            // using dta files as spectrum files. But most of the code below should work.
+
+//                try {
+//                    FileReader f = new FileReader(new File(filename));
+//                    BufferedReader b = new BufferedReader(f);
+//
+//                    String currentLine = b.readLine();
+//
+//                    if (properties.isCommaTheDecimalSymbol()) {
+//                        currentLine = currentLine.replaceAll(",", ".");
+//                    }
+//
+//                    StringTokenizer tok = new StringTokenizer(currentLine);
+//
+//                    double precursorMass = new Double(tok.nextToken()).doubleValue();
+//                    int precursorCharge = new Integer(tok.nextToken()).intValue();
+//
+//                    currentLine = b.readLine();
+//
+//                    Vector masses = new Vector();
+//                    Vector intensities = new Vector();
+//
+//                    boolean emptyLineFound = false;
+//
+//                    while (currentLine != null && !emptyLineFound) {
+//
+//                        if (currentLine.equalsIgnoreCase("")) {
+//                            emptyLineFound = true;
+//                        } else {
+//
+//                            if (properties.isCommaTheDecimalSymbol()) {
+//                                currentLine = currentLine.replaceAll(",", ".");
+//                            }
+//
+//                            tok = new StringTokenizer(currentLine);
+//                            masses.add(new Double(tok.nextToken()));
+//                            intensities.add(new Double(tok.nextToken()));
+//
+//                            currentLine = b.readLine();
+//                        }
+//                    }
+//
+//                    double[][] arrays = new double[2][masses.size()];
+//
+//                    for (int j = 0; j < masses.size(); j++) {
+//                        arrays[0][j] = ((Double) masses.get(j)).doubleValue();
+//                        arrays[1][j] = ((Double) intensities.get(j)).doubleValue();
+//                    }
+//
+//                    b.close();
+//                    f.close();
+//
+//
+//                    // Precursor collection.
+//                    ArrayList precursors = new ArrayList(1);
+//
+//                    // Ion selection parameters.
+//                    ArrayList ionSelection = new ArrayList(4);
+//
+//                    // See if we know the precursor charge, and if so, include it.
+//                    if (precursorCharge > 0) {
+//                        ionSelection.add(new CvParamImpl("PSI:1000041",
+//                                "PSI", "ChargeState", 0,
+//                                Integer.toString(precursorCharge)));
+//                    }
+//
+//                    ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
+//                            "MassToChargeRatio", 1, Double.toString(
+//                            precursorMass)));
+//
+//                    precursors.add(new PrecursorImpl(null, null,
+//                            ionSelection, null, 2, 0, 0));
+//
+//                    if (arrays[properties.MZ_ARRAY].length > 0) {
+//                        Double mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
+//                        Double mzRangeStop = new Double(arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+//
+//                        // Create new mzData spectrum for the fragmentation spectrum.
+//                        SpectrumImpl fragmentation = new SpectrumImpl(
+//                                new BinaryArrayImpl(arrays[properties.INTENSITIES_ARRAY],
+//                                BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+//                                mzRangeStart,
+//                                new BinaryArrayImpl(arrays[properties.MZ_ARRAY],
+//                                BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+//                                2, null,
+//                                mzRangeStop,
+//                                null,
+//                                idCount++, precursors,
+//                                null,
+//                                null,
+//                                null,
+//                                null, null);
+//
+//                        // Store (spectrumfileid, spectrumid) mapping.
+//
+//                        String usedFileName = filename.substring(0, filename.indexOf("."));
+//
+//                        aMappings.put(usedFileName + "_" + scanNumber, new Long(idCount));
+//
+//                        // Store the transformed spectrum.
+//                        aSpectra.add(fragmentation);
+//                    }
+//                } catch (Exception e) {
+//
+//                    boolean errorDetected = true;
+//
+//                    if (!cancelConversion) {
+//
+//                        Util.writeToErrorLog("Error parsing Sequest DTA file: ");
+//                        e.printStackTrace();
+//
+//                        JOptionPane.showMessageDialog(null,
+//                                "The following file could not parsed as a " +
+//                                "Sequest DTA file:\n " +
+//                                filename +
+//                                "\n\n" +
+//                                "See ../Properties/ErrorLog.txt for more details.",
+//                                "Error Parsing File", JOptionPane.ERROR_MESSAGE);
+//                    }
+//                }
             } else {
                 if (debug) {
                     System.out.println("The file " + filename + " was not included among the processed files\n");
@@ -5151,14 +5271,14 @@ public class PRIDEConverter {
             ionSelection.add(new CvParamImpl("PSI:1000041", "PSI", "ChargeState", 0, Integer.toString(charge)));
         }
 
-// See if we know the precursor intensity (for the machine used here,
-// intensity is always 'NumberOfCounts').
+        // See if we know the precursor intensity (for the machine used here,
+        // intensity is always 'NumberOfCounts').
         ionSelection.add(new CvParamImpl("PSI:1000040", "PSI", "MassToChargeRatio", 1, Double.toString(aPrecursorMZ)));
 
         aId++; // Note that the counter is used AND incremented here.
 
-// Create new mzData spectrum for the fragmentation spectrum.
-// Notice that certain collections and annotations are 'null' here.
+        // Create new mzData spectrum for the fragmentation spectrum.
+        // Notice that certain collections and annotations are 'null' here.
         Spectrum fragmentation = new SpectrumImpl(
                 new BinaryArrayImpl(aIntensityArray, BinaryArrayImpl.BIG_ENDIAN_LABEL),
                 new Double(aMzArray[0]),
@@ -5714,7 +5834,6 @@ public class PRIDEConverter {
                 } else {
                     identifications.add(PRIDE_protein);
                 }
-
             }
 
             if (!cancelConversion) {
@@ -8582,8 +8701,7 @@ public class PRIDEConverter {
 
                 progressDialog.setMax(properties.getSelectedSpectraKeys().size());
 
-                for (int i = 0; i <
-                        properties.getSelectedSpectraKeys().size(); i++) {
+                for (int i = 0; i < properties.getSelectedSpectraKeys().size(); i++) {
 
                     if (cancelConversion) {
                         outputFrame.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
