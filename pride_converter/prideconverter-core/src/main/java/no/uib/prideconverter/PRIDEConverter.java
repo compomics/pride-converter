@@ -4418,21 +4418,23 @@ public class PRIDEConverter {
                                 postDigSiteAA = "";
                             }
 
-                            // Here the Link between the spectrum and the corresponding peptide is added (fileName does not contain "-a").
-                            // It is necessary to add a 0.
 
                             // *** HERE IT IS WHEN THE JOINT IS MADE WITH THE SPECTRA. I HAVE SEEN TWO POSSIBILITIES TO DO IT:
-                            //String key = spectrumFile + "_0" +scanNumber;
-                            //String key = spectrumFile + scanNumber;
+                            // Check if the spectrumFile_scanNumber is not present in the HashMap
+
 
                             // In this case, it is the second one:
                             String key = spectrumFile + "_" + scanNumber;
-                            Long specRef = filenameToMzDataIDMapping.get(key);
 
-//                            if(specRef !=null){
-//                                System.out.println("specRef= "+specRef);
-//                                System.out.println(spectrumFile+ "_0" +scanNumber);
-//                            }
+                            Long specRef = filenameToMzDataIDMapping.get(key);
+                            System.out.println("testing long value. The value is : " +specRef);
+                            //****!!!!********
+                            // HERE, it is where the check is done (if the spectrum exists or not). Now it is shown in the console.
+                            // Remember that the code is duplicated below!!
+
+                           if(specRef ==null){
+                               System.out.println("The spectrum file " + spectrumFile + ".ms2 does not contain the spectrum with the scan number " + scanNumber + ", as referenced in the DTASelect txt file.");
+                           }
 
                             // add the modifications
                             ArrayList peptideModifications = new ArrayList();
@@ -4523,18 +4525,20 @@ public class PRIDEConverter {
 
                             // Here the Link between the spectrum and the corresponding peptide (fileName does not contain "-a"):
 
-                            // *** HERE IT IS WHEN THE JOINT IS MADE WITH THE SPECTRA. I HAVE SEEN TWO POSSIBILITIES TO DO IT:
-                            //String key = spectrumFile + "_0" +scanNumber;
-                            //String key = spectrumFile + scanNumber;
+                            //****!!!!********
+                            // HERE, it is where the check is done (if the spectrum exists or not). Now it is shown in the console.
+                            // Remember that the code is duplicated below!!
 
                             // In this case, it is the second one:
                             String key = spectrumFile + "_" + scanNumber;
                             Long specRef = filenameToMzDataIDMapping.get(key);
+                            System.out.println("testing long value. The value is : " +specRef);
 
-//                            if(specRef !=null){
-//                                System.out.println("specRef= "+specRef);
-//                                System.out.println(spectrumFile+ "_0" +scanNumber);
-//                            }
+                            //HERE, it is where the check is done (if the spectrum exists or not). Now it is shown in the console.
+                            // Remember that the code is duplicated above!!
+                           if(specRef == null){
+                               System.out.println("The spectrum file " + spectrumFile + ".ms2 does not contain the spectrum with the scan number " + scanNumber + ", as referenced in the DTASelect txt file.");
+                           }
 
                             // add the modifications
                             ArrayList peptideModifications = new ArrayList();
