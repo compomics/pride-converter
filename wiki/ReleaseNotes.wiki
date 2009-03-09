@@ -3,7 +3,7 @@
 
 ----
 
-*Changes in PRIDE Converter v1.15.3 - (March. 09. 2009):*
+*Changes in PRIDE Converter v1.15.3 - (Mar. 09. 2009):*
  * Fixed a bug that made it difficult to create new single sample. (The Next button did not become enabled when adding CV terms.)
  * Updated the data format descriptions.
  * Updated the data source selection help file.
