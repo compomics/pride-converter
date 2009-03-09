@@ -2202,6 +2202,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
             tempSampleCvParameters.setElementAt(cvParam, modifiedRow);
         }
+
+        mandatoryFieldsCheck();
     }
 
     /**
