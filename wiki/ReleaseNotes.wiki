@@ -3,10 +3,19 @@
 
 ----
 
+*Changes in PRIDE Converter v1.15.3 - (March. 09. 2009):*
+ * Fixed a bug that made it difficult to create new single sample. (The Next button did not become enabled when adding CV terms.)
+ * Updated the data format descriptions.
+ * Updated the data source selection help file.
+
+
+----
+
 *Changes in PRIDE Converter v1.15.2 - (Feb. 06. 2009):*
  * The Sample Details frame has been simplified, and it is now possible to add values to the added cv terms.
  * Fixed a minor bug in the File Selection frame for two data types, e.g., Sequest DTA and OUT files. The bug occured if a folder and not individual files was selected, and resulted in not being able to load the spectra in the Spectra Selection frame.
 
+Download Count: 27
 
 ----
 
