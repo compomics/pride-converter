@@ -404,8 +404,10 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(dtaSelectJRadioButton);
-        dtaSelectJRadioButton.setText("DTASelect (beta)");
+        dtaSelectJRadioButton.setText("DTASelect");
+        dtaSelectJRadioButton.setToolTipText("(in development)");
         dtaSelectJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        dtaSelectJRadioButton.setEnabled(false);
         dtaSelectJRadioButton.setIconTextGap(20);
         dtaSelectJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         dtaSelectJRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -446,7 +448,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                     .addComponent(mzXMLJRadioButton)
                     .addComponent(mzDataJRadioButton)
                     .addComponent(dtaSelectJRadioButton))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -712,9 +714,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "automate data flow in the high-throughput proteomics lab. Taking in spectrum " +
                 "files from a variety of fileformats, it transforms these to the Mascot " +
                 "Generic Format and stores them in the database.<br><br>" +
-                "These can then be submitted to a search engine, eg. Mascot from Matrix Science.<br><br>" +
-                "Subsequently, the results of these searches can be parsed and stored in a relational " +
-                "database structure for future reference.<br><br>" +
+                "These can then be submitted to a search engine, e.g., Mascot from Matrix Science.<br><br>" +
                 "Homepage: <a href=\"http://genesis.ugent.be/ms_lims\">http://genesis.ugent.be/ms_lims</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
@@ -812,8 +812,8 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "are result files from a Sequest search.<br> " +
                 "Includes two sets of files: *.dta (the spectrum files) and *.out " +
                 "(the identification files).<br><br>" +
-                "File Extension: .dta and .out<br><br>" +
-                "Homepage: <a href=\"http://fields.scripps.edu/sequest/\">http://fields.scripps.edu/sequest/</a>");
+                "File Extensions: .dta and .out<br><br>" +
+                "Homepage: <a href=\"http://fields.scripps.edu/?q=content/software\">http://fields.scripps.edu/?q=content/software</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
         if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
@@ -833,10 +833,10 @@ public class DataSourceSelection extends javax.swing.JFrame {
         this.nextJButton.setEnabled(true);
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
                 "<b>OMSSA</b><br><br>" +
-                "OMSSA result files from the Open Mass Spectrometry Search Algorithm [OMSSA].<br><br>" +
+                "OMSSA MS/MS result files from the Open Mass Spectrometry Search Algorithm [OMSSA].<br><br>" +
                 "File Extension: .omx<br><br>" +
                 "Homepage: <a href=\"http://pubchem.ncbi.nlm.nih.gov/omssa/\">" +
-                "http://pubchem.ncbi.nlm.nih.gov/omssa/</a>");
+                "http://pubchem.ncbi.nlm.nih.gov/omssa</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
         if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
@@ -856,11 +856,11 @@ public class DataSourceSelection extends javax.swing.JFrame {
         this.nextJButton.setEnabled(true);
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
                 "<b>Spectrum Mill</b><br><br>" +
-                "Spectrum Mill results consists of two sets of files: *.pkl (the spectrum files) and *.pkl.spo " +
-                "(the identifications)." + "<br><br>" +
-                "File Extension: .pkl and .pkl.spo<br><br>" +
-                "Homepage: <a href=\"http://www.chem.agilent.com/Scripts/PDS.asp?lPage=7771\">" +
-                "http://www.chem.agilent.com/Scripts/PDS.asp?lPage=7771</a>");
+                "Spectrum Mill search results consist of two sets of files: *.pkl (the spectrum files) and *.pkl.spo " +
+                "(the identification files)." + "<br><br>" +
+                "File Extensions: .pkl and .pkl.spo<br><br>" +
+                "Homepage: <a href=\"http://www.chem.agilent.com\">" +
+                "www.chem.agilent.com</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
         if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
@@ -880,14 +880,14 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         this.nextJButton.setEnabled(true);
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
-                "<b>Sequest DTA File</b><br><br>" +
+                "<b>Sequest DTA Files</b><br><br>" +
                 "Sequest DTA File is a simple MS/MS data format without identifications." +
                 "<br>The first line contains the singly protonated peptide mass (MH+) and the peptide charge " +
                 "state. Subsequent lines contain space separated pairs of fragment ion m/z and intensity values. " +
                 "<br><br>NB: Each file contains a single MS/MS data set.<br><br>" +
                 "File Extension: .dta<br><br>" +
                 "More Information: <a href=\"http://www.matrixscience.com/help/data_file_help.html#DTA\">" +
-                "http://www.matrixscience.com/help/data_file_help.html#DTA</a>");
+                "www.matrixscience.com/help/data_file_help.html#DTA</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
         if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File")) {
@@ -948,14 +948,14 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         this.nextJButton.setEnabled(true);
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
-                "<b>Micormass PKL Files</b><br><br>" + "Micormass PKL Files " +
-                "is a simple MS/MS data format without identifications. <br>The first line contains the " +
-                "observed m/z, intensity, and charge state of the precursor peptide. <br>Subsequent lines " +
+                "<b>Micormass PKL Files</b><br><br>" + "Micormass PKL File " +
+                "is a simple MS/MS data format without identifications. The first line contains the " +
+                "observed m/z, intensity, and the charge state of the precursor peptide. <br>Subsequent lines " +
                 "contain space separated pairs of fragment ion m/z and intensity values.<br><br>" +
-                "NB: Each file can include multiple MS/MS spectra.<br><br>" +
+                "Each file can include multiple MS/MS spectra.<br><br>" +
                 "File Extension: .pkl<br><br>" +
                 "More Information: <a href=\"http://www.matrixscience.com/help/data_file_help.html#QTOF\">" +
-                "http://www.matrixscience.com/help/data_file_help.html#QTOF</a>");
+                "www.matrixscience.com/help/data_file_help.html#QTOF</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
         if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Micromass PKL File")) {
@@ -997,11 +997,11 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         this.nextJButton.setEnabled(true);
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
-                "<b>Peptide-/ProteinProphet</b><br><br>" +
-                "Peptide-/ProteinProphet validates peptide assignments and protein identifications made " +
+                "<b>Peptide- and ProteinProphet</b><br><br>" +
+                "PeptideProphet/ProteinProphet validates peptide assignments and protein identifications made " +
                 "on the basis of peptides assigned to MS/MS spectra made by database search programs " +
                 "such as SEQUEST.<br><br>" +
-                "File Extension: .pepXML, .pep.xml, .protXML and .prot.xml<br><br>" +
+                "File Extensions: .pepXML, .pep.xml, .protXML and .prot.xml<br><br>" +
                 "More Information: <a href=\"http://peptideprophet.sourceforge.net\">" +
                 "http://peptideprophet.sourceforge.net</a>" +
                 " and <a href=\"http://proteinprophet.sourceforge.net\">" +
@@ -1051,7 +1051,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "mzData is a common file format for proteomics mass spectrometric data.<br><br>" +
                 "File Extension: .mzData<br><br>" +
                 "More Information: <a href=\"http://www.psidev.info/index.php?q=node/80#mzdata\">" +
-                "http://www.psidev.info/index.php?q=node/80#mzdata</a>");
+                "www.psidev.info/index.php?q=node/80#mzdata</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
         if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
@@ -1092,8 +1092,8 @@ public class DataSourceSelection extends javax.swing.JFrame {
         this.nextJButton.setEnabled(true);
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
                 "<b>VEMS: Virtual Expert Mass Spectrometrist</b><br><br>" +
-                "The *.pkx format is a VEMS format and is very similar to the pkl format.<br>" +
-                "Includes the retention time of the precursor and the charge state of the fragments.<br><br>" +
+                "The *.pkx format is a VEMS format and is very similar to the pkl format, but " +
+                "also includes the retention time of the precursor and the charge state of the fragments.<br><br>" +
                 "File Extension: .pkx<br><br>" +
                 "More Information: <a href=\"http://personal.cicbiogune.es/rmatthiesen/\">" +
                 "http://personal.cicbiogune.es/rmatthiesen/</a>");
@@ -1141,7 +1141,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
                 "<b>DTASelect</b><br><br>" +
                 "DTASelect reassembles Sequest peptide information into protein information.<br><br>" +
-                "File Extension: .txt for the identifications (the DTASelect file) and .ms2 for the spectra<br><br>" +
+                "File Extensions: .txt for the identifications (the DTASelect file) and .ms2 for the spectra<br><br>" +
                 "More Information: <a href=\"http://fields.scripps.edu/DTASelect\">" +
                 "http://fields.scripps.edu/DTASelect</a>");
         descriptionJEditorPane.setCaretPosition(0);
