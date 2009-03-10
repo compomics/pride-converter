@@ -404,10 +404,8 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(dtaSelectJRadioButton);
-        dtaSelectJRadioButton.setText("DTASelect");
-        dtaSelectJRadioButton.setToolTipText("(in development)");
+        dtaSelectJRadioButton.setText("DTASelect (beta)");
         dtaSelectJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        dtaSelectJRadioButton.setEnabled(false);
         dtaSelectJRadioButton.setIconTextGap(20);
         dtaSelectJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         dtaSelectJRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -448,7 +446,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                     .addComponent(mzXMLJRadioButton)
                     .addComponent(mzDataJRadioButton)
                     .addComponent(dtaSelectJRadioButton))
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -785,7 +783,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "<b>X!Tandem</b><br><br>" +
                 "X!Tandem is open source software that matches " +
                 "tandem mass spectra to peptide sequences.<br><br>" +
-                "The output format is described <a href=\"http://www.thegpm.org/docs/X_series_output_form.pdf\">here</a>." +
+                "The output format is described <a href=\"http://www.thegpm.org/docs/X_series_output_form.pdf\"> here</a>." +
                 "<br><br>" +
                 "File Extension: .xml<br><br>" +
                 "Homepage: <a href=\"http://www.thegpm.org/TANDEM\">www.thegpm.org/TANDEM</a>");
@@ -1001,9 +999,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "on the basis of peptides assigned to MS/MS spectra made by database search programs " +
                 "such as SEQUEST.<br><br>" +
                 "File Extensions: .pepXML, .pep.xml, .protXML and .prot.xml<br><br>" +
-                "More Information: <a href=\"http://peptideprophet.sourceforge.net\">" +
-                "http://peptideprophet.sourceforge.net</a> and <a href=\"http://proteinprophet.sourceforge.net\">" +
-                "http://proteinprophet.sourceforge.net</a><br><br><br>");
+                "More Information: <a href=\"http://peptideprophet.sourceforge.net\">http://peptideprophet.sourceforge.net</a>  and <a href=\"http://proteinprophet.sourceforge.net\">http://proteinprophet.sourceforge.net</a><br><br><br>");
         descriptionJEditorPane.setCaretPosition(0);
 
         if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {

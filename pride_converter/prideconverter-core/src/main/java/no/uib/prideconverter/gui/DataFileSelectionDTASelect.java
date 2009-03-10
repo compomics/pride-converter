@@ -212,7 +212,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
                     .addComponent(dtaSelectFileJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
                     .addComponent(spectrumFileFolderJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(fileSelectionJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(fileSelectionJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(findDtaSelectFileJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, Short.MAX_VALUE)
                     .addComponent(spectumFileFolderJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, Short.MAX_VALUE))
                 .addContainerGap())
@@ -239,8 +239,8 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
                             .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(spectrumFileFolderJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(fileSelectionJPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spectumFileFolderJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(spectumFileFolderJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
