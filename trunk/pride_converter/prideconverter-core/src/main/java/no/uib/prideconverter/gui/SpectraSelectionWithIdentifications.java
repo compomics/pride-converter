@@ -128,6 +128,11 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
         mascotConfidenceLevelJSpinner.setValue(prideConverter.getProperties().getMascotConfidenceLevel());
 
+        if(prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")){
+            mascotConfidenceLevelJLabel.setEnabled(true);
+            mascotConfidenceLevelJSpinner.setEnabled(true);
+        }
+
         selectAllSpectraJRadioButton.requestFocus();
 
         separatorJTextField.setText(prideConverter.getUserProperties().getCurrentFileNameSelectionCriteriaSeparator());
@@ -228,7 +233,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         peptideScoreJTextField = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
+        mascotConfidenceLevelJLabel = new javax.swing.JLabel();
         mascotConfidenceLevelJSpinner = new javax.swing.JSpinner();
         jLabel6 = new javax.swing.JLabel();
         proteinIdFilterJTextField = new javax.swing.JTextField();
@@ -550,9 +555,11 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         peptideScoreJTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         peptideScoreJTextField.setToolTipText("Only include identifications with peptide scores higher than this value");
 
-        jLabel4.setText("Mascot Confidence Level:");
+        mascotConfidenceLevelJLabel.setText("Mascot Confidence Level:");
+        mascotConfidenceLevelJLabel.setEnabled(false);
 
         mascotConfidenceLevelJSpinner.setModel(new javax.swing.SpinnerNumberModel(95, 0, 100, 1));
+        mascotConfidenceLevelJSpinner.setEnabled(false);
         mascotConfidenceLevelJSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 mascotConfidenceLevelJSpinnerStateChanged(evt);
@@ -573,7 +580,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
+                    .addComponent(mascotConfidenceLevelJLabel)
                     .addComponent(jLabel6))
                 .addGap(14, 14, 14)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -591,7 +598,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                     .addComponent(peptideScoreJTextField))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
+                    .addComponent(mascotConfidenceLevelJLabel)
                     .addComponent(mascotConfidenceLevelJSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1760,7 +1767,6 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
@@ -1771,6 +1777,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton loadSpectraJButton;
+    private javax.swing.JLabel mascotConfidenceLevelJLabel;
     private javax.swing.JSpinner mascotConfidenceLevelJSpinner;
     private javax.swing.JButton nextJButton;
     private javax.swing.JTextField numberOfSelectedSpectraJTextField;

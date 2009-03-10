@@ -4422,35 +4422,46 @@ public class PRIDEConverter {
                             // *** HERE IT IS WHEN THE JOINT IS MADE WITH THE SPECTRA. I HAVE SEEN TWO POSSIBILITIES TO DO IT:
                             // Check if the spectrumFile_scanNumber is not present in the HashMap
 
-
                             // In this case, it is the second one:
                             String key = spectrumFile + "_" + scanNumber;
 
                             Long specRef = filenameToMzDataIDMapping.get(key);
-                            System.out.println("testing long value. The value is : " +specRef);
-                            //****!!!!********
-                            // HERE, it is where the check is done (if the spectrum exists or not). Now it is shown in the console.
+
+                            if (debug) {
+                                System.out.println("testing long value. The value is : " + specRef);
+                            }
+
+                            // check if the spectrum exists or not
                             // Remember that the code is duplicated below!!
 
-                           if(specRef ==null){
-                               System.out.println("The spectrum file " + spectrumFile + ".ms2 does not contain the spectrum with the scan number " + scanNumber + ", as referenced in the DTASelect txt file.");
-                           }
+                            if (specRef == null) {
+                                JOptionPane.showMessageDialog(null,
+                                        "The spectrum file " + spectrumFile + ".ms2" +
+                                        "\ndoes not contain the spectrum with scan number " + scanNumber +
+                                        "\nas referenced in the DTASelect txt file!\n\n" +
+                                        "PRIDE XML file not created.",
+                                        "Spectrum Not Found",
+                                        JOptionPane.ERROR_MESSAGE);
+                                Util.writeToErrorLog("Error when parsing DTASelect file. Unknown scan number: " + scanNumber + " in file " + spectrumFile);
+                                cancelConversion = true;
+                            }
 
-                            // add the modifications
-                            ArrayList peptideModifications = new ArrayList();
+                            if (!cancelConversion) {
+                                // add the modifications
+                                ArrayList peptideModifications = new ArrayList();
 
-                            // adds the modification details to the peptideModifications list
-                            // and returns the unmodified sequence
-                            peptideSequence = addModificationDetails(peptideModifications, peptideSequence,
-                                    variableModifications, fixedModifications);
+                                // adds the modification details to the peptideModifications list
+                                // and returns the unmodified sequence
+                                peptideSequence = addModificationDetails(peptideModifications, peptideSequence,
+                                        variableModifications, fixedModifications);
 
-                            //Add information about each peptide to the protein instance
-                            protein.addPeptide(specRef, charge, sequestXcorr, sequestDelta, peptideMass, calculatedPeptideMass,
-                                    totalIntensity, sequestRSp, sequestSp, ionProportion, redundancy, peptideSequence,
-                                    preDigSiteAA, postDigSiteAA, peptideModifications, null, null);
+                                //Add information about each peptide to the protein instance
+                                protein.addPeptide(specRef, charge, sequestXcorr, sequestDelta, peptideMass, calculatedPeptideMass,
+                                        totalIntensity, sequestRSp, sequestSp, ionProportion, redundancy, peptideSequence,
+                                        preDigSiteAA, postDigSiteAA, peptideModifications, null, null);
 
-                            peptideIdCount++; // update the peptide counter
-
+                                peptideIdCount++; // update the peptide counter
+                            }
                         // If the first token is empty, the split method will not take it into account
                         } else if (peptidesTokens.length == 11) {
 
@@ -4525,36 +4536,46 @@ public class PRIDEConverter {
 
                             // Here the Link between the spectrum and the corresponding peptide (fileName does not contain "-a"):
 
-                            //****!!!!********
-                            // HERE, it is where the check is done (if the spectrum exists or not). Now it is shown in the console.
-                            // Remember that the code is duplicated below!!
-
                             // In this case, it is the second one:
                             String key = spectrumFile + "_" + scanNumber;
                             Long specRef = filenameToMzDataIDMapping.get(key);
-                            System.out.println("testing long value. The value is : " +specRef);
 
-                            //HERE, it is where the check is done (if the spectrum exists or not). Now it is shown in the console.
+                            if (debug) {
+                                System.out.println("testing long value. The value is : " + specRef);
+                            }
+
+                            // check if the spectrum exists or not
                             // Remember that the code is duplicated above!!
-                           if(specRef == null){
-                               System.out.println("The spectrum file " + spectrumFile + ".ms2 does not contain the spectrum with the scan number " + scanNumber + ", as referenced in the DTASelect txt file.");
-                           }
 
-                            // add the modifications
-                            ArrayList peptideModifications = new ArrayList();
+                            if (specRef == null) {
+                                JOptionPane.showMessageDialog(null,
+                                       "The spectrum file " + spectrumFile + ".ms2" +
+                                        "\ndoes not contain the spectrum with scan number " + scanNumber +
+                                        "\nas referenced in the DTASelect txt file!\n\n" +
+                                        "PRIDE XML file not created.",
+                                        "Spectrum Not Found",
+                                        JOptionPane.ERROR_MESSAGE);
+                                Util.writeToErrorLog("Error when parsing DTASelect file. Unknown scan number: " + scanNumber + " in file " + spectrumFile);
+                                cancelConversion = true;
+                            }
 
-                            // adds the modification details to the peptideModifications list
-                            // and returns the unmodified sequence
-                            peptideSequence = addModificationDetails(peptideModifications, peptideSequence,
-                                    variableModifications, fixedModifications);
+                            if (!cancelConversion) {
 
-                            //Add information about each peptide to the protein instance
-                            protein.addPeptide(specRef, charge, sequestXcorr, sequestDelta, peptideMass, calculatedPeptideMass,
-                                    totalIntensity, sequestRSp, sequestSp, ionProportion, redundancy, peptideSequence,
-                                    preDigSiteAA, postDigSiteAA, peptideModifications, null, null);
+                                // add the modifications
+                                ArrayList peptideModifications = new ArrayList();
 
-                            peptideIdCount++; // update the peptide counter
+                                // adds the modification details to the peptideModifications list
+                                // and returns the unmodified sequence
+                                peptideSequence = addModificationDetails(peptideModifications, peptideSequence,
+                                        variableModifications, fixedModifications);
 
+                                //Add information about each peptide to the protein instance
+                                protein.addPeptide(specRef, charge, sequestXcorr, sequestDelta, peptideMass, calculatedPeptideMass,
+                                        totalIntensity, sequestRSp, sequestSp, ionProportion, redundancy, peptideSequence,
+                                        preDigSiteAA, postDigSiteAA, peptideModifications, null, null);
+
+                                peptideIdCount++; // update the peptide counter
+                            }
                         } else {
 
                             // In case the number of tokens is different:
@@ -4579,7 +4600,7 @@ public class PRIDEConverter {
             }
 
             // FENCE-POST: fix last protein (which would be discarded otherwise).
-            if (protein != null && proteins.size() == 0) {
+            if (protein != null && proteins.size() == 0 && !cancelConversion) {
 
                 // We were already assembling a protein. So we need to store that one before proceeding with a new one. We add it to the HashMap
                 Object temp = allIds.put(protein.getIAccession(), protein);
@@ -4592,7 +4613,7 @@ public class PRIDEConverter {
             }
 
             // There will be already peptides here in this protein (getIPeptides().size()!=0)
-            if (protein != null && proteins.size() != 0 && protein.getIPeptides().size() != 0) {
+            if (protein != null && proteins.size() != 0 && protein.getIPeptides().size() != 0 && !cancelConversion) {
 
                 // There will be already peptides here in this protein (getIPeptides().size()!=0)
                 Object temp = allIds.put(protein.getIAccession(), protein);
@@ -4620,7 +4641,7 @@ public class PRIDEConverter {
             }
 
             //If they have not peptides, it will be necessary to copy the collection of proteins of the last created protein:
-            if (protein != null && protein.getIPeptides().size() == 0) {
+            if (protein != null && protein.getIPeptides().size() == 0 && !cancelConversion) {
                 proteins.add(protein);
             }
 
@@ -4631,7 +4652,7 @@ public class PRIDEConverter {
             // Transform our temporary identifications into PRIDE Identification instances.
             identifications = new ArrayList(allIds.size());
             Iterator<InnerID> iter = allIds.values().iterator();
-            while (iter.hasNext()) {
+            while (iter.hasNext() && !cancelConversion) {
                 InnerID lInnerID = iter.next();
                 identifications.add(lInnerID.getGelFreeIdentification());
             }
@@ -4724,6 +4745,12 @@ public class PRIDEConverter {
             Util.writeToErrorLog("Error Parsing DTASelect Project: ");
             e.printStackTrace();
         }
+
+        if(cancelConversion){
+            progressDialog.setVisible(false);
+            progressDialog.dispose();
+        }
+
 //        long end = System.currentTimeMillis();
 //        System.out.println("Transformation Done: " + (end - timerStart) + "\n");
         return filenameToMzDataIDMapping;
