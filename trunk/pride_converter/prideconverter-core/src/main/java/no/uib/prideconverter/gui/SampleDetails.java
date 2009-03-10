@@ -1218,7 +1218,6 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         searchTerm = searchTerm.replaceAll("\\[", " ");
         searchTerm = searchTerm.replaceAll("\\]", " ");
 
-
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
         new OLSDialog(this, true, "singleSample", prideConverter.getUserProperties().getLastSelectedSampleOntology(), selectedRow, searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -2622,7 +2621,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     }
 
     @Override
-    public void insertOLSResult(String field, String selectedValue, String accession, String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm) {
+    public void insertOLSResult(String field, String selectedValue, String accession, String ontologyShort,
+            String ontologyLong, int modifiedRow, String mappedTerm) {
 
         if (mappedTerm != null) {
             prideConverter.getUserProperties().getCVTermMappings().put(
@@ -2630,7 +2630,9 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                     selectedValue, 0, null));
         }
 
-        addSampleDetails(selectedValue, accession, ontologyLong, modifiedRow);
+        prideConverter.getUserProperties().setLastSelectedSampleOntology(ontologyLong);
+
+        addSampleDetails(selectedValue, accession, ontologyShort, modifiedRow);
     }
 
     @Override
