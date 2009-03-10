@@ -120,7 +120,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
             descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br><b>PRIDE Converter</b><br><br>" +
                     "<b>PRIDE Converter</b> converts mass spectrometry data sets into valid PRIDE XML<br>" +
                     "for submission to the online <a href=\"http://www.ebi.ac.uk/pride/\">PRIDE repository</a>.<br><br>" +
-                    "To get started, select one of the supported data sources above and click on <i>Next</i>.<br><br>" +
+                    "To get started, select one of the supported data sources above and click on Next.<br><br>" +
                     "Additional help can be found by clicking on the help icons " +
                     "in the lower left corner of each frame.<br><br>" +
                     "More information about <b>PRIDE Converter</b> can be found here:<br>" +
@@ -739,7 +739,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "Mascot Dat Files are result files " +
                 "from a Mascot search. <br>Both the spectra and the identifications are included.<br><br>" +
                 "File Extension: .dat<br><br>" +
-                "Homepage: <a href=\"www.matrixscience.com\">www.matrixscience.com</a>");
+                "Homepage: <a href=\"http://www.matrixscience.com\">www.matrixscience.com</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
         if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
@@ -763,7 +763,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "The Mascot Generic File format is a generic format for submitting " +
                 "data to Mascot. <br>It only contains information about the spectra.<br><br>" +
                 "File Extension: .mgf<br><br>" +
-                "Homepage: <a href=\"www.matrixscience.com\">www.matrixscience.com</a>");
+                "Homepage: <a href=\"http://www.matrixscience.com\">www.matrixscience.com</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
         if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Generic File")) {
@@ -785,11 +785,10 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "<b>X!Tandem</b><br><br>" +
                 "X!Tandem is open source software that matches " +
                 "tandem mass spectra to peptide sequences.<br><br>" +
-                "The output format is described " +
-                "<a href=\"http://www.thegpm.org/docs/X_series_output_form.pdf\">here</a>." +
+                "The output format is described <a href=\"http://www.thegpm.org/docs/X_series_output_form.pdf\">here</a>." +
                 "<br><br>" +
                 "File Extension: .xml<br><br>" +
-                "Homepage: <a href=\"www.thegpm.org/TANDEM\">www.thegpm.org/TANDEM</a>");
+                "Homepage: <a href=\"http://www.thegpm.org/TANDEM\">www.thegpm.org/TANDEM</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
         if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
@@ -883,7 +882,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "<b>Sequest DTA Files</b><br><br>" +
                 "Sequest DTA File is a simple MS/MS data format without identifications." +
                 "<br>The first line contains the singly protonated peptide mass (MH+) and the peptide charge " +
-                "state. Subsequent lines contain space separated pairs of fragment ion m/z and intensity values. " +
+                "state. <br>Subsequent lines contain space separated pairs of fragment ion m/z and intensity values. " +
                 "<br><br>NB: Each file contains a single MS/MS data set.<br><br>" +
                 "File Extension: .dta<br><br>" +
                 "More Information: <a href=\"http://www.matrixscience.com/help/data_file_help.html#DTA\">" +
@@ -948,7 +947,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         this.nextJButton.setEnabled(true);
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
-                "<b>Micormass PKL Files</b><br><br>" + "Micormass PKL File " +
+                "<b>Micromass PKL Files</b><br><br>" + "Micromass PKL File " +
                 "is a simple MS/MS data format without identifications. The first line contains the " +
                 "observed m/z, intensity, and the charge state of the precursor peptide. <br>Subsequent lines " +
                 "contain space separated pairs of fragment ion m/z and intensity values.<br><br>" +
@@ -1003,8 +1002,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "such as SEQUEST.<br><br>" +
                 "File Extensions: .pepXML, .pep.xml, .protXML and .prot.xml<br><br>" +
                 "More Information: <a href=\"http://peptideprophet.sourceforge.net\">" +
-                "http://peptideprophet.sourceforge.net</a>" +
-                " and <a href=\"http://proteinprophet.sourceforge.net\">" +
+                "http://peptideprophet.sourceforge.net</a> and <a href=\"http://proteinprophet.sourceforge.net\">" +
                 "http://proteinprophet.sourceforge.net</a><br><br><br>");
         descriptionJEditorPane.setCaretPosition(0);
 
