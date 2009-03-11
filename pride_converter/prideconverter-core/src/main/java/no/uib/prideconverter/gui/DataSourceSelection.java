@@ -3,6 +3,7 @@ package no.uib.prideconverter.gui;
 import no.uib.prideconverter.PRIDEConverter;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.io.IOException;
@@ -10,7 +11,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.html.HTMLDocument;
 import no.uib.prideconverter.util.Util;
 
 /**
@@ -46,7 +49,12 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         initComponents();
 
-        descriptionJEditorPane.setFont(new java.awt.Font("Tahoma", 0, 11));
+        //descriptionJEditorPane.setFont(new java.awt.Font("Tahoma", 0, 11));
+
+        Font font = UIManager.getFont("Label.font");
+        String bodyRule = "body { font-family: " + font.getFamily() + "; " +
+                "font-size: " + font.getSize() + "pt; }";
+        ((HTMLDocument)descriptionJEditorPane.getDocument()).getStyleSheet().addRule(bodyRule);
 
         ((TitledBorder) descriptionJPanel.getBorder()).setTitle("Data Source Description");
 

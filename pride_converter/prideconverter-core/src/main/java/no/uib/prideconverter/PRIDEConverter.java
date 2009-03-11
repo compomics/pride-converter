@@ -4549,7 +4549,7 @@ public class PRIDEConverter {
 
                             if (specRef == null) {
                                 JOptionPane.showMessageDialog(null,
-                                       "The spectrum file " + spectrumFile + ".ms2" +
+                                        "The spectrum file " + spectrumFile + ".ms2" +
                                         "\ndoes not contain the spectrum with scan number " + scanNumber +
                                         "\nas referenced in the DTASelect txt file!\n\n" +
                                         "PRIDE XML file not created.",
@@ -4746,7 +4746,7 @@ public class PRIDEConverter {
             e.printStackTrace();
         }
 
-        if(cancelConversion){
+        if (cancelConversion) {
             progressDialog.setVisible(false);
             progressDialog.dispose();
         }
@@ -7743,8 +7743,7 @@ public class PRIDEConverter {
 
         //Get the selected spectra
         ArrayList selectedSpectra = new ArrayList();
-        selectedSpectra =
-                getSelectedSpectraFromDatabase();
+        selectedSpectra = getSelectedSpectraFromDatabase();
 
         int idCounter = 0;
         Iterator iter = selectedSpectra.iterator();
@@ -7783,44 +7782,36 @@ public class PRIDEConverter {
 
         while (iter.hasNext() && !cancelConversion) {
             dbSpectrum = (Spectrumfile) iter.next();
-            filename =
-                    dbSpectrum.getFilename();
+            filename = dbSpectrum.getFilename();
 
-            spectrumKey =
-                    filename + "_null";
+            spectrumKey = filename + "_null";
 
             //JOptionPane.showMessageDialog(null, "spectrumKey: " + spectrumKey);
 
             progressDialog.setValue(progressCounter++);
             progressDialog.setString(filename + " (" + (progressCounter) + "/" + selectedSpectra.size() + ")");
 
-            file =
-                    new String(dbSpectrum.getUnzippedFile());
-            lSpectrumFile =
-                    new MascotGenericFile(filename, file);
+            file = new String(dbSpectrum.getUnzippedFile());
+            lSpectrumFile = new MascotGenericFile(filename, file);
 
             // Transform peaklist into double arrays.
-            arrays =
-                    transformPeakListToArrays_ms_lims(lSpectrumFile.getPeaks(), treeSet);
+            arrays = transformPeakListToArrays_ms_lims(lSpectrumFile.getPeaks(), treeSet);
 
             // Precursor collection.
-            precursors =
-                    new ArrayList(1);
+            precursors = new ArrayList(1);
 
             // Ion selection parameters.
-            ionSelection =
-                    new ArrayList(4);
+            ionSelection = new ArrayList(4);
 
             // See if we know the precursor charge, and if so, include it.
-            charge =
-                    lSpectrumFile.getCharge();
+            charge = lSpectrumFile.getCharge();
 
             if (charge > 0) {
                 ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
                         "ChargeState", 0, Integer.toString(charge)));
             }
 
-// See if we know the precursor intensity
+            // See if we know the precursor intensity
             intensity = lSpectrumFile.getIntensity();
             if (intensity > 1) {
                 ionSelection.add(new CvParamImpl("PSI:1000042", "PSI",
@@ -7834,19 +7825,15 @@ public class PRIDEConverter {
             precursors.add(new PrecursorImpl(null, null, ionSelection, null, 1, 0, 0));
             idCounter++;
 
-// Spectrum description comments.
-            spectrumDescriptionComments =
-                    new ArrayList(1);
-            identificationCount =
-                    dbSpectrum.getIdentified();
-            identified =
-                    (identificationCount > 0 ? "Identified" : "Not identified");
+            // Spectrum description comments.
+            spectrumDescriptionComments = new ArrayList(1);
+            identificationCount = dbSpectrum.getIdentified();
+            identified = (identificationCount > 0 ? "Identified" : "Not identified");
             spectrumDescriptionComments.add(new SpectrumDescCommentImpl(identified));
 
             if (arrays[properties.MZ_ARRAY].length > 0) {
                 mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
-                mzRangeStop =
-                        new Double(arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+                mzRangeStop = new Double(arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
 
                 fragmentation =
                         new SpectrumImpl(
@@ -7869,10 +7856,7 @@ public class PRIDEConverter {
                 // Store the transformed spectrum.
                 aTransformedSpectra.add(fragmentation);
                 idCounter++;
-
             }
-
-
         }
 
         // peptide identifications
@@ -7893,8 +7877,7 @@ public class PRIDEConverter {
         progressDialog.setMax(selectedSpectra.size());
         progressDialog.setTitle("Getting Spectra IDs. Please wait.");
 
-        for (int i = 0; i <
-                selectedSpectra.size() && !cancelConversion; i++) {
+        for (int i = 0; i < selectedSpectra.size() && !cancelConversion; i++) {
 
             try {
                 progressDialog.setValue(i);
@@ -7933,7 +7916,7 @@ public class PRIDEConverter {
                             userParams = null;
                         }
 
-// modifications
+                        // modifications
                         String modifiedSequence = tempIdentification.getModified_sequence();
 
                         String nTerm = modifiedSequence.substring(0, modifiedSequence.indexOf("-"));
@@ -7944,8 +7927,7 @@ public class PRIDEConverter {
 
                         String modificationName;
 
-                        peptideModifications =
-                                null;
+                        peptideModifications = null;
 
                         if (!nTerm.equalsIgnoreCase("NH2")) {
 
@@ -8029,7 +8011,6 @@ public class PRIDEConverter {
                                         modificationCVParams,
                                         null));
                             }
-
                         }
 
                         String modificationPattern = "[<][^<]*[>]";
@@ -8049,8 +8030,7 @@ public class PRIDEConverter {
                                     internalModification.substring(1,
                                     internalModification.length() - 1);
 
-                            index =
-                                    matcher.start() - modificationTagLengthSum;
+                            index = matcher.start() - modificationTagLengthSum;
 
                             StringTokenizer tok = new StringTokenizer(internalModification, ",");
 
@@ -8113,7 +8093,6 @@ public class PRIDEConverter {
                         properties.setMascotConfidenceLevel((int) ((1 -
                                 tempIdentification.getConfidence().doubleValue()) * 100));
                     }
-
                 }
             } catch (java.sql.SQLException e) {
                 JOptionPane.showMessageDialog(null, "An error occured when accessing the database.\n" +
@@ -8122,7 +8101,6 @@ public class PRIDEConverter {
                 Util.writeToErrorLog("An error occured when accessing the database: ");
                 e.printStackTrace();
             }
-
         }
 
         return mapping;
@@ -8154,25 +8132,19 @@ public class PRIDEConverter {
         Iterator treeSetIterator = treeSet.iterator();
 
         int counter = 0;
-
-        Double mz,
-                intensity;
+        Double mz, intensity;
 
         while (treeSetIterator.hasNext()) {
             // Extract m/z and corresponding intensity.
             mz = (Double) treeSetIterator.next();
-            intensity =
-                    (Double) aPeakList.get(mz);
+            intensity = (Double) aPeakList.get(mz);
 
             // Store the m/z and intensity.
             result[properties.MZ_ARRAY][counter] = mz.doubleValue();
             result[properties.INTENSITIES_ARRAY][counter] = intensity.doubleValue();
             // Increment counter.
             counter++;
-
         }
-
-
 
         return result;
     }
