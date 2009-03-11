@@ -356,12 +356,12 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="selectAllSpectraJRadioButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="166" max="32767" attributes="0"/>
+                          <EmptySpace pref="165" max="32767" attributes="0"/>
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="selectIdentifiedJRadioButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="132" max="32767" attributes="0"/>
+                          <EmptySpace pref="131" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -575,9 +575,9 @@
                   </Group>
                   <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="peptideScoreJTextField" pref="111" max="32767" attributes="1"/>
-                      <Component id="proteinIdFilterJTextField" alignment="1" pref="111" max="32767" attributes="1"/>
-                      <Component id="mascotConfidenceLevelJSpinner" alignment="0" pref="111" max="32767" attributes="1"/>
+                      <Component id="peptideScoreJTextField" pref="112" max="32767" attributes="1"/>
+                      <Component id="proteinIdFilterJTextField" alignment="1" pref="112" max="32767" attributes="1"/>
+                      <Component id="mascotConfidenceLevelJSpinner" alignment="0" pref="112" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -622,14 +622,16 @@
         <Component class="javax.swing.JLabel" name="mascotConfidenceLevelJLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Mascot Confidence Level:"/>
+            <Property name="toolTipText" type="java.lang.String" value="Mascot Confidence Level (%)"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JSpinner" name="mascotConfidenceLevelJSpinner">
           <Properties>
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-              <SpinnerModel initial="95" maximum="100" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+              <SpinnerModel initial="95.0" maximum="100.0" minimum="0.0" numberType="java.lang.Double" stepSize="1.0" type="number"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Mascot Confidence Level (%)"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
