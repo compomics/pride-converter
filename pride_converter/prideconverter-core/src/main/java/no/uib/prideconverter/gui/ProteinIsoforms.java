@@ -3,6 +3,7 @@ package no.uib.prideconverter.gui;
 import no.uib.prideconverter.PRIDEConverter;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 import no.uib.prideconverter.util.ExcelAdapter;
 
 /**
@@ -59,6 +60,8 @@ public class ProteinIsoforms extends javax.swing.JDialog {
         buttonGroup = new javax.swing.ButtonGroup();
         tableJPopupMenu = new javax.swing.JPopupMenu();
         pasteJMenuItem = new javax.swing.JMenuItem();
+        deleteJMenuItem = new javax.swing.JMenuItem();
+        addRowJMenuItem = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         manualSelectionJRadioButton = new javax.swing.JRadioButton();
@@ -81,6 +84,22 @@ public class ProteinIsoforms extends javax.swing.JDialog {
         });
         tableJPopupMenu.add(pasteJMenuItem);
 
+        deleteJMenuItem.setText("Delete Selected Rows");
+        deleteJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteJMenuItemActionPerformed(evt);
+            }
+        });
+        tableJPopupMenu.add(deleteJMenuItem);
+
+        addRowJMenuItem.setText("Add Empty Row");
+        addRowJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addRowJMenuItemActionPerformed(evt);
+            }
+        });
+        tableJPopupMenu.add(addRowJMenuItem);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Protein Isoforms Detected");
         setResizable(false);
@@ -90,7 +109,7 @@ public class ProteinIsoforms extends javax.swing.JDialog {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Protein Isoforms", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Protein Isoforms", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 2, 11));
         jLabel1.setText("How do you want to handle protein isoforms?");
@@ -262,6 +281,7 @@ public class ProteinIsoforms extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     /**
      * See cancelJButtonActionPerformed
      */
@@ -409,10 +429,53 @@ public class ProteinIsoforms extends javax.swing.JDialog {
         new HelpWindow(this, getClass().getResource("/no/uib/prideconverter/helpfiles/ProteinIsoforms.html"));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_helpJButtonActionPerformed
+
+    /**
+     * Deletes the selected rows from the peptide to protein table.
+     *
+     * @param evt
+     */
+    private void deleteJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteJMenuItemActionPerformed
+        int[] selectedRows = peptideToProteinJTable.getSelectedRows();
+
+        for (int i = selectedRows.length - 1; i >= 0; i--) {
+            ((DefaultTableModel) peptideToProteinJTable.getModel()).removeRow(selectedRows[i]);
+        }
+
+        if (provideListJRadioButton.isSelected()) {
+            okJButton.setEnabled(peptideToProteinJTable.getRowCount() > 0);
+        }
+    }//GEN-LAST:event_deleteJMenuItemActionPerformed
+
+    /**
+     * Adds an empty row to the peptide to protein table.
+     *
+     * @param evt
+     */
+    private void addRowJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRowJMenuItemActionPerformed
+
+        if (peptideToProteinJTable.getSelectedRow() != -1) {
+            ((DefaultTableModel) peptideToProteinJTable.getModel()).insertRow(
+                    peptideToProteinJTable.getSelectedRow() + 1, new Object[]{"", ""});
+
+            peptideToProteinJTable.scrollRectToVisible(peptideToProteinJTable.getCellRect(
+                peptideToProteinJTable.getSelectedRow() + 1, 0, false));
+
+        } else {
+            ((DefaultTableModel) peptideToProteinJTable.getModel()).addRow(new Object[]{"", ""});
+
+            peptideToProteinJTable.scrollRectToVisible(peptideToProteinJTable.getCellRect(
+                peptideToProteinJTable.getRowCount() - 1, 0, false));
+        }
+        
+    }//GEN-LAST:event_addRowJMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutJButton;
+    private javax.swing.JMenuItem addRowJMenuItem;
     private javax.swing.ButtonGroup buttonGroup;
     private javax.swing.JButton cancelJButton;
+    private javax.swing.JMenuItem deleteJMenuItem;
     private javax.swing.JButton helpJButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
