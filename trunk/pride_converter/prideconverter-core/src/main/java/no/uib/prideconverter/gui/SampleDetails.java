@@ -725,7 +725,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 2, 11));
-        jLabel2.setText("Preferred Ontologies are: NEWT for species, BTO for tissue, CTO for cell type, GO and DO for disease state");
+        jLabel2.setText("Preferred Ontologies: NEWT (species), BTO (tissue), CTO (cell type), GO and DO (disease state)");
 
         singleSampleDetailsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -800,7 +800,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         sampleJTabbedPane.addTab("Single Sample", jPanel1);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 2, 11));
-        jLabel4.setText("Preferred Ontologies are: NEWT for species, BTO for tissue, CTO for cell type, GO and DO for disease state");
+        jLabel4.setText("Preferred Ontologies: NEWT (species), BTO (tissue), CTO (cell type), GO and DO (disease state)");
 
         multipleSamplesDetailsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
