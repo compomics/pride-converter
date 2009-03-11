@@ -430,11 +430,11 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(selectAllSpectraJRadioButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 165, Short.MAX_VALUE)
                         .addComponent(jLabel1))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(selectIdentifiedJRadioButton)
-                        .addContainerGap(132, Short.MAX_VALUE))))
+                        .addContainerGap(131, Short.MAX_VALUE))))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -556,9 +556,11 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         peptideScoreJTextField.setToolTipText("Only include identifications with peptide scores higher than this value");
 
         mascotConfidenceLevelJLabel.setText("Mascot Confidence Level:");
+        mascotConfidenceLevelJLabel.setToolTipText("Mascot Confidence Level (%)");
         mascotConfidenceLevelJLabel.setEnabled(false);
 
-        mascotConfidenceLevelJSpinner.setModel(new javax.swing.SpinnerNumberModel(95, 0, 100, 1));
+        mascotConfidenceLevelJSpinner.setModel(new javax.swing.SpinnerNumberModel(95.0d, 0.0d, 100.0d, 1.0d));
+        mascotConfidenceLevelJSpinner.setToolTipText("Mascot Confidence Level (%)");
         mascotConfidenceLevelJSpinner.setEnabled(false);
         mascotConfidenceLevelJSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -584,9 +586,9 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                     .addComponent(jLabel6))
                 .addGap(33, 33, 33)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(peptideScoreJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
-                    .addComponent(proteinIdFilterJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
-                    .addComponent(mascotConfidenceLevelJSpinner, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
+                    .addComponent(peptideScoreJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+                    .addComponent(proteinIdFilterJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+                    .addComponent(mascotConfidenceLevelJSpinner, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -1098,10 +1100,10 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                         } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
 
                             prideConverter.getProperties().setMascotConfidenceLevel(
-                                    (Integer) mascotConfidenceLevelJSpinner.getValue());
+                                    (Double) mascotConfidenceLevelJSpinner.getValue());
 
                             double confidenceLevel = (100 -
-                                    (double) prideConverter.getProperties().getMascotConfidenceLevel()) /
+                                    prideConverter.getProperties().getMascotConfidenceLevel()) /
                                     100;
 
                             double size = (double) file.length() / 
@@ -1132,14 +1134,11 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                         null,
                                         currentQuery.getFilename(),
                                         null,
-                                        new Boolean(queryToPeptideMap.getPeptideHitsAboveIdentityThreshold(currentQuery.getQueryNumber(), confidenceLevel).size() >
-                                        0),
-                                        new Boolean(queryToPeptideMap.getPeptideHitsAboveIdentityThreshold(currentQuery.getQueryNumber(), confidenceLevel).size() >
-                                        0)
+                                        new Boolean(queryToPeptideMap.getPeptideHitsAboveIdentityThreshold(currentQuery.getQueryNumber(), confidenceLevel).size() > 0),
+                                        new Boolean(queryToPeptideMap.getPeptideHitsAboveIdentityThreshold(currentQuery.getQueryNumber(), confidenceLevel).size() > 0)
                                     });
 
-                                    if (queryToPeptideMap.getPeptideHitsAboveIdentityThreshold(currentQuery.getQueryNumber(), confidenceLevel).size() >
-                                            0) {
+                                    if (queryToPeptideMap.getPeptideHitsAboveIdentityThreshold(currentQuery.getQueryNumber(), confidenceLevel).size() > 0) {
                                         numberOfSelectedSpectra++;
                                     }
                                 } else {
@@ -1702,7 +1701,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
         prideConverter.getProperties().setSelectAllSpectra(selectAllSpectraJRadioButton.isSelected());
         prideConverter.getProperties().setSelectAllIdentifiedSpectra(selectIdentifiedJRadioButton.isSelected());
-        prideConverter.getProperties().setMascotConfidenceLevel((Integer) mascotConfidenceLevelJSpinner.getValue());
+        prideConverter.getProperties().setMascotConfidenceLevel((Double) mascotConfidenceLevelJSpinner.getValue());
         prideConverter.getProperties().setProteinIdentificationFilter(proteinIdFilterJTextField.getText());
 
         boolean saveOk = true;

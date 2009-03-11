@@ -365,7 +365,7 @@ public class UserProperties {
                             } else {
                                 option = JOptionPane.showConfirmDialog(null,
                                         "The selected file is not a PRIDE Converter 'UserProperties.prop' file.\n" +
-                                        "Please select the file named 'UserProperties.prop' in the PRIDE Converter's\n" +
+                                        "Please select the file named 'UserProperties.prop' in the PRIDE Converter\n" +
                                         "Properties folder.",
                                         "Locate Old Settings File", JOptionPane.OK_CANCEL_OPTION);
                             }

@@ -119,9 +119,9 @@ public class OutputDetails extends javax.swing.JFrame {
     }
 
     /**
-     * Returns a reference to the PRIDE Converter.
+     * Returns a reference to main class of the PRIDE Converter.
      * 
-     * @return a reference to the PRIDE Converter
+     * @return a reference to main class of the PRIDE Converter
      */
     public PRIDEConverter getPRIDEConverterReference() {
         return prideConverter;

@@ -55,7 +55,7 @@ public class Properties {
     private ArrayList selectedIsoformAccessions;
     private ArrayList selectedIsoformPeptideSequences;
     private int proteinIsoformSelectionType;
-    private int mascotConfidenceLevel = 95;
+    private double mascotConfidenceLevel = 95;
     private double proteinProphetThreshold = 0.9;
     private double peptideProphetThreshold = 0.9;
     private boolean instrumentDetailsExtracted = false;
@@ -542,7 +542,7 @@ public class Properties {
      * 
      * @return the Mascot confidence level
      */
-    public int getMascotConfidenceLevel() {
+    public double getMascotConfidenceLevel() {
         return mascotConfidenceLevel;
     }
 
@@ -551,7 +551,7 @@ public class Properties {
      * 
      * @param aMascotConfidenceLevel
      */
-    public void setMascotConfidenceLevel(int aMascotConfidenceLevel) {
+    public void setMascotConfidenceLevel(double aMascotConfidenceLevel) {
         mascotConfidenceLevel = aMascotConfidenceLevel;
     }
 

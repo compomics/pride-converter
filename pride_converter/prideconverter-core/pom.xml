@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
     <version>1.15.3</version>
     <name>prideconverter-core</name>
-    <description>The PRIDE Converter converts MS data into valid PRIDE XML for submission to the publicly available PRIDE database.
+    <description>PRIDE Converter converts MS data into valid PRIDE XML for submission to the publicly available PRIDE database.
 It presents a convenient, wizard-like graphical user interface, and includes efficient access to the Ontology Lookup Service (OLS).</description>
     <url>http://code.google.com/p/pride-converter/</url>
 
