@@ -569,15 +569,15 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel2" alignment="0" min="-2" pref="128" max="-2" attributes="1"/>
+                      <Component id="jLabel2" alignment="0" pref="131" max="32767" attributes="1"/>
                       <Component id="mascotConfidenceLevelJLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="peptideScoreJTextField" pref="130" max="32767" attributes="0"/>
-                      <Component id="mascotConfidenceLevelJSpinner" alignment="1" pref="130" max="32767" attributes="0"/>
-                      <Component id="proteinIdFilterJTextField" alignment="0" pref="130" max="32767" attributes="0"/>
+                      <Component id="peptideScoreJTextField" pref="111" max="32767" attributes="1"/>
+                      <Component id="proteinIdFilterJTextField" alignment="1" pref="111" max="32767" attributes="1"/>
+                      <Component id="mascotConfidenceLevelJSpinner" alignment="0" pref="111" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
