@@ -64,6 +64,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -227,6 +228,8 @@ public class PRIDEConverter {
      */
     public static void main(String[] args) {
 
+        Locale.setDefault(Locale.US);
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             @Override
