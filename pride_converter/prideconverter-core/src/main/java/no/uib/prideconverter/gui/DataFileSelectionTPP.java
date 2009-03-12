@@ -566,7 +566,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
         }
 
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        chooser.setDialogTitle("Select The ProteinProphet File");
+        chooser.setDialogTitle("Select the ProteinProphet File");
         chooser.setFileFilter(new ProtXmlFileFilter());
 
         String path;
@@ -610,7 +610,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
         }
 
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        chooser.setDialogTitle("Select The PeptideProphet File");
+        chooser.setDialogTitle("Select the PeptideProphet File");
         chooser.setFileFilter(new PepXmlFileFilter());
 
         String path;
@@ -655,7 +655,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
         }
 
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setDialogTitle("Select The Spectrum Files Folder");
+        chooser.setDialogTitle("Select the Spectrum Files Folder");
 
         String path;
 
