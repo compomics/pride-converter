@@ -21,8 +21,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class PRIDEConverterWrapper {
 
     private boolean debug = false;
-    private String jarFileName = "PRIDEConverter-1.15.3.jar";
-    private String prideConverterSourceJarFileName = "prideconverter-core-1.15.3.jar";
+    private String jarFileName = "PRIDEConverter-1.16.jar";
+    private String prideConverterSourceJarFileName = "prideconverter-core-1.16.jar";
 
     /**
      * Starts the launcher by calling the launch method. Use this as the 
@@ -105,7 +105,10 @@ public class PRIDEConverterWrapper {
                     currentOption = b.readLine();
 
                     while (currentOption != null) {
-                        options += currentOption + " ";
+                        if (!currentOption.startsWith("#")) {
+                            options += currentOption + " ";
+                        }
+
                         currentOption = b.readLine();
                     }
 
@@ -118,6 +121,7 @@ public class PRIDEConverterWrapper {
                     ex.printStackTrace();
                 }
             } else {
+                // options find not found. using default memory settings
                 options = "-Xms128M -Xmx768M";
             }
 
@@ -128,8 +132,8 @@ public class PRIDEConverterWrapper {
             String javaHome = System.getProperty("java.home") + File.separator +
                     "bin" + File.separator;
 
-            cmdLine = javaHome + "java " + options + " -jar "
-                    + new File(tempFile, prideConverterSourceJarFileName).getAbsolutePath();
+            cmdLine = javaHome + "java " + options + " -jar " +
+                    new File(tempFile, prideConverterSourceJarFileName).getAbsolutePath();
 
             if (debug) {
                 System.out.println(cmdLine);

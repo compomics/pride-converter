@@ -210,8 +210,8 @@ public class OLSDialog extends javax.swing.JDialog {
             }
         });
         olsResultsJTable.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                olsResultsJTableKeyPressed(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                olsResultsJTableKeyReleased(evt);
             }
         });
         jScrollPane.setViewportView(olsResultsJTable);
@@ -255,7 +255,7 @@ public class OLSDialog extends javax.swing.JDialog {
         numberOfTermsJTextField.setToolTipText("Number of Matching Terms");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 2, 10));
-        jLabel2.setText("An alternative way to search the ontology (as a graph) is available here:");
+        jLabel2.setText("An alternative way of searching the ontology is available here:");
 
         olsGraphSearchJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/ols_transparent.GIF"))); // NOI18N
         olsGraphSearchJButton.setToolTipText("Go to the Ontology Lookup Service web page");
@@ -379,9 +379,9 @@ public class OLSDialog extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -624,15 +624,6 @@ public class OLSDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_olsResultsJTableMouseClicked
 
     /**
-     * See olsResultsJTableMouseClicked
-     * 
-     * @param evt
-     */
-    private void olsResultsJTableKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_olsResultsJTableKeyPressed
-        olsResultsJTableMouseClicked(null);
-    }//GEN-LAST:event_olsResultsJTableKeyPressed
-
-    /**
      * Closes the dialog.
      * 
      * @param evt
@@ -698,6 +689,15 @@ public class OLSDialog extends javax.swing.JDialog {
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_olsGraphSearchJButtonActionPerformed
+
+    /**
+     * See olsResultsJTableMouseClicked
+     * 
+     * @param evt
+     */
+    private void olsResultsJTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_olsResultsJTableKeyReleased
+        olsResultsJTableMouseClicked(null);
+    }//GEN-LAST:event_olsResultsJTableKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutJButton;

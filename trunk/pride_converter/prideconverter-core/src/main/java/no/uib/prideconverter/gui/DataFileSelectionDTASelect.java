@@ -4,18 +4,13 @@ import no.uib.prideconverter.PRIDEConverter;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import no.uib.prideconverter.filefilters.SequestParamsFileFilter;
 import no.uib.prideconverter.filefilters.TxtFileFilter;
-import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
 import uk.ac.ebi.pride.model.interfaces.mzdata.UserParam;
 
@@ -475,7 +470,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
         }
 
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        chooser.setDialogTitle("Select The DTASelect File");
+        chooser.setDialogTitle("Select the DTASelect File");
         chooser.setFileFilter(new TxtFileFilter());
 
         String path;
@@ -520,7 +515,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
         }
 
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setDialogTitle("Select The Spectrum Files Folder");
+        chooser.setDialogTitle("Select the Spectrum Files Folder");
 
         String path;
 
@@ -573,7 +568,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
         }
 
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        chooser.setDialogTitle("Select The sequest.params File");
+        chooser.setDialogTitle("Select the sequest.params File");
         chooser.setFileFilter(new SequestParamsFileFilter());
 
         String path;

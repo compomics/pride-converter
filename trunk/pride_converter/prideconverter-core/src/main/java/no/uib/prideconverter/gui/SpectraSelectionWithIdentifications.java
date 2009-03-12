@@ -1227,8 +1227,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                     identificationId = null;
                                 }
 
-                                if (((Integer) dbSpectra[i][2]).intValue() > 0 &&
-                                        id.getValid() > 0) {
+                                if (((Integer) dbSpectra[i][2]).intValue() > 0 && id.getValid() > 0) {
                                     identified = true;
                                 } else {
                                     identified = false;
@@ -1245,8 +1244,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                         tempToken = tok.nextToken();
                                         tempToken = tempToken.trim();
 
-                                        if (((String) dbSpectra[i][1]).lastIndexOf(tempToken) !=
-                                                -1) {
+                                        if (((String) dbSpectra[i][1]).lastIndexOf(tempToken) != -1) {
                                             selected = true;
                                         }
                                     }

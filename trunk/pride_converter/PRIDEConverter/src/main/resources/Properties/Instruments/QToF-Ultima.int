@@ -1,0 +1,31 @@
+#instrument name
+Name: QToF-Ultima
+
+#instrument source
+Accession: PSI:1000073
+cvLookup: PSI
+Name: Electrospray Ionization
+
+#instrument detector
+Accession: PSI:1000253
+cvLookup: PSI
+Name: Electron Multiplier
+
+#analyzers
+1
+1
+Accession: PSI:1000188
+CVLookup: PSI
+Name: Q-Tof micro
+Value: null
+
+#processing methods
+1
+Accession: PSI:1000127
+CVLookup: PSI
+Name: Centroid Mass Spectrum
+Value: null
+
+#software
+Name: Protein Lynx Global Server
+Version: 2.2.5
