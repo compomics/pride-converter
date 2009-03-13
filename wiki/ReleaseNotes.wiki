@@ -3,11 +3,26 @@
 
 ----
 
+*Changes in PRIDE Converter v1.16 - (Mar. 13. 2009):*
+ * DTASelect is now supported (beta).
+ * A lot of minor bugs in the graphical user interface when run on Mac has been fixed.
+ * Some minor bugs in the graphical user interface when run on Linux has been fixed.
+ * Some platform independent minor bugs in the graphical user interface has been fixed.
+ * Fixed a bug in the handling of sample CV terms, where the long ontology name was incorrectly used instead of the short ontology name. (This resulted in problems when trying to automatically map the terms in PRIDE.)
+ * The Mascot confidence level can now be any number between 0 and 100, including non-integer values, e.g., 99.5.
+ * `Delete Rows` and `Add Empty Row` has been added to the table popup menu when adding a list of peptide to protein mappings.
+ * Fixed a bug in the Spectra Selection of Mascot Dat files that resulted in the Select identified spectra not being used correctly. 
+ * Added comments on how to increase the memory size in the JavaOptions file.
+ * Fixed a bug in the OLS dialog. When selecting terms in the table using the keyboard, the term details was not updated correctly.
+
+----
+
 *Changes in PRIDE Converter v1.15.3 - (Mar. 09. 2009):*
  * Fixed a bug that made it difficult to a create new single sample. (The Next button did not become enabled when adding CV terms.)
  * Updated the data format descriptions.
  * Updated the data source selection help file.
 
+Download Count: 1
 
 ----
 
