@@ -673,6 +673,7 @@ public class PeptideProphetXMLParser {
             aParser.moveToNextStartTag(true);
             int tempProteinCount = proteinCount - 1;
             Collection alternateProteins = new ArrayList(tempProteinCount);
+
             while (tempProteinCount > 0) {
 
                 if (!ALTERNATIVE_PROTEIN.equals(aParser.getName())) {
@@ -739,7 +740,17 @@ public class PeptideProphetXMLParser {
                 String name = aParser.getAttributeValue(null, "name");
                 String value = aParser.getAttributeValue(null, "value");
                 search_score_summary.put(name, value);
-                aParser.moveToNextStartTagWithEndBreaker(SPECTRUM_QUERY);
+                aParser.moveToNextStartTag(true);
+            }
+
+            // there could be more than one analysis tag, these will be ignored
+            // note that this assumes that the first analysis tag is the
+            // <analysis_result analysis="peptideprophet"> !!!
+            while (aParser.getName() != null &&
+                    !aParser.getName().equalsIgnoreCase("spectrum_query") &&
+                    !aParser.getName().equalsIgnoreCase("msms_run_summary")) {
+
+                aParser.moveToNextStartTag(true);
             }
 
             // Ignore all queries with hits below the probability threshold.
@@ -760,9 +771,6 @@ public class PeptideProphetXMLParser {
             } else {
                 logger.debug("Skipped query and peptidehit (" + sequence + ") with a probability (" + probability + ") below " + aThreshold + ".");
             }
-
-            // Move to the next tag
-            aParser.moveToNextStartTag(true);
         }
 
         // Create the complete MS/MS run instance
