@@ -208,10 +208,10 @@ public class ProteinProphetXMLParser {
         aParser.moveToNextStartTag(true);
         
         // skip any parameter and analysis result tags
-        while(PARAMETER.equals(aParser.getName()) || ANALYSIS_RESULT.equals(aParser.getName())) {
+        while(!aParser.getName().equalsIgnoreCase("annotation")) {
             aParser.moveToNextStartTag(true);
         }
-        
+                
         // This tag should be 'annotation'.
         // Read attributes here as well.
         String description = aParser.getAttributeValue(null, "protein_description");
