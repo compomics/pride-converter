@@ -87,8 +87,6 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
         analyzerJTable.getColumn(" ").setMaxWidth(40);
         analyzerJTable.getColumn(" ").setMinWidth(40);
-        analyzerJTable.getColumn("#Terms").setMinWidth(60);
-        analyzerJTable.getColumn("#Terms").setMaxWidth(60);
 
         ((DefaultTableModel) processingMethodsJTable.getModel()).addTableModelListener(
                 new TableModelListener() {
@@ -798,7 +796,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             }
         });
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Processing", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Processing", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
         processingMethodsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -907,7 +905,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                 .addContainerGap())
         );
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Instrument", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Instrument", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
         jLabel9.setText("Source:");
 
@@ -955,14 +953,14 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
             },
             new String [] {
-                " ", "CV Terms", "#Terms"
+                " ", "CV Terms"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1635,7 +1633,6 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         Object[] tempRow = new Object[]{
             analyzerJTable.getValueAt(selectedRow - 1, 0),
             analyzerJTable.getValueAt(selectedRow - 1, 1),
-            analyzerJTable.getValueAt(selectedRow - 1, 2)
         };
 
         ((DefaultTableModel) analyzerJTable.getModel()).removeRow(selectedRow - 1);
@@ -1679,7 +1676,6 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         Object[] tempRow = new Object[]{
             analyzerJTable.getValueAt(selectedRow + 1, 0),
             analyzerJTable.getValueAt(selectedRow + 1, 1),
-            analyzerJTable.getValueAt(selectedRow + 1, 2)
         };
 
         ((DefaultTableModel) analyzerJTable.getModel()).removeRow(selectedRow + 1);
@@ -2644,7 +2640,6 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         valuesChanged = true;
 
         String temp = "";
-        int numberOfTerms = 0;
         Collection analyzerCVParams = new ArrayList(terms.size());
 
         for (int i = 0; i < terms.size(); i++) {
@@ -2667,8 +2662,6 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         new Long(0).longValue(),
                         null));
             }
-
-            numberOfTerms++;
         }
 
         if (modifiedRow == -1) {
@@ -2681,12 +2674,10 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             ((DefaultTableModel) analyzerJTable.getModel()).addRow(
                     new Object[]{
                         new Integer(analyzerJTable.getRowCount() + 1),
-                        temp,
-                        new Integer(numberOfTerms)
+                        temp
                     });
         } else {
             analyzerJTable.setValueAt(temp, modifiedRow, 1);
-            analyzerJTable.setValueAt(new Integer(numberOfTerms), modifiedRow, 2);
 
             Object[] analyzers = prideConverter.getProperties().getAnalyzerList().toArray();
             analyzers[modifiedRow] = new AnalyzerImpl(analyzerCVParams, null, modifiedRow);

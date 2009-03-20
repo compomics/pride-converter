@@ -28,10 +28,10 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.xml.parsers.DocumentBuilder;
@@ -86,8 +86,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
         initComponents();
 
-        mascotConfidenceLevelJSpinner.setModel(new SpinnerNumberModel(95, 0, 100, 0.1));
-        mascotConfidenceLevelJSpinner.setEditor(new JSpinner.NumberEditor(mascotConfidenceLevelJSpinner, "#.#"));
+        JFormattedTextField tf = ((JSpinner.DefaultEditor) mascotConfidenceLevelJSpinner.getEditor()).getTextField();
+        tf.setHorizontalAlignment(JFormattedTextField.CENTER);
 
         spectraJTable.getColumn("Selected").setMinWidth(80);
         spectraJTable.getColumn("Selected").setMaxWidth(80);
@@ -564,7 +564,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         mascotConfidenceLevelJLabel.setToolTipText("Mascot Confidence Level (%)");
         mascotConfidenceLevelJLabel.setEnabled(false);
 
-        mascotConfidenceLevelJSpinner.setModel(new javax.swing.SpinnerNumberModel(95.0d, 0.0d, 100.0d, 1.0d));
+        mascotConfidenceLevelJSpinner.setModel(new javax.swing.SpinnerNumberModel(95.0d, 0.0d, 100.0d, 0.1d));
         mascotConfidenceLevelJSpinner.setToolTipText("Mascot Confidence Level (%)");
         mascotConfidenceLevelJSpinner.setEnabled(false);
         mascotConfidenceLevelJSpinner.addChangeListener(new javax.swing.event.ChangeListener() {

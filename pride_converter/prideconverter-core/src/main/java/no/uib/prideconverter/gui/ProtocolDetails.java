@@ -70,8 +70,6 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
         protocolStepsJTable.getColumn(" ").setMinWidth(40);
         protocolStepsJTable.getColumn(" ").setMaxWidth(40);
-        protocolStepsJTable.getColumn("#Terms").setMinWidth(60);
-        protocolStepsJTable.getColumn("#Terms").setMaxWidth(60);
 
         if (prideConverter.useHardcodedPaths()) {
             protocolPath = "D:/PRIDE_ms_lims/ms_lims_to_PRIDE/PRIDEConverter/Release/Properties/Protocols/";
@@ -210,7 +208,6 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         valuesChanged = true;
 
         String temp = "";
-        int numberOfTerms = 0;
         Collection protocolStepsCVParams = new ArrayList(terms.size());
 
         for (int i = 0; i < terms.size(); i++) {
@@ -233,8 +230,6 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                         new Long(i).longValue(),
                         null));
             }
-
-            numberOfTerms++;
         }
 
         if (modifiedRow == -1) {
@@ -246,13 +241,11 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
             ((DefaultTableModel) protocolStepsJTable.getModel()).addRow(
                     new Object[]{
                         new Integer(protocolStepsJTable.getRowCount() + 1),
-                        temp,
-                        new Integer(numberOfTerms)
+                        temp
                     });
         } else {
 
             protocolStepsJTable.setValueAt(temp, modifiedRow, 1);
-            protocolStepsJTable.setValueAt(new Integer(numberOfTerms), modifiedRow, 2);
 
             Object[] protocolSteps = prideConverter.getProperties().getExperimentProtocolSteps().toArray();
 
@@ -402,14 +395,14 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
             },
             new String [] {
-                " ", "CV Terms", "#Terms"
+                " ", "CV Terms"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -626,8 +619,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
             int[] selectedRows = protocolStepsJTable.getSelectedRows();
 
-            for (int i = protocolStepsJTable.getSelectedRows().length - 1; i >=
-                    0; i--) {
+            for (int i = protocolStepsJTable.getSelectedRows().length - 1; i >= 0; i--) {
                 ((DefaultTableModel) protocolStepsJTable.getModel()).removeRow(selectedRows[i]);
             }
 
@@ -672,7 +664,6 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         Object[] tempRow = new Object[]{
             protocolStepsJTable.getValueAt(selectedRow + 1, 0),
             protocolStepsJTable.getValueAt(selectedRow + 1, 1),
-            protocolStepsJTable.getValueAt(selectedRow + 1, 2)
         };
 
         ((DefaultTableModel) protocolStepsJTable.getModel()).removeRow(selectedRow + 1);
@@ -717,7 +708,6 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         Object[] tempRow = new Object[]{
             protocolStepsJTable.getValueAt(selectedRow - 1, 0),
             protocolStepsJTable.getValueAt(selectedRow - 1, 1),
-            protocolStepsJTable.getValueAt(selectedRow - 1, 2)
         };
 
         ((DefaultTableModel) protocolStepsJTable.getModel()).removeRow(selectedRow - 1);
