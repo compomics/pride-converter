@@ -5,7 +5,7 @@
 
 *Changes in PRIDE Converter v1.16.1 - (Mar. 20. 2009):*
  * The conversion of PeptideProphet/ProteinProphet data sets now supports multiple analysis tags in both the pepxml and protxml files.
- * The PeptideProphet and ProteinProphet thresholds are now in the range [0.01 - 1.0] (previously [0-100]), to better fit the thresholds used in the pepxml and protxml files.
+ * The PeptideProphet and ProteinProphet thresholds are now in the range 0.01 - 1.0 (previously 0-100), to better fit the thresholds used in the pepxml and protxml files.
  * Removed the `#Terms column` in the Protocol Properties table and the Instrument Properties - Analyzers table.
 
 ----
