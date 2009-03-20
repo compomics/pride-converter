@@ -20,28 +20,33 @@ OmssaInstallDir:
 CVTermMappings:
 Pyro-carbamidomethyl|MOD:00419|MOD|S-carbamoylmethylcysteine cyclization (N-terminus)|39.994915|
 Acetyl|MOD:00394|MOD|acetylated residue|42.010565|
-carbamidomethyl C|MOD:01214|MOD|iodoacetamide -site C|57.021464|
+ESI|PSI:1000073|PSI|Electrospray Ionization|null|
 111.0321_Q|MOD:00040|MOD|2-pyrrolidone-5-carboxylic acid (Gln)|-17.026549|
+carbamidomethyl C|MOD:01214|MOD|iodoacetamide -site C|57.021464|
 C|MOD:01214|MOD|iodoacetamide -site C|57.021464|
 carbamidomethylation|MOD:01214|MOD|iodoacetamide -site C|57.021464|
 oxidation of M|MOD:00425|MOD|monohydroxylated residue|15.994915|
-Oxidized-Methionine|MOD:00425|MOD|monohydroxylated residue|15.994915|
-C=57.01|MOD:01214|MOD|iodoacetamide -site C|57.021464|
 147.0354_M|MOD:00425|MOD|monohydroxylated residue|15.994915|
+C=57.01|MOD:01214|MOD|iodoacetamide -site C|57.021464|
+Oxidized-Methionine|MOD:00425|MOD|monohydroxylated residue|15.994915|
 Cam|MOD:01214|MOD|iodoacetamide -site C|57.021464|
 174.0463_C|MOD:00310|MOD|N5-methyl-L-arginine|14.01565|
 C#|MOD:01214|MOD|iodoacetamide -site C|57.021464|
 Mox|MOD:00425|MOD|monohydroxylated residue|15.994915|
 160.0306_C|MOD:01214|MOD|iodoacetamide -site C|57.021464|
+electrospray ionization|PSI:1000073|PSI|Electrospray Ionization|null|
 111.032_E|MOD:00420|MOD|2-pyrrolidone-5-carboxylic acid (Glu)|-18.010565|
+EMT|PSI:1000111|PSI|Electron Multiplier Tube|null|
 Acetyl:2H(3)|MOD:01233|MOD|Acetate labeling reagent (N-term and K) (heavy form, +3amu) -site K|45.029395|
 Deamidated|MOD:00400|MOD|deamidated residue|0.984016|
 Carbamidomethyl|MOD:01214|MOD|iodoacetamide -site C|57.021464|
 Gln->pyro-Glu|MOD:00040|MOD|2-pyrrolidone-5-carboxylic acid (Gln)|-17.026549|
-Oxidation|MOD:00425|MOD|monohydroxylated residue|15.994915|
 M*|MOD:00425|MOD|monohydroxylated residue|15.994915|
-Ace (N-terminal)|MOD:00408|MOD|N-acetylated residue|42.010565|
-electrospray ionization|PSI:1000073|PSI|Electrospray Ionization|null|
 Ion Trap|PSI:1000264|PSI|Ion Trap|null|
-EMT|PSI:1000111|PSI|Electron Multiplier Tube|null|
-ESI|PSI:1000073|PSI|Electrospray Ionization|null|
+Ace (N-terminal)|MOD:00408|MOD|N-acetylated residue|42.010565|
+339.333_C|MOD:00540|MOD|9xC13 label|9.030194|
+330.3991_C|MOD:00480|MOD|Applied Biosystems cleavable ICAT(TM) light|227.126991|
+Oxidation|MOD:00425|MOD|monohydroxylated residue|15.994915|
+HexNAc|MOD:00160|MOD|N4-glycosyl-L-asparagine|203.079373|
+Dioxidation|MOD:00256|MOD|oxidation to L-methionine sulfone|31.989829|
+147.192_M|MOD:00719|MOD|oxidation to L-methionine sulfoxide|15.994915|
