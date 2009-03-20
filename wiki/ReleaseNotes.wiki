@@ -3,6 +3,13 @@
 
 ----
 
+*Changes in PRIDE Converter v1.16.1 - (Mar. 20. 2009):*
+ * The conversion of PeptideProphet/ProteinProphet data sets now supports multiple analysis tags in both the pepxml and protxml files.
+ * The PeptideProphet and ProteinProphet thresholds are now in the range [0.01 - 1.0] (previously [0-100]), to better fit the thresholds used in the pepxml and protxml files.
+ * Removed the `#Terms column` in the Protocol Properties table and the Instrument Properties - Analyzers table.
+
+----
+
 *Changes in PRIDE Converter v1.16 - (Mar. 13. 2009):*
  * DTASelect is now supported (beta).
  * A lot of minor bugs in the graphical user interface when run on Mac has been fixed.
@@ -14,6 +21,8 @@
  * Fixed a bug in the Spectra Selection of Mascot Dat files that resulted in the Select identified spectra not being used correctly. 
  * Added comments on how to increase the memory size in the JavaOptions file.
  * Fixed a bug in the OLS dialog. When selecting terms in the table using the keyboard, the term details was not updated correctly.
+
+Download Count: 12
 
 ----
 
