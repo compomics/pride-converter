@@ -378,7 +378,7 @@
         <Component class="javax.swing.JSpinner" name="peptideProphetConfidenceLevelJSpinner">
           <Properties>
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-              <SpinnerModel initial="90" maximum="100" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+              <SpinnerModel initial="0.9" maximum="1.0" minimum="0.01" numberType="java.lang.Double" stepSize="0.01" type="number"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Probability threshold for acceptance of a peptide identification"/>
           </Properties>
@@ -386,7 +386,7 @@
         <Component class="javax.swing.JSpinner" name="proteinProphetConfidenceLevelJSpinner">
           <Properties>
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-              <SpinnerModel initial="90" maximum="100" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+              <SpinnerModel initial="0.9" maximum="1.0" minimum="0.01" numberType="java.lang.Double" stepSize="0.01" type="number"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Probability threshold for acceptance of a protein identification"/>
           </Properties>

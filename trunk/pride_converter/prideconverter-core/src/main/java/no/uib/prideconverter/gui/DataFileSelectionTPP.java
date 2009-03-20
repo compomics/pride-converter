@@ -8,7 +8,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import no.uib.prideconverter.filefilters.PepXmlFileFilter;
 import no.uib.prideconverter.filefilters.ProtXmlFileFilter;
 import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
@@ -48,6 +50,12 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
 
         initComponents();
 
+        JFormattedTextField tf = ((JSpinner.DefaultEditor) peptideProphetConfidenceLevelJSpinner.getEditor()).getTextField();
+        tf.setHorizontalAlignment(JFormattedTextField.CENTER);
+
+        tf = ((JSpinner.DefaultEditor) proteinProphetConfidenceLevelJSpinner.getEditor()).getTextField();
+        tf.setHorizontalAlignment(JFormattedTextField.CENTER);
+
         // insert stored information
         if (prideConverter.getProperties().getPeptideProphetFileName() != null) {
             peptideProphetFileJTextField.setText(prideConverter.getProperties().getPeptideProphetFileName());
@@ -64,10 +72,10 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
         proteinIdFilterJTextField.setText("" + prideConverter.getProperties().getProteinIdentificationFilter());
 
         peptideProphetConfidenceLevelJSpinner.setValue(
-                new Double(prideConverter.getProperties().getPeptideProphetThreshold() * 100).intValue());
+                new Double(prideConverter.getProperties().getPeptideProphetThreshold()));
 
         proteinProphetConfidenceLevelJSpinner.setValue(
-                new Double(prideConverter.getProperties().getProteinProphetThreshold() * 100).intValue());
+                new Double(prideConverter.getProperties().getProteinProphetThreshold()));
         
         // sets the icon of the frame
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
@@ -303,10 +311,10 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
         jLabel1.setText("PeptideProphet Threshold:");
         jLabel1.setToolTipText("Probability threshold for acceptance of a peptide identification");
 
-        peptideProphetConfidenceLevelJSpinner.setModel(new javax.swing.SpinnerNumberModel(90, 0, 100, 1));
+        peptideProphetConfidenceLevelJSpinner.setModel(new javax.swing.SpinnerNumberModel(0.9d, 0.01d, 1.0d, 0.01d));
         peptideProphetConfidenceLevelJSpinner.setToolTipText("Probability threshold for acceptance of a peptide identification");
 
-        proteinProphetConfidenceLevelJSpinner.setModel(new javax.swing.SpinnerNumberModel(90, 0, 100, 1));
+        proteinProphetConfidenceLevelJSpinner.setModel(new javax.swing.SpinnerNumberModel(0.9d, 0.01d, 1.0d, 0.01d));
         proteinProphetConfidenceLevelJSpinner.setToolTipText("Probability threshold for acceptance of a protein identification");
 
         jLabel2.setText("ProteinProphet Threshold:");
@@ -449,7 +457,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
 
         try {
             prideConverter.getProperties().setPeptideProphetThreshold(
-                    new Double((Integer) peptideProphetConfidenceLevelJSpinner.getValue()) / 100);
+                    (Double) peptideProphetConfidenceLevelJSpinner.getValue());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "The PeptideProphet threshold is not a number!");
             peptideProphetConfidenceLevelJSpinner.requestFocus();
@@ -458,7 +466,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
 
         try {
             prideConverter.getProperties().setProteinProphetThreshold(
-                    new Double((Integer) proteinProphetConfidenceLevelJSpinner.getValue()) / 100);
+                    (Double) proteinProphetConfidenceLevelJSpinner.getValue());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "The ProteinProphet threshold is not a number!");
             proteinProphetConfidenceLevelJSpinner.requestFocus();
@@ -523,7 +531,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
 
         try {
             prideConverter.getProperties().setPeptideProphetThreshold(
-                    new Double((Integer) peptideProphetConfidenceLevelJSpinner.getValue()) / 100);
+                    (Double) peptideProphetConfidenceLevelJSpinner.getValue());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "The PeptideProphet threshold is not a number!");
             peptideProphetConfidenceLevelJSpinner.requestFocus();
@@ -532,7 +540,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
 
         try {
             prideConverter.getProperties().setProteinProphetThreshold(
-                    new Double((Integer) proteinProphetConfidenceLevelJSpinner.getValue()) / 100);
+                    (Double) proteinProphetConfidenceLevelJSpinner.getValue());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "The ProteinProphet threshold is not a number!");
             proteinProphetConfidenceLevelJSpinner.requestFocus();

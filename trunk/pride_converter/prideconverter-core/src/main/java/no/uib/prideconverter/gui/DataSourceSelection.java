@@ -1151,7 +1151,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "File Extensions: .txt for the identifications (the DTASelect file) and .ms2 for the spectra<br><br>" +
                 "More Information: <a href=\"http://fields.scripps.edu/DTASelect\">" +
                 "http://fields.scripps.edu/DTASelect</a><br><br><br>" +
-                "<b>NB: The DTASelect support is currently in a beta status. " +
+                "<b>NB: DTASelect support is currently in a beta status. " +
                 "<br>If you find any bugs please let us know.</b>");
         descriptionJEditorPane.setCaretPosition(0);
 
