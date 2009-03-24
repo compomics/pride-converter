@@ -89,12 +89,38 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         JFormattedTextField tf = ((JSpinner.DefaultEditor) mascotConfidenceLevelJSpinner.getEditor()).getTextField();
         tf.setHorizontalAlignment(JFormattedTextField.CENTER);
 
+        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+            
+            spectraJTable.setModel(new javax.swing.table.DefaultTableModel(
+                    new Object[][]{},
+                    new String[]{
+                        "PID", "Filename", "ID", "Identified", "Selected"
+                    }) {
+
+                Class[] types = new Class[]{
+                    java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Boolean.class, java.lang.Boolean.class
+                };
+                boolean[] canEdit = new boolean[]{
+                    false, false, false, false, true
+                };
+
+                public Class getColumnClass(int columnIndex) {
+                    return types[columnIndex];
+                }
+
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit[columnIndex];
+                }
+            });
+
+            spectraJTable.getColumn("ID").setMaxWidth(50);
+            spectraJTable.getColumn("ID").setMinWidth(50);
+        }
+
         spectraJTable.getColumn("Selected").setMinWidth(80);
         spectraJTable.getColumn("Selected").setMaxWidth(80);
         spectraJTable.getColumn("Identified").setMinWidth(80);
         spectraJTable.getColumn("Identified").setMaxWidth(80);
-        spectraJTable.getColumn("ID").setMaxWidth(50);
-        spectraJTable.getColumn("ID").setMinWidth(50);
         spectraJTable.getColumn("PID").setMinWidth(50);
         spectraJTable.getColumn("PID").setMaxWidth(50);
 
@@ -349,7 +375,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Boolean.class, java.lang.Boolean.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, true
@@ -1079,8 +1105,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                                 if (!progressDialog.isVisible()) {
 
-                                    while (((DefaultTableModel) spectraJTable.getModel()).getRowCount() >
-                                            0) {
+                                    while (((DefaultTableModel) spectraJTable.getModel()).getRowCount() > 0) {
                                         ((DefaultTableModel) spectraJTable.getModel()).removeRow(0);
                                     }
 
@@ -1131,13 +1156,14 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                             while (queries.hasMoreElements()) {
 
                                 currentQuery = queries.nextElement();
+
                                 tempPeptideHit = queryToPeptideMap.getPeptideHitOfOneQuery(currentQuery.getQueryNumber());
 
                                 if (tempPeptideHit != null) {
                                     ((DefaultTableModel) spectraJTable.getModel()).addRow(new Object[]{
                                                 null,
                                                 currentQuery.getFilename(),
-                                                null,
+                                                tempMascotDatfile.getFileName() + "_" + currentQuery.getQueryNumber(),
                                                 new Boolean(queryToPeptideMap.getPeptideHitsAboveIdentityThreshold(currentQuery.getQueryNumber(), confidenceLevel).size() > 0),
                                                 new Boolean(queryToPeptideMap.getPeptideHitsAboveIdentityThreshold(currentQuery.getQueryNumber(), confidenceLevel).size() > 0)
                                             });
@@ -1149,7 +1175,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                     ((DefaultTableModel) spectraJTable.getModel()).addRow(new Object[]{
                                                 null,
                                                 currentQuery.getFilename(),
-                                                null,
+                                                tempMascotDatfile.getFileName() + "_" + currentQuery.getQueryNumber(),
                                                 new Boolean(false),
                                                 new Boolean(false)
                                             });
@@ -1561,27 +1587,26 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                 tempToken = selectionCriteriaTokenizer.nextToken();
                 tempToken = tempToken.trim();
 
-                if (selectionColumn == 1) {
-                    if (((String) spectraJTable.getValueAt(i, selectionColumn)).lastIndexOf(tempToken) != -1) {
-                        spectraJTable.setValueAt(new Boolean(true), i, 4);
-                        selected = true;
-                    }
-                } else {
-                    try {
-                        if (spectraJTable.getValueAt(i, selectionColumn) !=
-                                null) {
+                if (spectraJTable.getValueAt(i, selectionColumn) != null) {
 
-                            if (((Integer) spectraJTable.getValueAt(i, selectionColumn)).intValue() ==
-                                    new Integer(tempToken)) {
+                    if (selectionColumn == 1) {
+                        if (((String) spectraJTable.getValueAt(i, selectionColumn)).lastIndexOf(tempToken) != -1) {
+                            spectraJTable.setValueAt(new Boolean(true), i, 4);
+                            selected = true;
+                        }
+                    } else {
+
+                        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+                            if (((Integer) spectraJTable.getValueAt(i, selectionColumn)).toString().equalsIgnoreCase(tempToken)) {
+                                spectraJTable.setValueAt(new Boolean(true), i, 4);
+                                selected = true;
+                            }
+                        } else {
+                            if (((String) spectraJTable.getValueAt(i, selectionColumn)).equalsIgnoreCase(tempToken)) {
                                 spectraJTable.setValueAt(new Boolean(true), i, 4);
                                 selected = true;
                             }
                         }
-                    } catch (NumberFormatException e) {
-                        JOptionPane.showMessageDialog(this, tempToken +
-                                " is not an integer!\n" +
-                                "Selection not completed.");
-                        errorDetected = true;
                     }
                 }
             }
