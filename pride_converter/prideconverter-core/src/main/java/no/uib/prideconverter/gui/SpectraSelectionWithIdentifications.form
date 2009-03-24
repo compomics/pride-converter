@@ -294,7 +294,7 @@
                   <Table columnCount="5" rowCount="0">
                     <Column editable="false" title="PID" type="java.lang.Integer"/>
                     <Column editable="false" title="Filename" type="java.lang.String"/>
-                    <Column editable="false" title="ID" type="java.lang.Integer"/>
+                    <Column editable="false" title="ID" type="java.lang.String"/>
                     <Column editable="false" title="Identified" type="java.lang.Boolean"/>
                     <Column editable="true" title="Selected" type="java.lang.Boolean"/>
                   </Table>
