@@ -3,10 +3,20 @@
 
 ----
 
+*Changes in PRIDE Converter v1.16.2 - (Mar. 26. 2009):*
+ * Extended the advanced spectra selection support for Mascot dat files. The ID column is now filled with 'filename_queryNumber', e.g. 'F004071.dat_1'.
+ * Updated the check for new versions, due to a minor change in the way google code annotated deprecated downloads.
+ * Added some additional default PSI-MOD modification mappings.
+
+
+----
+
 *Changes in PRIDE Converter v1.16.1 - (Mar. 20. 2009):*
  * The conversion of PeptideProphet/ProteinProphet data sets now supports multiple analysis tags in both the pepxml and protxml files.
  * The PeptideProphet and ProteinProphet thresholds are now in the range 0.01 - 1.0 (previously 0-100), to better fit the thresholds used in the pepxml and protxml files.
  * Removed the `#Terms column` in the Protocol Properties table and the Instrument Properties - Analyzers table.
+
+Download Count: 4
 
 ----
 
