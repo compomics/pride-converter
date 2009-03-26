@@ -165,7 +165,8 @@ public class UserProperties {
                     version.equalsIgnoreCase("v1.15.2") ||
                     version.equalsIgnoreCase("v1.15.3") ||
                     version.equalsIgnoreCase("v1.16") ||
-                    version.equalsIgnoreCase("v1.16.1")) {
+                    version.equalsIgnoreCase("v1.16.1") ||
+                    version.equalsIgnoreCase("v1.16.2")) {
                 s = b.readLine();
                 fileNameSelectionCriteriaSeparator = s.substring(s.indexOf(": ") +2);
                 s = b.readLine();
@@ -202,7 +203,8 @@ public class UserProperties {
                     version.equalsIgnoreCase("v1.15.2") ||
                     version.equalsIgnoreCase("v1.15.3") ||
                     version.equalsIgnoreCase("v1.16") ||
-                    version.equalsIgnoreCase("v1.16.1")) {
+                    version.equalsIgnoreCase("v1.16.1") ||
+                    version.equalsIgnoreCase("v1.16.2")) {
                 
                 // read the iTRAQ settings values
                 s = b.readLine();
@@ -243,7 +245,8 @@ public class UserProperties {
                     version.equalsIgnoreCase("v1.15.2") ||
                     version.equalsIgnoreCase("v1.15.3") ||
                     version.equalsIgnoreCase("v1.16") ||
-                    version.equalsIgnoreCase("v1.16.1")) {
+                    version.equalsIgnoreCase("v1.16.1") ||
+                    version.equalsIgnoreCase("v1.16.2")) {
                 
                 s = b.readLine();
                 omssaInstallDir = s.substring(s.indexOf(": ") + 2);
@@ -279,7 +282,8 @@ public class UserProperties {
                     version.equalsIgnoreCase("v1.15.1") ||
                     version.equalsIgnoreCase("v1.15.3") ||
                     version.equalsIgnoreCase("v1.16") ||
-                    version.equalsIgnoreCase("v1.16.1")) {
+                    version.equalsIgnoreCase("v1.16.1") ||
+                    version.equalsIgnoreCase("v1.16.2")) {
 
                 s = b.readLine();
                 s = b.readLine();

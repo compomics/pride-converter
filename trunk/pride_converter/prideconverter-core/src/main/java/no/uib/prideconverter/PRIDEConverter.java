@@ -121,7 +121,7 @@ import uk.ac.ebi.tpp_to_pride.wrappers.peptideprophet.*;
 public class PRIDEConverter {
 
     private static String wizardName = "PRIDE Converter";
-    private static String prideConverterVersionNumber = "v1.16.1";
+    private static String prideConverterVersionNumber = "v1.16.2";
     private static ArrayList<IdentificationGeneral> ids;
     private static Collection identifications;
     private static int totalNumberOfSpectra = 0;
@@ -271,7 +271,8 @@ public class PRIDEConverter {
 
                         while ((inputLine = in.readLine()) != null && !deprecatedOrDeleted) {
                             if (inputLine.lastIndexOf("Deprecated") != -1 &&
-                                    inputLine.lastIndexOf("Deprecated Downloads") == -1) {
+                                    inputLine.lastIndexOf("Deprecated Downloads") == -1 &&
+                                    inputLine.lastIndexOf("Deprecated downloads") == -1) {
                                 deprecatedOrDeleted = true;
                             //JOptionPane.showMessageDialog(null, "Deprecated!!!!");
                             }
