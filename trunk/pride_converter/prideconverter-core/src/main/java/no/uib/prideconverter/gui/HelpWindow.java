@@ -1,18 +1,12 @@
 package no.uib.prideconverter.gui;
 
 import java.awt.Container;
-import java.awt.Desktop;
-import java.awt.Dialog.ModalExclusionType;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.net.URL;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
-import javax.swing.JOptionPane;
-import no.uib.prideconverter.util.Util;
+import no.uib.prideconverter.util.BareBonesBrowserLaunch;
 
 /**
  * A window used to display help text in html format.
@@ -31,7 +25,7 @@ public class HelpWindow extends javax.swing.JFrame {
      */
     public HelpWindow(java.awt.Frame parent, URL fileName) {
 
-        this.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+        //this.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
         initComponents();
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
@@ -121,7 +115,7 @@ public class HelpWindow extends javax.swing.JFrame {
      */
     public HelpWindow(javax.swing.JDialog parent, URL fileName) {
 
-        this.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+        //this.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
 
         initComponents();
 
@@ -261,24 +255,24 @@ public class HelpWindow extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(textJEditorPane);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
-                    .addComponent(closeJButton))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+                    .add(closeJButton))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(closeJButton)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(closeJButton)
                 .addContainerGap())
         );
 
@@ -314,25 +308,7 @@ public class HelpWindow extends javax.swing.JFrame {
                 textJEditorPane.scrollToReference(evt.getDescription());
             } else {
                 this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-
-                try {
-                    Desktop.getDesktop().browse(new URI(evt.getDescription()));
-                } catch (URISyntaxException ex) {
-                    JOptionPane.showMessageDialog(
-                            this, "Not able to open the web page. Make sure that you are online and try again.\n" +
-                            "You may also want to check your firewall settings.",
-                            "Web Page Not Available", JOptionPane.ERROR_MESSAGE);
-                    Util.writeToErrorLog("Error when trying to open web page: ");
-                    ex.printStackTrace();
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(
-                            this, "Not able to open the web page. Make sure that you are online and try again.\n" +
-                            "You may also want to check your firewall settings.",
-                            "Web Page Not Available", JOptionPane.ERROR_MESSAGE);
-                    Util.writeToErrorLog("Error when trying to open web page: ");
-                    ex.printStackTrace();
-                }
-
+                BareBonesBrowserLaunch.openURL(evt.getDescription());
                 this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
             }
         }

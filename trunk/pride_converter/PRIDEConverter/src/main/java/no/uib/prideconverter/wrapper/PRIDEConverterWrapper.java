@@ -59,7 +59,7 @@ public class PRIDEConverterWrapper {
         StringTokenizer tok = new StringTokenizer(javaVersion, ".");
 
         if (new Integer(tok.nextToken()).intValue() >= 1 &&
-                new Integer(tok.nextToken()).intValue() >= 6) {
+                new Integer(tok.nextToken()).intValue() >= 5) {
             //ok, do nothing
             if (debug) {
                 javax.swing.JOptionPane.showMessageDialog(null,
@@ -71,7 +71,7 @@ public class PRIDEConverterWrapper {
 
             int option = javax.swing.JOptionPane.showConfirmDialog(null,
                     "You are using Java " + javaVersion + ".\n\n" +
-                    "PRIDE Converter requires Java 1.6 or newer.\n\n" +
+                    "PRIDE Converter requires Java 1.5 or newer.\n\n" +
                     "Do you want to upgrade your Java version now?",
                     "PRIDE Converter - Java Version Test",
                     javax.swing.JOptionPane.YES_NO_OPTION,

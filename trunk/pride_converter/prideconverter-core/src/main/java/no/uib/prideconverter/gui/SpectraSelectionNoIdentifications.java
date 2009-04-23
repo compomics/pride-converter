@@ -17,11 +17,11 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import no.uib.prideconverter.util.Util;
+import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.JXTableHeader;
 import org.systemsbiology.jrap.MSXMLParser;
 import org.systemsbiology.jrap.Scan;
 import uk.ac.ebi.jmzml.model.mzml.Spectrum;
@@ -76,16 +76,16 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
         initComponents();
 
-        spectraJTable.getColumn("Selected").setMinWidth(75);
-        spectraJTable.getColumn("Selected").setMaxWidth(75);
-        spectraJTable.getColumn("Charge").setMaxWidth(75);
-        spectraJTable.getColumn("Charge").setMinWidth(75);
-        spectraJTable.getColumn("Mass").setMaxWidth(75);
-        spectraJTable.getColumn("Mass").setMinWidth(75);
-        spectraJTable.getColumn("ID").setMaxWidth(75);
-        spectraJTable.getColumn("ID").setMinWidth(75);
-        spectraJTable.getColumn("MS Level").setMaxWidth(75);
-        spectraJTable.getColumn("MS Level").setMinWidth(75);
+        spectraJXTable.getColumn("Selected").setMinWidth(75);
+        spectraJXTable.getColumn("Selected").setMaxWidth(75);
+        spectraJXTable.getColumn("Charge").setMaxWidth(75);
+        spectraJXTable.getColumn("Charge").setMinWidth(75);
+        spectraJXTable.getColumn("Mass").setMaxWidth(75);
+        spectraJXTable.getColumn("Mass").setMinWidth(75);
+        spectraJXTable.getColumn("ID").setMaxWidth(75);
+        spectraJXTable.getColumn("ID").setMinWidth(75);
+        spectraJXTable.getColumn("MS Level").setMaxWidth(75);
+        spectraJXTable.getColumn("MS Level").setMinWidth(75);
 
         columnToolTips = new Vector();
         columnToolTips.add("Filename of Spectrum File");
@@ -95,32 +95,30 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         columnToolTips.add("Mass Spectrometry Level");
         columnToolTips.add(null);
 
-        spectraJTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        spectraJTable.getTableHeader().setReorderingAllowed(false);
-        spectraJTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        spectraJXTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        spectraJXTable.getTableHeader().setReorderingAllowed(false);
+        spectraJXTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        spectraJTable.setAutoCreateColumnsFromModel(false);
-        spectraJTable.setAutoCreateRowSorter(true);
+        spectraJXTable.setAutoCreateColumnsFromModel(false);
 
         // makes sure that inserting an MS level lower than 1 is not allowed
         // and displays a warning message for MS levels above 3
-        spectraJTable.getModel().addTableModelListener(new TableModelListener() {
+        spectraJXTable.getModel().addTableModelListener(new TableModelListener() {
 
-            @Override
             public void tableChanged(TableModelEvent e) {
-                if (spectraJTable.getSelectedColumn() == 4) {
+                if (spectraJXTable.getSelectedColumn() == 4) {
 
-                    int insertedValue = ((Integer) spectraJTable.getValueAt(
-                            spectraJTable.getSelectedRow(), spectraJTable.getSelectedColumn())).intValue();
+                    int insertedValue = ((Integer) spectraJXTable.getValueAt(
+                            spectraJXTable.getSelectedRow(), spectraJXTable.getSelectedColumn())).intValue();
 
                     if (insertedValue < 2) {
 
                         JOptionPane.showMessageDialog(null, "The inserted MS level is smaller than 2!",
                                 "Incorrect MS Level", JOptionPane.ERROR_MESSAGE);
-                        spectraJTable.changeSelection(spectraJTable.getSelectedRow(), spectraJTable.getSelectedColumn(),
+                        spectraJXTable.changeSelection(spectraJXTable.getSelectedRow(), spectraJXTable.getSelectedColumn(),
                                 false, false);
-                        spectraJTable.setValueAt(null, spectraJTable.getSelectedRow(), spectraJTable.getSelectedColumn());
-                        spectraJTable.editCellAt(spectraJTable.getSelectedRow(), spectraJTable.getSelectedColumn());
+                        spectraJXTable.setValueAt(null, spectraJXTable.getSelectedRow(), spectraJXTable.getSelectedColumn());
+                        spectraJXTable.editCellAt(spectraJXTable.getSelectedRow(), spectraJXTable.getSelectedColumn());
 
                     } else if (insertedValue > 3) {
 
@@ -129,10 +127,10 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                 "Verify MS Level", JOptionPane.YES_NO_OPTION);
 
                         if (option == JOptionPane.NO_OPTION) {
-                            spectraJTable.changeSelection(spectraJTable.getSelectedRow(), spectraJTable.getSelectedColumn(),
+                            spectraJXTable.changeSelection(spectraJXTable.getSelectedRow(), spectraJXTable.getSelectedColumn(),
                                     false, false);
-                            spectraJTable.setValueAt(null, spectraJTable.getSelectedRow(), spectraJTable.getSelectedColumn());
-                            spectraJTable.editCellAt(spectraJTable.getSelectedRow(), spectraJTable.getSelectedColumn());
+                            spectraJXTable.setValueAt(null, spectraJXTable.getSelectedRow(), spectraJXTable.getSelectedColumn());
+                            spectraJXTable.editCellAt(spectraJXTable.getSelectedRow(), spectraJXTable.getSelectedColumn());
                         }
                     }
                 }
@@ -142,7 +140,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         selectAllJCheckBox.setSelected(prideConverter.getProperties().selectAllSpectra());
 
         if (prideConverter.getProperties().getSpectrumTableModel() != null) {
-            spectraJTable.setModel(prideConverter.getProperties().getSpectrumTableModel());
+            spectraJXTable.setModel(prideConverter.getProperties().getSpectrumTableModel());
             loadSpectraJButton.setEnabled(false);
             selectedSpectraJLabel.setEnabled(true);
             numberOfSelectedSpectraJTextField.setEnabled(true);
@@ -150,15 +148,15 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
             selectAllJCheckBox.setEnabled(false);
 
-            for (int i = 0; i < spectraJTable.getRowCount(); i++) {
-                if (((Boolean) spectraJTable.getValueAt(i, 5)).booleanValue()) {
+            for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
+                if (((Boolean) spectraJXTable.getValueAt(i, 5)).booleanValue()) {
                     numberOfSelectedSpectra++;
                 }
             }
 
             numberOfSelectedSpectraJTextField.setText("" +
                     numberOfSelectedSpectra + "/" +
-                    spectraJTable.getRowCount());
+                    spectraJXTable.getRowCount());
         }
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
@@ -204,10 +202,13 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         aboutJButton = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         loadSpectraJButton = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        spectraJTable = new JTable() {
-            protected JTableHeader createDefaultTableHeader() {
-                return new JTableHeader(columnModel) {
+        selectedSpectraJLabel = new javax.swing.JLabel();
+        numberOfSelectedSpectraJTextField = new javax.swing.JTextField();
+        spectrumAnnotationJLabel = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        spectraJXTable = new JXTable() {
+            protected JXTableHeader createDefaultTableHeader() {
+                return new JXTableHeader(columnModel) {
                     public String getToolTipText(MouseEvent e) {
                         String tip = null;
                         java.awt.Point p = e.getPoint();
@@ -219,9 +220,6 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                 };
             }
         };
-        selectedSpectraJLabel = new javax.swing.JLabel();
-        numberOfSelectedSpectraJTextField = new javax.swing.JTextField();
-        spectrumAnnotationJLabel = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         selectAllJCheckBox = new javax.swing.JCheckBox();
 
@@ -252,7 +250,6 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Spectra Selection - Step 2 of 8");
-        setMinimumSize(new java.awt.Dimension(580, 560));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -314,36 +311,6 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
             }
         });
 
-        spectraJTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Filename", "ID", "Mass", "Charge", "MS Level", "Selected"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Boolean.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, true, true
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        spectraJTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                spectraJTableMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(spectraJTable);
-
         selectedSpectraJLabel.setText("Selected Spectra:");
         selectedSpectraJLabel.setToolTipText("Number of Selected Spectra");
         selectedSpectraJLabel.setEnabled(false);
@@ -357,35 +324,66 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         spectrumAnnotationJLabel.setText("Right click on a row to add spectrum annotations.");
         spectrumAnnotationJLabel.setEnabled(false);
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        spectraJXTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Filename", "ID", "Mass", "Charge", "MS Level", "Selected"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Object.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        spectraJXTable.setOpaque(false);
+        spectraJXTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                spectraJXTableMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(spectraJXTable);
+
+        org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
-                    .addComponent(loadSpectraJButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(spectrumAnnotationJLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
-                        .addComponent(selectedSpectraJLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(numberOfSelectedSpectraJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, loadSpectraJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .add(spectrumAnnotationJLabel)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 85, Short.MAX_VALUE)
+                        .add(selectedSpectraJLabel)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(numberOfSelectedSpectraJTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 113, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(numberOfSelectedSpectraJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(selectedSpectraJLabel)
-                    .addComponent(spectrumAnnotationJLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(loadSpectraJButton)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(numberOfSelectedSpectraJTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(selectedSpectraJLabel)
+                    .add(spectrumAnnotationJLabel))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(loadSpectraJButton)
                 .addContainerGap())
         );
 
@@ -400,69 +398,69 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        org.jdesktop.layout.GroupLayout jPanel6Layout = new org.jdesktop.layout.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
+            jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(selectAllJCheckBox)
+                .add(selectAllJCheckBox)
                 .addContainerGap(413, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
+            jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(selectAllJCheckBox)
+                .add(selectAllJCheckBox)
                 .addContainerGap(10, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(helpJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(aboutJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 239, Short.MAX_VALUE)
-                        .addComponent(backJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(nextJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cancelJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(layout.createSequentialGroup()
+                        .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 239, Short.MAX_VALUE)
+                        .add(backJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(nextJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(18, 18, 18)
+                        .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel3))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cancelJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(nextJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(backJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(helpJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(aboutJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .add(jPanel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(18, 18, 18)
+                .add(jLabel3)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createSequentialGroup()
+                        .add(7, 7, 7)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(nextJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(backJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                    .add(layout.createSequentialGroup()
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 
@@ -560,7 +558,6 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
         Thread t = new Thread(new Runnable() {
 
-            @Override
             public void run() {
                 progressDialog.setVisible(true);
             }
@@ -570,7 +567,6 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
         Thread t2 = new Thread(new Runnable() {
 
-            @Override
             public void run() {
 
                 ArrayList spectraList;
@@ -591,8 +587,8 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                     if (prideConverter.isConversionCanceled()) {
 
-                        while (((DefaultTableModel) spectraJTable.getModel()).getRowCount() > 0) {
-                            ((DefaultTableModel) spectraJTable.getModel()).removeRow(0);
+                        while (((DefaultTableModel) spectraJXTable.getModel()).getRowCount() > 0) {
+                            ((DefaultTableModel) spectraJXTable.getModel()).removeRow(0);
                         }
 
                         numberOfSelectedSpectraJTextField.setText("");
@@ -619,7 +615,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                             precursorMass = new Double(tok.nextToken());
                             precursorCharge = new Integer(tok.nextToken());
 
-                            ((DefaultTableModel) spectraJTable.getModel()).addRow(
+                            ((DefaultTableModel) spectraJXTable.getModel()).addRow(
                                     new Object[]{
                                         file.getName(),
                                         null,
@@ -653,7 +649,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                                     precursorCharge = new Integer(tok.nextToken());
 
-                                    ((DefaultTableModel) spectraJTable.getModel()).addRow(
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
                                             new Object[]{
                                                 file.getName(),
                                                 null,
@@ -691,7 +687,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                                     precursorCharge = new Integer(tok.nextToken());
 
-                                    ((DefaultTableModel) spectraJTable.getModel()).addRow(
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
                                             new Object[]{
                                                 file.getName(),
                                                 null,
@@ -725,7 +721,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                                 if (precursorMass != -1 &&
                                         precursorCharge != -1) {
-                                    ((DefaultTableModel) spectraJTable.getModel()).addRow(
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
                                             new Object[]{
                                                 file.getName(),
                                                 scan.getNum(),
@@ -735,7 +731,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                             });
                                 } else if (precursorMass == -1 &&
                                         precursorCharge != -1) {
-                                    ((DefaultTableModel) spectraJTable.getModel()).addRow(
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
                                             new Object[]{
                                                 file.getName(),
                                                 scan.getNum(),
@@ -745,7 +741,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                             });
                                 } else if (precursorMass != -1 &&
                                         precursorCharge == -1) {
-                                    ((DefaultTableModel) spectraJTable.getModel()).addRow(
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
                                             new Object[]{
                                                 file.getName(),
                                                 scan.getNum(),
@@ -754,7 +750,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                                 new Boolean(true)
                                             });
                                 } else {
-                                    ((DefaultTableModel) spectraJTable.getModel()).addRow(
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
                                             new Object[]{
                                                 file.getName(),
                                                 scan.getNum(),
@@ -778,7 +774,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                             for (int i = 0; i < spectraMzMl.size(); i++) {
 
-                                ((DefaultTableModel) spectraJTable.getModel()).addRow(
+                                ((DefaultTableModel) spectraJXTable.getModel()).addRow(
                                         new Object[]{
                                             file.getName(),
                                             spectraMzMl.get(i).getId(),//.getIndex().toString(),
@@ -809,7 +805,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                             while (iterator.hasNext()) {
                                 currentSpectrum = iterator.next();
 
-                                ((DefaultTableModel) spectraJTable.getModel()).addRow(
+                                ((DefaultTableModel) spectraJXTable.getModel()).addRow(
                                         new Object[]{
                                             file.getName(),
                                             "" + currentSpectrum.getSpectrumId(),
@@ -861,7 +857,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                                     inSpectrum = false;
 
-                                    ((DefaultTableModel) spectraJTable.getModel()).addRow(
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
                                             new Object[]{
                                                 file.getName(),
                                                 null,
@@ -953,7 +949,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                                     chargeDecided = true;
 
-                                    ((DefaultTableModel) spectraJTable.getModel()).addRow(
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
                                             new Object[]{
                                                 file.getName(),
                                                 null,
@@ -1001,7 +997,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                 progressDialog.setVisible(false);
                 progressDialog.dispose();
 
-                if (spectraJTable.getRowCount() > 0) {
+                if (spectraJXTable.getRowCount() > 0) {
                     selectedSpectraJLabel.setEnabled(true);
                     numberOfSelectedSpectraJTextField.setEnabled(true);
                     spectrumAnnotationJLabel.setEnabled(true);
@@ -1030,47 +1026,6 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
      * 
      * @param evt
      */
-    private void spectraJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_spectraJTableMouseClicked
-
-        if (spectraJTable.columnAtPoint(evt.getPoint()) != -1 && spectraJTable.rowAtPoint(evt.getPoint()) != -1) {
-            spectraJTable.changeSelection(spectraJTable.rowAtPoint(evt.getPoint()),
-                    spectraJTable.columnAtPoint(evt.getPoint()), false, false);
-        }
-
-        if (spectraJTable.columnAtPoint(evt.getPoint()) == 5) {
-
-            this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-
-            numberOfSelectedSpectra = 0;
-
-            for (int i = 0; i < spectraJTable.getRowCount(); i++) {
-                if (((Boolean) spectraJTable.getValueAt(i, 5)).booleanValue()) {
-                    numberOfSelectedSpectra++;
-                }
-            }
-
-            numberOfSelectedSpectraJTextField.setText("" +
-                    numberOfSelectedSpectra + "/" +
-                    spectraJTable.getRowCount());
-
-            if (numberOfSelectedSpectra == 0) {
-                nextJButton.setEnabled(false);
-            } else {
-                nextJButton.setEnabled(true);
-            }
-        }
-
-        int column = spectraJTable.columnAtPoint(evt.getPoint());
-
-        if (evt.getButton() == java.awt.event.MouseEvent.BUTTON3 && column == 5) {
-            selectAllJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-        } else if (evt.getButton() == java.awt.event.MouseEvent.BUTTON3) {
-            spectrumDetailsJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-        }
-
-        this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-    }//GEN-LAST:event_spectraJTableMouseClicked
-
     /**
      * Selects all the spectra in the table.
      * 
@@ -1080,27 +1035,27 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
         if (selectAll) {
-            for (int i = 0; i < spectraJTable.getRowCount(); i++) {
-                if (!(((Boolean) spectraJTable.getValueAt(i, 5)).booleanValue())) {
-                    spectraJTable.setValueAt(new Boolean(true), i, 5);
+            for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
+                if (!(((Boolean) spectraJXTable.getValueAt(i, 5)).booleanValue())) {
+                    spectraJXTable.setValueAt(new Boolean(true), i, 5);
                 }
             }
 
             numberOfSelectedSpectraJTextField.setText("" +
-                    spectraJTable.getRowCount() + "/" +
-                    spectraJTable.getRowCount());
+                    spectraJXTable.getRowCount() + "/" +
+                    spectraJXTable.getRowCount());
             numberOfSelectedSpectra =
-                    spectraJTable.getRowCount();
+                    spectraJXTable.getRowCount();
 
         } else {
-            for (int i = 0; i < spectraJTable.getRowCount(); i++) {
-                if ((((Boolean) spectraJTable.getValueAt(i, 5)).booleanValue())) {
-                    spectraJTable.setValueAt(new Boolean(false), i, 5);
+            for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
+                if ((((Boolean) spectraJXTable.getValueAt(i, 5)).booleanValue())) {
+                    spectraJXTable.setValueAt(new Boolean(false), i, 5);
                 }
             }
 
             numberOfSelectedSpectraJTextField.setText("0" + "/" +
-                    spectraJTable.getRowCount());
+                    spectraJXTable.getRowCount());
             numberOfSelectedSpectra = 0;
         }
 
@@ -1125,17 +1080,17 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
         numberOfSelectedSpectra = 0;
 
-        for (int i = 0; i < spectraJTable.getRowCount(); i++) {
-            spectraJTable.setValueAt(
-                    new Boolean(!((Boolean) spectraJTable.getValueAt(i, 5)).booleanValue()), i, 5);
+        for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
+            spectraJXTable.setValueAt(
+                    new Boolean(!((Boolean) spectraJXTable.getValueAt(i, 5)).booleanValue()), i, 5);
 
-            if (((Boolean) spectraJTable.getValueAt(i, 5)).booleanValue()) {
+            if (((Boolean) spectraJXTable.getValueAt(i, 5)).booleanValue()) {
                 numberOfSelectedSpectra++;
             }
         }
 
         numberOfSelectedSpectraJTextField.setText("" + numberOfSelectedSpectra +
-                "/" + spectraJTable.getRowCount());
+                "/" + spectraJXTable.getRowCount());
 
         if (numberOfSelectedSpectra == 0) {
             nextJButton.setEnabled(false);
@@ -1164,14 +1119,67 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_selectAllJCheckBoxActionPerformed
 
+    /**
+     * Opens a dialog showning the spectrum annotations for the selected spectrum.
+     *
+     * @param evt
+     */
     private void viewSpectrumParametersJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSpectrumParametersJMenuItemActionPerformed
         new SpectrumDetails(this, true, prideConverter,
-                "" + spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 0) + "_" +
-                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 1) + "_" +
-                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 2) + "_" +
-                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 3) + "_" +
-                spectraJTable.getValueAt(spectraJTable.getSelectedRow(), 4));
+                "" + spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 0) + "_" +
+                spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 1) + "_" +
+                spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 2) + "_" +
+                spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 3) + "_" +
+                spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 4));
     }//GEN-LAST:event_viewSpectrumParametersJMenuItemActionPerformed
+
+    /**
+     * Makes sure that the number of selected spectra is updated when the 
+     * user selects or deselects a spectra in the list. Right clicking in 
+     * the last column open a popup menu with advanced selection option.
+     * 
+     * @param evt
+     */
+    private void spectraJXTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_spectraJXTableMouseClicked
+
+        if (spectraJXTable.columnAtPoint(evt.getPoint()) != -1 && spectraJXTable.rowAtPoint(evt.getPoint()) != -1) {
+            spectraJXTable.changeSelection(spectraJXTable.rowAtPoint(evt.getPoint()),
+                    spectraJXTable.columnAtPoint(evt.getPoint()), false, false);
+        }
+
+        if (spectraJXTable.columnAtPoint(evt.getPoint()) == 5) {
+
+            this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+
+            numberOfSelectedSpectra = 0;
+
+            for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
+                if (((Boolean) spectraJXTable.getValueAt(i, 5)).booleanValue()) {
+                    numberOfSelectedSpectra++;
+                }
+            }
+
+            numberOfSelectedSpectraJTextField.setText("" +
+                    numberOfSelectedSpectra + "/" +
+                    spectraJXTable.getRowCount());
+
+            if (numberOfSelectedSpectra == 0) {
+                nextJButton.setEnabled(false);
+            } else {
+                nextJButton.setEnabled(true);
+            }
+        }
+
+        int column = spectraJXTable.columnAtPoint(evt.getPoint());
+
+        if (evt.getButton() == java.awt.event.MouseEvent.BUTTON3 && column == 5) {
+            selectAllJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+        } else if (evt.getButton() == java.awt.event.MouseEvent.BUTTON3) {
+            spectrumDetailsJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+        }
+
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_spectraJXTableMouseClicked
 
     /**
      * Saves the inserted information to the Properties object.
@@ -1182,23 +1190,23 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         prideConverter.getProperties().setSelectedSpectraKeys(new ArrayList());
         prideConverter.getProperties().setSelectAllSpectra(selectAllJCheckBox.isSelected());
 
-        if (spectraJTable.getRowCount() > 0) {
+        if (spectraJXTable.getRowCount() > 0) {
 
-            for (int i = 0; i < spectraJTable.getRowCount(); i++) {
-                if (((Boolean) spectraJTable.getValueAt(i, 5)).booleanValue()) {
+            for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
+                if (((Boolean) spectraJXTable.getValueAt(i, 5)).booleanValue()) {
 
                     prideConverter.getProperties().getSelectedSpectraKeys().add(
                             new Object[]{
-                                spectraJTable.getValueAt(i, 0),
-                                spectraJTable.getValueAt(i, 1),
-                                spectraJTable.getValueAt(i, 2),
-                                spectraJTable.getValueAt(i, 3),
-                                spectraJTable.getValueAt(i, 4)
+                                spectraJXTable.getValueAt(i, 0),
+                                spectraJXTable.getValueAt(i, 1),
+                                spectraJXTable.getValueAt(i, 2),
+                                spectraJXTable.getValueAt(i, 3),
+                                spectraJXTable.getValueAt(i, 4)
                             });
                 }
             }
 
-            prideConverter.getProperties().setSpectrumTableModel((DefaultTableModel) spectraJTable.getModel());
+            prideConverter.getProperties().setSpectrumTableModel((DefaultTableModel) spectraJXTable.getModel());
         } else {
             prideConverter.getProperties().setSpectrumTableModel(null);
         }
@@ -1261,7 +1269,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton loadSpectraJButton;
     private javax.swing.JButton nextJButton;
@@ -1270,7 +1278,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
     private javax.swing.JMenuItem selectAllJMenuItem;
     private javax.swing.JPopupMenu selectAllJPopupMenu;
     private javax.swing.JLabel selectedSpectraJLabel;
-    private javax.swing.JTable spectraJTable;
+    private org.jdesktop.swingx.JXTable spectraJXTable;
     private javax.swing.JLabel spectrumAnnotationJLabel;
     private javax.swing.JPopupMenu spectrumDetailsJPopupMenu;
     private javax.swing.JMenuItem viewSpectrumParametersJMenuItem;
