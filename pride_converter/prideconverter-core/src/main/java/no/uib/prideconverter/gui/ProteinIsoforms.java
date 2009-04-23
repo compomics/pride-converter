@@ -1,7 +1,6 @@
 package no.uib.prideconverter.gui;
 
 import no.uib.prideconverter.PRIDEConverter;
-import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import no.uib.prideconverter.util.ExcelAdapter;
@@ -37,13 +36,13 @@ public class ProteinIsoforms extends javax.swing.JDialog {
         this.progressDialog = progressDialog;
         this.prideConverter = outputDetails.getPRIDEConverterReference();
 
-        excelAdapter = new ExcelAdapter(peptideToProteinJTable);
+        excelAdapter = new ExcelAdapter(peptideToProteinJXTable);
 
-        peptideToProteinJTable.getTableHeader().setReorderingAllowed(false);
-        peptideToProteinJTable.setAutoCreateRowSorter(true);
+        peptideToProteinJXTable.getTableHeader().setReorderingAllowed(false);
 
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
-                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
+        // only works for Java 1.6 and newer
+//        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+//                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
 
         setLocationRelativeTo(outputDetails);
         setVisible(true);
@@ -68,9 +67,9 @@ public class ProteinIsoforms extends javax.swing.JDialog {
         selectFirstJRadioButton = new javax.swing.JRadioButton();
         provideListJRadioButton = new javax.swing.JRadioButton();
         peptideToProteinJLabel = new javax.swing.JLabel();
-        peptideToProteinJScrollPane = new javax.swing.JScrollPane();
-        peptideToProteinJTable = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
+        peptideToProteinJScrollPane2 = new javax.swing.JScrollPane();
+        peptideToProteinJXTable = new org.jdesktop.swingx.JXTable();
         cancelJButton = new javax.swing.JButton();
         okJButton = new javax.swing.JButton();
         aboutJButton = new javax.swing.JButton();
@@ -147,72 +146,89 @@ public class ProteinIsoforms extends javax.swing.JDialog {
 
         peptideToProteinJLabel.setText("Peptide to Protein Matches:");
 
-        peptideToProteinJScrollPane.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabel5.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jLabel5.setText("Right click on the table and select Paste to insert data.");
+
+        peptideToProteinJScrollPane2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                peptideToProteinJScrollPaneMouseClicked(evt);
+                peptideToProteinJScrollPane2MouseClicked(evt);
             }
         });
 
-        peptideToProteinJTable.setModel(new javax.swing.table.DefaultTableModel(
+        peptideToProteinJXTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
                 "Peptide Sequence", "Protein Accession"
             }
-        ));
-        peptideToProteinJTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                peptideToProteinJTableMouseClicked(evt);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
             }
         });
-        peptideToProteinJScrollPane.setViewportView(peptideToProteinJTable);
+        peptideToProteinJXTable.setOpaque(false);
+        peptideToProteinJXTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                peptideToProteinJXTableKeyReleased(evt);
+            }
+        });
+        peptideToProteinJXTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                peptideToProteinJXTableMouseClicked(evt);
+            }
+        });
+        peptideToProteinJScrollPane2.setViewportView(peptideToProteinJXTable);
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 2, 11));
-        jLabel5.setText("Right click on the table and select Paste to insert data.");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(manualSelectionJRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(selectFirstJRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(provideListJRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(38, 38, 38))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .add(14, 14, 14)
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(manualSelectionJRadioButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 183, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(selectFirstJRadioButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 229, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(provideListJRadioButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 303, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(38, 38, 38))
+                    .add(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(peptideToProteinJLabel)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .add(peptideToProteinJScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE))
+                    .add(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(peptideToProteinJScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)))
+                        .add(jLabel5))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(peptideToProteinJLabel))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 225, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(selectFirstJRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(manualSelectionJRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(provideListJRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14)
-                .addComponent(peptideToProteinJLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(peptideToProteinJScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
-                .addContainerGap())
+                .add(jLabel1)
+                .add(18, 18, 18)
+                .add(selectFirstJRadioButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(manualSelectionJRadioButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(provideListJRadioButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(14, 14, 14)
+                .add(peptideToProteinJLabel)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(peptideToProteinJScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 127, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(18, 18, 18)
+                .add(jLabel5)
+                .add(6, 6, 6))
         );
 
         cancelJButton.setText("Cancel");
@@ -246,37 +262,37 @@ public class ProteinIsoforms extends javax.swing.JDialog {
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(helpJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(aboutJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE)
-                        .addComponent(okJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cancelJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(layout.createSequentialGroup()
+                        .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 166, Short.MAX_VALUE)
+                        .add(okJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 78, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 77, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cancelJButton)
-                        .addComponent(okJButton))
-                    .addComponent(helpJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(aboutJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 317, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(cancelJButton)
+                        .add(okJButton))
+                    .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -323,11 +339,11 @@ public class ProteinIsoforms extends javax.swing.JDialog {
             prideConverter.getProperties().setSelectedIsoformAccessions(new ArrayList());
             prideConverter.getProperties().setSelectedIsoformPeptideSequences(new ArrayList());
 
-            for (int i = 0; i < peptideToProteinJTable.getRowCount(); i++) {
+            for (int i = 0; i < peptideToProteinJXTable.getRowCount(); i++) {
                 prideConverter.getProperties().getSelectedIsoformPeptideSequences().add(
-                        peptideToProteinJTable.getValueAt(i, 0));
+                        peptideToProteinJXTable.getValueAt(i, 0));
                 prideConverter.getProperties().getSelectedIsoformAccessions().add(
-                        peptideToProteinJTable.getValueAt(i, 1));
+                        peptideToProteinJXTable.getValueAt(i, 1));
             }
         }
 
@@ -343,7 +359,7 @@ public class ProteinIsoforms extends javax.swing.JDialog {
      */
     private void provideListJRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_provideListJRadioButtonActionPerformed
         if (provideListJRadioButton.isSelected()) {
-            if (peptideToProteinJTable.getRowCount() > 0) {
+            if (peptideToProteinJXTable.getRowCount() > 0) {
                 okJButton.setEnabled(true);
             } else {
                 okJButton.setEnabled(false);
@@ -378,12 +394,6 @@ public class ProteinIsoforms extends javax.swing.JDialog {
      * 
      * @param evt
      */
-    private void peptideToProteinJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_peptideToProteinJTableMouseClicked
-        if (evt.getButton() == 3) {
-            tableJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-        }
-    }//GEN-LAST:event_peptideToProteinJTableMouseClicked
-
     /**
      * Pastes the list of peptide to protein matches into the table.
      * 
@@ -402,12 +412,6 @@ public class ProteinIsoforms extends javax.swing.JDialog {
      * 
      * @param evt
      */
-    private void peptideToProteinJScrollPaneMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_peptideToProteinJScrollPaneMouseClicked
-        if (evt.getButton() == 3) {
-            tableJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-        }
-}//GEN-LAST:event_peptideToProteinJScrollPaneMouseClicked
-
     /**
      * Opens an About PRIDE Converter dialog.
      * 
@@ -436,14 +440,14 @@ public class ProteinIsoforms extends javax.swing.JDialog {
      * @param evt
      */
     private void deleteJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteJMenuItemActionPerformed
-        int[] selectedRows = peptideToProteinJTable.getSelectedRows();
+        int[] selectedRows = peptideToProteinJXTable.getSelectedRows();
 
         for (int i = selectedRows.length - 1; i >= 0; i--) {
-            ((DefaultTableModel) peptideToProteinJTable.getModel()).removeRow(selectedRows[i]);
+            ((DefaultTableModel) peptideToProteinJXTable.getModel()).removeRow(selectedRows[i]);
         }
 
         if (provideListJRadioButton.isSelected()) {
-            okJButton.setEnabled(peptideToProteinJTable.getRowCount() > 0);
+            okJButton.setEnabled(peptideToProteinJXTable.getRowCount() > 0);
         }
     }//GEN-LAST:event_deleteJMenuItemActionPerformed
 
@@ -454,21 +458,55 @@ public class ProteinIsoforms extends javax.swing.JDialog {
      */
     private void addRowJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRowJMenuItemActionPerformed
 
-        if (peptideToProteinJTable.getSelectedRow() != -1) {
-            ((DefaultTableModel) peptideToProteinJTable.getModel()).insertRow(
-                    peptideToProteinJTable.getSelectedRow() + 1, new Object[]{"", ""});
+        if (peptideToProteinJXTable.getSelectedRow() != -1) {
+            ((DefaultTableModel) peptideToProteinJXTable.getModel()).insertRow(
+                    peptideToProteinJXTable.getSelectedRow() + 1, new Object[]{"", ""});
 
-            peptideToProteinJTable.scrollRectToVisible(peptideToProteinJTable.getCellRect(
-                peptideToProteinJTable.getSelectedRow() + 1, 0, false));
+            peptideToProteinJXTable.scrollRectToVisible(peptideToProteinJXTable.getCellRect(
+                peptideToProteinJXTable.getSelectedRow() + 1, 0, false));
 
         } else {
-            ((DefaultTableModel) peptideToProteinJTable.getModel()).addRow(new Object[]{"", ""});
+            ((DefaultTableModel) peptideToProteinJXTable.getModel()).addRow(new Object[]{"", ""});
 
-            peptideToProteinJTable.scrollRectToVisible(peptideToProteinJTable.getCellRect(
-                peptideToProteinJTable.getRowCount() - 1, 0, false));
+            peptideToProteinJXTable.scrollRectToVisible(peptideToProteinJXTable.getCellRect(
+                peptideToProteinJXTable.getRowCount() - 1, 0, false));
         }
-        
     }//GEN-LAST:event_addRowJMenuItemActionPerformed
+
+    /**
+     * Opens a popup menu that lets the user paste peptide to protein matches 
+     * into the table.
+     * 
+     * @param evt
+     */
+    private void peptideToProteinJScrollPane2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_peptideToProteinJScrollPane2MouseClicked
+        if (evt.getButton() == 3) {
+            tableJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_peptideToProteinJScrollPane2MouseClicked
+
+    /**
+     * Opens a popup menu that lets the user paste peptide to protein matches 
+     * into the table.
+     * 
+     * @param evt
+     */
+    private void peptideToProteinJXTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_peptideToProteinJXTableMouseClicked
+        if (evt.getButton() == 3) {
+            tableJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_peptideToProteinJXTableMouseClicked
+
+    /**
+     * Enables or disables the OK button.
+     * 
+     * @param evt
+     */
+    private void peptideToProteinJXTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_peptideToProteinJXTableKeyReleased
+        if (provideListJRadioButton.isSelected()) {
+            okJButton.setEnabled(peptideToProteinJXTable.getRowCount() > 0);
+        }
+    }//GEN-LAST:event_peptideToProteinJXTableKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutJButton;
@@ -484,8 +522,8 @@ public class ProteinIsoforms extends javax.swing.JDialog {
     private javax.swing.JButton okJButton;
     private javax.swing.JMenuItem pasteJMenuItem;
     private javax.swing.JLabel peptideToProteinJLabel;
-    private javax.swing.JScrollPane peptideToProteinJScrollPane;
-    private javax.swing.JTable peptideToProteinJTable;
+    private javax.swing.JScrollPane peptideToProteinJScrollPane2;
+    private org.jdesktop.swingx.JXTable peptideToProteinJXTable;
     private javax.swing.JRadioButton provideListJRadioButton;
     private javax.swing.JRadioButton selectFirstJRadioButton;
     private javax.swing.JPopupMenu tableJPopupMenu;

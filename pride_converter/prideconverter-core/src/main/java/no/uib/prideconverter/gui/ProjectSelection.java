@@ -7,15 +7,15 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.event.TableModelListener;
 import no.uib.prideconverter.util.Util;
+import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.JXTableHeader;
 
 /**
  * A frame that lets the user select one or more ms_lims projects to convert 
@@ -27,9 +27,9 @@ import no.uib.prideconverter.util.Util;
  */
 public class ProjectSelection extends javax.swing.JFrame {
 
-    private static JTable projectJTable;
+    private static JXTable projectJXTable;
     private PRIDEConverter prideConverter;
-    private JTableHeader projectJTableHeader;
+    private JXTableHeader projectJXTableHeader;
     private DefaultTableModel projectModel = null;
     private Project[] projects;
     private ProgressDialog progressDialog;
@@ -71,7 +71,7 @@ public class ProjectSelection extends javax.swing.JFrame {
         columnToolTips.add("Creation Date of Project");
         columnToolTips.add(null);
 
-        projectJTable = new JTable(new DefaultTableModel()) {
+        projectJXTable = new JXTable(new DefaultTableModel()) {
 
             @Override
             public void tableChanged(TableModelEvent e) {
@@ -98,8 +98,8 @@ public class ProjectSelection extends javax.swing.JFrame {
             }
 
             @Override
-            protected JTableHeader createDefaultTableHeader() {
-                return new JTableHeader(columnModel) {
+            protected JXTableHeader createDefaultTableHeader() {
+                return new JXTableHeader(columnModel) {
 
                     @Override
                     public String getToolTipText(MouseEvent e) {
@@ -114,18 +114,19 @@ public class ProjectSelection extends javax.swing.JFrame {
             }
         };
 
-        projectJTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        projectJTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        projectJXTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+        projectJXTable.addMouseListener(new java.awt.event.MouseAdapter() {
 
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
 
-                int row = projectJTable.getSelectedRow();
+                int row = projectJXTable.getSelectedRow();
 
                 if (row != -1) {
 
                     for (int i = 0; i < projects.length; i++) {
-                        if (projects[i].getTitle().equalsIgnoreCase((String) projectJTable.getValueAt(row, 1))) {
+                        if (projects[i].getTitle().equalsIgnoreCase((String) projectJXTable.getValueAt(row, 1))) {
                             projectDescriptionJTextArea.setText(projects[i].getDescription());
                             projectDescriptionJTextArea.setCaretPosition(0);
                         }
@@ -134,10 +135,10 @@ public class ProjectSelection extends javax.swing.JFrame {
 
                 boolean projectsSelected = false;
 
-                for (int i = 0; i < projectJTable.getRowCount() &&
+                for (int i = 0; i < projectJXTable.getRowCount() &&
                         !projectsSelected; i++) {
 
-                    if (((Boolean) projectJTable.getValueAt(i, 3)).booleanValue()) {
+                    if (((Boolean) projectJXTable.getValueAt(i, 3)).booleanValue()) {
                         projectsSelected = true;
                     }
                 }
@@ -146,43 +147,42 @@ public class ProjectSelection extends javax.swing.JFrame {
             }
         });
 
-        projectJTable.addKeyListener(new java.awt.event.KeyAdapter() {
+        projectJXTable.addKeyListener(new java.awt.event.KeyAdapter() {
 
             @Override
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                projectJTableKeyReleased(evt);
+                projectJXTableKeyReleased(evt);
             }
         });
 
-        projectJTableHeader = projectJTable.getTableHeader();
-        projectJTableHeader.setReorderingAllowed(false);
+        projectJXTableHeader = (JXTableHeader) projectJXTable.getTableHeader();
+        projectJXTableHeader.setReorderingAllowed(false);
 
-        projectJTableHeader.addMouseListener(new java.awt.event.MouseAdapter() {
+        projectJXTableHeader.addMouseListener(new java.awt.event.MouseAdapter() {
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                projectJTableHeaderMouseExited(evt);
+                projectJXTableHeaderMouseExited(evt);
             }
         });
 
-        projectJTableHeader.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        projectJXTableHeader.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
 
             @Override
             public void mouseMoved(java.awt.event.MouseEvent evt) {
-                projectJTableHeaderMouseMoved(evt);
+                projectJXTableHeaderMouseMoved(evt);
             }
         });
 
-        projectModel =new DefaultTableModel();
+        projectModel = new DefaultTableModel();
         projectModel.setColumnIdentifiers(new Object[]{
             "PID", "Title", "Creation Date", " "
         });
 
         projectModel.addTableModelListener(new MyTableModelListener());
 
-        jScrollPane1.setViewportView(projectJTable);
+        jScrollPane1.setViewportView(projectJXTable);
 
-        projectJTable.setAutoCreateRowSorter(true);
 
         if (location != null) {
             setLocation(location);
@@ -199,13 +199,13 @@ public class ProjectSelection extends javax.swing.JFrame {
      * 
      * @param evt
      */
-    private void projectJTableKeyReleased(java.awt.event.KeyEvent evt) {
+    private void projectJXTableKeyReleased(java.awt.event.KeyEvent evt) {
 
-        int row = projectJTable.getSelectedRow();
+        int row = projectJXTable.getSelectedRow();
 
         for (int i = 0; i < projects.length; i++) {
             if (row != -1) {
-                if (projects[i].getTitle().equalsIgnoreCase((String) projectJTable.getValueAt(row, 1))) {
+                if (projects[i].getTitle().equalsIgnoreCase((String) projectJXTable.getValueAt(row, 1))) {
                     projectDescriptionJTextArea.setText(projects[i].getDescription());
                     projectDescriptionJTextArea.setCaretPosition(0);
                 }
@@ -214,9 +214,9 @@ public class ProjectSelection extends javax.swing.JFrame {
 
         boolean projectsSelected = false;
 
-        for (int i = 0; i < projectJTable.getRowCount() && !projectsSelected; i++) {
+        for (int i = 0; i < projectJXTable.getRowCount() && !projectsSelected; i++) {
 
-            if (((Boolean) projectJTable.getValueAt(i, 3)).booleanValue()) {
+            if (((Boolean) projectJXTable.getValueAt(i, 3)).booleanValue()) {
                 projectsSelected = true;
             }
         }
@@ -230,7 +230,7 @@ public class ProjectSelection extends javax.swing.JFrame {
      *
      * @param evt
      */
-    private void projectJTableHeaderMouseExited(java.awt.event.MouseEvent evt) {
+    private void projectJXTableHeaderMouseExited(java.awt.event.MouseEvent evt) {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }
 
@@ -241,15 +241,15 @@ public class ProjectSelection extends javax.swing.JFrame {
      *
      * @param evt
      */
-    private void projectJTableHeaderMouseMoved(java.awt.event.MouseEvent evt) {
+    private void projectJXTableHeaderMouseMoved(java.awt.event.MouseEvent evt) {
 
-        java.awt.Rectangle rectangle = projectJTableHeader.getHeaderRect(
-                projectJTable.columnAtPoint(evt.getPoint()));
+        java.awt.Rectangle rectangle = projectJXTableHeader.getHeaderRect(
+                projectJXTable.columnAtPoint(evt.getPoint()));
 
         if (((evt.getX() < rectangle.getMinX() + 2) &&
-                (projectJTable.columnAtPoint(evt.getPoint()) != 0)) || ((evt.getX() > rectangle.getMaxX() - 4) 
-                && (projectJTable.columnAtPoint(evt.getPoint()) !=
-                projectJTable.getColumnCount() - 1))) {
+                (projectJXTable.columnAtPoint(evt.getPoint()) != 0)) || ((evt.getX() > rectangle.getMaxX() - 4)
+                && (projectJXTable.columnAtPoint(evt.getPoint()) !=
+                projectJXTable.getColumnCount() - 1))) {
             setCursor(new java.awt.Cursor(java.awt.Cursor.E_RESIZE_CURSOR));
         } else {
             setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -323,23 +323,25 @@ public class ProjectSelection extends javax.swing.JFrame {
                         });
                     }
 
-                    projectJTable.setModel(projectModel);
+                    projectJXTable.setModel(projectModel);
 
                     if (projectsSelected) {
                         nextJButton.setEnabled(true);
                     }
 
-                    projectJTable.getColumn("Creation Date").setMaxWidth(135);
-                    projectJTable.getColumn("Creation Date").setMinWidth(135);
-                    projectJTable.getColumn("PID").setMaxWidth(52);
-                    projectJTable.getColumn("PID").setMinWidth(52);
-                    projectJTable.getColumn(" ").setMaxWidth(40);
-                    projectJTable.getColumn(" ").setMinWidth(40);
+                    projectJXTable.setOpaque(false);
+
+                    projectJXTable.getColumn("Creation Date").setMaxWidth(135);
+                    projectJXTable.getColumn("Creation Date").setMinWidth(135);
+                    projectJXTable.getColumn("PID").setMaxWidth(52);
+                    projectJXTable.getColumn("PID").setMinWidth(52);
+                    projectJXTable.getColumn(" ").setMaxWidth(40);
+                    projectJXTable.getColumn(" ").setMinWidth(40);
 
                     progressDialog.setVisible(false);
                     progressDialog.dispose();
 
-                    projectJTable.requestFocus();
+                    projectJXTable.requestFocus();
 
                 } catch (SQLException sqle) {
                     progressDialog.setVisible(false);
@@ -412,26 +414,26 @@ public class ProjectSelection extends javax.swing.JFrame {
             }
         });
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Project Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Project Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Project Description", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Project Description", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
         projectDescriptionJTextArea.setColumns(20);
         projectDescriptionJTextArea.setEditable(false);
@@ -440,20 +442,20 @@ public class ProjectSelection extends javax.swing.JFrame {
         projectDescriptionJTextArea.setWrapStyleWord(true);
         jScrollPane2.setViewportView(projectDescriptionJTextArea);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -480,52 +482,52 @@ public class ProjectSelection extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(helpJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(aboutJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 239, Short.MAX_VALUE)
-                        .addComponent(backJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(nextJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cancelJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
-                    .addComponent(jLabel3))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 239, Short.MAX_VALUE)
+                        .add(backJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(nextJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(18, 18, 18)
+                        .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                    .add(jLabel3))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cancelJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(nextJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(backJButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(helpJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(aboutJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .add(jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(18, 18, 18)
+                .add(jLabel3)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createSequentialGroup()
+                        .add(7, 7, 7)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(nextJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(backJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                    .add(layout.createSequentialGroup()
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 
@@ -608,9 +610,9 @@ public class ProjectSelection extends javax.swing.JFrame {
 
         prideConverter.getProperties().setProjectIds(new ArrayList());
 
-        for (int i = 0; i < projectJTable.getRowCount(); i++) {
-            if (((Boolean) projectJTable.getValueAt(i, 3)).booleanValue()) {
-                prideConverter.getProperties().getProjectIds().add((Long) projectJTable.getValueAt(i, 0));
+        for (int i = 0; i < projectJXTable.getRowCount(); i++) {
+            if (((Boolean) projectJXTable.getValueAt(i, 3)).booleanValue()) {
+                prideConverter.getProperties().getProjectIds().add((Long) projectJXTable.getValueAt(i, 0));
             }
         }
 
@@ -662,7 +664,7 @@ public class ProjectSelection extends javax.swing.JFrame {
      */
     private class MyTableModelListener implements TableModelListener {
         public void tableChanged(TableModelEvent e) {
-            projectJTableKeyReleased(null);
+            projectJXTableKeyReleased(null);
         }
     }
 }

@@ -21,10 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.awt.Desktop;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 import be.proteomics.lims.db.accessors.Spectrumfile;
@@ -47,9 +44,6 @@ import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
 import com.jgoodies.looks.plastic.theme.SkyKrupp;
 
-import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
-
 import de.proteinms.omxparser.OmssaOmxFile;
 import de.proteinms.omxparser.util.MSHitSet;
 import de.proteinms.omxparser.util.MSHits;
@@ -69,6 +63,7 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.Vector;
 import no.uib.prideconverter.gui.*;
+import no.uib.prideconverter.util.BareBonesBrowserLaunch;
 import no.uib.prideconverter.util.IdentificationGeneral;
 import no.uib.prideconverter.util.OmssaModification;
 import no.uib.prideconverter.util.Properties;
@@ -176,7 +171,7 @@ public class PRIDEConverter {
             //test to check if the latest version of ms_lims is used
             try {
                 Identification.getIdentification(conn, "");
-            } catch (MySQLSyntaxErrorException e) {
+            } catch (SQLException e) {
                 JOptionPane.showMessageDialog(dataBaseDetails,
                         "Database connection not established:" +
                         "\n Please check that you are using the latest version of MS_LIMS.",
@@ -184,12 +179,17 @@ public class PRIDEConverter {
                 connectionSuccessfull = false;
                 closeDataBaseConnection();
             }
-        } catch (CommunicationsException ce) {
-            JOptionPane.showMessageDialog(dataBaseDetails, "Database connection not established:" +
-                    "\n" + "Unknown host.", "Database Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(dataBaseDetails, "Database connection not established:" +
+
+            if(e.getMessage().lastIndexOf("Communications link failure") != -1){
+
+                // this is the most likely option as far as I can see
+                JOptionPane.showMessageDialog(dataBaseDetails, "Database connection not established:" +
+                    "\n" + "Verify server host.", "Database Error", JOptionPane.ERROR_MESSAGE);
+            } else{
+                JOptionPane.showMessageDialog(dataBaseDetails, "Database connection not established:" +
                     "\n" + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
 
         return connectionSuccessfull;
@@ -232,7 +232,6 @@ public class PRIDEConverter {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
 
-            @Override
             public void run() {
 
                 try {
@@ -290,7 +289,7 @@ public class PRIDEConverter {
                                 "PRIDE Converter - Upgrade Available",
                                 JOptionPane.YES_NO_CANCEL_OPTION);
                         if (option == JOptionPane.YES_OPTION) {
-                            Desktop.getDesktop().browse(new URI("http://code.google.com/p/pride-converter/"));
+                            BareBonesBrowserLaunch.openURL("http://code.google.com/p/pride-converter/");
                             System.exit(0);
                         } else if (option == JOptionPane.CANCEL_OPTION) {
                             System.exit(0);
@@ -301,10 +300,6 @@ public class PRIDEConverter {
                             e.toString());
                 //e.printStackTrace();
                 } catch (IOException e) {
-                    Util.writeToErrorLog("PRIDEConvertert: Error when trying to look for update. " +
-                            e.toString());
-                //e.printStackTrace();
-                } catch (URISyntaxException e) {
                     Util.writeToErrorLog("PRIDEConvertert: Error when trying to look for update. " +
                             e.toString());
                 //e.printStackTrace();
@@ -376,7 +371,6 @@ public class PRIDEConverter {
 
         final Thread t = new Thread(new Runnable() {
 
-            @Override
             public void run() {
 
                 if (properties.getDataSource().equalsIgnoreCase("ms_lims")) {
