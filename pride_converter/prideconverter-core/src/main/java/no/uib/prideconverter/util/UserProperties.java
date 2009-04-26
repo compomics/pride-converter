@@ -168,7 +168,7 @@ public class UserProperties {
                     version.equalsIgnoreCase("v1.16.1") ||
                     version.equalsIgnoreCase("v1.16.2")) {
                 s = b.readLine();
-                fileNameSelectionCriteriaSeparator = s.substring(s.indexOf(": ") +2);
+                fileNameSelectionCriteriaSeparator = s.substring(s.indexOf(": ") + 2);
                 s = b.readLine();
                 sourceFileLocation = s.substring(s.indexOf(": ") + 2);
             } else {
@@ -205,7 +205,7 @@ public class UserProperties {
                     version.equalsIgnoreCase("v1.16") ||
                     version.equalsIgnoreCase("v1.16.1") ||
                     version.equalsIgnoreCase("v1.16.2")) {
-                
+
                 // read the iTRAQ settings values
                 s = b.readLine();
                 peakIntegrationRangeLower = new Double(s.substring(s.indexOf(": ") + 2)).doubleValue();
@@ -247,7 +247,7 @@ public class UserProperties {
                     version.equalsIgnoreCase("v1.16") ||
                     version.equalsIgnoreCase("v1.16.1") ||
                     version.equalsIgnoreCase("v1.16.2")) {
-                
+
                 s = b.readLine();
                 omssaInstallDir = s.substring(s.indexOf(": ") + 2);
 
@@ -407,9 +407,36 @@ public class UserProperties {
                             File propertiesFolder = selectedFile.getParentFile();
 
                             // copy the JavaOptions file
-                            if(new File(propertiesFolder + "/JavaOptions.txt").exists()){
+                            if (new File(propertiesFolder + "/JavaOptions.txt").exists()) {
                                 copyFile(new File(propertiesFolder + "/JavaOptions.txt"),
                                         new File(path + "/Properties/JavaOptions.txt"));
+                            }
+
+                            // add the java stack size options if not already included
+                            File newJavaOptionsFile = new File(path + "/Properties/JavaOptions.txt");
+                            FileReader fileReader = new FileReader(newJavaOptionsFile);
+                            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+                            boolean insertJavaStackSizeOptions = true;
+
+                            String temp = bufferedReader.readLine();
+
+                            while (temp != null) {
+                                if (temp.lastIndexOf("-Xss") != -1) {
+                                    insertJavaStackSizeOptions = false;
+                                } else if (temp.lastIndexOf("-Xoss") != -1) {
+                                    insertJavaStackSizeOptions = false;
+                                }
+
+                                temp = bufferedReader.readLine();
+                            }
+
+                            if (insertJavaStackSizeOptions) {
+                                FileWriter fw = new FileWriter(newJavaOptionsFile, true);
+                                BufferedWriter bw = new BufferedWriter(fw);
+                                bw.write("-Xss1M\n-Xoss1M");
+                                bw.close();
+                                fw.close();
                             }
 
                             File contactsFolder = new File(propertiesFolder + "/Contacts/");
@@ -419,7 +446,7 @@ public class UserProperties {
 
                             // the contacts folder is not included in the downloaded zip file
                             // so we have to create it
-                            if(!new File(path + "/Properties/Contacts/").exists()){
+                            if (!new File(path + "/Properties/Contacts/").exists()) {
                                 new File(path + "/Properties/Contacts/").mkdir();
                             }
 
@@ -536,7 +563,7 @@ public class UserProperties {
 
                 path = "" + this.getClass().getProtectionDomain().getCodeSource().getLocation();
                 path = path.substring(5, path.lastIndexOf("/"));
-                path = path.substring(0, path.lastIndexOf("/") + 1) +"Properties/UserProperties.prop";
+                path = path.substring(0, path.lastIndexOf("/") + 1) + "Properties/UserProperties.prop";
                 path = path.replace("%20", " ");
             }
 
@@ -551,20 +578,20 @@ public class UserProperties {
             f.write("ServerHost: " + serverHost + "\n");
             f.write("Schema: " + schema + "\n");
             f.write("LastSelectedOntology: " + lastSelectedOntology + "\n");
-            f.write("LastSelectedSampleOntology: " + lastSelectedSampleOntology +"\n");
-            f.write("CurrentSelectedInstrument: " + currentSelectedInstrument +"\n");
+            f.write("LastSelectedSampleOntology: " + lastSelectedSampleOntology + "\n");
+            f.write("CurrentSelectedInstrument: " + currentSelectedInstrument + "\n");
             f.write("CurrentSampleSet: " + currentSampleSet + "\n");
             f.write("CurrentProtocol: " + currentProtocol + "\n");
             f.write("CurrentContact: " + currentContact + "\n");
-            f.write("FileNameSelectionCriteriaSeparator: " +fileNameSelectionCriteriaSeparator + "\n");
+            f.write("FileNameSelectionCriteriaSeparator: " + fileNameSelectionCriteriaSeparator + "\n");
             f.write("SourceFileLocation: " + sourceFileLocation + "\n");
-            f.write("PeakIntegrationRangeLower: " + peakIntegrationRangeLower +"\n");
-            f.write("PeakIntegrationRangeUpper: " + peakIntegrationRangeUpper +"\n");
-            f.write("ReporterIonIntensityThreshold: " +reporterIonIntensityThreshold + "\n");
+            f.write("PeakIntegrationRangeLower: " + peakIntegrationRangeLower + "\n");
+            f.write("PeakIntegrationRangeUpper: " + peakIntegrationRangeUpper + "\n");
+            f.write("ReporterIonIntensityThreshold: " + reporterIonIntensityThreshold + "\n");
 
             String temp = "";
 
-            for (int i = 0; i <purityCorrections.length - 1; i++) {
+            for (int i = 0; i < purityCorrections.length - 1; i++) {
                 temp += purityCorrections[i] + ",";
             }
 
@@ -583,8 +610,8 @@ public class UserProperties {
                 key = (String) iter.next();
 
                 f.write("\n" + key + "|");
-                f.write(((CvParamImpl) cvTermMappings.get(key)).getAccession() +"|");
-                f.write(((CvParamImpl) cvTermMappings.get(key)).getCVLookup() +"|");
+                f.write(((CvParamImpl) cvTermMappings.get(key)).getAccession() + "|");
+                f.write(((CvParamImpl) cvTermMappings.get(key)).getCVLookup() + "|");
                 f.write(((CvParamImpl) cvTermMappings.get(key)).getName() + "|");
                 f.write(((CvParamImpl) cvTermMappings.get(key)).getValue() + "|");
             }

@@ -181,14 +181,14 @@ public class PRIDEConverter {
             }
         } catch (Exception e) {
 
-            if(e.getMessage().lastIndexOf("Communications link failure") != -1){
+            if (e.getMessage().lastIndexOf("Communications link failure") != -1) {
 
                 // this is the most likely option as far as I can see
                 JOptionPane.showMessageDialog(dataBaseDetails, "Database connection not established:" +
-                    "\n" + "Verify server host.", "Database Error", JOptionPane.ERROR_MESSAGE);
-            } else{
+                        "\n" + "Verify server host.", "Database Error", JOptionPane.ERROR_MESSAGE);
+            } else {
                 JOptionPane.showMessageDialog(dataBaseDetails, "Database connection not established:" +
-                    "\n" + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+                        "\n" + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
             }
         }
 
@@ -228,6 +228,7 @@ public class PRIDEConverter {
      */
     public static void main(String[] args) {
 
+        // makes sure that '.' is used as the decimal
         Locale.setDefault(Locale.US);
 
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -590,10 +591,11 @@ public class PRIDEConverter {
                         String accession = peptideIdentification.getPeptideAccession();
                         String accessionVersion = null;
 
-                        // special case for DBToolkit ([0-9]*-[0-9]*)
-                        String dbToolKitPattern = "[\\d]\\+?-[\\d]\\+?";
-
                         Integer tempStartIndex = peptideIdentification.getPeptideStart();
+
+                        
+                        // special case for DBToolkit ([0-9]*-[0-9]*)
+                        String dbToolKitPattern = "\\([\\d]\\+?-[\\d]\\+?\\)";
 
                         Pattern pattern = Pattern.compile(dbToolKitPattern);
                         Matcher matcher = pattern.matcher(accession);
@@ -603,8 +605,8 @@ public class PRIDEConverter {
                                     new Integer(accession.substring(accession.lastIndexOf("(") +
                                     1, accession.lastIndexOf("-"))).intValue();
                             accession = accession.substring(0, accession.lastIndexOf(" "));
-
                         }
+
 
                         if (accession.lastIndexOf("|") != -1) {
                             if (properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
@@ -847,15 +849,18 @@ public class PRIDEConverter {
                         Util.writeToErrorLog("Progress bar: NullPointerException!!!\n" + e.toString());
                     }
 
-                    // validate the xml file
-                    FileReader reader = new FileReader(completeFileName);
-                    XMLValidationErrorHandler xmlErrors = PrideXmlValidator.validate(reader);
-
                     if (cancelConversion) {
                         outputFrame.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
                         outputFrame.setConvertButtonEnabled(true);
                         return;
                     }
+
+                    // Validate the xml file,
+                    //
+                    // NB validation may cause a java stack overflow exception, if so
+                    // increase the stack settings in the JavaOptions file,
+                    FileReader reader = new FileReader(completeFileName);
+                    XMLValidationErrorHandler xmlErrors = PrideXmlValidator.validate(reader);
 
                     progressDialog.setVisible(false);
                     progressDialog.dispose();
@@ -5704,15 +5709,14 @@ public class PRIDEConverter {
                                             new Integer(start);
                                 } else {
                                     if (debug) {
-                                        System.out.println("Could not find start position of '" + pepSequence + 
+                                        System.out.println("Could not find start position of '" + pepSequence +
                                                 "' in '" + protein.getAccession() + "' (protein sequence '" +
                                                 protSequence + "')!");
                                     }
                                 }
                             } else {
                                 if (debug) {
-                                    System.out.println("Unable to determine start and stop position of '" 
-                                            + pepSequence + "' in '" + protein.getAccession() +
+                                    System.out.println("Unable to determine start and stop position of '" + pepSequence + "' in '" + protein.getAccession() +
                                             "' because no protein sequence was found.");
                                 }
                             }
@@ -5750,8 +5754,7 @@ public class PRIDEConverter {
                                     if (duplicate != null) {
                                         if (debug) {
                                             System.out.println(
-                                                    "Modifications with non-unique combination of mass and amino acid ("
-                                                    + mod.getMass() + " " + mod.getAminoacid() + ") found!");
+                                                    "Modifications with non-unique combination of mass and amino acid (" + mod.getMass() + " " + mod.getAminoacid() + ") found!");
                                         }
                                     }
                                 }
@@ -5772,8 +5775,7 @@ public class PRIDEConverter {
 
                                         if (bd.scale() == 0) {
                                             if (debug) {
-                                                System.out.println("Rounded down modification mass for '" + ppma.getMass()
-                                                        + "_" + residue + "' down to '" + bd.doubleValue() +
+                                                System.out.println("Rounded down modification mass for '" + ppma.getMass() + "_" + residue + "' down to '" + bd.doubleValue() +
                                                         "' without finding a match!");
                                             }
 
@@ -7350,7 +7352,7 @@ public class PRIDEConverter {
                 // OMSSA question: possible with more than one file name per spectrum??
                 fileName = tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.get(0);
 
-                matchFound =  false;
+                matchFound = false;
 
                 spectrumKey = fileName + "_" + tempSpectrum.MSSpectrum_number;
 
@@ -7412,7 +7414,7 @@ public class PRIDEConverter {
 
                     arrays = new double[2][mzValues.size()];
 
-                    for (int j = 0; j <  mzValues.size(); j++) {
+                    for (int j = 0; j < mzValues.size(); j++) {
                         arrays[0][j] = mzValues.get(j) / omssaResponseScale;
                         arrays[1][j] = intensityValues.get(j) / omssaAbundanceScale;
                     }
@@ -7533,7 +7535,7 @@ public class PRIDEConverter {
                                         modificationCVParams = new ArrayList();
                                         modificationCVParams.add(tempCvParam);
 
-                                        monoMasses =  new ArrayList();
+                                        monoMasses = new ArrayList();
                                         // get the modification mass (DiffMono) retrieved from PSI-MOD
                                         if (tempCvParam.getValue() != null) {
                                             monoMasses.add(new MonoMassDeltaImpl(
@@ -7581,9 +7583,9 @@ public class PRIDEConverter {
                             currentMSModHit = modsIterator.next();
 
                             modType = currentMSModHit.MSModHit_modtype.MSMod;
-                            modSite =currentMSModHit.MSModHit_site;
+                            modSite = currentMSModHit.MSModHit_site;
 
-                            modificationCVParams =new ArrayList();
+                            modificationCVParams = new ArrayList();
                             modificationCVParams.add(userProperties.getCVTermMappings().get(
                                     omssaModificationDetails.get(modType).getModName()));
 

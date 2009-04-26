@@ -1,5 +1,6 @@
 package no.uib.prideconverter.gui;
 
+import java.awt.Dimension;
 import java.awt.KeyboardFocusManager;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -65,8 +66,8 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
         currentContactName = null;
         readContactsFromFile();
 
-        setLocationRelativeTo(parent);
-        //setVisible(true);
+        setLocationRelativeTo(experimentProperties);
+        setVisible(true);
     }
 
     /**
@@ -105,7 +106,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
         readContactsFromFile();
 
         setLocationRelativeTo(parent);
-        //setVisible(true);
+        setVisible(true);
     }
 
     /**
@@ -269,11 +270,6 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
 
         namesJComboBox.setMaximumSize(new java.awt.Dimension(32767, 20));
         namesJComboBox.setMinimumSize(new java.awt.Dimension(23, 20));
-        namesJComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                namesJComboBoxMouseClicked(evt);
-            }
-        });
         namesJComboBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 namesJComboBoxItemStateChanged(evt);
@@ -282,6 +278,11 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
         namesJComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 namesJComboBoxActionPerformed(evt);
+            }
+        });
+        namesJComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                namesJComboBoxMouseClicked(evt);
             }
         });
 
@@ -527,7 +528,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
      */
     private void helpJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpJButtonActionPerformed
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new HelpWindow(this, getClass().getResource("/no/uib/prideconverter/helpfiles/NewContact.html"));
+        new HelpDialog(this, true, getClass().getResource("/no/uib/prideconverter/helpfiles/NewContact.html"));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_helpJButtonActionPerformed
 
@@ -766,7 +767,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
      */
     private void aboutJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutJButtonActionPerformed
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new HelpWindow(this, getClass().getResource("/no/uib/prideconverter/helpfiles/AboutPRIDE_Converter.html"));
+        new HelpDialog(this, true, getClass().getResource("/no/uib/prideconverter/helpfiles/AboutPRIDE_Converter.html"));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_aboutJButtonActionPerformed
 

@@ -45,7 +45,7 @@ public class OLSDialog extends javax.swing.JDialog {
      */
     public OLSDialog(JFrame parent, OLSInputable olsInputable, boolean modal, String field,
             String selectedOntology, String term) {
-        new OLSDialog(parent, olsInputable, modal, field, selectedOntology, -1, term);
+        this(parent, olsInputable, modal, field, selectedOntology, -1, term);
     }
 
     /**
@@ -60,7 +60,7 @@ public class OLSDialog extends javax.swing.JDialog {
      */
     public OLSDialog(JDialog parent, OLSInputable olsInputable, boolean modal, String field,
             String selectedOntology, String term) {
-        new OLSDialog(parent, olsInputable, modal, field, selectedOntology, -1, term);
+        this(parent, olsInputable, modal, field, selectedOntology, -1, term);
     }
 
     /**
@@ -76,9 +76,8 @@ public class OLSDialog extends javax.swing.JDialog {
      */
     public OLSDialog(JFrame parent, OLSInputable olsInputable, boolean modal, String field,
             String selectedOntology, int modifiedRow, String term) {
-        super(parent);
+        super(parent, modal);
 
-        this.setModal(modal);
         this.olsInputable = olsInputable;
         this.field = field;
         this.selectedOntology = selectedOntology;
@@ -123,9 +122,8 @@ public class OLSDialog extends javax.swing.JDialog {
      */
     public OLSDialog(JDialog parent, OLSInputable olsInputable, boolean modal, String field,
             String selectedOntology, int modifiedRow, String term) {
-        super(parent);
+        super(parent, modal);
 
-        this.setModal(modal);
         this.olsInputable = olsInputable;
         this.field = field;
         this.selectedOntology = selectedOntology;
@@ -237,6 +235,7 @@ public class OLSDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(" Ontology Lookup Service (OLS)");
+        setResizable(false);
 
         insertSelectedJButton.setText("Use Selected Term");
         insertSelectedJButton.setEnabled(false);
@@ -707,7 +706,7 @@ public class OLSDialog extends javax.swing.JDialog {
      */
     private void helpJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpJButtonActionPerformed
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new HelpWindow(this, getClass().getResource("/no/uib/prideconverter/helpfiles/OLSDialog.html"));
+        new HelpDialog(this, true, getClass().getResource("/no/uib/prideconverter/helpfiles/OLSDialog.html"));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_helpJButtonActionPerformed
 
@@ -718,7 +717,7 @@ public class OLSDialog extends javax.swing.JDialog {
      */
     private void aboutJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutJButtonActionPerformed
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new HelpWindow(this, getClass().getResource("/no/uib/prideconverter/helpfiles/AboutOLS.html"));
+        new HelpDialog(this, true, getClass().getResource("/no/uib/prideconverter/helpfiles/AboutOLS.html"));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_aboutJButtonActionPerformed
 
