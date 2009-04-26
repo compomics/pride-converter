@@ -3,33 +3,35 @@ package no.uib.prideconverter.gui;
 import java.awt.Container;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
-import java.net.URL;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import no.uib.prideconverter.util.BareBonesBrowserLaunch;
 
 /**
- * A window used to display help text in html format.
- * 
+ * A dialog used to display help text in html format.
+ *
  * @author Harald Barsnes
- * 
- * Created November 2005
+ *
+ * Created April 2009
  */
-public class HelpWindow extends javax.swing.JFrame {
+public class HelpDialog extends javax.swing.JDialog {
 
     /**
-     * Creates a new HelpWindow object with a Frame as a parent.
+     * Creates a new HelpDialog with a Frame as a parent.
      *
      * @param parent
      * @param fileName the name of the help file
      */
-    public HelpWindow(java.awt.Frame parent, URL fileName) {
+    public HelpDialog(java.awt.Frame parent, boolean modal, URL fileName) {
+        super(parent, modal);
 
         //this.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
         initComponents();
 
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
-                getResource("/no/uib/prideconverter/icons/help.GIF")));
+        // only works in Java 1.6 and newer
+//        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+//                getResource("/no/uib/prideconverter/icons/help.GIF")));
 
         boolean aboutFile = false;
 
@@ -51,13 +53,14 @@ public class HelpWindow extends javax.swing.JFrame {
                     fileName.getPath().endsWith("AboutOLS.html")) {
                 aboutFile = true;
 
-                if (fileName.getPath().endsWith("AboutPRIDE_Converter.html")) {
-                    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
-                            getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
-                } else {
-                    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
-                            getResource("/no/uib/prideconverter/icons/ols_transparent_small.GIF")));
-                }
+                // only works in Java 1.6 and newer
+//                if (fileName.getPath().endsWith("AboutPRIDE_Converter.html")) {
+//                    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+//                            getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
+//                } else {
+//                    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+//                            getResource("/no/uib/prideconverter/icons/ols_transparent_small.GIF")));
+//                }
             }
         } catch (Exception e) {
 
@@ -104,28 +107,31 @@ public class HelpWindow extends javax.swing.JFrame {
         }
 
         setVisible(true);
-
     }
 
     /**
-     * Creates a new HelpWindow-object with a JDialog as a parent.
+     * Creates a new HelpDialog with a JDialog as a parent.
      *
      * @param parent
      * @param fileName the name of the help file
      */
-    public HelpWindow(javax.swing.JDialog parent, URL fileName) {
+    public HelpDialog(javax.swing.JDialog parent, boolean modal, URL fileName) {
+        super(parent, modal);
 
         //this.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
 
         initComponents();
 
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
-                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
+        // only works in Java 1.6 and newer
+//        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+//                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
 
         if (fileName.getPath().endsWith("OLSDialog.html")) {
             setTitle("OLS - Help");
-            setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
-                    getResource("/no/uib/prideconverter/icons/ols_transparent_small.GIF")));
+
+            // only works in Java 1.6 and newer
+//            setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+//                    getResource("/no/uib/prideconverter/icons/ols_transparent_small.GIF")));
         }
 
         boolean aboutFile = false;
@@ -148,13 +154,14 @@ public class HelpWindow extends javax.swing.JFrame {
                     fileName.getPath().endsWith("AboutOLS.html")) {
                 aboutFile = true;
 
-                if (fileName.getPath().endsWith("AboutPRIDE_Converter.html")) {
-                    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
-                            getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
-                } else {
-                    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
-                            getResource("/no/uib/prideconverter/icons/ols_transparent_small.GIF")));
-                }
+                // only works in Java 1.6 and newer
+//                if (fileName.getPath().endsWith("AboutPRIDE_Converter.html")) {
+//                    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+//                            getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
+//                } else {
+//                    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+//                            getResource("/no/uib/prideconverter/icons/ols_transparent_small.GIF")));
+//                }
             }
         } catch (Exception e) {
             try {
@@ -226,6 +233,7 @@ public class HelpWindow extends javax.swing.JFrame {
      * WARNING: Do NOT modify this code. The content of this method is
      * always regenerated by the Form Editor.
      */
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -259,6 +267,7 @@ public class HelpWindow extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 255, Short.MAX_VALUE)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
@@ -268,6 +277,7 @@ public class HelpWindow extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 550, Short.MAX_VALUE)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
@@ -287,7 +297,7 @@ public class HelpWindow extends javax.swing.JFrame {
     private void closeJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeJButtonActionPerformed
         this.setVisible(false);
         this.dispose();
-    }//GEN-LAST:event_closeJButtonActionPerformed
+}//GEN-LAST:event_closeJButtonActionPerformed
 
     /**
      * Makes the links active.
@@ -312,7 +322,8 @@ public class HelpWindow extends javax.swing.JFrame {
                 this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
             }
         }
-    }//GEN-LAST:event_textJEditorPaneHyperlinkUpdate
+}//GEN-LAST:event_textJEditorPaneHyperlinkUpdate
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton closeJButton;
     private javax.swing.JScrollPane jScrollPane1;

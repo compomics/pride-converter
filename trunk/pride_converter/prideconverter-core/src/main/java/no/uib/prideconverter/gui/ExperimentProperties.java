@@ -1302,9 +1302,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
      */
     private void addContactJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addContactJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        NewContact contact = new NewContact(this, this, true);
-        contact.setTitle("New Contact");
-        contact.setVisible(true);
+        new NewContact(this, this, true);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_addContactJButtonActionPerformed
 
@@ -1402,7 +1400,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
      */
     private void helpJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpJButtonActionPerformed
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new HelpWindow(this, getClass().getResource("/no/uib/prideconverter/helpfiles/ExperimentProperties.html"));
+        new HelpDialog(this, false, getClass().getResource("/no/uib/prideconverter/helpfiles/ExperimentProperties.html"));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_helpJButtonActionPerformed
 
@@ -1413,7 +1411,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
      */
     private void aboutJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutJButtonActionPerformed
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new HelpWindow(this, getClass().getResource("/no/uib/prideconverter/helpfiles/AboutPRIDE_Converter.html"));
+        new HelpDialog(this, false, getClass().getResource("/no/uib/prideconverter/helpfiles/AboutPRIDE_Converter.html"));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_aboutJButtonActionPerformed
 

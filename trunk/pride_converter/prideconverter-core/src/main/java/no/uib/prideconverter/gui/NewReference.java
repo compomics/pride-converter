@@ -361,7 +361,7 @@ public class NewReference extends javax.swing.JDialog {
      */
     private void helpJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpJButtonActionPerformed
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new HelpWindow(this, getClass().getResource("/no/uib/prideconverter/helpfiles/NewReference.html"));
+        new HelpDialog(this, true, getClass().getResource("/no/uib/prideconverter/helpfiles/NewReference.html"));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_helpJButtonActionPerformed
 
@@ -415,7 +415,7 @@ public class NewReference extends javax.swing.JDialog {
      */
     private void aboutJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutJButtonActionPerformed
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new HelpWindow(this, getClass().getResource("/no/uib/prideconverter/helpfiles/AboutPRIDE_Converter.html"));
+        new HelpDialog(this, true, getClass().getResource("/no/uib/prideconverter/helpfiles/AboutPRIDE_Converter.html"));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_aboutJButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
