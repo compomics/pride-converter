@@ -33,6 +33,7 @@ public class Properties {
     public final int FRAGMENT_ION_CHARGE_STATES_ARRAY = 2;
     public final int NUMBER_OF_BYTES_PER_MEGABYTE = 1048576;
     public final double MAX_MASCOT_DAT_FILESIZE_BEFORE_INDEXING = 40; //in megabytes
+    public final double PROTON_MASS = 1.00727646677;
     
     private boolean useCommaAsDecimalSymbol = false;
     private boolean roundMascotScoreAndThresholdDownToNearestInteger = false;

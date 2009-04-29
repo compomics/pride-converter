@@ -388,6 +388,11 @@ public class PRIDEConverter {
 
         t.start();
 
+        // wait until progress dialog is visible
+        // (was not needed in Java 1.6...)
+        while (!progressDialog.isVisible()) {
+        }
+
         new Thread("ConverterThread") {
 
             @Override
@@ -593,7 +598,7 @@ public class PRIDEConverter {
 
                         Integer tempStartIndex = peptideIdentification.getPeptideStart();
 
-                        
+
                         // special case for DBToolkit ([0-9]*-[0-9]*)
                         String dbToolKitPattern = "\\([\\d]\\+?-[\\d]\\+?\\)";
 
@@ -608,15 +613,17 @@ public class PRIDEConverter {
                         }
 
 
+                        // parsing of the accession number if it includs more than one '|'
+                        // if so the part after the second '|' is removed
                         if (accession.lastIndexOf("|") != -1) {
-                            if (properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
-                                if (accession.indexOf("|", accession.indexOf("|")) != -1) {
+                            //if (properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                                if (accession.indexOf("|", accession.indexOf("|") + 1) != -1) {
                                     accession = accession.substring(0, accession.indexOf("|",
                                             accession.indexOf("|") + 1));
                                 }
-                            } else {
-                                accession = accession.substring(0, accession.indexOf("|"));
-                            }
+//                            } else {
+//                                accession = accession.substring(0, accession.indexOf("|"));
+//                            }
                         }
 
                         int dotLocation = accession.indexOf(".");
@@ -1103,7 +1110,7 @@ public class PRIDEConverter {
      */
     private static HashMap transformSpectraFromXTandemDataFile(ArrayList aTransformedSpectra) throws IOException {
 
-        // note: the xml parsing in this class is far from perfect and should be reimplemented
+        // note: the xml parsing in this method is very far from perfect and should be reimplemented
 
         HashMap mapping = new HashMap();
 
@@ -1119,7 +1126,6 @@ public class PRIDEConverter {
         BufferedReader b;
 
         StringTokenizer tokXValues, tokYValues;
-        Double precursorMass;
         Integer precursorCharge;
 
         NodeList idNodes,
@@ -1132,12 +1138,12 @@ public class PRIDEConverter {
         String tempXValue,
                 tempYValue;
 
-        int spectraCounter = 1;
+        int totalSpectraCounter = 0;
         String fileName;
         boolean matchFound = false;
-        NodeList nodes;
+        NodeList nodes, parameterNodes;
         int spectrumID = -1;
-        precursorMass = 0.0;
+        Double precursorMz = 0.0;
         precursorCharge = 0;
         double hyperscore = 0.0;
 
@@ -1150,6 +1156,7 @@ public class PRIDEConverter {
         String xValues = "", yValues = "";
         int numberOfValues = 0;
         int counter;
+        Integer msLevel;
         ids = new ArrayList<IdentificationGeneral>();
 
         String modificationName;
@@ -1157,6 +1164,8 @@ public class PRIDEConverter {
         double modificationMass;
         NamedNodeMap modificationMap;
         ArrayList modificationCVParams, monoMasses, peptideModifications;
+
+        float[][] arraysFloat;
 
         ArrayList cVParams, userParams;
         Collection spectrumDescriptionComments;
@@ -1166,19 +1175,507 @@ public class PRIDEConverter {
         Double mzRangeStart;
         Double mzRangeStop;
 
-        progressDialog.setIntermidiate(false);
-        progressDialog.setValue(0);
+        Spectrum spectrum;
 
+        String[] values;
+        Double precursorIntensity = null;
+
+        progressDialog.setIntermidiate(true);
+
+        Vector masses, intensities, charges;
+
+        ArrayList<String> identifiedSpectraIds = new ArrayList<String>();
+
+        String spectrumTag = "";
+
+        int spectraCounter = 0;
+
+        if (properties.selectAllIdentifiedSpectra()) {
+
+            // If 'select identified spectra' is selected, we need to find out which spectra
+            // are identified. So we need to parse the X!Tandem files before parsing the
+            // spectra. This means the X!Tandem files are parsed more than once, so maybe
+            // this can be done in a better way.
+
+            for (int j = 0; j < properties.getSelectedIdentificationFiles().size() && !cancelConversion; j++) {
+
+                // get the spectrumTag
+                file = new File(properties.getSelectedIdentificationFiles().get(j));
+
+                progressDialog.setString(file.getName() + " (" + (j + 1) +
+                        "/" + properties.getSelectedIdentificationFiles().size() + ")");
+
+                try {
+                    // should be replaced by better and simpler xml parsing
+
+                    //get the factory
+                    dbf = DocumentBuilderFactory.newInstance();
+
+                    //Using factory get an instance of document builder
+                    db = dbf.newDocumentBuilder();
+
+                    //parse using builder to get DOM representation of the XML file
+                    dom = db.parse(file);
+
+                    //get the root elememt
+                    docEle = dom.getDocumentElement();
+
+                    nodes = docEle.getChildNodes();
+
+                    boolean spectrumTagFound = false;
+
+                    // find the spectrum, path tag
+                    for (int i = 0; i < nodes.getLength() && !spectrumTagFound; i++) {
+                        if (nodes.item(i).getAttributes() != null) {
+                            if (nodes.item(i).getAttributes().getNamedItem("type") != null) {
+                                if (nodes.item(i).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase(
+                                        "parameters") &&
+                                        nodes.item(i).getAttributes().getNamedItem("label").getNodeValue().equalsIgnoreCase(
+                                        "input parameters")) {
+                                    parameterNodes = nodes.item(i).getChildNodes();
+
+                                    for (int m = 0; m < parameterNodes.getLength() && !spectrumTagFound; m++) {
+                                        if (parameterNodes.item(m).getAttributes() != null) {
+                                            if (parameterNodes.item(m).getAttributes().getNamedItem("label").toString().equalsIgnoreCase("label=\"spectrum, path\"")) {
+                                                spectrumTag = parameterNodes.item(m).getTextContent();
+                                                spectrumTagFound = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (!spectrumTagFound) {
+
+                        JOptionPane.showMessageDialog(null,
+                                "The X!Tandem file " + file.getPath() + "\n" +
+                                "does not contain the reference to the original spectra!\n" +
+                                "The file can not be parsed.");
+                        cancelConversion = true;
+                    }
+
+
+                    // parse the rest of the X!Tandem file and find the identifications
+                    for (int i = 0; i < nodes.getLength() && !cancelConversion; i++) {
+
+                        if (nodes.item(i).getAttributes() != null) {
+
+                            if (nodes.item(i).getAttributes().getNamedItem("type") != null) {
+
+                                if (nodes.item(i).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase("model")) {
+
+                                    if (nodes.item(i).getAttributes().getNamedItem("id") != null) {
+                                        spectrumID = new Integer(nodes.item(i).getAttributes().getNamedItem("id").getNodeValue()).intValue();
+                                        identifiedSpectraIds.add(spectrumTag + "_" + spectrumID);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (FileNotFoundException ex) {
+                    JOptionPane.showMessageDialog(null, "The file named " +
+                            file.getName() +
+                            "\ncould not be found.",
+                            "File Not Found", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Error when reading X!Tandem file: ");
+                    ex.printStackTrace();
+                } catch (Exception e) {
+
+                    Util.writeToErrorLog("Error parsing X!Tandem file: ");
+                    e.printStackTrace();
+
+                    JOptionPane.showMessageDialog(null,
+                            "The following file could not parsed as an X!Tandem file:\n " +
+                            file.getName() +
+                            "\n\n" +
+                            "See ../Properties/ErrorLog.txt for more details.",
+                            "Error Parsing File", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+
+
+
+        // get the spectra
         for (int j = 0; j < properties.getSelectedSourceFiles().size() && !cancelConversion; j++) {
 
             file = new File(properties.getSelectedSourceFiles().get(j));
+            BufferedReader br = new BufferedReader(new FileReader(file));
             fileName = file.getName();
             currentFileName = fileName;
 
-            progressDialog.setValue(0);
+            progressDialog.setIntermidiate(true);
             progressDialog.setString(currentFileName + " (" + (j + 1) + "/" +
                     properties.getSelectedSourceFiles().size() + ")");
 
+
+            if (file.getName().toLowerCase().endsWith(".mgf")) {
+                String line = null;
+                int lineCount = 0;
+                masses = new Vector();
+                intensities = new Vector();
+                charges = new Vector();
+                boolean inSpectrum = false;
+                msLevel = 2; // defaults to MS/MS
+                spectraCounter = 0;
+
+                while ((line = br.readLine()) != null && !cancelConversion) {
+                    // Advance line count.
+                    lineCount++;
+                    // Delete leading/trailing spaces.
+                    line = line.trim();
+                    // Skip empty lines.
+                    if (line.equals("")) {
+                        continue;
+                    }
+                    // First line can be 'CHARGE'.
+                    if (lineCount == 1 && line.startsWith("CHARGE")) {
+                        continue;
+                    }
+
+                    // BEGIN IONS marks the start of the real file.
+                    if (line.equals("BEGIN IONS")) {
+                        inSpectrum = true;
+                        spectraCounter++;
+                    } // END IONS marks the end.
+                    else if (line.equals("END IONS")) {
+                        inSpectrum = false;
+
+                        matchFound = false;
+
+                        if (properties.getSelectedSpectraKeys().size() > 0) {
+                            for (int k = 0; k < properties.getSelectedSpectraKeys().size() &&
+                                    !matchFound && !cancelConversion; k++) {
+
+                                Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
+
+                                if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
+                                    if (((String) temp[1]).equalsIgnoreCase("" + spectraCounter)) {
+                                        matchFound = true;
+                                        spectrumKey = currentFileName + "_" + spectraCounter;
+                                    }
+                                }
+                            }
+                        } else {
+                            if (properties.selectAllIdentifiedSpectra()) {
+                                if (identifiedSpectraIds.contains((currentFileName + "_" + spectraCounter))) {
+                                    matchFound = true;
+                                    spectrumKey = currentFileName + "_" + spectraCounter;
+                                }
+                            } else {
+                                matchFound = true;
+                                spectrumKey = currentFileName + "_" + spectraCounter;
+                            }
+                        }
+
+                        if (matchFound && !cancelConversion) {
+
+                            arrays = new double[2][masses.size()];
+
+                            for (int i = 0; i < masses.size() && !cancelConversion; i++) {
+                                arrays[0][i] = ((Double) masses.get(i)).doubleValue();
+                                arrays[1][i] = ((Double) intensities.get(i)).doubleValue();
+                            }
+
+                            // Precursor collection.
+                            precursors = new ArrayList(1);
+
+                            // Ion selection parameters.
+                            ionSelection = new ArrayList();
+
+                            if (precursorCharge != null) {
+                                if (precursorCharge > 0) {
+                                    ionSelection.add(new CvParamImpl("PSI:1000041",
+                                            "PSI", "ChargeState", 0,
+                                            Integer.toString(precursorCharge)));
+                                }
+                            }
+
+                            if (precursorIntensity != 0) {
+                                if (precursorIntensity > 1) {
+                                    ionSelection.add(new CvParamImpl("PSI:1000042",
+                                            "PSI", "Intensity", 1,
+                                            Double.toString(precursorIntensity)));
+                                }
+                            }
+
+                            if (precursorMz != null) {
+                                ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
+                                        "MassToChargeRatio", 2, Double.toString(
+                                        precursorMz)));
+                            }
+
+                            if (ionSelection.size() > 0) {
+                                precursors.add(new PrecursorImpl(null, null,
+                                        ionSelection, null, msLevel - 1, 0, 0));
+                            } else {
+                                precursors = null;
+                            }
+
+                            // Spectrum description comments.
+                            spectrumDescriptionComments = null;
+//                        spectrumDescriptionComments = new ArrayList(1);
+//                        spectrumDescriptionComments.add(new SpectrumDescCommentImpl(comments));
+
+                            if (arrays[properties.MZ_ARRAY].length > 0) {
+
+                                totalSpectraCounter++;
+
+                                mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
+                                mzRangeStop = new Double(
+                                        arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+
+                                fragmentation =
+                                        new SpectrumImpl(
+                                        new BinaryArrayImpl(arrays[properties.INTENSITIES_ARRAY],
+                                        BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                        mzRangeStart,
+                                        new BinaryArrayImpl(arrays[properties.MZ_ARRAY],
+                                        BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                        msLevel, null,
+                                        mzRangeStop,
+                                        null,
+                                        totalSpectraCounter, precursors,
+                                        spectrumDescriptionComments,
+                                        properties.getSpectrumCvParams().get(spectrumKey),
+                                        properties.getSpectrumUserParams().get(spectrumKey),
+                                        null, null);
+
+                                // Store (spectrumKey, spectrumid) mapping.
+                                mapping.put(spectrumKey,
+                                        new Long(totalSpectraCounter));
+
+                                // Store the transformed spectrum.
+                                aTransformedSpectra.add(fragmentation);
+                            }
+                        }
+
+                        masses = new Vector();
+                        intensities = new Vector();
+                        charges = new Vector();
+
+                        precursorMz = null;
+                        precursorIntensity = null;
+                        precursorCharge = null;
+
+                    } // Read embedded parameters.
+                    else if (inSpectrum && (line.indexOf("=") >= 0)) {
+                        // Find the starting location of the value (which is one beyond the location
+                        // of the '=').
+                        int equalSignIndex = line.indexOf("=");
+
+                        if (line.startsWith("PEPMASS")) {
+                            // PEPMASS line found.
+                            String value = line.substring(equalSignIndex + 1);//.trim();
+                            //StringTokenizer st = new StringTokenizer(value, " \t");
+
+                            if (properties.isCommaTheDecimalSymbol()) {
+                                value = value.replaceAll(",", ".");
+                            }
+
+                            values = value.split("\\s");
+                            precursorMz = Double.parseDouble(values[0]);
+
+                            if (values.length > 1) {
+                                precursorIntensity = Double.parseDouble(values[1]);
+                            } else {
+                                precursorIntensity = 0.0;
+                            }
+                        } else if (line.startsWith("CHARGE")) {
+                            // CHARGE line found.
+                            // Note the extra parsing to read a Mascot Generic File charge (eg., 1+).
+                            precursorCharge = extractCharge(line.substring(equalSignIndex + 1));
+                        }
+                    } // Read peaks, minding the possibility of charge present!
+                    else if (inSpectrum) {
+                        // We're inside the spectrum, with no '=' in the line, so it should be
+                        // a peak line.
+                        // A peak line should be either of the following two:
+                        // 234.56 789
+                        // 234.56 789   1+
+
+                        if (properties.isCommaTheDecimalSymbol()) {
+                            line = line.replaceAll(",", ".");
+                        }
+
+                        values = line.split("\\s+");
+
+                        int count = values.length;
+
+                        if (count == 2 || count == 3) {
+
+                            masses.add(Double.parseDouble(values[0]));
+                            intensities.add(new Double(values[1]));
+
+                            if (count == 3) {
+                                charges.add(new Integer(extractCharge(values[2])));
+                            }
+                        } else {
+                            System.err.println("\n\nUnrecognized line at line number " +
+                                    lineCount + ": '" + line + "'!\n");
+                        }
+                    }
+                }
+            } else if (file.getName().toLowerCase().endsWith(".dta")) {
+                // not yet implemented
+            } else if (file.getName().toLowerCase().endsWith(".pkl")) {
+                // not yet implemented
+            } else if (file.getName().toLowerCase().endsWith(".mzdata")) {
+                // not yet implemented
+            } else if (file.getName().toLowerCase().endsWith(".mzxml")) {
+
+                MSXMLParser msXMLParser = new MSXMLParser(
+                        new File(properties.getSelectedSourceFiles().get(j)).getAbsolutePath());
+
+                int scanCount = msXMLParser.getScanCount();
+
+                progressDialog.setIntermidiate(false);
+                progressDialog.setMax(scanCount);
+
+                for (int i = 1; i <= scanCount; i++) {
+
+                    progressDialog.setValue(i);
+
+                    Scan scan = msXMLParser.rap(i);
+                    precursorCharge = scan.getPrecursorCharge();
+                    precursorMz = new Float(scan.getPrecursorMz()).doubleValue();
+                    msLevel = scan.getMsLevel();
+
+                    matchFound = false;
+
+                    if (properties.getSelectedSpectraKeys().size() > 0) {
+                        for (int k = 0; k < properties.getSelectedSpectraKeys().size() &&
+                                !matchFound && !cancelConversion; k++) {
+
+                            Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
+
+                            if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
+                                if (((String) temp[1]).equalsIgnoreCase("" + scan.getNum())) {
+                                    matchFound = true;
+                                    spectrumKey = currentFileName + "_" + scan.getNum();
+                                }
+                            }
+                        }
+                    } else {
+                        if (properties.selectAllIdentifiedSpectra()) {
+                            if (identifiedSpectraIds.contains((currentFileName + "_" + scan.getNum()))) {
+                                matchFound = true;
+                                spectrumKey = currentFileName + "_" + scan.getNum();
+                            }
+                        } else {
+                            matchFound = true;
+                            spectrumKey = currentFileName + "_" + scan.getNum();
+                        }
+                    }
+
+                    if (matchFound) {
+
+                        // Transform peaklist into float arrays.
+                        arraysFloat = scan.getMassIntensityList();
+
+                        // Precursor collection.
+                        precursors = new ArrayList(1);
+
+                        // Ion selection parameters.
+                        ionSelection = new ArrayList(4);
+
+                        // See if we know the precursor charge, and if so, include it.
+                        if (precursorCharge > 0) {
+                            ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
+                                    "ChargeState", 0,
+                                    Integer.toString(precursorCharge)));
+                        }
+
+                        ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
+                                "MassToChargeRatio", 2, "" + precursorMz));
+
+                        precursors.add(new PrecursorImpl(null, null, ionSelection,
+                                null, 1, 0, 0));
+
+                        // Spectrum description comments.
+                        spectrumDescriptionComments = null;
+
+                        if (arraysFloat[properties.MZ_ARRAY].length > 0) {
+
+                            totalSpectraCounter++;
+
+                            mzRangeStart = new Double(arraysFloat[properties.MZ_ARRAY][0]);
+                            mzRangeStop = new Double(
+                                    arraysFloat[properties.MZ_ARRAY][arraysFloat[properties.MZ_ARRAY].length - 1]);
+
+                            if (msLevel == 1) {
+                                spectrum = new SpectrumImpl(
+                                        new BinaryArrayImpl(arraysFloat[properties.INTENSITIES_ARRAY],
+                                        BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                        mzRangeStart,
+                                        new BinaryArrayImpl(arraysFloat[properties.MZ_ARRAY],
+                                        BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                        1, null,
+                                        new Double(arraysFloat[properties.MZ_ARRAY][arraysFloat[properties.MZ_ARRAY].length -
+                                        1]), //null,
+                                        null,
+                                        totalSpectraCounter, null, null,
+                                        properties.getSpectrumCvParams().get(spectrumKey),
+                                        properties.getSpectrumUserParams().get(spectrumKey),
+                                        null,
+                                        null);
+                            } else {//msLevel == 2){
+                                spectrum = new SpectrumImpl(
+                                        new BinaryArrayImpl(arraysFloat[properties.INTENSITIES_ARRAY],
+                                        BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                        mzRangeStart,
+                                        new BinaryArrayImpl(arraysFloat[properties.MZ_ARRAY],
+                                        BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                        2, null,
+                                        mzRangeStop,
+                                        null,
+                                        totalSpectraCounter, precursors,
+                                        spectrumDescriptionComments,
+                                        properties.getSpectrumCvParams().get(spectrumKey),
+                                        properties.getSpectrumUserParams().get(spectrumKey),
+                                        null,
+                                        null);
+                            }
+
+                            // Create new mzData spectrum for the fragmentation spectrum.
+                            // Store (spectrumfileid, spectrumid) mapping.
+                            mapping.put(spectrumKey, new Long(totalSpectraCounter));
+
+                            // Store the transformed spectrum.
+                            aTransformedSpectra.add(spectrum);
+                        }
+                    }
+                }
+            }
+
+            br.close();
+        }
+
+
+
+        // parse the identifications
+        for (int j = 0; j < properties.getSelectedIdentificationFiles().size() && !cancelConversion; j++) {
+
+            // get the spectrumTag
+            file = new File(properties.getSelectedIdentificationFiles().get(j));
+
+            progressDialog.setIntermidiate(true);
+            progressDialog.setString(file.getName() + " (" + (j + 1) +
+                    "/" + properties.getSelectedIdentificationFiles().size() + ")");
+
+            spectrumID = -1;
+            Double precursorMh = 0.0;
+            precursorCharge = 0;
+            Double expect = 0.0;
+
+            hyperscore = 0.0;
+
+            upstreamFlankingSequence = null;
+            downstreamFlankingSequence = null;
+
+            // should be replaced by better and simpler xml parsing
             try {
                 //get the factory
                 dbf = DocumentBuilderFactory.newInstance();
@@ -1194,244 +1691,220 @@ public class PRIDEConverter {
 
                 nodes = docEle.getChildNodes();
 
-                spectrumID = -1;
-                precursorMass = 0.0;
-                precursorCharge = 0;
-                hyperscore = 0.0;
+                spectrumTag = "";
 
-                upstreamFlankingSequence = null;
-                downstreamFlankingSequence = null;
-
-                progressDialog.setMax(nodes.getLength());
-
+                // find the spectrum, path tag
                 for (int i = 0; i < nodes.getLength(); i++) {
-
-                    progressDialog.setValue(i);
-
                     if (nodes.item(i).getAttributes() != null) {
-
                         if (nodes.item(i).getAttributes().getNamedItem("type") != null) {
+                            if (nodes.item(i).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase(
+                                    "parameters") &&
+                                    nodes.item(i).getAttributes().getNamedItem("label").getNodeValue().equalsIgnoreCase(
+                                    "input parameters")) {
+                                parameterNodes = nodes.item(i).getChildNodes();
 
-                            peptideModifications = null;
-
-                            if (nodes.item(i).getAttributes().getNamedItem("type").
-                                    getNodeValue().equalsIgnoreCase("model")) {
-
-                                if (nodes.item(i).getAttributes().getNamedItem("id") != null) {
-                                    spectrumID = new Integer(
-                                            nodes.item(i).getAttributes().getNamedItem("id").getNodeValue()).intValue();
-                                }
-
-                                if (nodes.item(i).getAttributes().getNamedItem("mh") != null) {
-                                    precursorMass = new Double(
-                                            nodes.item(i).getAttributes().getNamedItem("mh").getNodeValue()).doubleValue();
-                                }
-
-                                if (nodes.item(i).getAttributes().getNamedItem("z") != null) {
-                                    precursorCharge = new Integer(
-                                            nodes.item(i).getAttributes().getNamedItem("z").getNodeValue()).intValue();
-                                }
-
-                                if (nodes.item(i).getAttributes().getNamedItem("label") != null) {
-                                    label = nodes.item(i).getAttributes().getNamedItem("label").getNodeValue();
-                                }
-
-                                matchFound = false;
-                                spectrumKey = fileName + "_" + spectrumID;
-
-                                if (properties.getSelectedSpectraKeys().size() > 0) {
-                                    for (int k = 0; k < properties.getSelectedSpectraKeys().size() && !matchFound; k++) {
-
-                                        Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
-
-                                        if (((String) temp[0]).equalsIgnoreCase(fileName)) {
-                                            if (((Integer) temp[1]).intValue() == spectrumID) {
-                                                matchFound = true;
-                                            }
+                                for (int m = 0; m < parameterNodes.getLength(); m++) {
+                                    if (parameterNodes.item(m).getAttributes() != null) {
+                                        if (parameterNodes.item(m).getAttributes().getNamedItem("label").toString().equalsIgnoreCase("label=\"spectrum, path\"")) {
+                                            //System.out.println(parameterNodes.item(m).getTextContent());
+                                            //identifiedSpectraIds.add(parameterNodes.item(m).getTextContent() + "_" + spectrumID);
+                                            spectrumTag = parameterNodes.item(m).getTextContent();
                                         }
                                     }
-                                } else {
-                                    if (properties.getSpectraSelectionCriteria() != null) {
+                                }
+                            }
+                        }
+                    }
+                }
 
-                                        StringTokenizer tok;
+                if (spectrumTag.equalsIgnoreCase("")) {
 
-                                        if (userProperties.getCurrentFileNameSelectionCriteriaSeparator().length() == 0) {
-                                            tok = new StringTokenizer(properties.getSpectraSelectionCriteria());
-                                        } else {
-                                            tok = new StringTokenizer(properties.getSpectraSelectionCriteria(),
-                                                    userProperties.getCurrentFileNameSelectionCriteriaSeparator());
-                                        }
+                    JOptionPane.showMessageDialog(null,
+                            "The X!Tandem file " + properties.getSelectedIdentificationFiles().get(j) + "\n" +
+                            "does not contain the reference to the original spectra!\n" +
+                            "The file can not be parsed.");
+                    cancelConversion = true;
+                } else {
+                    // get the identifications
 
-                                        String tempToken;
+                    progressDialog.setIntermidiate(false);
+                    progressDialog.setMax(nodes.getLength());
 
-                                        while (tok.hasMoreTokens() && !matchFound) {
+                    for (int i = 0; i < nodes.getLength(); i++) {
 
-                                            tempToken = tok.nextToken();
-                                            tempToken = tempToken.trim();
+                        progressDialog.setValue(i);
 
-                                            if (properties.isSelectionCriteriaFileName()) {
-                                                if (fileName.lastIndexOf(tempToken) != -1) {
+                        if (nodes.item(i).getAttributes() != null) {
+
+                            if (nodes.item(i).getAttributes().getNamedItem("type") != null) {
+
+                                peptideModifications = null;
+
+                                if (nodes.item(i).getAttributes().getNamedItem("type").
+                                        getNodeValue().equalsIgnoreCase("model")) {
+
+                                    if (nodes.item(i).getAttributes().getNamedItem("id") != null) {
+                                        spectrumID = new Integer(
+                                                nodes.item(i).getAttributes().getNamedItem("id").getNodeValue()).intValue();
+                                    }
+
+                                    if (nodes.item(i).getAttributes().getNamedItem("mh") != null) {
+                                        precursorMh = new Double(
+                                                nodes.item(i).getAttributes().getNamedItem("mh").getNodeValue()).doubleValue();
+                                    }
+
+                                    if (nodes.item(i).getAttributes().getNamedItem("z") != null) {
+                                        precursorCharge = new Integer(
+                                                nodes.item(i).getAttributes().getNamedItem("z").getNodeValue()).intValue();
+                                    }
+
+                                    if (nodes.item(i).getAttributes().getNamedItem("label") != null) {
+                                        label = nodes.item(i).getAttributes().getNamedItem("label").getNodeValue();
+                                    }
+
+                                    matchFound = false;
+                                    spectrumKey = spectrumTag + "_" + spectrumID;
+
+                                    if (properties.getSelectedSpectraKeys().size() > 0) {
+                                        for (int k = 0; k < properties.getSelectedSpectraKeys().size() && !matchFound; k++) {
+
+                                            Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
+
+                                            if (((String) temp[0]).equalsIgnoreCase(spectrumTag)) {
+                                                if (((String) temp[1]).equalsIgnoreCase("" + spectrumID)) {
                                                     matchFound = true;
                                                 }
+                                            }
+                                        }
+                                    } else {
+                                        if (properties.getSpectraSelectionCriteria() != null) {
+
+                                            StringTokenizer tok;
+
+                                            if (userProperties.getCurrentFileNameSelectionCriteriaSeparator().length() == 0) {
+                                                tok = new StringTokenizer(properties.getSpectraSelectionCriteria());
                                             } else {
-                                                if (("" + spectrumID).lastIndexOf(tempToken) != -1) {
-                                                    matchFound = true;
-                                                }
+                                                tok = new StringTokenizer(properties.getSpectraSelectionCriteria(),
+                                                        userProperties.getCurrentFileNameSelectionCriteriaSeparator());
                                             }
-                                        }
-                                    } else {
-                                        matchFound = true;
-                                    }
-                                }
 
-                                if (matchFound) {
+                                            String tempToken;
 
-                                    idNodes = nodes.item(i).getChildNodes();
+                                            while (tok.hasMoreTokens() && !matchFound) {
 
-                                    for (int k = 0; k < idNodes.getLength(); k++) {
+                                                tempToken = tok.nextToken();
+                                                tempToken = tempToken.trim();
 
-                                        if (idNodes.item(k).getNodeName().equalsIgnoreCase("protein")) {
-
-                                            proteinNodes = idNodes.item(k).getChildNodes();
-
-                                            for (int m = 0; m < proteinNodes.getLength(); m++) {
-
-                                                if (proteinNodes.item(m).getNodeName().equalsIgnoreCase("peptide")) {
-
-                                                    peptideNodes = proteinNodes.item(m).getChildNodes();
-
-                                                    for (int n = 0; n < peptideNodes.getLength(); n++) {
-
-                                                        if (peptideNodes.item(n).getNodeName().equalsIgnoreCase("domain")) {
-
-                                                            start = new Integer(
-                                                                    peptideNodes.item(n).getAttributes().getNamedItem("start").getNodeValue()).intValue();
-                                                            peptideSequence =
-                                                                    peptideNodes.item(n).getAttributes().getNamedItem("seq").getNodeValue();
-
-                                                            hyperscore = new Double(
-                                                                    peptideNodes.item(n).getAttributes().getNamedItem("hyperscore").getNodeValue()).doubleValue();
-
-                                                            upstreamFlankingSequence =
-                                                                    peptideNodes.item(n).getAttributes().getNamedItem("pre").getNodeValue();
-
-                                                            downstreamFlankingSequence =
-                                                                    peptideNodes.item(n).getAttributes().getNamedItem("post").getNodeValue();
-
-                                                            peptideModifications = new ArrayList();
-                                                            modificationCVParams = new ArrayList();
-
-                                                            for (int c = 0; c < peptideNodes.item(n).getChildNodes().getLength(); c++) {
-
-                                                                if (peptideNodes.item(n).getChildNodes().item(c).getNodeName().equalsIgnoreCase("aa")) {
-
-                                                                    modificationMap = peptideNodes.item(n).getChildNodes().item(c).getAttributes();
-
-                                                                    modificationName =
-                                                                            modificationMap.getNamedItem("type").getNodeValue();
-                                                                    modificationLocation = "" +
-                                                                            (new Integer(modificationMap.getNamedItem("at").getNodeValue()).intValue() -
-                                                                            start + 1);
-                                                                    modificationMass =
-                                                                            new Double(
-                                                                            modificationMap.getNamedItem("modified").getNodeValue()).doubleValue();
-
-                                                                    modificationName += "=" + modificationMass;
-
-                                                                    if (!properties.getAlreadyChoosenModifications().contains(modificationName)) {
-                                                                        new ModificationMapping(outputFrame,
-                                                                                true, progressDialog,
-                                                                                modificationName,
-                                                                                "-",
-                                                                                modificationMass,
-                                                                                (CvParamImpl) userProperties.getCVTermMappings().
-                                                                                get(modificationName));
-
-                                                                        properties.getAlreadyChoosenModifications().add(modificationName);
-                                                                    } else {
-                                                                        //do nothing, mapping already choosen
-                                                                    }
-
-                                                                    CvParamImpl tempCvParam =
-                                                                            (CvParamImpl) userProperties.getCVTermMappings().get(modificationName);
-
-
-                                                                    modificationCVParams.add(tempCvParam);
-
-                                                                    monoMasses = new ArrayList();
-                                                                    // get the modification mass (DiffMono) retrieved from PSI-MOD
-                                                                    if (tempCvParam.getValue() != null) {
-                                                                        monoMasses.add(new MonoMassDeltaImpl(
-                                                                                new Double(tempCvParam.getValue()).doubleValue()));
-                                                                    } else {
-                                                                        // if the DiffMono is not found for the PSI-MOD the mass 
-                                                                        // from the file is used
-                                                                        monoMasses.add(new MonoMassDeltaImpl(modificationMass));
-                                                                    //monoMasses = null;
-                                                                    }
-
-                                                                    peptideModifications.add(new ModificationImpl(
-                                                                            tempCvParam.getAccession(),
-                                                                            new Integer(modificationLocation),
-                                                                            tempCvParam.getCVLookup(),
-                                                                            null,
-                                                                            monoMasses,
-                                                                            null,
-                                                                            modificationCVParams,
-                                                                            null));
-                                                                }
-                                                            }
-                                                        }
+                                                if (properties.isSelectionCriteriaFileName()) {
+                                                    if (spectrumTag.lastIndexOf(tempToken) != -1) {
+                                                        matchFound = true;
+                                                    }
+                                                } else {
+                                                    if (("" + spectrumID).lastIndexOf(tempToken) != -1) {
+                                                        matchFound = true;
                                                     }
                                                 }
                                             }
-                                        } else if (idNodes.item(k).getNodeName().
-                                                equalsIgnoreCase(
-                                                "group")) {
-                                            if (idNodes.item(k).getAttributes().
-                                                    getNamedItem("label").
-                                                    getNodeValue().
-                                                    equalsIgnoreCase(
-                                                    "fragment ion mass spectrum")) {
+                                        } else {
+                                            matchFound = true;
+                                        }
+                                    }
 
-                                                traceNodes = idNodes.item(k).getChildNodes();
+                                    if (matchFound) {
 
-                                                for (int m = 0; m < traceNodes.getLength(); m++) {
+                                        idNodes = nodes.item(i).getChildNodes();
 
-                                                    if (traceNodes.item(m).getNodeName().equalsIgnoreCase(
-                                                            "GAML:trace")) {
+                                        for (int k = 0; k < idNodes.getLength(); k++) {
 
-                                                        spectrumNodes = traceNodes.item(m).getChildNodes();
+                                            if (idNodes.item(k).getNodeName().equalsIgnoreCase("protein")) {
 
-                                                        for (int n = 0; n < spectrumNodes.getLength(); n++) {
+                                                proteinNodes = idNodes.item(k).getChildNodes();
 
-                                                            if (spectrumNodes.item(n).getNodeName().equalsIgnoreCase(
-                                                                    "GAML:Xdata")) {
+                                                for (int m = 0; m < proteinNodes.getLength(); m++) {
 
-                                                                xDataNodes = spectrumNodes.item(n).getChildNodes();
+                                                    if (proteinNodes.item(m).getNodeName().equalsIgnoreCase("peptide")) {
 
-                                                                for (int p = 0; p < xDataNodes.getLength(); p++) {
+                                                        peptideNodes = proteinNodes.item(m).getChildNodes();
 
-                                                                    if (xDataNodes.item(p).getNodeName().equalsIgnoreCase(
-                                                                            "GAML:values")) {
+                                                        for (int n = 0; n < peptideNodes.getLength(); n++) {
 
-                                                                        numberOfValues = new Integer(
-                                                                                xDataNodes.item(p).getAttributes().getNamedItem(
-                                                                                "numvalues").getNodeValue());
+                                                            if (peptideNodes.item(n).getNodeName().equalsIgnoreCase("domain")) {
 
-                                                                        xValues = xDataNodes.item(p).getTextContent();
-                                                                    }
-                                                                }
-                                                            } else if (spectrumNodes.item(n).getNodeName().equalsIgnoreCase("GAML:Ydata")) {
+                                                                start = new Integer(
+                                                                        peptideNodes.item(n).getAttributes().getNamedItem("start").getNodeValue()).intValue();
+                                                                peptideSequence =
+                                                                        peptideNodes.item(n).getAttributes().getNamedItem("seq").getNodeValue();
 
-                                                                yDataNodes = spectrumNodes.item(n).getChildNodes();
+                                                                hyperscore = new Double(
+                                                                        peptideNodes.item(n).getAttributes().getNamedItem("hyperscore").getNodeValue()).doubleValue();
 
-                                                                for (int p = 0; p < yDataNodes.getLength(); p++) {
+                                                                upstreamFlankingSequence =
+                                                                        peptideNodes.item(n).getAttributes().getNamedItem("pre").getNodeValue();
 
-                                                                    if (yDataNodes.item(p).getNodeName().equalsIgnoreCase(
-                                                                            "GAML:values")) {
+                                                                downstreamFlankingSequence =
+                                                                        peptideNodes.item(n).getAttributes().getNamedItem("post").getNodeValue();
 
-                                                                        yValues = yDataNodes.item(p).getTextContent();
+                                                                peptideModifications = new ArrayList();
+                                                                modificationCVParams = new ArrayList();
+
+                                                                for (int c = 0; c < peptideNodes.item(n).getChildNodes().getLength(); c++) {
+
+                                                                    if (peptideNodes.item(n).getChildNodes().item(c).getNodeName().equalsIgnoreCase("aa")) {
+
+                                                                        modificationMap = peptideNodes.item(n).getChildNodes().item(c).getAttributes();
+
+                                                                        modificationName =
+                                                                                modificationMap.getNamedItem("type").getNodeValue();
+                                                                        modificationLocation = "" +
+                                                                                (new Integer(modificationMap.getNamedItem("at").getNodeValue()).intValue() -
+                                                                                start + 1);
+                                                                        modificationMass =
+                                                                                new Double(
+                                                                                modificationMap.getNamedItem("modified").getNodeValue()).doubleValue();
+
+                                                                        modificationName += "=" + modificationMass;
+
+                                                                        if (!properties.getAlreadyChoosenModifications().contains(modificationName)) {
+                                                                            new ModificationMapping(outputFrame,
+                                                                                    true, progressDialog,
+                                                                                    modificationName,
+                                                                                    "-",
+                                                                                    modificationMass,
+                                                                                    (CvParamImpl) userProperties.getCVTermMappings().
+                                                                                    get(modificationName));
+
+                                                                            properties.getAlreadyChoosenModifications().add(modificationName);
+                                                                        } else {
+                                                                            //do nothing, mapping already choosen
+                                                                            }
+
+                                                                        CvParamImpl tempCvParam =
+                                                                                (CvParamImpl) userProperties.getCVTermMappings().get(modificationName);
+
+
+                                                                        modificationCVParams.add(tempCvParam);
+
+                                                                        monoMasses = new ArrayList();
+                                                                        // get the modification mass (DiffMono) retrieved from PSI-MOD
+                                                                        if (tempCvParam.getValue() != null) {
+                                                                            monoMasses.add(new MonoMassDeltaImpl(
+                                                                                    new Double(tempCvParam.getValue()).doubleValue()));
+                                                                        } else {
+                                                                            // if the DiffMono is not found for the PSI-MOD the mass
+                                                                            // from the file is used
+                                                                            monoMasses.add(new MonoMassDeltaImpl(modificationMass));
+                                                                        //monoMasses = null;
+                                                                        }
+
+                                                                        peptideModifications.add(new ModificationImpl(
+                                                                                tempCvParam.getAccession(),
+                                                                                new Integer(modificationLocation),
+                                                                                tempCvParam.getCVLookup(),
+                                                                                null,
+                                                                                monoMasses,
+                                                                                null,
+                                                                                modificationCVParams,
+                                                                                null));
                                                                     }
                                                                 }
                                                             }
@@ -1440,151 +1913,78 @@ public class PRIDEConverter {
                                                 }
                                             }
                                         }
-                                    }
 
-                                    // Transform peaklist into double arrays.
-                                    arrays = new double[2][numberOfValues];
-                                    tokXValues = new StringTokenizer(xValues);
-                                    tokYValues = new StringTokenizer(yValues);
 
-                                    counter = 0;
+                                        SpectrumImpl tempSpectrumImpl =
+                                                ((SpectrumImpl) aTransformedSpectra.get(((Long) mapping.get(spectrumKey)).intValue() - 1));
 
-                                    while (tokXValues.hasMoreTokens()) {
+                                        //calculate itraq values
+                                        iTRAQ iTRAQValues = null;
 
-                                        tempXValue = tokXValues.nextToken();
-                                        tempYValue = tokYValues.nextToken();
+                                        if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
 
-                                        arrays[0][counter] = new Double(tempXValue).doubleValue();
-                                        arrays[1][counter++] = new Double(tempYValue).doubleValue();
-                                    }
+                                            iTRAQValues = new iTRAQ(tempSpectrumImpl.getMzArrayBinary().getDoubleArray(),
+                                                    tempSpectrumImpl.getIntenArrayBinary().getDoubleArray(),
+                                                    ((precursorMh + precursorCharge - properties.PROTON_MASS) / precursorCharge),
+                                                    precursorCharge,
+                                                    userProperties.getPeakIntegrationRangeLower(),
+                                                    userProperties.getPeakIntegrationRangeUpper(),
+                                                    userProperties.getReporterIonIntensityThreshold(),
+                                                    userProperties.getPurityCorrections());
+                                            iTRAQValues.calculateiTRAQValues();
+                                        }
 
-                                    //calculate itraq values
-                                    iTRAQ iTRAQValues = null;
+                                        String[] iTraqNorm = null;
+                                        String[] iTraqUT = null;
+                                        String[][] iTraqRatio = null;
 
-                                    if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
+                                        if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
+                                            //iTraq-stuff
+                                            iTraqNorm = (String[]) iTRAQValues.getAllNorms().get(0);
+                                            iTraqUT = (String[]) iTRAQValues.getAllUTs().get(0);
+                                            iTraqRatio = (String[][]) iTRAQValues.getAllRatios().get(0);
+                                        }
 
-                                        iTRAQValues = new iTRAQ(arrays, precursorMass, precursorCharge,
-                                                userProperties.getPeakIntegrationRangeLower(),
-                                                userProperties.getPeakIntegrationRangeUpper(),
-                                                userProperties.getReporterIonIntensityThreshold(),
-                                                userProperties.getPurityCorrections());
-                                        iTRAQValues.calculateiTRAQValues();
-                                    }
+                                        cVParams = new ArrayList();
+                                        cVParams.add(new CvParamImpl("PRIDE:0000176",
+                                                "PRIDE", "X!Tandem Hyperscore",
+                                                cVParams.size(), "" + hyperscore));
 
-                                    String[] iTraqNorm = null;
-                                    String[] iTraqUT = null;
-                                    String[][] iTraqRatio = null;
+                                        if (upstreamFlankingSequence != null) {
+                                            cVParams.add(new CvParamImpl("PRIDE:0000065", "PRIDE",
+                                                    "Upstream flanking sequence", cVParams.size(),
+                                                    "" + upstreamFlankingSequence.toUpperCase()));
+                                        }
+                                        if (downstreamFlankingSequence != null) {
+                                            cVParams.add(new CvParamImpl("PRIDE:0000066", "PRIDE",
+                                                    "Downstream flanking sequence", cVParams.size(),
+                                                    "" + downstreamFlankingSequence.toUpperCase()));
+                                        }
 
-                                    if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
-                                        //iTraq-stuff
-                                        iTraqNorm = (String[]) iTRAQValues.getAllNorms().get(0);
-                                        iTraqUT = (String[]) iTRAQValues.getAllUTs().get(0);
-                                        iTraqRatio = (String[][]) iTRAQValues.getAllRatios().get(0);
-                                    }
+                                        if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
+                                            cVParams = addItraqCVTerms(cVParams, iTraqNorm);
+                                            userParams = addItraqUserTerms(iTraqRatio);
+                                        } else {
+                                            userParams = null;
+                                        }
 
-                                    cVParams = new ArrayList();
-                                    cVParams.add(new CvParamImpl("PRIDE:0000176",
-                                            "PRIDE", "X!Tandem Hyperscore",
-                                            cVParams.size(), "" + hyperscore));
+                                        if (hyperscore >= properties.getPeptideScoreThreshold()) {
 
-                                    if (upstreamFlankingSequence != null) {
-                                        cVParams.add(new CvParamImpl("PRIDE:0000065", "PRIDE",
-                                                "Upstream flanking sequence", cVParams.size(),
-                                                "" + upstreamFlankingSequence.toUpperCase()));
-                                    }
-                                    if (downstreamFlankingSequence != null) {
-                                        cVParams.add(new CvParamImpl("PRIDE:0000066", "PRIDE",
-                                                "Downstream flanking sequence", cVParams.size(),
-                                                "" + downstreamFlankingSequence.toUpperCase()));
-                                    }
+                                            //System.out.println(peptideSequence.toUpperCase() + " " + ((Long) mapping.get(spectrumKey)).intValue());
 
-                                    if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
-                                        cVParams = addItraqCVTerms(cVParams, iTraqNorm);
-                                        userParams = addItraqUserTerms(iTraqRatio);
-                                    } else {
-                                        userParams = null;
-                                    }
-
-                                    if (hyperscore >= properties.getPeptideScoreThreshold()) {
-
-                                        ids.add(new IdentificationGeneral(
-                                                "" + spectraCounter,//spectrumFileID
-                                                label, //accession
-                                                "X!Tandem", //search engine
-                                                null, //database
-                                                null, //database version
-                                                peptideSequence.toUpperCase(), //sequence
-                                                start, //start
-                                                hyperscore, //score
-                                                null, //threshold
-                                                iTraqNorm, iTraqUT, iTraqRatio,
-                                                cVParams, userParams, peptideModifications));
-                                    }
-
-                                    // Precursor collection.
-                                    precursors = new ArrayList(1);
-
-                                    // Ion selection parameters.
-                                    ionSelection = new ArrayList(3);
-
-                                    // See if we know the precursor charge, and if so, include it.
-                                    charge = precursorCharge;
-                                    if (charge > 0) {
-                                        ionSelection.add(
-                                                new CvParamImpl("PSI:1000041",
-                                                "PSI", "ChargeState", 0,
-                                                Integer.toString(charge)));
-                                    }
-
-                                    intensity = 0;//no intensity found for X!Tandem data (?)
-                                    if (intensity > 1) {
-                                        ionSelection.add(new CvParamImpl("PSI:1000042",
-                                                "PSI", "Intensity", 1,
-                                                Double.toString(intensity)));
-                                    }
-
-                                    ionSelection.add(new CvParamImpl("PSI:1000040",
-                                            "PSI", "MassToChargeRatio", 2, Double.toString(
-                                            precursorMass)));
-
-                                    precursors.add(new PrecursorImpl(/*activation*/null,
-                                            null, ionSelection, null, 1, 0, 0));
-
-                                    // Spectrum description comments.
-                                    spectrumDescriptionComments = new ArrayList(1);
-
-                                    identified = "Identified";
-                                    spectrumDescriptionComments.add(new SpectrumDescCommentImpl(identified));
-
-                                    if (arrays[properties.MZ_ARRAY].length > 0) {
-                                        mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
-                                        mzRangeStop = new Double(
-                                                arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
-
-                                        // Create new mzData spectrum for the fragmentation spectrum.
-                                        fragmentation = new SpectrumImpl(
-                                                new BinaryArrayImpl(arrays[properties.INTENSITIES_ARRAY],
-                                                BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
-                                                mzRangeStart,
-                                                new BinaryArrayImpl(arrays[properties.MZ_ARRAY],
-                                                BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
-                                                2, null,
-                                                mzRangeStop,
-                                                null,
-                                                spectraCounter, precursors,
-                                                spectrumDescriptionComments,
-                                                properties.getSpectrumCvParams().get(spectrumKey),
-                                                properties.getSpectrumUserParams().get(spectrumKey),
-                                                null, null);
-
-                                        // Store (spectrumfileid, spectrumid) mapping.
-                                        mapping.put("" + spectraCounter,
-                                                new Long(spectraCounter));
-
-                                        spectraCounter++;
-
-                                        // Store the transformed spectrum.
-                                        aTransformedSpectra.add(fragmentation);
+                                            ids.add(new IdentificationGeneral(
+                                                    spectrumKey,//spectrumFileID
+                                                    label, //accession
+                                                    "X!Tandem", //search engine
+                                                    null, //database
+                                                    null, //database version
+                                                    peptideSequence.toUpperCase(), //sequence
+                                                    start, //start
+                                                    hyperscore, //score
+                                                    null, //threshold
+                                                    iTraqNorm, iTraqUT, iTraqRatio,
+                                                    cVParams, userParams, peptideModifications));
+                                        }
                                     }
                                 }
                             }
@@ -1593,32 +1993,32 @@ public class PRIDEConverter {
                 }
             } catch (FileNotFoundException ex) {
                 JOptionPane.showMessageDialog(null, "The file named " +
-                        file.getPath() +
+                        properties.getSelectedIdentificationFiles().get(j) +
                         "\ncould not be found.",
                         "File Not Found", JOptionPane.ERROR_MESSAGE);
-                Util.writeToErrorLog("File not found: ");
+                Util.writeToErrorLog("Error when reading X!Tandem file: ");
                 ex.printStackTrace();
             } catch (Exception e) {
-                if (!cancelConversion) {
-                    Util.writeToErrorLog("Error parsing X!Tandem file: " + e.toString());
-                    e.printStackTrace();
 
-                    JOptionPane.showMessageDialog(null,
-                            "The following file could not parsed as an X!Tandem file:\n " +
-                            file.getPath() + "\n\n" +
-                            "See ../Properties/ErrorLog.txt for more details.",
-                            "Error Parsing File", JOptionPane.ERROR_MESSAGE);
-                }
+                Util.writeToErrorLog("Error parsing X!Tandem file: ");
+                e.printStackTrace();
+
+                JOptionPane.showMessageDialog(null,
+                        "The following file could not parsed as an X!Tandem file:\n " +
+                        properties.getSelectedIdentificationFiles().get(j) +
+                        "\n\n" +
+                        "See ../Properties/ErrorLog.txt for more details.",
+                        "Error Parsing File", JOptionPane.ERROR_MESSAGE);
             }
-
-            totalNumberOfSpectra = spectraCounter - 1;
         }
+
+        totalNumberOfSpectra = totalSpectraCounter;
 
         return mapping;
     }
 
     /**
-     * This method transforms spectra from Spectrum Mill and Sequest files, 
+     * This method transforms spectra from Spectrum Mill and Sequest files,
      * returning a HashMap that maps the filenames to their mzData spectrumID.
      *
      * @param    aSpectra   Collection with the Spectrumfile instances to to transform.
@@ -1673,7 +2073,7 @@ public class PRIDEConverter {
         FileReader f;
         BufferedReader b;
         boolean emptyLineFound;
-        double precursorMass;
+        double precursorMh, precursorMz;
         double precursorIntensty;
         int precursorCharge;
         Vector masses;
@@ -1775,7 +2175,8 @@ public class PRIDEConverter {
 
             if (isSelected) {
 
-                precursorMass = -1.0;
+                precursorMh = -1.0;
+                precursorMz = -1.0;
                 precursorIntensty = -1.0;
                 precursorCharge = -1;
 
@@ -1791,7 +2192,15 @@ public class PRIDEConverter {
 
                     tok = new StringTokenizer(currentLine);
 
-                    precursorMass = new Double(tok.nextToken()).doubleValue();
+                    if (properties.getDataSource().equalsIgnoreCase("Spectrum Mill")) {
+                        precursorMz = new Double(tok.nextToken()).doubleValue();
+                    }
+
+                    if (properties.getDataSource().equalsIgnoreCase("Sequest DTA File") ||
+                            properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                        precursorMh = new Double(tok.nextToken()).doubleValue();
+                    }
+
                     precursorIntensty = -1;
 
                     //intensity not included in pkl files
@@ -2159,7 +2568,7 @@ public class PRIDEConverter {
                                 iTRAQ iTRAQValues = null;
 
                                 if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
-                                    iTRAQValues = new iTRAQ(arrays, precursorMass,
+                                    iTRAQValues = new iTRAQ(arrays, (precursorMz * precursorCharge),
                                             precursorCharge,
                                             userProperties.getPeakIntegrationRangeLower(),
                                             userProperties.getPeakIntegrationRangeUpper(),
@@ -2290,6 +2699,7 @@ public class PRIDEConverter {
                                 columnHeaders = new Vector();
 
                                 hitFound = false;
+                                boolean outFileIsEmpty = false;
 
                                 while (currentLine != null && !hitFound) {
 
@@ -2403,99 +2813,149 @@ public class PRIDEConverter {
 //                                            nextLine = b.readLine();
 //                                        }
 
-                                        tok = new StringTokenizer(currentLine);
 
-                                        tok.nextToken(); // # column
+                                        // check if the file contains any identifications at all
+                                        if (currentLine.length() == 0) {
 
-                                        rankSp = tok.nextToken() +
-                                                tok.nextToken();
+                                            outFileIsEmpty = true;
 
-                                        if (rankSp.endsWith("/")) {
-                                            rankSp += tok.nextToken();
-                                        }
+                                        } else {
 
-                                        // the old version of sequest files does 
-                                        // not contain the Id# column
-                                        if (columnHeader.lastIndexOf("Id#") !=
-                                                -1) {
-                                            tok.nextToken(); //Id#
-                                        }
+                                            tok = new StringTokenizer(currentLine);
 
-                                        mH = new Double(tok.nextToken()).doubleValue(); //(M+H)+
+                                            tok.nextToken(); // # column
 
-                                        deltaCn = new Double(tok.nextToken()).doubleValue(); //deltCn
-                                        score = new Double(tok.nextToken()).doubleValue(); //XCorr
-                                        sp = new Double(tok.nextToken()).doubleValue(); //Sp
-                                        ions = tok.nextToken(); //Ions
+                                            rankSp = tok.nextToken() +
+                                                    tok.nextToken();
 
-                                        if (ions.endsWith("/")) {
-                                            ions += tok.nextToken();
-                                        }
+                                            if (rankSp.endsWith("/")) {
+                                                rankSp += tok.nextToken();
+                                            }
 
-                                        accession = tok.nextToken(); //Accession number
-                                        sequence = tok.nextToken(); //Peptide
+                                            // the old version of sequest files does
+                                            // not contain the Id# column
+                                            if (columnHeader.lastIndexOf("Id#") !=
+                                                    -1) {
+                                                tok.nextToken(); //Id#
+                                            }
 
-                                        //skip the protein isoform counter
-                                        String isoformsPattern = "\\+[\\d]";
+                                            mH = new Double(tok.nextToken()).doubleValue(); //(M+H)+
 
-                                        pattern = Pattern.compile(isoformsPattern);
-                                        matcher = pattern.matcher(sequence);
+                                            deltaCn = new Double(tok.nextToken()).doubleValue(); //deltCn
+                                            score = new Double(tok.nextToken()).doubleValue(); //XCorr
+                                            sp = new Double(tok.nextToken()).doubleValue(); //Sp
+                                            ions = tok.nextToken(); //Ions
 
-                                        if (matcher.find()) {
+                                            if (ions.endsWith("/")) {
+                                                ions += tok.nextToken();
+                                            }
+
+                                            accession = tok.nextToken(); //Accession number
                                             sequence = tok.nextToken(); //Peptide
-                                        }
 
-                                        if (sequence.indexOf(".") == 1) {
-                                            upstreamFlankingSequence = sequence.substring(0, 1).
-                                                    toUpperCase();
-                                        }
-                                        if (sequence.lastIndexOf(".") ==
-                                                sequence.length() - 2) {
-                                            downstreamFlankingSequence = sequence.substring(sequence.length() -
-                                                    1, sequence.length()).
-                                                    toUpperCase();
-                                        }
+                                            //skip the protein isoform counter
+                                            String isoformsPattern = "\\+[\\d]";
 
-                                        sequence = sequence.substring(2, sequence.length() - 2);
-                                        sequenceArray = new String[sequence.length()];
+                                            pattern = Pattern.compile(isoformsPattern);
+                                            matcher = pattern.matcher(sequence);
 
-                                        modificationsDetected = false;
-                                        index = 0;
+                                            if (matcher.find()) {
+                                                sequence = tok.nextToken(); //Peptide
+                                            }
 
-                                        for (int i = 0; i < sequence.length() && !cancelConversion; i++) {
+                                            if (sequence.indexOf(".") == 1) {
+                                                upstreamFlankingSequence = sequence.substring(0, 1).
+                                                        toUpperCase();
+                                            }
+                                            if (sequence.lastIndexOf(".") ==
+                                                    sequence.length() - 2) {
+                                                downstreamFlankingSequence = sequence.substring(sequence.length() -
+                                                        1, sequence.length()).
+                                                        toUpperCase();
+                                            }
 
-                                            if (i == sequence.length() - 1) {
-                                                sequenceArray[index++] = sequence.substring(sequence.length() -
-                                                        1, sequence.length());
-                                            } else {
-                                                if (properties.getAlreadyChoosenModifications().
-                                                        contains(sequence.substring(i, i + 2))) {
-                                                    sequenceArray[index++] = sequence.substring(i, i + 2);
-                                                    i++;
+                                            sequence = sequence.substring(2, sequence.length() - 2);
+                                            sequenceArray = new String[sequence.length()];
 
+                                            modificationsDetected = false;
+                                            index = 0;
+
+                                            for (int i = 0; i < sequence.length() && !cancelConversion; i++) {
+
+                                                if (i == sequence.length() - 1) {
+                                                    sequenceArray[index++] = sequence.substring(sequence.length() -
+                                                            1, sequence.length());
                                                 } else {
-                                                    sequenceArray[index++] = sequence.substring(i, i + 1);
+                                                    if (properties.getAlreadyChoosenModifications().
+                                                            contains(sequence.substring(i, i + 2))) {
+                                                        sequenceArray[index++] = sequence.substring(i, i + 2);
+                                                        i++;
+
+                                                    } else {
+                                                        sequenceArray[index++] = sequence.substring(i, i + 1);
+                                                    }
                                                 }
                                             }
-                                        }
 
-                                        sequence = "";
-                                        peptideModifications = null;
+                                            sequence = "";
+                                            peptideModifications = null;
 
-                                        for (int i = 0; i < sequenceArray.length && !cancelConversion; i++) {
+                                            for (int i = 0; i < sequenceArray.length && !cancelConversion; i++) {
 
-                                            if (sequenceArray[i] != null) {
+                                                if (sequenceArray[i] != null) {
 
-                                                if (sequenceArray[i].length() == 2) {
+                                                    if (sequenceArray[i].length() == 2) {
 
-                                                    if (properties.getAlreadyChoosenModifications().contains(sequenceArray[i])) {
+                                                        if (properties.getAlreadyChoosenModifications().contains(sequenceArray[i])) {
+
+                                                            if (peptideModifications == null) {
+                                                                peptideModifications = new ArrayList();
+                                                            }
+
+                                                            CvParamImpl tempCvParam =
+                                                                    (CvParamImpl) userProperties.getCVTermMappings().get(sequenceArray[i]);
+
+                                                            modificationCVParams = new ArrayList();
+                                                            modificationCVParams.add(tempCvParam);
+
+                                                            monoMasses = new ArrayList();
+
+                                                            // get the modification mass (DiffMono) retrieved from PSI-MOD
+                                                            if (tempCvParam.getValue() != null) {
+                                                                monoMasses.add(new MonoMassDeltaImpl(
+                                                                        new Double(tempCvParam.getValue()).doubleValue()));
+                                                            } else {
+                                                                // it would be possible to use the mass from the data file
+                                                                // but this is currently not used, as this could be incorrect
+                                                                // relative to properties of the PSI-MOD modification
+//                                                    monoMasses.add(new MonoMassDeltaImpl(((Double) modifications.get(
+//                                                            sequenceArray[i])).doubleValue()));
+                                                                monoMasses = null;
+                                                            }
+
+                                                            peptideModifications.add(new ModificationImpl(
+                                                                    tempCvParam.getAccession(),
+                                                                    new Integer(i + 1),
+                                                                    tempCvParam.getCVLookup(),
+                                                                    null,
+                                                                    monoMasses,
+                                                                    null,
+                                                                    modificationCVParams,
+                                                                    null));
+                                                        }
+                                                    }
+                                                }
+
+                                                // check if the current amino acid contains a fixed modification
+                                                if (sequenceArray[i] != null) {
+                                                    if (properties.getAlreadyChoosenModifications().contains(sequenceArray[i].substring(0, 1))) {
 
                                                         if (peptideModifications == null) {
                                                             peptideModifications = new ArrayList();
                                                         }
 
                                                         CvParamImpl tempCvParam =
-                                                                (CvParamImpl) userProperties.getCVTermMappings().get(sequenceArray[i]);
+                                                                (CvParamImpl) userProperties.getCVTermMappings().get(sequenceArray[i].substring(0, 1));
 
                                                         modificationCVParams = new ArrayList();
                                                         modificationCVParams.add(tempCvParam);
@@ -2526,56 +2986,15 @@ public class PRIDEConverter {
                                                                 null));
                                                     }
                                                 }
-                                            }
 
-                                            // check if the current amino acid contains a fixed modification
-                                            if (sequenceArray[i] != null) {
-                                                if (properties.getAlreadyChoosenModifications().contains(sequenceArray[i].substring(0, 1))) {
-
-                                                    if (peptideModifications == null) {
-                                                        peptideModifications = new ArrayList();
-                                                    }
-
-                                                    CvParamImpl tempCvParam =
-                                                            (CvParamImpl) userProperties.getCVTermMappings().get(sequenceArray[i].substring(0, 1));
-
-                                                    modificationCVParams = new ArrayList();
-                                                    modificationCVParams.add(tempCvParam);
-
-                                                    monoMasses = new ArrayList();
-
-                                                    // get the modification mass (DiffMono) retrieved from PSI-MOD
-                                                    if (tempCvParam.getValue() != null) {
-                                                        monoMasses.add(new MonoMassDeltaImpl(
-                                                                new Double(tempCvParam.getValue()).doubleValue()));
-                                                    } else {
-                                                        // it would be possible to use the mass from the data file
-                                                        // but this is currently not used, as this could be incorrect 
-                                                        // relative to properties of the PSI-MOD modification
-//                                                    monoMasses.add(new MonoMassDeltaImpl(((Double) modifications.get(
-//                                                            sequenceArray[i])).doubleValue()));
-                                                        monoMasses = null;
-                                                    }
-
-                                                    peptideModifications.add(new ModificationImpl(
-                                                            tempCvParam.getAccession(),
-                                                            new Integer(i + 1),
-                                                            tempCvParam.getCVLookup(),
-                                                            null,
-                                                            monoMasses,
-                                                            null,
-                                                            modificationCVParams,
-                                                            null));
+                                                if (sequenceArray[i] != null) {
+                                                    sequence += sequenceArray[i].substring(0, 1);
                                                 }
                                             }
 
-                                            if (sequenceArray[i] != null) {
-                                                sequence += sequenceArray[i].substring(0, 1);
-                                            }
+                                            sequence = sequence.toUpperCase();
+                                            hitFound = true;
                                         }
-
-                                        sequence = sequence.toUpperCase();
-                                        hitFound = true;
                                     }
 
                                     currentLine = b.readLine();
@@ -2584,105 +3003,109 @@ public class PRIDEConverter {
                                 b.close();
                                 f.close();
 
-                                //calculate itraq values
-                                iTRAQ iTRAQValues = null;
 
-                                if (properties.getSampleDescriptionCVParamsQuantification().
-                                        size() > 0 && !cancelConversion) {
-                                    iTRAQValues =
-                                            new iTRAQ(arrays, precursorMass,
-                                            precursorCharge,
-                                            userProperties.getPeakIntegrationRangeLower(),
-                                            userProperties.getPeakIntegrationRangeUpper(),
-                                            userProperties.getReporterIonIntensityThreshold(),
-                                            userProperties.getPurityCorrections());
-                                    iTRAQValues.calculateiTRAQValues();
-                                }
+                                if (!outFileIsEmpty) {
 
-                                String[] iTraqNorm = null;
-                                String[] iTraqUT = null;
-                                String[][] iTraqRatio = null;
+                                    //calculate itraq values
+                                    iTRAQ iTRAQValues = null;
 
-                                if (properties.getSampleDescriptionCVParamsQuantification().
-                                        size() > 0 && !cancelConversion) {
-                                    iTraqNorm = (String[]) iTRAQValues.getAllNorms().get(0);
-                                    iTraqUT = (String[]) iTRAQValues.getAllUTs().get(0);
-                                    iTraqRatio = (String[][]) iTRAQValues.getAllRatios().get(0);
-                                }
-
-                                cVParams = new ArrayList();
-                                cVParams.add(new CvParamImpl("PRIDE:0000053",
-                                        "PRIDE", "Sequest Score",
-                                        cVParams.size(), "" + score));
-
-                                if (deltaCn != null) {
-                                    cVParams.add(new CvParamImpl("PRIDE:0000012",
-                                            "PRIDE", "Delta Cn", cVParams.size(), "" + deltaCn));
-                                }
-
-                                if (sp != null) {
-                                    cVParams.add(new CvParamImpl("PRIDE:0000054",
-                                            "PRIDE", "Sp", cVParams.size(), "" + sp));
-                                }
-
-                                if (ions != null) {
-                                    cVParams.add(new CvParamImpl("PRIDE:0000055",
-                                            "PRIDE", "Ions", cVParams.size(), "" + ions));
-                                }
-
-                                if (upstreamFlankingSequence != null) {
-                                    if (!upstreamFlankingSequence.equalsIgnoreCase("-")) {
-                                        cVParams.add(new CvParamImpl("PRIDE:0000065",
-                                                "PRIDE",
-                                                "Upstream flanking sequence",
-                                                cVParams.size(),
-                                                "" +
-                                                upstreamFlankingSequence.toUpperCase()));
+                                    if (properties.getSampleDescriptionCVParamsQuantification().
+                                            size() > 0 && !cancelConversion) {
+                                        iTRAQValues =
+                                                new iTRAQ(arrays, ((precursorMh + precursorCharge - properties.PROTON_MASS) / precursorCharge),
+                                                precursorCharge,
+                                                userProperties.getPeakIntegrationRangeLower(),
+                                                userProperties.getPeakIntegrationRangeUpper(),
+                                                userProperties.getReporterIonIntensityThreshold(),
+                                                userProperties.getPurityCorrections());
+                                        iTRAQValues.calculateiTRAQValues();
                                     }
-                                }
 
-                                if (downstreamFlankingSequence != null) {
-                                    if (!downstreamFlankingSequence.equalsIgnoreCase("-")) {
-                                        cVParams.add(new CvParamImpl("PRIDE:0000066",
-                                                "PRIDE",
-                                                "Downstream flanking sequence",
-                                                cVParams.size(),
-                                                "" +
-                                                downstreamFlankingSequence.toUpperCase()));
+                                    String[] iTraqNorm = null;
+                                    String[] iTraqUT = null;
+                                    String[][] iTraqRatio = null;
+
+                                    if (properties.getSampleDescriptionCVParamsQuantification().
+                                            size() > 0 && !cancelConversion) {
+                                        iTraqNorm = (String[]) iTRAQValues.getAllNorms().get(0);
+                                        iTraqUT = (String[]) iTRAQValues.getAllUTs().get(0);
+                                        iTraqRatio = (String[][]) iTRAQValues.getAllRatios().get(0);
                                     }
-                                }
 
-                                if (rankSp != null) {
-                                    cVParams.add(new CvParamImpl("PRIDE:0000050",
-                                            "PRIDE", "Rank/Sp", cVParams.size(), "" + rankSp));
-                                }
+                                    cVParams = new ArrayList();
+                                    cVParams.add(new CvParamImpl("PRIDE:0000053",
+                                            "PRIDE", "Sequest Score",
+                                            cVParams.size(), "" + score));
 
-                                if (mH != null) {
-                                    cVParams.add(new CvParamImpl("PRIDE:0000051",
-                                            "PRIDE", "(M+H)+", cVParams.size(), "" + mH));
-                                }
+                                    if (deltaCn != null) {
+                                        cVParams.add(new CvParamImpl("PRIDE:0000012",
+                                                "PRIDE", "Delta Cn", cVParams.size(), "" + deltaCn));
+                                    }
 
-                                if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
-                                    cVParams = addItraqCVTerms(cVParams, iTraqNorm);
-                                    userParams = addItraqUserTerms(iTraqRatio);
-                                } else {
-                                    userParams = null;
-                                }
+                                    if (sp != null) {
+                                        cVParams.add(new CvParamImpl("PRIDE:0000054",
+                                                "PRIDE", "Sp", cVParams.size(), "" + sp));
+                                    }
 
-                                if (score.doubleValue() >= properties.getPeptideScoreThreshold()) {
+                                    if (ions != null) {
+                                        cVParams.add(new CvParamImpl("PRIDE:0000055",
+                                                "PRIDE", "Ions", cVParams.size(), "" + ions));
+                                    }
 
-                                    ids.add(new IdentificationGeneral(
-                                            new File(properties.getSelectedSourceFiles().get(j)).getName(),//spectrumFileID
-                                            accession, //accession
-                                            "Sequest",//search engine
-                                            database, //database
-                                            null, //databaseversion
-                                            sequence.toUpperCase(), //sequence
-                                            null, //start
-                                            score, //score
-                                            null, //threshold
-                                            iTraqNorm, iTraqUT, iTraqRatio,
-                                            cVParams, userParams, peptideModifications));
+                                    if (upstreamFlankingSequence != null) {
+                                        if (!upstreamFlankingSequence.equalsIgnoreCase("-")) {
+                                            cVParams.add(new CvParamImpl("PRIDE:0000065",
+                                                    "PRIDE",
+                                                    "Upstream flanking sequence",
+                                                    cVParams.size(),
+                                                    "" +
+                                                    upstreamFlankingSequence.toUpperCase()));
+                                        }
+                                    }
+
+                                    if (downstreamFlankingSequence != null) {
+                                        if (!downstreamFlankingSequence.equalsIgnoreCase("-")) {
+                                            cVParams.add(new CvParamImpl("PRIDE:0000066",
+                                                    "PRIDE",
+                                                    "Downstream flanking sequence",
+                                                    cVParams.size(),
+                                                    "" +
+                                                    downstreamFlankingSequence.toUpperCase()));
+                                        }
+                                    }
+
+                                    if (rankSp != null) {
+                                        cVParams.add(new CvParamImpl("PRIDE:0000050",
+                                                "PRIDE", "Rank/Sp", cVParams.size(), "" + rankSp));
+                                    }
+
+                                    if (mH != null) {
+                                        cVParams.add(new CvParamImpl("PRIDE:0000051",
+                                                "PRIDE", "(M+H)+", cVParams.size(), "" + mH));
+                                    }
+
+                                    if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
+                                        cVParams = addItraqCVTerms(cVParams, iTraqNorm);
+                                        userParams = addItraqUserTerms(iTraqRatio);
+                                    } else {
+                                        userParams = null;
+                                    }
+
+                                    if (score.doubleValue() >= properties.getPeptideScoreThreshold()) {
+
+                                        ids.add(new IdentificationGeneral(
+                                                new File(properties.getSelectedSourceFiles().get(j)).getName(),//spectrumFileID
+                                                accession, //accession
+                                                "Sequest",//search engine
+                                                database, //database
+                                                null, //databaseversion
+                                                sequence.toUpperCase(), //sequence
+                                                null, //start
+                                                score, //score
+                                                null, //threshold
+                                                iTraqNorm, iTraqUT, iTraqRatio,
+                                                cVParams, userParams, peptideModifications));
+                                    }
                                 }
                             }
                         }
@@ -2709,9 +3132,21 @@ public class PRIDEConverter {
                                     Double.toString(precursorIntensty)));
                         }
 
-                        ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                "MassToChargeRatio", 2, Double.toString(
-                                precursorMass)));
+
+                        if (properties.getDataSource().equalsIgnoreCase("Sequest DTA File") ||
+                                properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                            ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
+                                    "MassToChargeRatio", 2, Double.toString(
+                                    (precursorMh + charge - properties.PROTON_MASS) / charge)));
+                        }
+
+                        if (properties.getDataSource().equalsIgnoreCase("Spectrum Mill")) {
+                            ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
+                                    "MassToChargeRatio", 2, Double.toString(
+                                    precursorMz)));
+                        }
+
+
 
                         precursors.add(new PrecursorImpl(null, null,
                                 ionSelection, null, msLevel - 1, 0, 0));
@@ -2866,7 +3301,7 @@ public class PRIDEConverter {
         boolean errorDetected;
         FileReader f;
         BufferedReader b;
-        double precursorMass;
+        double precursorMz;
         double precursorIntensty;
         double precursorRetentionTime;
         int precursorCharge;
@@ -2895,7 +3330,7 @@ public class PRIDEConverter {
             errorDetected = false;
             matchFound = false;
 
-            precursorMass = -1.0;
+            precursorMz = -1.0;
             precursorIntensty = -1.0;
             precursorCharge = -1;
             precursorRetentionTime = -1;
@@ -2926,7 +3361,7 @@ public class PRIDEConverter {
                             (properties.getDataSource().equalsIgnoreCase("Micromass PKL File") &&
                             tok.countTokens() == 3)) {
 
-                        precursorMass = new Double(tok.nextToken()).doubleValue();
+                        precursorMz = new Double(tok.nextToken()).doubleValue();
                         precursorIntensty = new Double(tok.nextToken()).doubleValue();
                         precursorCharge = new Integer(tok.nextToken()).intValue();
                         precursorRetentionTime = -1;
@@ -2964,7 +3399,7 @@ public class PRIDEConverter {
                                 Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
 
                                 if (((String) temp[0]).equalsIgnoreCase(fileName)) {
-                                    if (((Double) temp[2]).doubleValue() == precursorMass) {
+                                    if (((Double) temp[2]).doubleValue() == precursorMz) {
                                         if (temp[3] != null) {
                                             if (((Integer) temp[3]).intValue() == precursorCharge) {
                                                 matchFound = true;
@@ -3025,7 +3460,7 @@ public class PRIDEConverter {
                             // precursor mass
                             ionSelection.add(new CvParamImpl("PSI:1000040",
                                     "PSI", "MassToChargeRatio", 2, Double.toString(
-                                    precursorMass)));
+                                    precursorMz)));
 
                             // precursor retention time
                             if (properties.getDataSource().equalsIgnoreCase("VEMS")) {
@@ -3086,7 +3521,7 @@ public class PRIDEConverter {
                                         supDescArrays);
 
                                 mapping.put((new File(properties.getSelectedSourceFiles().get(j)).getName() +
-                                        "_" + precursorMass), new Long(spectraCounter));
+                                        "_" + precursorMz), new Long(spectraCounter));
                                 spectraCounter++;
 
                                 // Store the transformed spectrum.
@@ -3099,7 +3534,7 @@ public class PRIDEConverter {
                         fragmentIonChargeStates = new Vector();
                         msLevel = 2;
 
-                        precursorMass = new Double(tok.nextToken()).doubleValue();
+                        precursorMz = new Double(tok.nextToken()).doubleValue();
                         precursorIntensty = new Double(tok.nextToken()).doubleValue();
                         precursorCharge = new Integer(tok.nextToken()).intValue();
                         precursorRetentionTime = -1;
@@ -3132,7 +3567,7 @@ public class PRIDEConverter {
                         Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
 
                         if (((String) temp[0]).equalsIgnoreCase(fileName)) {
-                            if (((Double) temp[2]).doubleValue() == precursorMass) {
+                            if (((Double) temp[2]).doubleValue() == precursorMz) {
                                 if (temp[3] != null) {
                                     if (((Integer) temp[3]).intValue() == precursorCharge) {
                                         matchFound = true;
@@ -3190,7 +3625,7 @@ public class PRIDEConverter {
                     // precursor mass
                     ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
                             "MassToChargeRatio", 2, Double.toString(
-                            precursorMass)));
+                            precursorMz)));
 
                     // precursor retention time
                     if (properties.getDataSource().equalsIgnoreCase("VEMS")) {
@@ -3250,7 +3685,7 @@ public class PRIDEConverter {
 
                         mapping.put((new File(properties.getSelectedSourceFiles().
                                 get(j)).getName() +
-                                "_" + precursorMass),
+                                "_" + precursorMz),
                                 new Long(spectraCounter));
                         spectraCounter++;
 
@@ -3753,7 +4188,7 @@ public class PRIDEConverter {
 
         Vector masses, intensities, charges;
         String[] values;
-        Double precursorMass = null;
+        Double precursorMz = null;
         Double precursorIntensity = null;
         Integer precursorCharge = null;
         Double mzRangeStart;
@@ -3814,7 +4249,7 @@ public class PRIDEConverter {
                             Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
 
                             if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
-                                if (((Double) temp[2]).doubleValue() == precursorMass) {
+                                if (((Double) temp[2]).doubleValue() == precursorMz) {
                                     if (temp[3] != null) {
                                         if (((Integer) temp[3]).intValue() == precursorCharge) {
                                             matchFound = true;
@@ -3870,10 +4305,10 @@ public class PRIDEConverter {
                             }
                         }
 
-                        if (precursorMass != null) {
+                        if (precursorMz != null) {
                             ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
                                     "MassToChargeRatio", 2, Double.toString(
-                                    precursorMass)));
+                                    precursorMz)));
                         }
 
                         if (ionSelection.size() > 0) {
@@ -3923,7 +4358,7 @@ public class PRIDEConverter {
                     intensities = new Vector();
                     charges = new Vector();
 
-                    precursorMass = null;
+                    precursorMz = null;
                     precursorIntensity = null;
                     precursorCharge = null;
 
@@ -3943,7 +4378,7 @@ public class PRIDEConverter {
                         }
 
                         values = value.split("\\s");
-                        precursorMass = Double.parseDouble(values[0]);
+                        precursorMz = Double.parseDouble(values[0]);
 
                         if (values.length > 1) {
                             precursorIntensity = Double.parseDouble(values[1]);
@@ -6143,7 +6578,7 @@ public class PRIDEConverter {
         Vector intensities;
 
         String[] values;
-        double precursorMass = 0.0;
+        double precursorMz = 0.0;
         double precursorRetentionTime = -1;
         int precursorCharge = -1;
         Double mzRangeStart;
@@ -6211,7 +6646,7 @@ public class PRIDEConverter {
 
                                 if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
 
-                                    if (((Double) temp[2]).doubleValue() == precursorMass) {
+                                    if (((Double) temp[2]).doubleValue() == precursorMz) {
 
                                         if (temp[3] != null) {
                                             if (((Integer) temp[3]).intValue() == precursorCharge) {
@@ -6277,7 +6712,7 @@ public class PRIDEConverter {
 
                             ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
                                     "MassToChargeRatio", 2, Double.toString(
-                                    precursorMass)));
+                                    precursorMz)));
 
                             precursors.add(new PrecursorImpl(null, null,
                                     ionSelection, null, msLevel - 1, 0, 0));
@@ -6334,7 +6769,7 @@ public class PRIDEConverter {
 
                     values = line.split("\\s");
 
-                    precursorMass =
+                    precursorMz =
                             new Double(values[3]);
 
                 } else if (line.startsWith("I")) {
@@ -6401,7 +6836,7 @@ public class PRIDEConverter {
 
                             if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
 
-                                if (((Double) temp[2]).doubleValue() == precursorMass) {
+                                if (((Double) temp[2]).doubleValue() == precursorMz) {
 
                                     if (temp[3] != null) {
                                         if (((Integer) temp[3]).intValue() == precursorCharge) {
@@ -6459,7 +6894,7 @@ public class PRIDEConverter {
 
                         ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
                                 "MassToChargeRatio", 2, Double.toString(
-                                precursorMass)));
+                                precursorMz)));
 
                         precursors.add(new PrecursorImpl(null, null,
                                 ionSelection, null, 1, 0, 0));
