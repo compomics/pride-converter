@@ -138,6 +138,11 @@ public class ExperimentProperties extends javax.swing.JFrame {
 
         t.start();
 
+        // wait until progress dialog is visible
+        // (was not needed in Java 1.6...)
+        while (!progressDialog.isVisible()) {
+        }
+
         Thread t2 = new Thread(new Runnable() {
 
             public void run() {
@@ -215,6 +220,11 @@ public class ExperimentProperties extends javax.swing.JFrame {
         }, "ProgressDialog");
 
         t.start();
+
+        // wait until progress dialog is visible
+        // (was not needed in Java 1.6...)
+        while (!progressDialog.isVisible()) {
+        }
 
         Thread t2 = new Thread(new Runnable() {
 

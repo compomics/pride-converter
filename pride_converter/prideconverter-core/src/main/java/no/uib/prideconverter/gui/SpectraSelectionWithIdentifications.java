@@ -37,6 +37,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import no.uib.prideconverter.util.Util;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTableHeader;
+import org.systemsbiology.jrap.MSXMLParser;
+import org.systemsbiology.jrap.Scan;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -90,7 +92,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         tf.setHorizontalAlignment(JFormattedTextField.CENTER);
 
         if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
-            
+
             spectraJXTable.setModel(new javax.swing.table.DefaultTableModel(
                     new Object[][]{},
                     new String[]{
@@ -765,12 +767,12 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
     private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backJButtonActionPerformed
 
         if (saveInsertedInformation()) {
-            if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem") ||
-                    prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File") ||
+            if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File") ||
                     prideConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
                 new DataFileSelection(prideConverter, this.getLocation());
             } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill") ||
-                    prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                    prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File") ||
+                    prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
                 new DataFileSelectionTwoFileTypes(prideConverter, this.getLocation());
             } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims")) {
                 new ProjectSelection(prideConverter, this.getLocation());
@@ -806,6 +808,10 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
         t.start();
 
+        // wait until progress dialog is visible
+        // (was not needed in Java 1.6...)
+        while (!progressDialog.isVisible()) {
+        }
 
         Thread t2 = new Thread(new Runnable() {
 
@@ -820,10 +826,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                 DocumentBuilder db;
                 Document dom;
                 Element docEle;
-                NodeList nodes;
-                NodeList idNodes,
-                        proteinNodes, peptideNodes, traceNodes, spectrumNodes,
-                        xDataNodes, yDataNodes;
+                NodeList nodes, parameterNodes;
 
                 boolean matchFound;
                 boolean selected;
@@ -847,40 +850,493 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                     ((DefaultTableModel) spectraJXTable.getModel()).removeRow(0);
                 }
 
-                if (prideConverter.getProperties().getSelectedSourceFiles() != null) {
+                ArrayList<String> identifiedSpectraIds = new ArrayList<String>();
 
-                    for (int j = 0; j < prideConverter.getProperties().getSelectedSourceFiles().size(); j++) {
+                ArrayList<String> selectedFiles;
 
-                        file = new File(prideConverter.getProperties().getSelectedSourceFiles().get(j));
+                if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+                    selectedFiles = prideConverter.getProperties().getSelectedIdentificationFiles();
+
+                    // parse X!Tandem files
+                    for (int j = 0; j < selectedFiles.size(); j++) {
+
+                        file = new File(selectedFiles.get(j));
 
                         progressDialog.setString(file.getName() + " (" + (j + 1) +
-                                "/" + prideConverter.getProperties().getSelectedSourceFiles().size() + ")");
+                                "/" + selectedFiles.size() + ")");
 
                         spectrumID = -1;
                         precursorMass = 0.0;
                         precursorCharge = 0;
                         expect = 0.0;
 
-                        // parse X!Tandem file
                         // should be replaced by better and simpler xml parsing
-                        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+                        try {
+                            //get the factory
+                            dbf = DocumentBuilderFactory.newInstance();
 
-                            try {
-                                //get the factory
-                                dbf = DocumentBuilderFactory.newInstance();
+                            //Using factory get an instance of document builder
+                            db = dbf.newDocumentBuilder();
 
-                                //Using factory get an instance of document builder
-                                db = dbf.newDocumentBuilder();
+                            //parse using builder to get DOM representation of the XML file
+                            dom = db.parse(file);
 
-                                //parse using builder to get DOM representation of the XML file
-                                dom = db.parse(file);
+                            //get the root elememt
+                            docEle = dom.getDocumentElement();
 
-                                //get the root elememt
-                                docEle = dom.getDocumentElement();
+                            nodes = docEle.getChildNodes();
 
-                                nodes = docEle.getChildNodes();
+                            String spectrumTag = "";
 
-                                for (int i = 0; i < nodes.getLength(); i++) {
+                            boolean spectrumTagFound = false;
+
+                            // find the spectrum, path tag
+                            for (int i = 0; i < nodes.getLength() && !spectrumTagFound; i++) {
+                                if (nodes.item(i).getAttributes() != null) {
+                                    if (nodes.item(i).getAttributes().getNamedItem("type") != null) {
+                                        if (nodes.item(i).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase(
+                                                "parameters") &&
+                                                nodes.item(i).getAttributes().getNamedItem("label").getNodeValue().equalsIgnoreCase(
+                                                "input parameters")) {
+                                            parameterNodes = nodes.item(i).getChildNodes();
+
+                                            for (int m = 0; m < parameterNodes.getLength() && !spectrumTagFound; m++) {
+                                                if (parameterNodes.item(m).getAttributes() != null) {
+                                                    if (parameterNodes.item(m).getAttributes().getNamedItem("label").toString().equalsIgnoreCase("label=\"spectrum, path\"")) {
+                                                        //System.out.println(parameterNodes.item(m).getTextContent());
+                                                        //identifiedSpectraIds.add(parameterNodes.item(m).getTextContent() + "_" + spectrumID);
+                                                        spectrumTag = parameterNodes.item(m).getTextContent();
+                                                        spectrumTagFound = true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (!spectrumTagFound) {
+
+                                while (((DefaultTableModel) spectraJXTable.getModel()).getRowCount() > 0) {
+                                    ((DefaultTableModel) spectraJXTable.getModel()).removeRow(0);
+                                }
+
+                                progressDialog.setVisible(false);
+                                progressDialog.dispose();
+
+                                numberOfSelectedSpectraJTextField.setText("");
+
+                                setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+                                JOptionPane.showMessageDialog(null,
+                                        "The X!Tandem file " + selectedFiles.get(j) + "\n" +
+                                        "does not contain the reference to the original spectra!\n" +
+                                        "The file can not be parsed.");
+                                return;
+                            }
+
+
+                            // parse the rest of the X!Tandem file and find the identifications
+                            for (int i = 0; i < nodes.getLength(); i++) {
+
+                                if (!progressDialog.isVisible()) {
+
+                                    while (((DefaultTableModel) spectraJXTable.getModel()).getRowCount() > 0) {
+                                        ((DefaultTableModel) spectraJXTable.getModel()).removeRow(0);
+                                    }
+
+                                    numberOfSelectedSpectraJTextField.setText("");
+
+                                    setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+                                    return;
+                                }
+
+                                if (nodes.item(i).getAttributes() != null) {
+
+                                    if (nodes.item(i).getAttributes().getNamedItem("type") != null) {
+
+                                        if (nodes.item(i).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase("model")) {
+
+                                            if (nodes.item(i).getAttributes().getNamedItem("id") != null) {
+                                                spectrumID = new Integer(nodes.item(i).getAttributes().getNamedItem("id").getNodeValue()).intValue();
+                                                identifiedSpectraIds.add(spectrumTag + "_" + spectrumID);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (FileNotFoundException ex) {
+                            JOptionPane.showMessageDialog(null, "The file named " +
+                                    selectedFiles.get(j) +
+                                    "\ncould not be found.",
+                                    "File Not Found", JOptionPane.ERROR_MESSAGE);
+                            Util.writeToErrorLog("Error when reading X!Tandem file: ");
+                            ex.printStackTrace();
+                        } catch (Exception e) {
+
+                            Util.writeToErrorLog("Error parsing X!Tandem file: ");
+                            e.printStackTrace();
+
+                            JOptionPane.showMessageDialog(null,
+                                    "The following file could not parsed as an X!Tandem file:\n " +
+                                    selectedFiles.get(j) +
+                                    "\n\n" +
+                                    "See ../Properties/ErrorLog.txt for more details.",
+                                    "Error Parsing File", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+
+
+                    // parse the spectrum files
+                    ArrayList<String> spectraFiles = prideConverter.getProperties().getSelectedSourceFiles();
+
+                    try {
+
+                        for (int i = 0; i < spectraFiles.size(); i++) {
+
+                            String currentSpectraFile = spectraFiles.get(i);
+                            FileReader f = new FileReader(new File(currentSpectraFile));
+                            b = new BufferedReader(f);
+
+                            int spectraCounter = 0;
+
+                            if (currentSpectraFile.toLowerCase().endsWith(".mgf")) {
+
+                                String line = null;
+                                int lineCount = 0;
+                                boolean inSpectrum = false;
+
+                                while ((line = b.readLine()) != null && progressDialog.isVisible()) {
+
+                                    // Advance line count.
+                                    lineCount++;
+
+                                    // Delete leading/trailing spaces.
+                                    line = line.trim();
+
+                                    // Skip empty lines.
+                                    if (line.equals("")) {
+                                        continue;
+                                    }
+
+                                    // First line can be 'CHARGE'.
+                                    if (lineCount == 1 && line.startsWith("CHARGE")) {
+                                        continue;
+                                    }
+
+                                    // BEGIN IONS marks the start of the real file.
+                                    if (line.equals("BEGIN IONS")) {
+                                        inSpectrum = true;
+                                        spectraCounter++;
+                                    } // END IONS marks the end.
+                                    else if (line.equals("END IONS")) {
+
+                                        inSpectrum = false;
+
+                                        ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                                new Object[]{
+                                                    null,
+                                                    new File(currentSpectraFile).getName(),
+                                                    spectraCounter,
+                                                    new Boolean(identifiedSpectraIds.contains(
+                                                    new File(currentSpectraFile).getName() + "_" + spectraCounter)),
+                                                    new Boolean(identifiedSpectraIds.contains(
+                                                    new File(currentSpectraFile).getName() + "_" + spectraCounter))
+                                                });
+
+                                        if (identifiedSpectraIds.contains(
+                                                new File(currentSpectraFile).getName() + "_" + spectraCounter)) {
+                                            numberOfSelectedSpectra++;
+                                        }
+
+                                        numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
+                                                "/" + spectraJXTable.getRowCount());
+                                    }
+                                }
+
+                                b.close();
+                                f.close();
+
+                            } else if (currentSpectraFile.toLowerCase().endsWith(".dta")) {
+                                // has to be extended to parse more than one experiment per dta file........
+//                                currentLine = b.readLine();
+//
+//                                tok = new StringTokenizer(currentLine);
+//
+//                                ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+//                                        new Object[]{
+//                                            null,
+//                                            new File(currentSpectraFile).getName(),
+//                                            null,
+//                                            new Boolean(identifiedSpectraIds.contains(
+//                                            new File(currentSpectraFile).getName() + "_" + 1)),
+//                                            new Boolean(identifiedSpectraIds.contains(
+//                                            new File(currentSpectraFile).getName() + "_" + 1))
+//                                        });
+//
+//                                if (identifiedSpectraIds.contains(
+//                                        new File(currentSpectraFile).getName() + "_" + 1)) {
+//                                    numberOfSelectedSpectra++;
+//                                }
+//
+//                                numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
+//                                        "/" + spectraJXTable.getRowCount());
+                            } else if (currentSpectraFile.toLowerCase().endsWith(".pkl")) {
+
+                                currentLine = b.readLine();
+
+                                while (currentLine != null) {
+
+                                    tok = new StringTokenizer(currentLine);
+
+                                    if (tok.countTokens() == 3) {
+
+                                        spectraCounter++;
+
+                                        ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                                new Object[]{
+                                                    null,
+                                                    new File(currentSpectraFile).getName(),
+                                                    spectraCounter,
+                                                    new Boolean(identifiedSpectraIds.contains(
+                                                    new File(currentSpectraFile).getName() + "_" + spectraCounter)),
+                                                    new Boolean(identifiedSpectraIds.contains(
+                                                    new File(currentSpectraFile).getName() + "_" + spectraCounter))
+                                                });
+
+                                        if (identifiedSpectraIds.contains(
+                                                new File(currentSpectraFile).getName() + "_" + spectraCounter)) {
+                                            numberOfSelectedSpectra++;
+                                        }
+
+                                        numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
+                                                "/" + spectraJXTable.getRowCount());
+                                    }
+
+                                    currentLine = b.readLine();
+                                }
+
+                            } else if (currentSpectraFile.toLowerCase().endsWith(".mzdata")) {
+                                // not yet implemented
+                            } else if (currentSpectraFile.toLowerCase().endsWith(".mzxml")) {
+
+                                MSXMLParser msXMLParser = new MSXMLParser(currentSpectraFile);
+
+                                int scanCount = msXMLParser.getScanCount();
+
+                                for (int j = 1; j <= scanCount && progressDialog.isVisible(); j++) {
+                                    Scan scan = msXMLParser.rap(j);
+
+                                    spectraCounter++;
+
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                            new Object[]{
+                                                null,
+                                                new File(currentSpectraFile).getName(),
+                                                scan.getNum(),
+                                                new Boolean(identifiedSpectraIds.contains(
+                                                new File(currentSpectraFile).getName() + "_" + scan.getNum())),
+                                                new Boolean(identifiedSpectraIds.contains(
+                                                new File(currentSpectraFile).getName() + "_" + scan.getNum()))
+                                            });
+
+                                    if (identifiedSpectraIds.contains(
+                                            new File(currentSpectraFile).getName() + "_" + scan.getNum())) {
+                                        numberOfSelectedSpectra++;
+                                    }
+
+                                    numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
+                                            "/" + spectraJXTable.getRowCount());
+                                }
+                            }
+
+                            if (!progressDialog.isVisible()) {
+
+                                while (((DefaultTableModel) spectraJXTable.getModel()).getRowCount() > 0) {
+                                    ((DefaultTableModel) spectraJXTable.getModel()).removeRow(0);
+                                }
+
+                                numberOfSelectedSpectraJTextField.setText("");
+
+                                setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+                                return;
+                            }
+                        }
+                    } catch (FileNotFoundException ex) {
+                        JOptionPane.showMessageDialog(null, "The file named " +
+                                file.getPath() +
+                                "\ncould not be found.",
+                                "File Not Found", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to read file: ");
+                        ex.printStackTrace();
+                    } catch (Exception e) {
+
+                        Util.writeToErrorLog("Error parsing " + prideConverter.getProperties().getDataSource() + ": ");
+                        e.printStackTrace();
+
+                        String fileType = prideConverter.getProperties().getDataSource();
+
+                        JOptionPane.showMessageDialog(null,
+                                "The following file could not parsed as a " +
+                                fileType + ":\n " +
+                                file.getPath() +
+                                "\n\n" +
+                                "See ../Properties/ErrorLog.txt for more details.",
+                                "Error Parsing File", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    selectedFiles = prideConverter.getProperties().getSelectedSourceFiles();
+
+                    if (selectedFiles != null) {
+
+                        for (int j = 0; j < selectedFiles.size(); j++) {
+
+                            file = new File(selectedFiles.get(j));
+
+                            progressDialog.setString(file.getName() + " (" + (j + 1) +
+                                    "/" + selectedFiles.size() + ")");
+
+                            spectrumID = -1;
+                            precursorMass = 0.0;
+                            precursorCharge = 0;
+                            expect = 0.0;
+
+                            if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill") ||
+                                    prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+
+                                try {
+                                    f = new FileReader(file);
+                                    b = new BufferedReader(f);
+
+                                    currentLine = b.readLine();
+
+                                    tok = new StringTokenizer(currentLine);
+
+                                    precursorMass = new Double(tok.nextToken()).doubleValue();
+                                    precursorIntensty = Double.NaN;
+
+                                    if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
+                                        precursorIntensty = new Double(tok.nextToken()).doubleValue();
+                                    }
+
+                                    precursorCharge = new Integer(tok.nextToken()).intValue();
+
+                                    matchFound = false;
+
+                                    for (int i = 0; i <
+                                            prideConverter.getProperties().getSelectedIdentificationFiles().size() &&
+                                            !matchFound; i++) {
+
+                                        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
+                                            matchFound = new File(prideConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName().equalsIgnoreCase(file.getName() +
+                                                    ".spo");
+                                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+
+                                            matchFound = new File(prideConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName().equalsIgnoreCase(
+                                                    file.getName().substring(0, file.getName().length() -
+                                                    4) + ".out");
+                                        }
+                                    }
+
+                                    selected = false;
+
+                                    if (selectAllSpectraJRadioButton.isSelected()) {
+                                        selected = true;
+                                    } else if (selectIdentifiedJRadioButton.isSelected()) {
+                                        selected = matchFound;
+                                    }
+
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                            new Object[]{
+                                                null,
+                                                file.getName(),
+                                                null,
+                                                new Boolean(matchFound),
+                                                new Boolean(selected)
+                                            });
+
+                                    if (selected) {
+                                        numberOfSelectedSpectra++;
+                                    }
+
+                                    numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
+                                            "/" + spectraJXTable.getRowCount());
+
+                                } catch (FileNotFoundException ex) {
+                                    JOptionPane.showMessageDialog(null, "The file named " +
+                                            file.getName() +
+                                            "\ncould not be found.",
+                                            "File Not Found", JOptionPane.ERROR_MESSAGE);
+                                    Util.writeToErrorLog("File not found: ");
+                                    ex.printStackTrace();
+                                } catch (Exception e) {
+
+                                    String fileName = "Sequest DTA file";
+
+                                    if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
+                                        fileName = "Micromass PKL file";
+                                    }
+
+                                    Util.writeToErrorLog("Error parsing " + fileName + ": ");
+                                    e.printStackTrace();
+
+                                    JOptionPane.showMessageDialog(null,
+                                            "The following file could not parsed as a " +
+                                            fileName + ":\n " +
+                                            file.getPath() + "\n\n" +
+                                            "See ../Properties/ErrorLog.txt for more details.",
+                                            "Error Parsing File", JOptionPane.ERROR_MESSAGE);
+                                }
+
+                                if (!progressDialog.isVisible()) {
+
+                                    while (((DefaultTableModel) spectraJXTable.getModel()).getRowCount() >
+                                            0) {
+                                        ((DefaultTableModel) spectraJXTable.getModel()).removeRow(0);
+                                    }
+
+                                    numberOfSelectedSpectraJTextField.setText("");
+
+                                    setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+                                    return;
+                                }
+                            } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
+
+                                try {
+                                    selected = false;
+
+                                    omxFile = new OmssaOmxFile(file.getPath(), null, null);
+                                    results = omxFile.getSpectrumToHitSetMap();
+
+                                    iterator = results.keySet().iterator();
+
+                                    while (iterator.hasNext()) {
+
+                                        tempSpectrum = iterator.next();
+
+                                        selected = false;
+
+                                        if (selectAllSpectraJRadioButton.isSelected()) {
+                                            selected = true;
+                                            numberOfSelectedSpectra++;
+                                        } else if (results.get(tempSpectrum).MSHitSet_hits.MSHits.size() > 0) {
+                                            selected = true;
+                                            numberOfSelectedSpectra++;
+                                        }
+
+                                        ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                                new Object[]{
+                                                    null,
+                                                    tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.get(0),
+                                                    tempSpectrum.MSSpectrum_number,
+                                                    new Boolean(results.get(tempSpectrum).MSHitSet_hits.MSHits.size() > 0),
+                                                    new Boolean(selected)
+                                                });
+
+                                        numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
+                                                "/" +
+                                                spectraJXTable.getRowCount());
+                                    }
 
                                     if (!progressDialog.isVisible()) {
 
@@ -893,314 +1349,98 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
                                         return;
                                     }
+                                } catch (Exception e) {
 
-                                    if (nodes.item(i).getAttributes() != null) {
+                                    Util.writeToErrorLog("Error parsing OMSSA file: ");
+                                    e.printStackTrace();
 
-                                        if (nodes.item(i).getAttributes().getNamedItem("type") != null) {
+                                    JOptionPane.showMessageDialog(null,
+                                            "The following file could not parsed as an OMSSA file:\n " +
+                                            prideConverter.getProperties().getSelectedSourceFiles().get(j) +
+                                            "\n\n" +
+                                            "See ../Properties/ErrorLog.txt for more details.",
+                                            "Error Parsing File", JOptionPane.ERROR_MESSAGE);
+                                }
+                            } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
 
-                                            if (nodes.item(i).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase(
-                                                    "model")) {
+                                prideConverter.getProperties().setMascotConfidenceLevel(
+                                        (Double) mascotConfidenceLevelJSpinner.getValue());
 
-                                                if (nodes.item(i).getAttributes().getNamedItem("id") != null) {
-                                                    spectrumID = new Integer(nodes.item(i).getAttributes().getNamedItem("id").getNodeValue()).intValue();
-                                                }
+                                double confidenceLevel = (100 -
+                                        prideConverter.getProperties().getMascotConfidenceLevel()) /
+                                        100;
 
-                                                if (nodes.item(i).getAttributes().getNamedItem("mh") !=
-                                                        null) {
-                                                    precursorMass = new Double(nodes.item(i).getAttributes().getNamedItem("mh").getNodeValue()).doubleValue();
-                                                }
+                                double size = (double) file.length() /
+                                        prideConverter.getProperties().NUMBER_OF_BYTES_PER_MEGABYTE;
 
-                                                if (nodes.item(i).getAttributes().getNamedItem("z") !=
-                                                        null) {
-                                                    precursorCharge = new Integer(nodes.item(i).getAttributes().getNamedItem("z").getNodeValue()).intValue();
-                                                }
+                                if (size > prideConverter.getProperties().MAX_MASCOT_DAT_FILESIZE_BEFORE_INDEXING) {
 
-                                                if (nodes.item(i).getAttributes().getNamedItem("expect") !=
-                                                        null) {
-                                                    expect = new Double(nodes.item(i).getAttributes().getNamedItem("expect").getNodeValue()).doubleValue();
-                                                }
+                                    //if the file is large
+                                    tempMascotDatfile = MascotDatfileFactory.create(
+                                            file.getPath(),
+                                            MascotDatfileType.INDEX);
+                                } else {
+                                    tempMascotDatfile = MascotDatfileFactory.create(
+                                            file.getPath(),
+                                            MascotDatfileType.MEMORY);
+                                }
 
-                                                if (nodes.item(i).getAttributes().getNamedItem("label") !=
-                                                        null) {
-                                                    label = nodes.item(i).getAttributes().getNamedItem("label").getNodeValue();
-                                                }
+                                queryToPeptideMap = tempMascotDatfile.getQueryToPeptideMap();
+                                queries = tempMascotDatfile.getQueryEnumerator();
 
-                                                ((DefaultTableModel) spectraJXTable.getModel()).addRow(
-                                                        new Object[]{
-                                                            null,
-                                                            file.getName(),
-                                                            spectrumID,
-                                                            new Boolean(true),
-                                                            new Boolean(true)
-                                                        });
+                                while (queries.hasMoreElements()) {
 
-                                                numberOfSelectedSpectra++;
-                                            }
+                                    currentQuery = queries.nextElement();
+
+                                    tempPeptideHit = queryToPeptideMap.getPeptideHitOfOneQuery(currentQuery.getQueryNumber());
+
+                                    if (tempPeptideHit != null) {
+                                        ((DefaultTableModel) spectraJXTable.getModel()).addRow(new Object[]{
+                                                    null,
+                                                    currentQuery.getFilename(),
+                                                    tempMascotDatfile.getFileName() + "_" + currentQuery.getQueryNumber(),
+                                                    new Boolean(queryToPeptideMap.getPeptideHitsAboveIdentityThreshold(currentQuery.getQueryNumber(), confidenceLevel).size() > 0),
+                                                    new Boolean(queryToPeptideMap.getPeptideHitsAboveIdentityThreshold(currentQuery.getQueryNumber(), confidenceLevel).size() > 0)
+                                                });
+
+                                        if (queryToPeptideMap.getPeptideHitsAboveIdentityThreshold(currentQuery.getQueryNumber(), confidenceLevel).size() > 0) {
+                                            numberOfSelectedSpectra++;
                                         }
-                                    }
-                                }
-
-                                numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-                                        "/" +
-                                        numberOfSelectedSpectra);
-
-                            } catch (FileNotFoundException ex) {
-                                JOptionPane.showMessageDialog(null, "The file named " +
-                                        prideConverter.getProperties().getSelectedSourceFiles().get(j) +
-                                        "\ncould not be found.",
-                                        "File Not Found", JOptionPane.ERROR_MESSAGE);
-                                Util.writeToErrorLog("Error when reading X!Tandem file: ");
-                                ex.printStackTrace();
-                            } catch (Exception e) {
-
-                                Util.writeToErrorLog("Error parsing X!Tandem file: ");
-                                e.printStackTrace();
-
-                                JOptionPane.showMessageDialog(null,
-                                        "The following file could not parsed as an X!Tandem file:\n " +
-                                        prideConverter.getProperties().getSelectedSourceFiles().get(j) +
-                                        "\n\n" +
-                                        "See ../Properties/ErrorLog.txt for more details.",
-                                        "Error Parsing File", JOptionPane.ERROR_MESSAGE);
-                            }
-                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill") ||
-                                prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
-
-                            try {
-                                f = new FileReader(file);
-                                b = new BufferedReader(f);
-
-                                currentLine = b.readLine();
-
-                                tok = new StringTokenizer(currentLine);
-
-                                precursorMass = new Double(tok.nextToken()).doubleValue();
-                                precursorIntensty = Double.NaN;
-
-                                if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
-                                    precursorIntensty = new Double(tok.nextToken()).doubleValue();
-                                }
-
-                                precursorCharge = new Integer(tok.nextToken()).intValue();
-
-                                matchFound = false;
-
-                                for (int i = 0; i <
-                                        prideConverter.getProperties().getSelectedIdentificationFiles().size() &&
-                                        !matchFound; i++) {
-
-                                    if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
-                                        matchFound = new File(prideConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName().equalsIgnoreCase(file.getName() +
-                                                ".spo");
-                                    } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
-
-                                        matchFound = new File(prideConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName().equalsIgnoreCase(
-                                                file.getName().substring(0, file.getName().length() -
-                                                4) + ".out");
-                                    }
-                                }
-
-                                selected = false;
-
-                                if (selectAllSpectraJRadioButton.isSelected()) {
-                                    selected = true;
-                                } else if (selectIdentifiedJRadioButton.isSelected()) {
-                                    selected = matchFound;
-                                }
-
-                                ((DefaultTableModel) spectraJXTable.getModel()).addRow(
-                                        new Object[]{
-                                            null,
-                                            file.getName(),
-                                            null,
-                                            new Boolean(matchFound),
-                                            new Boolean(selected)
-                                        });
-
-                                if (selected) {
-                                    numberOfSelectedSpectra++;
-                                }
-
-                                numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-                                        "/" + spectraJXTable.getRowCount());
-
-                            } catch (FileNotFoundException ex) {
-                                JOptionPane.showMessageDialog(null, "The file named " +
-                                        file.getName() +
-                                        "\ncould not be found.",
-                                        "File Not Found", JOptionPane.ERROR_MESSAGE);
-                                Util.writeToErrorLog("File not found: ");
-                                ex.printStackTrace();
-                            } catch (Exception e) {
-
-                                String fileName = "Sequest DTA file";
-
-                                if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
-                                    fileName = "Micromass PKL file";
-                                }
-
-                                Util.writeToErrorLog("Error parsing " + fileName + ": ");
-                                e.printStackTrace();
-
-                                JOptionPane.showMessageDialog(null,
-                                        "The following file could not parsed as a " +
-                                        fileName + ":\n " +
-                                        file.getPath() + "\n\n" +
-                                        "See ../Properties/ErrorLog.txt for more details.",
-                                        "Error Parsing File", JOptionPane.ERROR_MESSAGE);
-                            }
-
-                            if (!progressDialog.isVisible()) {
-
-                                while (((DefaultTableModel) spectraJXTable.getModel()).getRowCount() >
-                                        0) {
-                                    ((DefaultTableModel) spectraJXTable.getModel()).removeRow(0);
-                                }
-
-                                numberOfSelectedSpectraJTextField.setText("");
-
-                                setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-                                return;
-                            }
-                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
-
-                            try {
-                                selected = false;
-
-                                omxFile = new OmssaOmxFile(file.getPath(), null, null);
-                                results = omxFile.getSpectrumToHitSetMap();
-
-                                iterator = results.keySet().iterator();
-
-                                while (iterator.hasNext()) {
-
-                                    tempSpectrum = iterator.next();
-
-                                    selected = false;
-
-                                    if (selectAllSpectraJRadioButton.isSelected()) {
-                                        selected = true;
-                                        numberOfSelectedSpectra++;
-                                    } else if (results.get(tempSpectrum).MSHitSet_hits.MSHits.size() > 0) {
-                                        selected = true;
-                                        numberOfSelectedSpectra++;
+                                    } else {
+                                        ((DefaultTableModel) spectraJXTable.getModel()).addRow(new Object[]{
+                                                    null,
+                                                    currentQuery.getFilename(),
+                                                    tempMascotDatfile.getFileName() + "_" + currentQuery.getQueryNumber(),
+                                                    new Boolean(false),
+                                                    new Boolean(false)
+                                                });
                                     }
 
-                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
-                                            new Object[]{
-                                                null,
-                                                tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.get(0),
-                                                tempSpectrum.MSSpectrum_number,
-                                                new Boolean(results.get(tempSpectrum).MSHitSet_hits.MSHits.size() > 0),
-                                                new Boolean(selected)
-                                            });
+                                    totalNumberOfSpectra++;
+
+                                    if (!progressDialog.isVisible()) {
+
+                                        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+
+                                        while (((DefaultTableModel) spectraJXTable.getModel()).getRowCount() > 0) {
+                                            ((DefaultTableModel) spectraJXTable.getModel()).removeRow(0);
+                                        }
+
+                                        numberOfSelectedSpectra = 0;
+                                        numberOfSelectedSpectraJTextField.setText("");
+                                        loadSpectraJButton.setEnabled(true);
+
+                                        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+                                        return;
+                                    }
 
                                     numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-                                            "/" +
-                                            spectraJXTable.getRowCount());
+                                            "/" + totalNumberOfSpectra);
                                 }
-
-                                if (!progressDialog.isVisible()) {
-
-                                    while (((DefaultTableModel) spectraJXTable.getModel()).getRowCount() > 0) {
-                                        ((DefaultTableModel) spectraJXTable.getModel()).removeRow(0);
-                                    }
-
-                                    numberOfSelectedSpectraJTextField.setText("");
-
-                                    setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-                                    return;
-                                }
-                            } catch (Exception e) {
-
-                                Util.writeToErrorLog("Error parsing OMSSA file: ");
-                                e.printStackTrace();
-
-                                JOptionPane.showMessageDialog(null,
-                                        "The following file could not parsed as an OMSSA file:\n " +
-                                        prideConverter.getProperties().getSelectedSourceFiles().get(j) +
-                                        "\n\n" +
-                                        "See ../Properties/ErrorLog.txt for more details.",
-                                        "Error Parsing File", JOptionPane.ERROR_MESSAGE);
-                            }
-                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
-
-                            prideConverter.getProperties().setMascotConfidenceLevel(
-                                    (Double) mascotConfidenceLevelJSpinner.getValue());
-
-                            double confidenceLevel = (100 -
-                                    prideConverter.getProperties().getMascotConfidenceLevel()) /
-                                    100;
-
-                            double size = (double) file.length() /
-                                    prideConverter.getProperties().NUMBER_OF_BYTES_PER_MEGABYTE;
-
-                            if (size > prideConverter.getProperties().MAX_MASCOT_DAT_FILESIZE_BEFORE_INDEXING) {
-
-                                //if the file is large
-                                tempMascotDatfile = MascotDatfileFactory.create(
-                                        file.getPath(),
-                                        MascotDatfileType.INDEX);
-                            } else {
-                                tempMascotDatfile = MascotDatfileFactory.create(
-                                        file.getPath(),
-                                        MascotDatfileType.MEMORY);
-                            }
-
-                            queryToPeptideMap = tempMascotDatfile.getQueryToPeptideMap();
-                            queries = tempMascotDatfile.getQueryEnumerator();
-
-                            while (queries.hasMoreElements()) {
-
-                                currentQuery = queries.nextElement();
-
-                                tempPeptideHit = queryToPeptideMap.getPeptideHitOfOneQuery(currentQuery.getQueryNumber());
-
-                                if (tempPeptideHit != null) {
-                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(new Object[]{
-                                                null,
-                                                currentQuery.getFilename(),
-                                                tempMascotDatfile.getFileName() + "_" + currentQuery.getQueryNumber(),
-                                                new Boolean(queryToPeptideMap.getPeptideHitsAboveIdentityThreshold(currentQuery.getQueryNumber(), confidenceLevel).size() > 0),
-                                                new Boolean(queryToPeptideMap.getPeptideHitsAboveIdentityThreshold(currentQuery.getQueryNumber(), confidenceLevel).size() > 0)
-                                            });
-
-                                    if (queryToPeptideMap.getPeptideHitsAboveIdentityThreshold(currentQuery.getQueryNumber(), confidenceLevel).size() > 0) {
-                                        numberOfSelectedSpectra++;
-                                    }
-                                } else {
-                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(new Object[]{
-                                                null,
-                                                currentQuery.getFilename(),
-                                                tempMascotDatfile.getFileName() + "_" + currentQuery.getQueryNumber(),
-                                                new Boolean(false),
-                                                new Boolean(false)
-                                            });
-                                }
-
-                                totalNumberOfSpectra++;
-
-                                if (!progressDialog.isVisible()) {
-
-                                    setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-
-                                    while (((DefaultTableModel) spectraJXTable.getModel()).getRowCount() > 0) {
-                                        ((DefaultTableModel) spectraJXTable.getModel()).removeRow(0);
-                                    }
-
-                                    numberOfSelectedSpectra = 0;
-                                    numberOfSelectedSpectraJTextField.setText("");
-                                    loadSpectraJButton.setEnabled(true);
-
-                                    setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-                                    return;
-                                }
-
-                                numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-                                        "/" + totalNumberOfSpectra);
                             }
                         }
                     }
+
                 }
 
                 if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims")) {
@@ -1757,7 +1997,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                         prideConverter.getProperties().getSelectedSpectraKeys().add(
                                 new Object[]{
                                     spectraJXTable.getValueAt(i, 1),
-                                    spectraJXTable.getValueAt(i, 2)
+                                    "" + spectraJXTable.getValueAt(i, 2)
                                 });
                     }
                 }
@@ -1782,6 +2022,52 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         return saveOk;
+    }
+
+    /**
+     * This method extracts an integer from Mascot Generic File charge notation, eg.,
+     * 1+.
+     * Remark that the charge can also be annotated as "+2,+3", in those rather cases the charge is also "not known." So we save a zero value.
+     *
+     * @param aCharge   String with the Mascot Generic File charge notation (eg., 1+).
+     * @return  int with the corresponding integer.
+     */
+    private static int extractCharge(String aCharge) {
+        int charge = 0;
+
+        // Trim the charge String.
+        String trimmedCharge = aCharge.trim();
+
+        boolean negate = false;
+        boolean multiCharge = false;
+
+        // See if there is a '-' in the charge String.
+        if (trimmedCharge.indexOf("-") >= 0) {
+            negate = true;
+        }
+
+        // See if there are multiple charges assigned to this spectrum.
+        if (trimmedCharge.indexOf(",") >= 0) {
+            multiCharge = true;
+        }
+
+        if (!multiCharge) {
+            // Charge is now: trimmedCharge without the sign character,
+            // negated if necessary.
+
+            if (trimmedCharge.endsWith("+")) {
+                charge = Integer.parseInt(trimmedCharge.substring(0, trimmedCharge.length() -
+                        1));
+            } else {
+                charge = Integer.parseInt(trimmedCharge);
+            }
+
+            if (negate) {
+                charge = -charge;
+            }
+        }
+
+        return charge;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutJButton;

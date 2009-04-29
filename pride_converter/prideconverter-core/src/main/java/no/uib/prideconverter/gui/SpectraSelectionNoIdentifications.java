@@ -549,7 +549,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
     private void loadSpectraJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadSpectraJButtonActionPerformed
 
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-
+        
         numberOfSelectedSpectra = 0;
 
         progressDialog = new ProgressDialog(this, true);
@@ -565,11 +565,17 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
         t.start();
 
+
+        // wait until progress dialog is visible
+        // (was not needed in Java 1.6...)
+        while(!progressDialog.isVisible()){
+            
+        }
+
         Thread t2 = new Thread(new Runnable() {
 
             public void run() {
 
-                ArrayList spectraList;
                 MSXMLParser msXMLParser;
                 int scanCount;
                 Scan scan;
@@ -706,8 +712,6 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                             f.close();
 
                         } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")) {
-
-                            spectraList = new ArrayList();
 
                             msXMLParser = new MSXMLParser(file.getAbsolutePath());
 

@@ -625,7 +625,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
             new DataFileSelection(prideConverter, this.getLocation());
         } else if (xTandemJRadioButton.isSelected()) {
             prideConverter.getProperties().setDataSource("X!Tandem");
-            new DataFileSelection(prideConverter, this.getLocation());
+            new DataFileSelectionTwoFileTypes(prideConverter, this.getLocation());
         } else if (pklFilesJRadioButton.isSelected()) {
             prideConverter.getProperties().setDataSource("Micromass PKL File");
             new DataFileSelection(prideConverter, this.getLocation());
@@ -789,7 +789,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "The output format is described here:<br>" +
                 "<a href=\"http://www.thegpm.org/docs/X_series_output_form.pdf\">www.thegpm.org/docs/X_series_output_form.pdf</a>" +
                 "<br><br>" +
-                "File Extension: .xml<br><br>" +
+                "File Extension: .xml (the identifications) and dta, mgf, pkl, mzData or mzXML (the spectra)<br><br>" +
                 "Homepage: <a href=\"http://www.thegpm.org/TANDEM\">www.thegpm.org/TANDEM</a>");
         descriptionJEditorPane.setCaretPosition(0);
 

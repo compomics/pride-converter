@@ -13,9 +13,13 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import no.uib.prideconverter.filefilters.DtaFileFilter;
+import no.uib.prideconverter.filefilters.MgfFileFilter;
+import no.uib.prideconverter.filefilters.MzDataFileFilter;
+import no.uib.prideconverter.filefilters.MzXmlFileFilter;
 import no.uib.prideconverter.filefilters.OutFileFilter;
 import no.uib.prideconverter.filefilters.PklFileFilter;
 import no.uib.prideconverter.filefilters.PklSpoFileFilter;
+import no.uib.prideconverter.filefilters.XmlFileFilter;
 import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
 import uk.ac.ebi.pride.model.interfaces.mzdata.UserParam;
 
@@ -547,6 +551,12 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
             chooser.setFileFilter(new PklFileFilter());
         } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
             chooser.setFileFilter(new DtaFileFilter());
+        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+            //chooser.addChoosableFileFilter(new DtaFileFilter());
+            chooser.addChoosableFileFilter(new MgfFileFilter());
+            //chooser.addChoosableFileFilter(new MzDataFileFilter());
+            chooser.addChoosableFileFilter(new MzXmlFileFilter());
+            //chooser.addChoosableFileFilter(new PklFileFilter());
         }
 
         int returnVal = chooser.showOpenDialog(this);
@@ -621,6 +631,23 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                                             "File Already Selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
+                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+                            if (chooser.getFileFilter().accept(tempFile)) {
+                                if (!prideConverter.getProperties().getSelectedSourceFiles().contains(tempFile)) {
+                                    ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).addRow(
+                                            new Object[]{
+                                                new Integer(selectedSpectraFilesJTable.getRowCount() + 1),
+                                                tempFile.getName(),
+                                                new Boolean(true)
+                                            });
+
+                                    prideConverter.getProperties().getSelectedSourceFiles().add(tempFile.getPath());
+                                } else {
+                                    JOptionPane.showMessageDialog(this, "A file with the name " + tempFile.getPath() +
+                                            " is already selected.\nThe same file can not be added twice.",
+                                            "File Already Selected", JOptionPane.ERROR_MESSAGE);
+                                }
+                            }
                         }
                     }
                 } else {
@@ -637,7 +664,8 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                     } else {
                         JOptionPane.showMessageDialog(this, "A file with the name " +
                                 currentFile.getPath() +
-                                " is already selected.\nThe same file can not be added twice.", "File Already Selected", JOptionPane.ERROR_MESSAGE);
+                                " is already selected.\nThe same file can not be added twice.", "File Already Selected",
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -694,6 +722,8 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
             chooser.setFileFilter(new PklSpoFileFilter());
         } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
             chooser.setFileFilter(new OutFileFilter());
+        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+            chooser.setFileFilter(new XmlFileFilter());
         }
 
         int returnVal = chooser.showOpenDialog(this);
@@ -754,6 +784,24 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                         } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
                             if (tempFile.getAbsolutePath().endsWith(".out") ||
                                     tempFile.getAbsolutePath().endsWith(".OUT")) {
+                                if (!prideConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile)) {
+                                    ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).addRow(
+                                            new Object[]{
+                                                new Integer(selectedIdentificationFilesJTable.getRowCount() + 1),
+                                                tempFile.getName(),
+                                                new Boolean(true)
+                                            });
+
+                                    prideConverter.getProperties().getSelectedIdentificationFiles().add(tempFile.getPath());
+                                } else {
+                                    JOptionPane.showMessageDialog(this,
+                                            "A file with the name " + tempFile.getPath() +
+                                            " is already selected.\nThe same file can not be added twice.",
+                                            "File Already Selected", JOptionPane.ERROR_MESSAGE);
+                                }
+                            }
+                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+                            if (chooser.getFileFilter().accept(tempFile)) {
                                 if (!prideConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile)) {
                                     ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).addRow(
                                             new Object[]{

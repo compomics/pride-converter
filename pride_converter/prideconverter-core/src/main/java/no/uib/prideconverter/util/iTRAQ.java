@@ -44,26 +44,26 @@ public class iTRAQ {
     private String err1 = "NA",  err2 = "NA",  err3 = "NA",  err4 = "NA";
     private double i114max = 0,  i115max = 0,  i116max = 0,  i117max = 0;
     private double[][] arrays;
-    private double precursorMass,  precursorCharge;
+    private double precursorMz,  precursorCharge;
 
     /**
      * Creates a new iTRAQ object that holds all the information needed for 
      * the calculations.
      * 
      * @param arrays
-     * @param precursorMass
+     * @param precursorMz
      * @param precursorCharge
      * @param lowerRange
      * @param upperRange
      * @param threshold
      * @param corrections
      */
-    public iTRAQ(double[][] arrays, double precursorMass, int precursorCharge,
+    public iTRAQ(double[][] arrays, double precursorMz, int precursorCharge,
             double lowerRange, double upperRange,
             double threshold, double[] corrections) {
 
         this.arrays = arrays;
-        this.precursorMass = precursorMass;
+        this.precursorMz = precursorMz;
         this.precursorCharge = precursorCharge;
 
         this.lowerRange = lowerRange;
@@ -83,14 +83,14 @@ public class iTRAQ {
      * 
      * @param mzValues
      * @param intValues 
-     * @param precursorMass
+     * @param precursorMz
      * @param precursorCharge
      * @param lowerRange
      * @param upperRange
      * @param threshold
      * @param corrections 
      */
-    public iTRAQ(double[] mzValues, double[] intValues, double precursorMass, int precursorCharge,
+    public iTRAQ(double[] mzValues, double[] intValues, double precursorMz, int precursorCharge,
             double lowerRange, double upperRange,
             double threshold, double[] corrections) {
 
@@ -101,7 +101,7 @@ public class iTRAQ {
             arrays[1][j] = intValues[j];
         }
 
-        this.precursorMass = precursorMass;
+        this.precursorMz = precursorMz;
         this.precursorCharge = precursorCharge;
 
         this.lowerRange = lowerRange;
@@ -536,7 +536,7 @@ public class iTRAQ {
             }
         }
         if (arrays != null) {
-            calculateRatios(precursorMass);
+            calculateRatios(precursorMz);
         } else {
 
             // Tries to read the file as a space separated text file of 
@@ -549,7 +549,7 @@ public class iTRAQ {
 
                 StringTokenizer tok = new StringTokenizer(currentLine);
 
-                precursorMass = new Double(tok.nextToken()).doubleValue();
+                precursorMz = new Double(tok.nextToken()).doubleValue();
                 precursorCharge = new Integer(tok.nextToken()).intValue();
 
                 currentLine = b.readLine();
@@ -572,7 +572,7 @@ public class iTRAQ {
                     arrays[1][i] = ((Double) intensities.get(i)).doubleValue();
                 }
 
-                calculateRatios(precursorMass);
+                calculateRatios(precursorMz);
 
             } catch (FileNotFoundException ex) {
                 JOptionPane.showMessageDialog(
