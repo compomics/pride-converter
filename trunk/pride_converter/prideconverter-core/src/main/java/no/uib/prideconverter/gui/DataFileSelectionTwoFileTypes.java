@@ -435,12 +435,30 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
      */
     private void nextJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextJButtonActionPerformed
 
-        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new SpectraSelectionWithIdentifications(prideConverter, this.getLocation());
-        this.setVisible(false);
-        this.dispose();
+        boolean cancel = false;
 
-        this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        // for X!Tandem you can only convert one pair of spectra / identification files at once
+        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+
+            if (selectedSpectraFilesJTable.getRowCount() > 1 ||
+                    selectedIdentificationFilesJTable.getRowCount() > 1) {
+                JOptionPane.showMessageDialog(this,
+                        "For X!Tandem you can currently only convert one\n" +
+                        "pair of spectra and identification files. Please\n" +
+                        "reduce the selected set of files before continuing.",
+                        "X!Tandem Conversion Limitation",
+                        JOptionPane.WARNING_MESSAGE);
+                cancel = true;
+            }
+        }
+
+        if (!cancel) {
+            this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+            new SpectraSelectionWithIdentifications(prideConverter, this.getLocation());
+            this.setVisible(false);
+            this.dispose();
+            this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        }
     }//GEN-LAST:event_nextJButtonActionPerformed
 
     /**
@@ -552,11 +570,53 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
         } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
             chooser.setFileFilter(new DtaFileFilter());
         } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
-            //chooser.addChoosableFileFilter(new DtaFileFilter());
-            chooser.addChoosableFileFilter(new MgfFileFilter());
-            //chooser.addChoosableFileFilter(new MzDataFileFilter());
-            chooser.addChoosableFileFilter(new MzXmlFileFilter());
-            //chooser.addChoosableFileFilter(new PklFileFilter());
+
+            // make sure that the last used file filter is selected
+            // the next time the file user is opened
+            if (prideConverter.getProperties().getLastUsedFileFilter() != null) {
+                if (prideConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
+                        new MgfFileFilter().getDescription())) {
+                    //chooser.addChoosableFileFilter(new DtaFileFilter());
+                    //chooser.addChoosableFileFilter(new PklFileFilter());
+                    chooser.addChoosableFileFilter(new MzDataFileFilter());
+                    chooser.addChoosableFileFilter(new MzXmlFileFilter());
+                    chooser.addChoosableFileFilter(new MgfFileFilter());
+                } else if (prideConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
+                        new MzDataFileFilter().getDescription())) {
+                    //chooser.addChoosableFileFilter(new DtaFileFilter());
+                    //chooser.addChoosableFileFilter(new PklFileFilter());
+                    chooser.addChoosableFileFilter(new MgfFileFilter());
+                    chooser.addChoosableFileFilter(new MzXmlFileFilter());
+                    chooser.addChoosableFileFilter(new MzDataFileFilter());
+                } else if (prideConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
+                        new MzXmlFileFilter().getDescription())) {
+                    //chooser.addChoosableFileFilter(new DtaFileFilter());
+                    //chooser.addChoosableFileFilter(new PklFileFilter());
+                    chooser.addChoosableFileFilter(new MgfFileFilter());
+                    chooser.addChoosableFileFilter(new MzDataFileFilter());
+                    chooser.addChoosableFileFilter(new MzXmlFileFilter());
+                } else if (prideConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
+                        new DtaFileFilter().getDescription())) {
+                    chooser.addChoosableFileFilter(new MgfFileFilter());
+                    chooser.addChoosableFileFilter(new MzDataFileFilter());
+                    chooser.addChoosableFileFilter(new MzXmlFileFilter());
+                    chooser.addChoosableFileFilter(new PklFileFilter());
+                    chooser.addChoosableFileFilter(new DtaFileFilter());
+                } else if (prideConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
+                        new PklFileFilter().getDescription())) {
+                    chooser.addChoosableFileFilter(new DtaFileFilter());
+                    chooser.addChoosableFileFilter(new MgfFileFilter());
+                    chooser.addChoosableFileFilter(new MzDataFileFilter());
+                    chooser.addChoosableFileFilter(new MzXmlFileFilter());
+                    chooser.addChoosableFileFilter(new PklFileFilter());
+                }
+            } else {
+                //chooser.addChoosableFileFilter(new DtaFileFilter());
+                chooser.addChoosableFileFilter(new MgfFileFilter());
+                chooser.addChoosableFileFilter(new MzDataFileFilter());
+                chooser.addChoosableFileFilter(new MzXmlFileFilter());
+                //chooser.addChoosableFileFilter(new PklFileFilter());
+            }
         }
 
         int returnVal = chooser.showOpenDialog(this);
@@ -580,6 +640,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
             }
 
             prideConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
+            prideConverter.getProperties().setLastUsedFileFilter(chooser.getFileFilter());
 
             File[] allFiles = chooser.getSelectedFiles();
 
