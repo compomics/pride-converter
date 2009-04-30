@@ -116,7 +116,7 @@ import uk.ac.ebi.tpp_to_pride.wrappers.peptideprophet.*;
 public class PRIDEConverter {
 
     private static String wizardName = "PRIDE Converter";
-    private static String prideConverterVersionNumber = "v1.16.2";
+    private static String prideConverterVersionNumber = "v1.17_beta";//"v1.16.2";
     private static ArrayList<IdentificationGeneral> ids;
     private static Collection identifications;
     private static int totalNumberOfSpectra = 0;
@@ -129,6 +129,7 @@ public class PRIDEConverter {
     private static Properties properties;
     private static ProgressDialog progressDialog;
     private static Connection conn = null;
+    private static MzData mzData;
     private static boolean cancelConversion = false;
     private static boolean useErrorLog = true;
     private static boolean debug = false;
@@ -281,7 +282,9 @@ public class PRIDEConverter {
                         in.close();
                     }
 
-                    if (deprecatedOrDeleted) {
+                    // informs the user about an updated version of the converter, unless the user
+                    // is running a beta version
+                    if (deprecatedOrDeleted && prideConverterVersionNumber.lastIndexOf("beta") == -1) {
                         int option = JOptionPane.showConfirmDialog(null,
                                 "A newer version of PRIDE Converter is available.\n" +
                                 "Do you want to upgrade?\n\n" +
@@ -476,9 +479,6 @@ public class PRIDEConverter {
                         Util.writeToErrorLog("Progress bar: NullPointerException!!!\n" + e.toString());
                     }
 
-                    // create the mzData object
-                    MzData mzData;
-
                     if (properties.getDataSource().equalsIgnoreCase("TPP") ||
                             properties.getDataSource().equalsIgnoreCase("DTASelect")) {
 
@@ -489,8 +489,13 @@ public class PRIDEConverter {
 
                         // for mzData the, we just have to add/update the additional details
                         // and combine the files into one mzData file
-                        mzData = combineMzDataFiles();
+                        mzData = combineMzDataFiles(new HashMap(), mzDataSpectra);
 
+                    } else if (properties.getDataSource().equalsIgnoreCase("X!Tandem")) {
+
+                        if (properties.getSelectedSourceFiles().get(0).toLowerCase().endsWith(".mzdata")) {
+                            // the spectra has already been extracted
+                        }
                     } else {
                         mzData = createMzData(mzDataSpectra);
                     }
@@ -617,10 +622,10 @@ public class PRIDEConverter {
                         // if so the part after the second '|' is removed
                         if (accession.lastIndexOf("|") != -1) {
                             //if (properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
-                                if (accession.indexOf("|", accession.indexOf("|") + 1) != -1) {
-                                    accession = accession.substring(0, accession.indexOf("|",
-                                            accession.indexOf("|") + 1));
-                                }
+                            if (accession.indexOf("|", accession.indexOf("|") + 1) != -1) {
+                                accession = accession.substring(0, accession.indexOf("|",
+                                        accession.indexOf("|") + 1));
+                            }
 //                            } else {
 //                                accession = accession.substring(0, accession.indexOf("|"));
 //                            }
@@ -1523,7 +1528,7 @@ public class PRIDEConverter {
             } else if (file.getName().toLowerCase().endsWith(".pkl")) {
                 // not yet implemented
             } else if (file.getName().toLowerCase().endsWith(".mzdata")) {
-                // not yet implemented
+                mzData = combineMzDataFiles(mapping, aTransformedSpectra);
             } else if (file.getName().toLowerCase().endsWith(".mzxml")) {
 
                 MSXMLParser msXMLParser = new MSXMLParser(
@@ -1651,6 +1656,10 @@ public class PRIDEConverter {
             }
 
             br.close();
+
+            if (!file.getName().toLowerCase().endsWith(".mzdata")) {
+                totalNumberOfSpectra = totalSpectraCounter;
+            }
         }
 
 
@@ -1914,7 +1923,6 @@ public class PRIDEConverter {
                                             }
                                         }
 
-
                                         SpectrumImpl tempSpectrumImpl =
                                                 ((SpectrumImpl) aTransformedSpectra.get(((Long) mapping.get(spectrumKey)).intValue() - 1));
 
@@ -2011,8 +2019,6 @@ public class PRIDEConverter {
                         "Error Parsing File", JOptionPane.ERROR_MESSAGE);
             }
         }
-
-        totalNumberOfSpectra = totalSpectraCounter;
 
         return mapping;
     }
@@ -9246,9 +9252,11 @@ public class PRIDEConverter {
      * values chosen by the user, combines all the spectra from the selected
      * mzData files into one mzData object and returns this object.
      *
+     * @param mapping a hashmap of the spectrum ids mapped to the spectrum number
+     *                in the xml file
      * @return the mzData object
      */
-    private MzData combineMzDataFiles() {
+    private static MzData combineMzDataFiles(HashMap mapping, ArrayList aTransformedSpectra) {
 
         // The CV lookup stuff. (NB: currently hardcoded to PSI only)
         Collection cvLookups = new ArrayList(1);
@@ -9278,16 +9286,13 @@ public class PRIDEConverter {
         ArrayList sampleDescriptionUserParams = new ArrayList(
                 properties.getSampleDescriptionUserSubSampleNames().size());
 
-        for (int i = 0; i <
-                properties.getSampleDescriptionUserSubSampleNames().size(); i++) {
+        for (int i = 0; i < properties.getSampleDescriptionUserSubSampleNames().size(); i++) {
             sampleDescriptionUserParams.add(new UserParamImpl(
                     "SUBSAMPLE_" + (i + 1),
-                    i, (String) properties.getSampleDescriptionUserSubSampleNames().
-                    get(i)));
+                    i, (String) properties.getSampleDescriptionUserSubSampleNames().get(i)));
         }
 
-        for (int i = 0; i <
-                properties.getSampleDescriptionCVParamsQuantification().size(); i++) {
+        for (int i = 0; i < properties.getSampleDescriptionCVParamsQuantification().size(); i++) {
             properties.getSampleDescriptionCVParams().add(
                     properties.getSampleDescriptionCVParamsQuantification().get(i));
         }
@@ -9295,17 +9300,13 @@ public class PRIDEConverter {
         progressDialog.setString(null);
         progressDialog.setIntermidiate(true);
 
-        ArrayList aTransformedSpectra = new ArrayList();
+        totalNumberOfSpectra = 0;
 
-        long spectrumId = 1;
-
-        for (int j = 0; j <
-                properties.getSelectedSourceFiles().size() && !cancelConversion; j++) {
+        for (int j = 0; j < properties.getSelectedSourceFiles().size() && !cancelConversion; j++) {
 
             String filePath = properties.getSelectedSourceFiles().get(j);
 
-            currentFileName =
-                    filePath.substring(filePath.lastIndexOf(File.separator) + 1);
+            currentFileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
 
             progressDialog.setIntermidiate(true);
             progressDialog.setString(currentFileName + " (" + (j + 1) + "/" +
@@ -9319,6 +9320,8 @@ public class PRIDEConverter {
 
                 while (spectra.hasNext()) {
 
+                    totalNumberOfSpectra++;
+
                     Spectrum currentSpectrum = spectra.next();
 
                     Spectrum updatedSpectrum =
@@ -9330,7 +9333,7 @@ public class PRIDEConverter {
                             currentSpectrum.getSupDataArrayBinaryCollection(),
                             currentSpectrum.getMzRangeStop(),
                             currentSpectrum.getAcqSpecification(),
-                            spectrumId++,
+                            totalNumberOfSpectra,
                             currentSpectrum.getPrecursorCollection(),
                             currentSpectrum.getSpectrumDescCommentCollection(),
                             currentSpectrum.getSpectrumInstrumentCvParameters(),
@@ -9339,6 +9342,10 @@ public class PRIDEConverter {
                             currentSpectrum.getSupDescCollection());
 
                     aTransformedSpectra.add(updatedSpectrum);
+
+                    String spectrum_key = new File(filePath).getName() + "_" + currentSpectrum.getSpectrumId();
+
+                    mapping.put(spectrum_key, new Long(totalNumberOfSpectra));
                 }
 
             } catch (FileNotFoundException e) {
@@ -9365,7 +9372,6 @@ public class PRIDEConverter {
                         "Parsing Error",
                         JOptionPane.ERROR_MESSAGE);
             }
-
         }
 
         // Create the combinded mzData object.

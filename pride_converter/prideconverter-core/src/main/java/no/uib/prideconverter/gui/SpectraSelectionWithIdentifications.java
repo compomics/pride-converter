@@ -165,6 +165,22 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
             mascotConfidenceLevelJSpinner.setEnabled(true);
         }
 
+        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+
+            if (prideConverter.getProperties().getSelectedSourceFiles().get(0).toLowerCase().endsWith(".mzdata")) {
+                selectIdentifiedJRadioButton.setEnabled(false);
+                selectionTypeJLabel.setEnabled(false);
+                fileNamesSelectionJRadioButton.setEnabled(false);
+                identificationIdsSelectionJRadioButton.setEnabled(false);
+                jLabel5.setEnabled(false);
+                separatorJTextField.setEnabled(false);
+                findOutPutFileJButton.setEnabled(false);
+                advancedSelectionJTextArea.setEnabled(false);
+                spectraJXTable.setEnabled(false);
+                loadSpectraJButton.setEnabled(false);
+            }
+        }
+
         selectAllSpectraJRadioButton.requestFocus();
 
         separatorJTextField.setText(prideConverter.getUserProperties().getCurrentFileNameSelectionCriteriaSeparator());

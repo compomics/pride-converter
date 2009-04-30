@@ -4,6 +4,7 @@ import be.proteomics.mascotdatfile.util.mascot.ProteinHit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import uk.ac.ebi.jmzml.model.mzml.MzML;
 import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
@@ -70,6 +71,7 @@ public class Properties {
     private MzData mzDataFile;
     private MzML mzML;
     private boolean isGelFree = true;
+    private FileFilter lastUsedFileFilter;
 
     private HashMap<String, ArrayList<CvParam>> spectrumCvParams;
     private HashMap<String, ArrayList<UserParam>> spectrumUserParams;
@@ -1609,5 +1611,25 @@ public class Properties {
      */
     public void setSequestParamFile(String sequestParamFile) {
         this.sequestParamFile = sequestParamFile;
+    }
+
+    /**
+     * Returns the last selected file filter in the data file selection with two
+     * data file types, for the spectra file selection.
+     *
+     * @return lastUsedFileFilter
+     */
+    public FileFilter getLastUsedFileFilter() {
+        return lastUsedFileFilter;
+    }
+
+    /**
+     * Sets the last selected file filter in the data file selection with two
+     * data file types, for the spectra file selection.
+     *
+     * @param lastUsedFileFilter
+     */
+    public void setLastUsedFileFilter(FileFilter lastUsedFileFilter) {
+        this.lastUsedFileFilter = lastUsedFileFilter;
     }
 }
