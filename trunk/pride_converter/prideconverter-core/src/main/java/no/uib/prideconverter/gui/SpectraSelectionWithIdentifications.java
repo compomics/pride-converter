@@ -1074,29 +1074,42 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                 f.close();
 
                             } else if (currentSpectraFile.toLowerCase().endsWith(".dta")) {
-                                // has to be extended to parse more than one experiment per dta file........
-//                                currentLine = b.readLine();
-//
-//                                tok = new StringTokenizer(currentLine);
-//
-//                                ((DefaultTableModel) spectraJXTable.getModel()).addRow(
-//                                        new Object[]{
-//                                            null,
-//                                            new File(currentSpectraFile).getName(),
-//                                            null,
-//                                            new Boolean(identifiedSpectraIds.contains(
-//                                            new File(currentSpectraFile).getName() + "_" + 1)),
-//                                            new Boolean(identifiedSpectraIds.contains(
-//                                            new File(currentSpectraFile).getName() + "_" + 1))
-//                                        });
-//
-//                                if (identifiedSpectraIds.contains(
-//                                        new File(currentSpectraFile).getName() + "_" + 1)) {
-//                                    numberOfSelectedSpectra++;
-//                                }
-//
-//                                numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-//                                        "/" + spectraJXTable.getRowCount());
+
+                                currentLine = b.readLine();
+
+                                while (currentLine != null) {
+
+                                    spectraCounter++;
+
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                            new Object[]{
+                                                null,
+                                                new File(currentSpectraFile).getName(),
+                                                spectraCounter,
+                                                new Boolean(identifiedSpectraIds.contains(
+                                                new File(currentSpectraFile).getName() + "_" + spectraCounter)),
+                                                new Boolean(identifiedSpectraIds.contains(
+                                                new File(currentSpectraFile).getName() + "_" + spectraCounter))
+                                            });
+
+                                    if (identifiedSpectraIds.contains(
+                                            new File(currentSpectraFile).getName() + "_" + spectraCounter)) {
+                                        numberOfSelectedSpectra++;
+                                    }
+
+                                    numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
+                                            "/" + spectraJXTable.getRowCount());
+
+                                    currentLine = b.readLine();
+
+                                    while (currentLine != null && currentLine.length() > 0) {
+                                        currentLine = b.readLine();
+                                    }
+
+                                    if(currentLine != null){
+                                        currentLine = b.readLine();
+                                    }
+                                }
                             } else if (currentSpectraFile.toLowerCase().endsWith(".pkl")) {
 
                                 currentLine = b.readLine();

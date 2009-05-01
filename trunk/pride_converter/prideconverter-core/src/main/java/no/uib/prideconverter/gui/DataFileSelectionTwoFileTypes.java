@@ -576,22 +576,22 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
             if (prideConverter.getProperties().getLastUsedFileFilter() != null) {
                 if (prideConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
                         new MgfFileFilter().getDescription())) {
-                    //chooser.addChoosableFileFilter(new DtaFileFilter());
-                    //chooser.addChoosableFileFilter(new PklFileFilter());
+                    chooser.addChoosableFileFilter(new DtaFileFilter());
+                    chooser.addChoosableFileFilter(new PklFileFilter());
                     chooser.addChoosableFileFilter(new MzDataFileFilter());
                     chooser.addChoosableFileFilter(new MzXmlFileFilter());
                     chooser.addChoosableFileFilter(new MgfFileFilter());
                 } else if (prideConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
                         new MzDataFileFilter().getDescription())) {
-                    //chooser.addChoosableFileFilter(new DtaFileFilter());
-                    //chooser.addChoosableFileFilter(new PklFileFilter());
+                    chooser.addChoosableFileFilter(new DtaFileFilter());
+                    chooser.addChoosableFileFilter(new PklFileFilter());
                     chooser.addChoosableFileFilter(new MgfFileFilter());
                     chooser.addChoosableFileFilter(new MzXmlFileFilter());
                     chooser.addChoosableFileFilter(new MzDataFileFilter());
                 } else if (prideConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
                         new MzXmlFileFilter().getDescription())) {
-                    //chooser.addChoosableFileFilter(new DtaFileFilter());
-                    //chooser.addChoosableFileFilter(new PklFileFilter());
+                    chooser.addChoosableFileFilter(new DtaFileFilter());
+                    chooser.addChoosableFileFilter(new PklFileFilter());
                     chooser.addChoosableFileFilter(new MgfFileFilter());
                     chooser.addChoosableFileFilter(new MzDataFileFilter());
                     chooser.addChoosableFileFilter(new MzXmlFileFilter());
@@ -611,11 +611,11 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                     chooser.addChoosableFileFilter(new PklFileFilter());
                 }
             } else {
-                //chooser.addChoosableFileFilter(new DtaFileFilter());
+                chooser.addChoosableFileFilter(new DtaFileFilter());
                 chooser.addChoosableFileFilter(new MgfFileFilter());
                 chooser.addChoosableFileFilter(new MzDataFileFilter());
                 chooser.addChoosableFileFilter(new MzXmlFileFilter());
-                //chooser.addChoosableFileFilter(new PklFileFilter());
+                chooser.addChoosableFileFilter(new PklFileFilter());
             }
         }
 
