@@ -50,3 +50,6 @@ Oxidation|MOD:00425|MOD|monohydroxylated residue|15.994915|
 HexNAc|MOD:00160|MOD|N4-glycosyl-L-asparagine|203.079373|
 Dioxidation|MOD:00256|MOD|oxidation to L-methionine sulfone|31.989829|
 147.192_M|MOD:00719|MOD|oxidation to L-methionine sulfoxide|15.994915|
+Q=-17.0265|MOD:00040|MOD|2-pyrrolidone-5-carboxylic acid (Gln)|-17.026549|
+E=-18.0106|MOD:00420|MOD|2-pyrrolidone-5-carboxylic acid (Glu)|-18.010565|
+C=57.022|MOD:01214|MOD|iodoacetamide -site C|57.021464|

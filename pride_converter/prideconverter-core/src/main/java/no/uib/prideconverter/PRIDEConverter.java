@@ -495,7 +495,7 @@ public class PRIDEConverter {
 
                         if (properties.getSelectedSourceFiles().get(0).toLowerCase().endsWith(".mzdata")) {
                             // the spectra has already been extracted
-                        } else{
+                        } else {
                             mzData = createMzData(mzDataSpectra);
                         }
                     } else {
@@ -1318,39 +1318,382 @@ public class PRIDEConverter {
             progressDialog.setString(currentFileName + " (" + (j + 1) + "/" +
                     properties.getSelectedSourceFiles().size() + ")");
 
+            try {
+                if (file.getName().toLowerCase().endsWith(".mgf")) {
+                    String line = null;
+                    int lineCount = 0;
+                    masses = new Vector();
+                    intensities = new Vector();
+                    charges = new Vector();
+                    boolean inSpectrum = false;
+                    msLevel = 2; // defaults to MS/MS
+                    spectraCounter = 0;
 
-            if (file.getName().toLowerCase().endsWith(".mgf")) {
-                String line = null;
-                int lineCount = 0;
-                masses = new Vector();
-                intensities = new Vector();
-                charges = new Vector();
-                boolean inSpectrum = false;
-                msLevel = 2; // defaults to MS/MS
-                spectraCounter = 0;
+                    while ((line = br.readLine()) != null && !cancelConversion) {
+                        // Advance line count.
+                        lineCount++;
+                        // Delete leading/trailing spaces.
+                        line = line.trim();
+                        // Skip empty lines.
+                        if (line.equals("")) {
+                            continue;
+                        }
+                        // First line can be 'CHARGE'.
+                        if (lineCount == 1 && line.startsWith("CHARGE")) {
+                            continue;
+                        }
 
-                while ((line = br.readLine()) != null && !cancelConversion) {
-                    // Advance line count.
-                    lineCount++;
-                    // Delete leading/trailing spaces.
-                    line = line.trim();
-                    // Skip empty lines.
-                    if (line.equals("")) {
-                        continue;
+                        // BEGIN IONS marks the start of the real file.
+                        if (line.equals("BEGIN IONS")) {
+                            inSpectrum = true;
+                            spectraCounter++;
+                        } // END IONS marks the end.
+                        else if (line.equals("END IONS")) {
+                            inSpectrum = false;
+
+                            matchFound = false;
+
+                            if (properties.getSelectedSpectraKeys().size() > 0) {
+                                for (int k = 0; k < properties.getSelectedSpectraKeys().size() &&
+                                        !matchFound && !cancelConversion; k++) {
+
+                                    Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
+
+                                    if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
+                                        if (((String) temp[1]).equalsIgnoreCase("" + spectraCounter)) {
+                                            matchFound = true;
+                                            spectrumKey = currentFileName + "_" + spectraCounter;
+                                        }
+                                    }
+                                }
+                            } else {
+                                if (properties.selectAllIdentifiedSpectra()) {
+                                    if (identifiedSpectraIds.contains((currentFileName + "_" + spectraCounter))) {
+                                        matchFound = true;
+                                        spectrumKey = currentFileName + "_" + spectraCounter;
+                                    }
+                                } else {
+                                    matchFound = true;
+                                    spectrumKey = currentFileName + "_" + spectraCounter;
+                                }
+                            }
+
+                            if (matchFound && !cancelConversion) {
+
+                                arrays = new double[2][masses.size()];
+
+                                for (int i = 0; i < masses.size() && !cancelConversion; i++) {
+                                    arrays[0][i] = ((Double) masses.get(i)).doubleValue();
+                                    arrays[1][i] = ((Double) intensities.get(i)).doubleValue();
+                                }
+
+                                // Precursor collection.
+                                precursors = new ArrayList(1);
+
+                                // Ion selection parameters.
+                                ionSelection = new ArrayList();
+
+                                if (precursorCharge != null) {
+                                    if (precursorCharge > 0) {
+                                        ionSelection.add(new CvParamImpl("PSI:1000041",
+                                                "PSI", "ChargeState", 0,
+                                                Integer.toString(precursorCharge)));
+                                    }
+                                }
+
+                                if (precursorIntensity != 0) {
+                                    if (precursorIntensity > 1) {
+                                        ionSelection.add(new CvParamImpl("PSI:1000042",
+                                                "PSI", "Intensity", 1,
+                                                Double.toString(precursorIntensity)));
+                                    }
+                                }
+
+                                if (precursorMz != null) {
+                                    ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
+                                            "MassToChargeRatio", 2, Double.toString(
+                                            precursorMz)));
+                                }
+
+                                if (ionSelection.size() > 0) {
+                                    precursors.add(new PrecursorImpl(null, null,
+                                            ionSelection, null, msLevel - 1, 0, 0));
+                                } else {
+                                    precursors = null;
+                                }
+
+                                // Spectrum description comments.
+                                spectrumDescriptionComments = null;
+//                        spectrumDescriptionComments = new ArrayList(1);
+//                        spectrumDescriptionComments.add(new SpectrumDescCommentImpl(comments));
+
+                                if (arrays[properties.MZ_ARRAY].length > 0) {
+
+                                    totalSpectraCounter++;
+
+                                    mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
+                                    mzRangeStop = new Double(
+                                            arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+
+                                    fragmentation =
+                                            new SpectrumImpl(
+                                            new BinaryArrayImpl(arrays[properties.INTENSITIES_ARRAY],
+                                            BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                            mzRangeStart,
+                                            new BinaryArrayImpl(arrays[properties.MZ_ARRAY],
+                                            BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                            msLevel, null,
+                                            mzRangeStop,
+                                            null,
+                                            totalSpectraCounter, precursors,
+                                            spectrumDescriptionComments,
+                                            properties.getSpectrumCvParams().get(spectrumKey),
+                                            properties.getSpectrumUserParams().get(spectrumKey),
+                                            null, null);
+
+                                    // Store (spectrumKey, spectrumid) mapping.
+                                    mapping.put(spectrumKey,
+                                            new Long(totalSpectraCounter));
+
+                                    // Store the transformed spectrum.
+                                    aTransformedSpectra.add(fragmentation);
+                                }
+                            }
+
+                            masses = new Vector();
+                            intensities = new Vector();
+                            charges = new Vector();
+
+                            precursorMz = null;
+                            precursorIntensity = null;
+                            precursorCharge = null;
+
+                        } // Read embedded parameters.
+                        else if (inSpectrum && (line.indexOf("=") >= 0)) {
+                            // Find the starting location of the value (which is one beyond the location
+                            // of the '=').
+                            int equalSignIndex = line.indexOf("=");
+
+                            if (line.startsWith("PEPMASS")) {
+                                // PEPMASS line found.
+                                String value = line.substring(equalSignIndex + 1);//.trim();
+                                //StringTokenizer st = new StringTokenizer(value, " \t");
+
+                                if (properties.isCommaTheDecimalSymbol()) {
+                                    value = value.replaceAll(",", ".");
+                                }
+
+                                values = value.split("\\s");
+                                precursorMz = Double.parseDouble(values[0]);
+
+                                if (values.length > 1) {
+                                    precursorIntensity = Double.parseDouble(values[1]);
+                                } else {
+                                    precursorIntensity = 0.0;
+                                }
+                            } else if (line.startsWith("CHARGE")) {
+                                // CHARGE line found.
+                                // Note the extra parsing to read a Mascot Generic File charge (eg., 1+).
+                                precursorCharge = extractCharge(line.substring(equalSignIndex + 1));
+                            }
+                        } // Read peaks, minding the possibility of charge present!
+                        else if (inSpectrum) {
+                            // We're inside the spectrum, with no '=' in the line, so it should be
+                            // a peak line.
+                            // A peak line should be either of the following two:
+                            // 234.56 789
+                            // 234.56 789   1+
+
+                            if (properties.isCommaTheDecimalSymbol()) {
+                                line = line.replaceAll(",", ".");
+                            }
+
+                            values = line.split("\\s+");
+
+                            int count = values.length;
+
+                            if (count == 2 || count == 3) {
+
+                                masses.add(Double.parseDouble(values[0]));
+                                intensities.add(new Double(values[1]));
+
+                                if (count == 3) {
+                                    charges.add(new Integer(extractCharge(values[2])));
+                                }
+                            } else {
+                                System.err.println("\n\nUnrecognized line at line number " +
+                                        lineCount + ": '" + line + "'!\n");
+                            }
+                        }
                     }
-                    // First line can be 'CHARGE'.
-                    if (lineCount == 1 && line.startsWith("CHARGE")) {
-                        continue;
+                } else if (file.getName().toLowerCase().endsWith(".dta")) {
+
+                    String currentLine = br.readLine();
+                    masses = new Vector();
+                    intensities = new Vector();
+                    StringTokenizer tok;
+                    msLevel = 2;
+                    spectraCounter = 0;
+                    double precursorMh = 0;
+
+                    boolean firstSpectraFound = false;
+
+                    // find the first spectra parent ion
+                    while (currentLine != null && !firstSpectraFound && !cancelConversion) {
+
+                        if (properties.isCommaTheDecimalSymbol()) {
+                            currentLine = currentLine.replaceAll(",", ".");
+                        }
+
+                        tok = new StringTokenizer(currentLine);
+
+                        if (tok.countTokens() == 2) {
+                            precursorMh = new Double(tok.nextToken()).doubleValue();
+                            precursorCharge = new Integer(tok.nextToken()).intValue();
+                            firstSpectraFound = true;
+                        }
+
+                        currentLine = br.readLine();
                     }
 
-                    // BEGIN IONS marks the start of the real file.
-                    if (line.equals("BEGIN IONS")) {
-                        inSpectrum = true;
+                    // find the rest of the spectra
+                    while (currentLine != null && !cancelConversion) {
+
+                        if (properties.isCommaTheDecimalSymbol()) {
+                            currentLine = currentLine.replaceAll(",", ".");
+                        }
+
+                        // at the end of one spectrum
+                        if (currentLine.trim().length() == 0) {
+
+                            // empty spectra are ignored by X!Tandem
+                            if (masses.size() > 0) {
+                                spectraCounter++;
+
+                                // check if the spectra is selected or not
+                                matchFound = false;
+
+                                if (properties.getSelectedSpectraKeys().size() > 0) {
+                                    for (int k = 0; k < properties.getSelectedSpectraKeys().size() &&
+                                            !matchFound && !cancelConversion; k++) {
+
+                                        Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
+
+                                        if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
+                                            if (((String) temp[1]).equalsIgnoreCase("" + spectraCounter)) {
+                                                matchFound = true;
+                                                spectrumKey = currentFileName + "_" + spectraCounter;
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    if (properties.selectAllIdentifiedSpectra()) {
+                                        if (identifiedSpectraIds.contains((currentFileName + "_" + spectraCounter))) {
+                                            matchFound = true;
+                                            spectrumKey = currentFileName + "_" + spectraCounter;
+                                        }
+                                    } else {
+                                        matchFound = true;
+                                        spectrumKey = currentFileName + "_" + spectraCounter;
+                                    }
+                                }
+
+
+                                if (matchFound) {
+
+                                    arrays = new double[2][masses.size()];
+
+                                    for (int i = 0; i < masses.size() && !cancelConversion; i++) {
+                                        arrays[0][i] = ((Double) masses.get(i)).doubleValue();
+                                        arrays[1][i] = ((Double) intensities.get(i)).doubleValue();
+                                    }
+
+                                    // Precursor collection.
+                                    precursors = new ArrayList(1);
+
+                                    // Ion selection parameters.
+                                    ionSelection = new ArrayList(4);
+
+                                    // See if we know the precursor charge, and if so, include it.
+                                    charge = precursorCharge;
+                                    if (charge > 0) {
+                                        ionSelection.add(new CvParamImpl("PSI:1000041",
+                                                "PSI", "ChargeState", 0,
+                                                Integer.toString(charge)));
+                                    }
+
+                                    // precursor m/z
+                                    ionSelection.add(new CvParamImpl("PSI:1000040",
+                                            "PSI", "MassToChargeRatio", 2, Double.toString(
+                                            ((precursorMh + precursorCharge - properties.PROTON_MASS) / precursorCharge))));
+
+                                    precursors.add(new PrecursorImpl(null, null,
+                                            ionSelection, null, msLevel - 1, 0, 0));
+
+                                    spectrumDescriptionComments = null;
+
+                                    if (arrays[properties.MZ_ARRAY].length > 0) {
+
+                                        totalSpectraCounter++;
+
+                                        mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
+                                        mzRangeStop = new Double(
+                                                arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+
+                                        // Create new mzData spectrum for the fragmentation spectrum.
+                                        fragmentation = new SpectrumImpl(
+                                                new BinaryArrayImpl(arrays[properties.INTENSITIES_ARRAY],
+                                                BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                                mzRangeStart,
+                                                new BinaryArrayImpl(arrays[properties.MZ_ARRAY],
+                                                BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                                msLevel,
+                                                null,
+                                                mzRangeStop,
+                                                null,
+                                                totalSpectraCounter, precursors,
+                                                spectrumDescriptionComments,
+                                                properties.getSpectrumCvParams().get(spectrumKey),
+                                                properties.getSpectrumUserParams().get(spectrumKey),
+                                                null,
+                                                null);
+
+                                        mapping.put(spectrumKey, new Long(totalSpectraCounter));
+
+                                        // Store the transformed spectrum.
+                                        aTransformedSpectra.add(fragmentation);
+                                    }
+                                }
+                            }
+
+                            masses = new Vector();
+                            intensities = new Vector();
+                            msLevel = 2;
+
+                            // read the first line in the next spectrum
+                            currentLine = br.readLine();
+
+                            tok = new StringTokenizer(currentLine);
+
+                            precursorMh = new Double(tok.nextToken()).doubleValue();
+                            precursorCharge = new Integer(tok.nextToken()).intValue();
+
+                        } else {
+                            tok = new StringTokenizer(currentLine);
+                            masses.add(new Double(tok.nextToken()));
+                            intensities.add(new Double(tok.nextToken()));
+                        }
+
+                        currentLine = br.readLine();
+                    }
+
+
+                    // empty spectra are ignored by X!Tandem
+                    if (masses.size() > 0) {
                         spectraCounter++;
-                    } // END IONS marks the end.
-                    else if (line.equals("END IONS")) {
-                        inSpectrum = false;
 
+                        // add the last spectra
+                        // check if the spectra is selected or not
                         matchFound = false;
 
                         if (properties.getSelectedSpectraKeys().size() > 0) {
@@ -1378,7 +1721,7 @@ public class PRIDEConverter {
                             }
                         }
 
-                        if (matchFound && !cancelConversion) {
+                        if (matchFound) {
 
                             arrays = new double[2][masses.size()];
 
@@ -1391,41 +1734,24 @@ public class PRIDEConverter {
                             precursors = new ArrayList(1);
 
                             // Ion selection parameters.
-                            ionSelection = new ArrayList();
+                            ionSelection = new ArrayList(4);
 
-                            if (precursorCharge != null) {
-                                if (precursorCharge > 0) {
-                                    ionSelection.add(new CvParamImpl("PSI:1000041",
-                                            "PSI", "ChargeState", 0,
-                                            Integer.toString(precursorCharge)));
-                                }
+                            // See if we know the precursor charge, and if so, include it.
+                            charge = precursorCharge;
+                            if (charge > 0) {
+                                ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
+                                        "ChargeState", 0, Integer.toString(charge)));
                             }
 
-                            if (precursorIntensity != 0) {
-                                if (precursorIntensity > 1) {
-                                    ionSelection.add(new CvParamImpl("PSI:1000042",
-                                            "PSI", "Intensity", 1,
-                                            Double.toString(precursorIntensity)));
-                                }
-                            }
+                            // precursor mass
+                            ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
+                                    "MassToChargeRatio", 2, Double.toString(
+                                    ((precursorMh + precursorCharge - properties.PROTON_MASS) / precursorCharge))));
 
-                            if (precursorMz != null) {
-                                ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                        "MassToChargeRatio", 2, Double.toString(
-                                        precursorMz)));
-                            }
+                            precursors.add(new PrecursorImpl(null, null, ionSelection,
+                                    null, msLevel - 1, 0, 0));
 
-                            if (ionSelection.size() > 0) {
-                                precursors.add(new PrecursorImpl(null, null,
-                                        ionSelection, null, msLevel - 1, 0, 0));
-                            } else {
-                                precursors = null;
-                            }
-
-                            // Spectrum description comments.
                             spectrumDescriptionComments = null;
-//                        spectrumDescriptionComments = new ArrayList(1);
-//                        spectrumDescriptionComments.add(new SpectrumDescCommentImpl(comments));
 
                             if (arrays[properties.MZ_ARRAY].length > 0) {
 
@@ -1435,14 +1761,15 @@ public class PRIDEConverter {
                                 mzRangeStop = new Double(
                                         arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
 
-                                fragmentation =
-                                        new SpectrumImpl(
+                                // Create new mzData spectrum for the fragmentation spectrum.
+                                fragmentation = new SpectrumImpl(
                                         new BinaryArrayImpl(arrays[properties.INTENSITIES_ARRAY],
                                         BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
                                         mzRangeStart,
                                         new BinaryArrayImpl(arrays[properties.MZ_ARRAY],
                                         BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
-                                        msLevel, null,
+                                        msLevel,
+                                        null,
                                         mzRangeStop,
                                         null,
                                         totalSpectraCounter, precursors,
@@ -1451,608 +1778,187 @@ public class PRIDEConverter {
                                         properties.getSpectrumUserParams().get(spectrumKey),
                                         null, null);
 
-                                // Store (spectrumKey, spectrumid) mapping.
-                                mapping.put(spectrumKey,
-                                        new Long(totalSpectraCounter));
+                                mapping.put(spectrumKey, new Long(totalSpectraCounter));
 
                                 // Store the transformed spectrum.
                                 aTransformedSpectra.add(fragmentation);
                             }
                         }
+                    }
+                } else if (file.getName().toLowerCase().endsWith(".pkl")) {
 
-                        masses = new Vector();
-                        intensities = new Vector();
-                        charges = new Vector();
+                    String currentLine = br.readLine();
+                    masses = new Vector();
+                    intensities = new Vector();
+                    StringTokenizer tok;
+                    msLevel = 2;
+                    spectraCounter = 0;
 
-                        precursorMz = null;
-                        precursorIntensity = null;
-                        precursorCharge = null;
+                    boolean firstSpectraFound = false;
 
-                    } // Read embedded parameters.
-                    else if (inSpectrum && (line.indexOf("=") >= 0)) {
-                        // Find the starting location of the value (which is one beyond the location
-                        // of the '=').
-                        int equalSignIndex = line.indexOf("=");
-
-                        if (line.startsWith("PEPMASS")) {
-                            // PEPMASS line found.
-                            String value = line.substring(equalSignIndex + 1);//.trim();
-                            //StringTokenizer st = new StringTokenizer(value, " \t");
-
-                            if (properties.isCommaTheDecimalSymbol()) {
-                                value = value.replaceAll(",", ".");
-                            }
-
-                            values = value.split("\\s");
-                            precursorMz = Double.parseDouble(values[0]);
-
-                            if (values.length > 1) {
-                                precursorIntensity = Double.parseDouble(values[1]);
-                            } else {
-                                precursorIntensity = 0.0;
-                            }
-                        } else if (line.startsWith("CHARGE")) {
-                            // CHARGE line found.
-                            // Note the extra parsing to read a Mascot Generic File charge (eg., 1+).
-                            precursorCharge = extractCharge(line.substring(equalSignIndex + 1));
-                        }
-                    } // Read peaks, minding the possibility of charge present!
-                    else if (inSpectrum) {
-                        // We're inside the spectrum, with no '=' in the line, so it should be
-                        // a peak line.
-                        // A peak line should be either of the following two:
-                        // 234.56 789
-                        // 234.56 789   1+
+                    // find the first spectra parent ion
+                    while (currentLine != null && !firstSpectraFound && !cancelConversion) {
 
                         if (properties.isCommaTheDecimalSymbol()) {
-                            line = line.replaceAll(",", ".");
+                            currentLine = currentLine.replaceAll(",", ".");
                         }
 
-                        values = line.split("\\s+");
+                        tok = new StringTokenizer(currentLine);
 
-                        int count = values.length;
+                        if (tok.countTokens() == 3) {
 
-                        if (count == 2 || count == 3) {
+                            precursorMz = new Double(tok.nextToken()).doubleValue();
+                            precursorIntensty = new Double(tok.nextToken()).doubleValue();
+                            precursorCharge = new Integer(tok.nextToken()).intValue();
 
-                            masses.add(Double.parseDouble(values[0]));
-                            intensities.add(new Double(values[1]));
-
-                            if (count == 3) {
-                                charges.add(new Integer(extractCharge(values[2])));
-                            }
-                        } else {
-                            System.err.println("\n\nUnrecognized line at line number " +
-                                    lineCount + ": '" + line + "'!\n");
-                        }
-                    }
-                }
-            } else if (file.getName().toLowerCase().endsWith(".dta")) {
-
-                String currentLine = br.readLine();
-                masses = new Vector();
-                intensities = new Vector();
-                StringTokenizer tok;
-                msLevel = 2;
-                spectraCounter = 0;
-                double precursorMh = 0;
-
-                boolean firstSpectraFound = false;
-
-                // find the first spectra parent ion
-                while (currentLine != null && !firstSpectraFound && !cancelConversion) {
-
-                    if (properties.isCommaTheDecimalSymbol()) {
-                        currentLine = currentLine.replaceAll(",", ".");
-                    }
-
-                    tok = new StringTokenizer(currentLine);
-
-                    if (tok.countTokens() == 2) {
-                        precursorMh = new Double(tok.nextToken()).doubleValue();
-                        precursorCharge = new Integer(tok.nextToken()).intValue();
-                        firstSpectraFound = true;
-                    }
-
-                    currentLine = br.readLine();
-                }
-
-                // find the rest of the spectra
-                while (currentLine != null && !cancelConversion) {
-
-                    if (properties.isCommaTheDecimalSymbol()) {
-                        currentLine = currentLine.replaceAll(",", ".");
-                    }
-
-                    // at the end of one spectrum
-                    if (currentLine.trim().length() == 0) {
-
-                        spectraCounter++;
-
-                        // check if the spectra is selected or not
-                        matchFound = false;
-
-                        if (properties.getSelectedSpectraKeys().size() > 0) {
-                            for (int k = 0; k < properties.getSelectedSpectraKeys().size() &&
-                                    !matchFound && !cancelConversion; k++) {
-
-                                Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
-
-                                if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
-                                    if (((String) temp[1]).equalsIgnoreCase("" + spectraCounter)) {
-                                        matchFound = true;
-                                        spectrumKey = currentFileName + "_" + spectraCounter;
-                                    }
-                                }
-                            }
-                        } else {
-                            if (properties.selectAllIdentifiedSpectra()) {
-                                if (identifiedSpectraIds.contains((currentFileName + "_" + spectraCounter))) {
-                                    matchFound = true;
-                                    spectrumKey = currentFileName + "_" + spectraCounter;
-                                }
-                            } else {
-                                matchFound = true;
-                                spectrumKey = currentFileName + "_" + spectraCounter;
-                            }
+                            firstSpectraFound = true;
                         }
 
-                        if (matchFound) {
-
-                            arrays = new double[2][masses.size()];
-
-                            for (int i = 0; i < masses.size() && !cancelConversion; i++) {
-                                arrays[0][i] = ((Double) masses.get(i)).doubleValue();
-                                arrays[1][i] = ((Double) intensities.get(i)).doubleValue();
-                            }
-
-                            // Precursor collection.
-                            precursors = new ArrayList(1);
-
-                            // Ion selection parameters.
-                            ionSelection = new ArrayList(4);
-
-                            // See if we know the precursor charge, and if so, include it.
-                            charge = precursorCharge;
-                            if (charge > 0) {
-                                ionSelection.add(new CvParamImpl("PSI:1000041",
-                                        "PSI", "ChargeState", 0,
-                                        Integer.toString(charge)));
-                            }
-
-                            // precursor m/z
-                            ionSelection.add(new CvParamImpl("PSI:1000040",
-                                    "PSI", "MassToChargeRatio", 2, Double.toString(
-                                    ((precursorMh + precursorCharge - properties.PROTON_MASS) / precursorCharge))));
-
-                            precursors.add(new PrecursorImpl(null, null,
-                                    ionSelection, null, msLevel - 1, 0, 0));
-
-                            spectrumDescriptionComments = null;
-
-                            if (arrays[properties.MZ_ARRAY].length > 0) {
-
-                                totalSpectraCounter++;
-
-                                mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
-                                mzRangeStop = new Double(
-                                        arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
-
-                                // Create new mzData spectrum for the fragmentation spectrum.
-                                fragmentation = new SpectrumImpl(
-                                        new BinaryArrayImpl(arrays[properties.INTENSITIES_ARRAY],
-                                        BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
-                                        mzRangeStart,
-                                        new BinaryArrayImpl(arrays[properties.MZ_ARRAY],
-                                        BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
-                                        msLevel,
-                                        null,
-                                        mzRangeStop,
-                                        null,
-                                        totalSpectraCounter, precursors,
-                                        spectrumDescriptionComments,
-                                        properties.getSpectrumCvParams().get(spectrumKey),
-                                        properties.getSpectrumUserParams().get(spectrumKey),
-                                        null,
-                                        null);
-
-                                mapping.put(spectrumKey, new Long(totalSpectraCounter));
-
-                                // Store the transformed spectrum.
-                                aTransformedSpectra.add(fragmentation);
-                            }
-                        }
-
-                        masses = new Vector();
-                        intensities = new Vector();
-                        msLevel = 2;
-
-                        // read the first line in the next spectrum
                         currentLine = br.readLine();
-
-                        tok = new StringTokenizer(currentLine);
-
-                        precursorMh = new Double(tok.nextToken()).doubleValue();
-                        precursorCharge = new Integer(tok.nextToken()).intValue();
-
-                    } else {
-                        tok = new StringTokenizer(currentLine);
-                        masses.add(new Double(tok.nextToken()));
-                        intensities.add(new Double(tok.nextToken()));
                     }
 
-                    currentLine = br.readLine();
-                }
+                    // find the rest of the spectra
+                    while (currentLine != null && !cancelConversion) {
 
-                // add the last spectra
-                // check if the spectra is selected or not
-                matchFound = false;
+                        if (properties.isCommaTheDecimalSymbol()) {
+                            currentLine = currentLine.replaceAll(",", ".");
+                        }
 
-                if (properties.getSelectedSpectraKeys().size() > 0) {
-                    for (int k = 0; k < properties.getSelectedSpectraKeys().size() &&
-                            !matchFound && !cancelConversion; k++) {
+                        tok = new StringTokenizer(currentLine);
 
-                        Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
+                        if (tok.countTokens() == 3) {
 
-                        if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
-                            if (((String) temp[1]).equalsIgnoreCase("" + spectraCounter)) {
-                                matchFound = true;
-                                spectrumKey = currentFileName + "_" + spectraCounter;
+                            // empty spectra are ignored by X!Tandem
+                            if (masses.size() > 0) {
+                                spectraCounter++;
                             }
-                        }
-                    }
-                } else {
-                    if (properties.selectAllIdentifiedSpectra()) {
-                        if (identifiedSpectraIds.contains((currentFileName + "_" + spectraCounter))) {
-                            matchFound = true;
-                            spectrumKey = currentFileName + "_" + spectraCounter;
-                        }
-                    } else {
-                        matchFound = true;
-                        spectrumKey = currentFileName + "_" + spectraCounter;
-                    }
-                }
 
-                if (matchFound) {
+                            // check if the spectra is selected or not
+                            matchFound = false;
 
-                    arrays = new double[2][masses.size()];
+                            if (properties.getSelectedSpectraKeys().size() > 0) {
+                                for (int k = 0; k < properties.getSelectedSpectraKeys().size() &&
+                                        !matchFound && !cancelConversion; k++) {
 
-                    for (int i = 0; i < masses.size() && !cancelConversion; i++) {
-                        arrays[0][i] = ((Double) masses.get(i)).doubleValue();
-                        arrays[1][i] = ((Double) intensities.get(i)).doubleValue();
-                    }
+                                    Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
 
-                    // Precursor collection.
-                    precursors = new ArrayList(1);
-
-                    // Ion selection parameters.
-                    ionSelection = new ArrayList(4);
-
-                    // See if we know the precursor charge, and if so, include it.
-                    charge = precursorCharge;
-                    if (charge > 0) {
-                        ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
-                                "ChargeState", 0, Integer.toString(charge)));
-                    }
-
-                    // precursor mass
-                    ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                            "MassToChargeRatio", 2, Double.toString(
-                            ((precursorMh + precursorCharge - properties.PROTON_MASS) / precursorCharge))));
-
-                    precursors.add(new PrecursorImpl(null, null, ionSelection,
-                            null, msLevel - 1, 0, 0));
-
-                    spectrumDescriptionComments = null;
-
-                    if (arrays[properties.MZ_ARRAY].length > 0) {
-
-                        totalSpectraCounter++;
-
-                        mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
-                        mzRangeStop = new Double(
-                                arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
-
-                        // Create new mzData spectrum for the fragmentation spectrum.
-                        fragmentation = new SpectrumImpl(
-                                new BinaryArrayImpl(arrays[properties.INTENSITIES_ARRAY],
-                                BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
-                                mzRangeStart,
-                                new BinaryArrayImpl(arrays[properties.MZ_ARRAY],
-                                BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
-                                msLevel,
-                                null,
-                                mzRangeStop,
-                                null,
-                                totalSpectraCounter, precursors,
-                                spectrumDescriptionComments,
-                                properties.getSpectrumCvParams().get(spectrumKey),
-                                properties.getSpectrumUserParams().get(spectrumKey),
-                                null, null);
-
-                        mapping.put(spectrumKey, new Long(totalSpectraCounter));
-
-                        // Store the transformed spectrum.
-                        aTransformedSpectra.add(fragmentation);
-                    }
-                }
-            } else if (file.getName().toLowerCase().endsWith(".pkl")) {
-
-                String currentLine = br.readLine();
-                masses = new Vector();
-                intensities = new Vector();
-                StringTokenizer tok;
-                msLevel = 2;
-                spectraCounter = 0;
-
-                boolean firstSpectraFound = false;
-
-                // find the first spectra parent ion
-                while (currentLine != null && !firstSpectraFound && !cancelConversion) {
-
-                    if (properties.isCommaTheDecimalSymbol()) {
-                        currentLine = currentLine.replaceAll(",", ".");
-                    }
-
-                    tok = new StringTokenizer(currentLine);
-
-                    if (tok.countTokens() == 3) {
-
-                        precursorMz = new Double(tok.nextToken()).doubleValue();
-                        precursorIntensty = new Double(tok.nextToken()).doubleValue();
-                        precursorCharge = new Integer(tok.nextToken()).intValue();
-
-                        firstSpectraFound = true;
-                    }
-
-                    currentLine = br.readLine();
-                }
-
-                // find the rest of the spectra
-                while (currentLine != null && !cancelConversion) {
-
-                    if (properties.isCommaTheDecimalSymbol()) {
-                        currentLine = currentLine.replaceAll(",", ".");
-                    }
-
-                    tok = new StringTokenizer(currentLine);
-
-                    if (tok.countTokens() == 3) {
-
-                        spectraCounter++;
-
-                        // check if the spectra is selected or not
-                        matchFound = false;
-
-                        if (properties.getSelectedSpectraKeys().size() > 0) {
-                            for (int k = 0; k < properties.getSelectedSpectraKeys().size() &&
-                                    !matchFound && !cancelConversion; k++) {
-
-                                Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
-
-                                if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
-                                    if (((String) temp[1]).equalsIgnoreCase("" + spectraCounter)) {
+                                    if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
+                                        if (((String) temp[1]).equalsIgnoreCase("" + spectraCounter)) {
+                                            matchFound = true;
+                                            spectrumKey = currentFileName + "_" + spectraCounter;
+                                        }
+                                    }
+                                }
+                            } else {
+                                if (properties.selectAllIdentifiedSpectra()) {
+                                    if (identifiedSpectraIds.contains((currentFileName + "_" + spectraCounter))) {
                                         matchFound = true;
                                         spectrumKey = currentFileName + "_" + spectraCounter;
                                     }
-                                }
-                            }
-                        } else {
-                            if (properties.selectAllIdentifiedSpectra()) {
-                                if (identifiedSpectraIds.contains((currentFileName + "_" + spectraCounter))) {
+                                } else {
                                     matchFound = true;
                                     spectrumKey = currentFileName + "_" + spectraCounter;
                                 }
-                            } else {
-                                matchFound = true;
-                                spectrumKey = currentFileName + "_" + spectraCounter;
                             }
+
+
+
+                            if (matchFound) {
+
+                                arrays = new double[2][masses.size()];
+
+                                for (int i = 0; i < masses.size() && !cancelConversion; i++) {
+                                    arrays[0][i] = ((Double) masses.get(i)).doubleValue();
+                                    arrays[1][i] = ((Double) intensities.get(i)).doubleValue();
+                                }
+
+                                // Precursor collection.
+                                precursors = new ArrayList(1);
+
+                                // Ion selection parameters.
+                                ionSelection = new ArrayList(4);
+
+                                // See if we know the precursor charge, and if so, include it.
+                                charge = precursorCharge;
+                                if (charge > 0) {
+                                    ionSelection.add(new CvParamImpl("PSI:1000041",
+                                            "PSI", "ChargeState", 0,
+                                            Integer.toString(charge)));
+                                }
+
+                                // precursor intensity
+                                ionSelection.add(new CvParamImpl("PSI:1000042",
+                                        "PSI", "Intensity", 1,
+                                        Double.toString(precursorIntensty)));
+
+                                // precursor m/z
+                                ionSelection.add(new CvParamImpl("PSI:1000040",
+                                        "PSI", "MassToChargeRatio", 2, Double.toString(
+                                        precursorMz)));
+
+                                precursors.add(new PrecursorImpl(null, null,
+                                        ionSelection, null, msLevel - 1, 0, 0));
+
+                                spectrumDescriptionComments = null;
+
+                                if (arrays[properties.MZ_ARRAY].length > 0) {
+
+                                    totalSpectraCounter++;
+
+                                    mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
+                                    mzRangeStop = new Double(
+                                            arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+
+                                    // Create new mzData spectrum for the fragmentation spectrum.
+                                    fragmentation = new SpectrumImpl(
+                                            new BinaryArrayImpl(arrays[properties.INTENSITIES_ARRAY],
+                                            BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                            mzRangeStart,
+                                            new BinaryArrayImpl(arrays[properties.MZ_ARRAY],
+                                            BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                            msLevel,
+                                            null,
+                                            mzRangeStop,
+                                            null,
+                                            totalSpectraCounter, precursors,
+                                            spectrumDescriptionComments,
+                                            properties.getSpectrumCvParams().get(spectrumKey),
+                                            properties.getSpectrumUserParams().get(spectrumKey),
+                                            null,
+                                            null);
+
+                                    mapping.put(spectrumKey, new Long(totalSpectraCounter));
+
+                                    // Store the transformed spectrum.
+                                    aTransformedSpectra.add(fragmentation);
+                                }
+                            }
+
+                            masses = new Vector();
+                            intensities = new Vector();
+                            msLevel = 2;
+
+                            precursorMz = new Double(tok.nextToken()).doubleValue();
+                            precursorIntensty = new Double(tok.nextToken()).doubleValue();
+                            precursorCharge = new Integer(tok.nextToken()).intValue();
+
+                        } else if (!currentLine.equalsIgnoreCase("")) {
+                            tok = new StringTokenizer(currentLine);
+                            masses.add(new Double(tok.nextToken()));
+                            intensities.add(new Double(tok.nextToken()));
                         }
 
-                        if (matchFound) {
-
-                            arrays = new double[2][masses.size()];
-
-                            for (int i = 0; i < masses.size() && !cancelConversion; i++) {
-                                arrays[0][i] = ((Double) masses.get(i)).doubleValue();
-                                arrays[1][i] = ((Double) intensities.get(i)).doubleValue();
-                            }
-
-                            // Precursor collection.
-                            precursors = new ArrayList(1);
-
-                            // Ion selection parameters.
-                            ionSelection = new ArrayList(4);
-
-                            // See if we know the precursor charge, and if so, include it.
-                            charge = precursorCharge;
-                            if (charge > 0) {
-                                ionSelection.add(new CvParamImpl("PSI:1000041",
-                                        "PSI", "ChargeState", 0,
-                                        Integer.toString(charge)));
-                            }
-
-                            // precursor intensity
-                            ionSelection.add(new CvParamImpl("PSI:1000042",
-                                    "PSI", "Intensity", 1,
-                                    Double.toString(precursorIntensty)));
-
-                            // precursor m/z
-                            ionSelection.add(new CvParamImpl("PSI:1000040",
-                                    "PSI", "MassToChargeRatio", 2, Double.toString(
-                                    precursorMz)));
-
-                            precursors.add(new PrecursorImpl(null, null,
-                                    ionSelection, null, msLevel - 1, 0, 0));
-
-                            spectrumDescriptionComments = null;
-
-                            if (arrays[properties.MZ_ARRAY].length > 0) {
-
-                                totalSpectraCounter++;
-
-                                mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
-                                mzRangeStop = new Double(
-                                        arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
-
-                                // Create new mzData spectrum for the fragmentation spectrum.
-                                fragmentation = new SpectrumImpl(
-                                        new BinaryArrayImpl(arrays[properties.INTENSITIES_ARRAY],
-                                        BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
-                                        mzRangeStart,
-                                        new BinaryArrayImpl(arrays[properties.MZ_ARRAY],
-                                        BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
-                                        msLevel,
-                                        null,
-                                        mzRangeStop,
-                                        null,
-                                        totalSpectraCounter, precursors,
-                                        spectrumDescriptionComments,
-                                        properties.getSpectrumCvParams().get(spectrumKey),
-                                        properties.getSpectrumUserParams().get(spectrumKey),
-                                        null,
-                                        null);
-
-                                mapping.put(spectrumKey, new Long(totalSpectraCounter));
-
-                                // Store the transformed spectrum.
-                                aTransformedSpectra.add(fragmentation);
-                            }
-                        }
-
-                        masses = new Vector();
-                        intensities = new Vector();
-                        msLevel = 2;
-
-                        precursorMz = new Double(tok.nextToken()).doubleValue();
-                        precursorIntensty = new Double(tok.nextToken()).doubleValue();
-                        precursorCharge = new Integer(tok.nextToken()).intValue();
-
-                    } else if (!currentLine.equalsIgnoreCase("")) {
-                        tok = new StringTokenizer(currentLine);
-                        masses.add(new Double(tok.nextToken()));
-                        intensities.add(new Double(tok.nextToken()));
+                        currentLine = br.readLine();
                     }
 
-                    currentLine = br.readLine();
-                }
 
-                // add the last spectra
-                // check if the spectra is selected or not
-                matchFound = false;
-
-                if (properties.getSelectedSpectraKeys().size() > 0) {
-                    for (int k = 0; k < properties.getSelectedSpectraKeys().size() &&
-                            !matchFound && !cancelConversion; k++) {
-
-                        Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
-
-                        if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
-                            if (((String) temp[1]).equalsIgnoreCase("" + spectraCounter)) {
-                                matchFound = true;
-                                spectrumKey = currentFileName + "_" + spectraCounter;
-                            }
-                        }
-                    }
-                } else {
-                    if (properties.selectAllIdentifiedSpectra()) {
-                        if (identifiedSpectraIds.contains((currentFileName + "_" + spectraCounter))) {
-                            matchFound = true;
-                            spectrumKey = currentFileName + "_" + spectraCounter;
-                        }
-                    } else {
-                        matchFound = true;
-                        spectrumKey = currentFileName + "_" + spectraCounter;
-                    }
-                }
-
-                if (matchFound) {
-
-                    arrays = new double[2][masses.size()];
-
-                    for (int i = 0; i < masses.size() && !cancelConversion; i++) {
-                        arrays[0][i] = ((Double) masses.get(i)).doubleValue();
-                        arrays[1][i] = ((Double) intensities.get(i)).doubleValue();
+                    // empty spectra are ignored by X!Tandem (and PRIDE)
+                    if (masses.size() > 0) {
+                        spectraCounter++;
                     }
 
-                    // Precursor collection.
-                    precursors = new ArrayList(1);
-
-                    // Ion selection parameters.
-                    ionSelection = new ArrayList(4);
-
-                    // See if we know the precursor charge, and if so, include it.
-                    charge = precursorCharge;
-                    if (charge > 0) {
-                        ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
-                                "ChargeState", 0, Integer.toString(charge)));
-                    }
-
-                    // precursor intensity
-                    ionSelection.add(new CvParamImpl("PSI:1000042", "PSI",
-                            "Intensity", 1, Double.toString(precursorIntensty)));
-
-                    // precursor mass
-                    ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                            "MassToChargeRatio", 2, Double.toString(
-                            precursorMz)));
-
-                    precursors.add(new PrecursorImpl(null, null, ionSelection,
-                            null, msLevel - 1, 0, 0));
-
-                    spectrumDescriptionComments = null;
-
-                    if (arrays[properties.MZ_ARRAY].length > 0) {
-
-                        totalSpectraCounter++;
-
-                        mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
-                        mzRangeStop = new Double(
-                                arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
-
-                        // Create new mzData spectrum for the fragmentation spectrum.
-                        fragmentation = new SpectrumImpl(
-                                new BinaryArrayImpl(arrays[properties.INTENSITIES_ARRAY],
-                                BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
-                                mzRangeStart,
-                                new BinaryArrayImpl(arrays[properties.MZ_ARRAY],
-                                BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
-                                msLevel,
-                                null,
-                                mzRangeStop,
-                                null,
-                                totalSpectraCounter, precursors,
-                                spectrumDescriptionComments,
-                                properties.getSpectrumCvParams().get(spectrumKey),
-                                properties.getSpectrumUserParams().get(spectrumKey),
-                                null, null);
-
-                        mapping.put(spectrumKey, new Long(totalSpectraCounter));
-
-                        // Store the transformed spectrum.
-                        aTransformedSpectra.add(fragmentation);
-                    }
-                }
-            } else if (file.getName().toLowerCase().endsWith(".mzdata")) {
-                mzData = combineMzDataFiles(mapping, aTransformedSpectra);
-            } else if (file.getName().toLowerCase().endsWith(".mzxml")) {
-
-                MSXMLParser msXMLParser = new MSXMLParser(
-                        new File(properties.getSelectedSourceFiles().get(j)).getAbsolutePath());
-
-                int scanCount = msXMLParser.getScanCount();
-
-                progressDialog.setIntermidiate(false);
-                progressDialog.setMax(scanCount);
-
-                for (int i = 1; i <= scanCount; i++) {
-
-                    progressDialog.setValue(i);
-
-                    Scan scan = msXMLParser.rap(i);
-                    precursorCharge = scan.getPrecursorCharge();
-                    precursorMz = new Float(scan.getPrecursorMz()).doubleValue();
-                    msLevel = scan.getMsLevel();
-
+                    // add the last spectra
+                    // check if the spectra is selected or not
                     matchFound = false;
 
                     if (properties.getSelectedSpectraKeys().size() > 0) {
@@ -2062,28 +1968,32 @@ public class PRIDEConverter {
                             Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
 
                             if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
-                                if (((String) temp[1]).equalsIgnoreCase("" + scan.getNum())) {
+                                if (((String) temp[1]).equalsIgnoreCase("" + spectraCounter)) {
                                     matchFound = true;
-                                    spectrumKey = currentFileName + "_" + scan.getNum();
+                                    spectrumKey = currentFileName + "_" + spectraCounter;
                                 }
                             }
                         }
                     } else {
                         if (properties.selectAllIdentifiedSpectra()) {
-                            if (identifiedSpectraIds.contains((currentFileName + "_" + scan.getNum()))) {
+                            if (identifiedSpectraIds.contains((currentFileName + "_" + spectraCounter))) {
                                 matchFound = true;
-                                spectrumKey = currentFileName + "_" + scan.getNum();
+                                spectrumKey = currentFileName + "_" + spectraCounter;
                             }
                         } else {
                             matchFound = true;
-                            spectrumKey = currentFileName + "_" + scan.getNum();
+                            spectrumKey = currentFileName + "_" + spectraCounter;
                         }
                     }
 
                     if (matchFound) {
 
-                        // Transform peaklist into float arrays.
-                        arraysFloat = scan.getMassIntensityList();
+                        arrays = new double[2][masses.size()];
+
+                        for (int i = 0; i < masses.size() && !cancelConversion; i++) {
+                            arrays[0][i] = ((Double) masses.get(i)).doubleValue();
+                            arrays[1][i] = ((Double) intensities.get(i)).doubleValue();
+                        }
 
                         // Precursor collection.
                         precursors = new ArrayList(1);
@@ -2092,80 +2002,212 @@ public class PRIDEConverter {
                         ionSelection = new ArrayList(4);
 
                         // See if we know the precursor charge, and if so, include it.
-                        if (precursorCharge > 0) {
+                        charge = precursorCharge;
+                        if (charge > 0) {
                             ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
-                                    "ChargeState", 0,
-                                    Integer.toString(precursorCharge)));
+                                    "ChargeState", 0, Integer.toString(charge)));
                         }
 
+                        // precursor intensity
+                        ionSelection.add(new CvParamImpl("PSI:1000042", "PSI",
+                                "Intensity", 1, Double.toString(precursorIntensty)));
+
+                        // precursor mass
                         ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                "MassToChargeRatio", 2, "" + precursorMz));
+                                "MassToChargeRatio", 2, Double.toString(
+                                precursorMz)));
 
                         precursors.add(new PrecursorImpl(null, null, ionSelection,
-                                null, 1, 0, 0));
+                                null, msLevel - 1, 0, 0));
 
-                        // Spectrum description comments.
                         spectrumDescriptionComments = null;
 
-                        if (arraysFloat[properties.MZ_ARRAY].length > 0) {
+                        if (arrays[properties.MZ_ARRAY].length > 0) {
 
                             totalSpectraCounter++;
 
-                            mzRangeStart = new Double(arraysFloat[properties.MZ_ARRAY][0]);
+                            mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
                             mzRangeStop = new Double(
-                                    arraysFloat[properties.MZ_ARRAY][arraysFloat[properties.MZ_ARRAY].length - 1]);
-
-                            if (msLevel == 1) {
-                                spectrum = new SpectrumImpl(
-                                        new BinaryArrayImpl(arraysFloat[properties.INTENSITIES_ARRAY],
-                                        BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
-                                        mzRangeStart,
-                                        new BinaryArrayImpl(arraysFloat[properties.MZ_ARRAY],
-                                        BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
-                                        1, null,
-                                        new Double(arraysFloat[properties.MZ_ARRAY][arraysFloat[properties.MZ_ARRAY].length -
-                                        1]), //null,
-                                        null,
-                                        totalSpectraCounter, null, null,
-                                        properties.getSpectrumCvParams().get(spectrumKey),
-                                        properties.getSpectrumUserParams().get(spectrumKey),
-                                        null,
-                                        null);
-                            } else {//msLevel == 2){
-                                spectrum = new SpectrumImpl(
-                                        new BinaryArrayImpl(arraysFloat[properties.INTENSITIES_ARRAY],
-                                        BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
-                                        mzRangeStart,
-                                        new BinaryArrayImpl(arraysFloat[properties.MZ_ARRAY],
-                                        BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
-                                        2, null,
-                                        mzRangeStop,
-                                        null,
-                                        totalSpectraCounter, precursors,
-                                        spectrumDescriptionComments,
-                                        properties.getSpectrumCvParams().get(spectrumKey),
-                                        properties.getSpectrumUserParams().get(spectrumKey),
-                                        null,
-                                        null);
-                            }
+                                    arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
 
                             // Create new mzData spectrum for the fragmentation spectrum.
-                            // Store (spectrumfileid, spectrumid) mapping.
+                            fragmentation = new SpectrumImpl(
+                                    new BinaryArrayImpl(arrays[properties.INTENSITIES_ARRAY],
+                                    BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                    mzRangeStart,
+                                    new BinaryArrayImpl(arrays[properties.MZ_ARRAY],
+                                    BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                    msLevel,
+                                    null,
+                                    mzRangeStop,
+                                    null,
+                                    totalSpectraCounter, precursors,
+                                    spectrumDescriptionComments,
+                                    properties.getSpectrumCvParams().get(spectrumKey),
+                                    properties.getSpectrumUserParams().get(spectrumKey),
+                                    null, null);
+
                             mapping.put(spectrumKey, new Long(totalSpectraCounter));
 
                             // Store the transformed spectrum.
-                            aTransformedSpectra.add(spectrum);
+                            aTransformedSpectra.add(fragmentation);
+                        }
+                    }
+                } else if (file.getName().toLowerCase().endsWith(".mzdata")) {
+                    mzData = combineMzDataFiles(mapping, aTransformedSpectra);
+                } else if (file.getName().toLowerCase().endsWith(".mzxml")) {
+
+                    MSXMLParser msXMLParser = new MSXMLParser(
+                            new File(properties.getSelectedSourceFiles().get(j)).getAbsolutePath());
+
+                    int scanCount = msXMLParser.getScanCount();
+
+                    progressDialog.setIntermidiate(false);
+                    progressDialog.setMax(scanCount);
+
+                    for (int i = 1; i <= scanCount && !cancelConversion; i++) {
+
+                        progressDialog.setValue(i);
+
+                        Scan scan = msXMLParser.rap(i);
+                        precursorCharge = scan.getPrecursorCharge();
+                        precursorMz = new Float(scan.getPrecursorMz()).doubleValue();
+                        msLevel = scan.getMsLevel();
+
+                        matchFound = false;
+
+                        if (properties.getSelectedSpectraKeys().size() > 0) {
+                            for (int k = 0; k < properties.getSelectedSpectraKeys().size() &&
+                                    !matchFound && !cancelConversion; k++) {
+
+                                Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
+
+                                if (((String) temp[0]).equalsIgnoreCase(currentFileName)) {
+                                    if (((String) temp[1]).equalsIgnoreCase("" + scan.getNum())) {
+                                        matchFound = true;
+                                        spectrumKey = currentFileName + "_" + scan.getNum();
+                                    }
+                                }
+                            }
+                        } else {
+                            if (properties.selectAllIdentifiedSpectra()) {
+                                if (identifiedSpectraIds.contains((currentFileName + "_" + scan.getNum()))) {
+                                    matchFound = true;
+                                    spectrumKey = currentFileName + "_" + scan.getNum();
+                                }
+                            } else {
+                                matchFound = true;
+                                spectrumKey = currentFileName + "_" + scan.getNum();
+                            }
+                        }
+
+                        if (matchFound) {
+
+                            // Transform peaklist into float arrays.
+                            arraysFloat = scan.getMassIntensityList();
+
+                            // Precursor collection.
+                            precursors = new ArrayList(1);
+
+                            // Ion selection parameters.
+                            ionSelection = new ArrayList(4);
+
+                            // See if we know the precursor charge, and if so, include it.
+                            if (precursorCharge > 0) {
+                                ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
+                                        "ChargeState", 0,
+                                        Integer.toString(precursorCharge)));
+                            }
+
+                            ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
+                                    "MassToChargeRatio", 2, "" + precursorMz));
+
+                            precursors.add(new PrecursorImpl(null, null, ionSelection,
+                                    null, 1, 0, 0));
+
+                            // Spectrum description comments.
+                            spectrumDescriptionComments = null;
+
+                            if (arraysFloat[properties.MZ_ARRAY].length > 0) {
+
+                                totalSpectraCounter++;
+
+                                mzRangeStart = new Double(arraysFloat[properties.MZ_ARRAY][0]);
+                                mzRangeStop = new Double(
+                                        arraysFloat[properties.MZ_ARRAY][arraysFloat[properties.MZ_ARRAY].length - 1]);
+
+                                if (msLevel == 1) {
+                                    spectrum = new SpectrumImpl(
+                                            new BinaryArrayImpl(arraysFloat[properties.INTENSITIES_ARRAY],
+                                            BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                            mzRangeStart,
+                                            new BinaryArrayImpl(arraysFloat[properties.MZ_ARRAY],
+                                            BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                            1, null,
+                                            new Double(arraysFloat[properties.MZ_ARRAY][arraysFloat[properties.MZ_ARRAY].length -
+                                            1]), //null,
+                                            null,
+                                            totalSpectraCounter, null, null,
+                                            properties.getSpectrumCvParams().get(spectrumKey),
+                                            properties.getSpectrumUserParams().get(spectrumKey),
+                                            null,
+                                            null);
+                                } else {//msLevel == 2){
+                                    spectrum = new SpectrumImpl(
+                                            new BinaryArrayImpl(arraysFloat[properties.INTENSITIES_ARRAY],
+                                            BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                            mzRangeStart,
+                                            new BinaryArrayImpl(arraysFloat[properties.MZ_ARRAY],
+                                            BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
+                                            2, null,
+                                            mzRangeStop,
+                                            null,
+                                            totalSpectraCounter, precursors,
+                                            spectrumDescriptionComments,
+                                            properties.getSpectrumCvParams().get(spectrumKey),
+                                            properties.getSpectrumUserParams().get(spectrumKey),
+                                            null,
+                                            null);
+                                }
+
+                                // Create new mzData spectrum for the fragmentation spectrum.
+                                // Store (spectrumfileid, spectrumid) mapping.
+                                mapping.put(spectrumKey, new Long(totalSpectraCounter));
+
+                                // Store the transformed spectrum.
+                                aTransformedSpectra.add(spectrum);
+                            }
                         }
                     }
                 }
-            }
 
-            br.close();
+                br.close();
+
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(null, "The file named " +
+                        file.getName() +
+                        "\ncould not be found.",
+                        "File Not Found", JOptionPane.ERROR_MESSAGE);
+                Util.writeToErrorLog("Error when reading X!Tandem file: ");
+                ex.printStackTrace();
+            } catch (Exception e) {
+
+                Util.writeToErrorLog("Error parsing X!Tandem file: ");
+                e.printStackTrace();
+
+                JOptionPane.showMessageDialog(null,
+                        "The following file could not parsed as an X!Tandem spetrum file:\n " +
+                        file.getName() +
+                        "\n\n" +
+                        "See ../Properties/ErrorLog.txt for more details.",
+                        "Error Parsing File", JOptionPane.ERROR_MESSAGE);
+            }
 
             if (!file.getName().toLowerCase().endsWith(".mzdata")) {
                 totalNumberOfSpectra = totalSpectraCounter;
             }
         }
+
 
 
 
@@ -2208,7 +2250,7 @@ public class PRIDEConverter {
                 spectrumTag = "";
 
                 // find the spectrum, path tag
-                for (int i = 0; i < nodes.getLength(); i++) {
+                for (int i = 0; i < nodes.getLength() && !cancelConversion; i++) {
                     if (nodes.item(i).getAttributes() != null) {
                         if (nodes.item(i).getAttributes().getNamedItem("type") != null) {
                             if (nodes.item(i).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase(
@@ -2244,7 +2286,7 @@ public class PRIDEConverter {
                     progressDialog.setIntermidiate(false);
                     progressDialog.setMax(nodes.getLength());
 
-                    for (int i = 0; i < nodes.getLength(); i++) {
+                    for (int i = 0; i < nodes.getLength() && !cancelConversion; i++) {
 
                         progressDialog.setValue(i);
 
@@ -2385,7 +2427,7 @@ public class PRIDEConverter {
                                                                                     "-",
                                                                                     modificationMass,
                                                                                     (CvParamImpl) userProperties.getCVTermMappings().
-                                                                                    get(modificationName));
+                                                                                    get(modificationName), false);
 
                                                                             properties.getAlreadyChoosenModifications().add(modificationName);
                                                                         } else {
@@ -2428,75 +2470,96 @@ public class PRIDEConverter {
                                             }
                                         }
 
-                                        SpectrumImpl tempSpectrumImpl =
-                                                ((SpectrumImpl) aTransformedSpectra.get(((Long) mapping.get(spectrumKey)).intValue() - 1));
+                                        SpectrumImpl tempSpectrumImpl = null;
 
-                                        //calculate itraq values
-                                        iTRAQ iTRAQValues = null;
+                                        try {
+                                            tempSpectrumImpl =
+                                                    ((SpectrumImpl) aTransformedSpectra.get(((Long) mapping.get(spectrumKey)).intValue() - 1));
+                                        } catch (NullPointerException e) {
 
-                                        if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
+                                            cancelConversion = true;
+                                            progressDialog.setVisible(false);
+                                            progressDialog.dispose();
 
-                                            iTRAQValues = new iTRAQ(tempSpectrumImpl.getMzArrayBinary().getDoubleArray(),
-                                                    tempSpectrumImpl.getIntenArrayBinary().getDoubleArray(),
-                                                    ((precursorMh + precursorCharge - properties.PROTON_MASS) / precursorCharge),
-                                                    precursorCharge,
-                                                    userProperties.getPeakIntegrationRangeLower(),
-                                                    userProperties.getPeakIntegrationRangeUpper(),
-                                                    userProperties.getReporterIonIntensityThreshold(),
-                                                    userProperties.getPurityCorrections());
-                                            iTRAQValues.calculateiTRAQValues();
+                                            JOptionPane.showMessageDialog(outputFrame,
+                                                    "The X!Tandem file references an unknown MS spectrum.\n" +
+                                                    "Are you sure you are using the correct spectrum file?\n\n" +
+                                                    "See ../Properties/ErrorLog.txt for more details.\n\n" +
+                                                    "PRIDE XML file not created.",
+                                                    "Error Parsing File", JOptionPane.ERROR_MESSAGE);
+                                            Util.writeToErrorLog("Spectrum key \'" + spectrumKey + "\' was not found!");
+                                            e.printStackTrace();
                                         }
 
-                                        String[] iTraqNorm = null;
-                                        String[] iTraqUT = null;
-                                        String[][] iTraqRatio = null;
+                                        if (!cancelConversion) {
 
-                                        if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
-                                            //iTraq-stuff
-                                            iTraqNorm = (String[]) iTRAQValues.getAllNorms().get(0);
-                                            iTraqUT = (String[]) iTRAQValues.getAllUTs().get(0);
-                                            iTraqRatio = (String[][]) iTRAQValues.getAllRatios().get(0);
-                                        }
+                                            //calculate itraq values
+                                            iTRAQ iTRAQValues = null;
 
-                                        cVParams = new ArrayList();
-                                        cVParams.add(new CvParamImpl("PRIDE:0000176",
-                                                "PRIDE", "X!Tandem Hyperscore",
-                                                cVParams.size(), "" + hyperscore));
+                                            if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
 
-                                        if (upstreamFlankingSequence != null) {
-                                            cVParams.add(new CvParamImpl("PRIDE:0000065", "PRIDE",
-                                                    "Upstream flanking sequence", cVParams.size(),
-                                                    "" + upstreamFlankingSequence.toUpperCase()));
-                                        }
-                                        if (downstreamFlankingSequence != null) {
-                                            cVParams.add(new CvParamImpl("PRIDE:0000066", "PRIDE",
-                                                    "Downstream flanking sequence", cVParams.size(),
-                                                    "" + downstreamFlankingSequence.toUpperCase()));
-                                        }
+                                                iTRAQValues = new iTRAQ(tempSpectrumImpl.getMzArrayBinary().getDoubleArray(),
+                                                        tempSpectrumImpl.getIntenArrayBinary().getDoubleArray(),
+                                                        ((precursorMh + precursorCharge - properties.PROTON_MASS) / precursorCharge),
+                                                        precursorCharge,
+                                                        userProperties.getPeakIntegrationRangeLower(),
+                                                        userProperties.getPeakIntegrationRangeUpper(),
+                                                        userProperties.getReporterIonIntensityThreshold(),
+                                                        userProperties.getPurityCorrections());
+                                                iTRAQValues.calculateiTRAQValues();
+                                            }
 
-                                        if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
-                                            cVParams = addItraqCVTerms(cVParams, iTraqNorm);
-                                            userParams = addItraqUserTerms(iTraqRatio);
-                                        } else {
-                                            userParams = null;
-                                        }
+                                            String[] iTraqNorm = null;
+                                            String[] iTraqUT = null;
+                                            String[][] iTraqRatio = null;
 
-                                        if (hyperscore >= properties.getPeptideScoreThreshold()) {
+                                            if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
+                                                //iTraq-stuff
+                                                iTraqNorm = (String[]) iTRAQValues.getAllNorms().get(0);
+                                                iTraqUT = (String[]) iTRAQValues.getAllUTs().get(0);
+                                                iTraqRatio = (String[][]) iTRAQValues.getAllRatios().get(0);
+                                            }
 
-                                            //System.out.println(peptideSequence.toUpperCase() + " " + ((Long) mapping.get(spectrumKey)).intValue());
+                                            cVParams = new ArrayList();
+                                            cVParams.add(new CvParamImpl("PRIDE:0000176",
+                                                    "PRIDE", "X!Tandem Hyperscore",
+                                                    cVParams.size(), "" + hyperscore));
 
-                                            ids.add(new IdentificationGeneral(
-                                                    spectrumKey,//spectrumFileID
-                                                    label, //accession
-                                                    "X!Tandem", //search engine
-                                                    null, //database
-                                                    null, //database version
-                                                    peptideSequence.toUpperCase(), //sequence
-                                                    start, //start
-                                                    hyperscore, //score
-                                                    null, //threshold
-                                                    iTraqNorm, iTraqUT, iTraqRatio,
-                                                    cVParams, userParams, peptideModifications));
+                                            if (upstreamFlankingSequence != null) {
+                                                cVParams.add(new CvParamImpl("PRIDE:0000065", "PRIDE",
+                                                        "Upstream flanking sequence", cVParams.size(),
+                                                        "" + upstreamFlankingSequence.toUpperCase()));
+                                            }
+                                            if (downstreamFlankingSequence != null) {
+                                                cVParams.add(new CvParamImpl("PRIDE:0000066", "PRIDE",
+                                                        "Downstream flanking sequence", cVParams.size(),
+                                                        "" + downstreamFlankingSequence.toUpperCase()));
+                                            }
+
+                                            if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
+                                                cVParams = addItraqCVTerms(cVParams, iTraqNorm);
+                                                userParams = addItraqUserTerms(iTraqRatio);
+                                            } else {
+                                                userParams = null;
+                                            }
+
+                                            if (hyperscore >= properties.getPeptideScoreThreshold()) {
+
+                                                //System.out.println(peptideSequence.toUpperCase() + " " + ((Long) mapping.get(spectrumKey)).intValue());
+
+                                                ids.add(new IdentificationGeneral(
+                                                        spectrumKey,//spectrumFileID
+                                                        label, //accession
+                                                        "X!Tandem", //search engine
+                                                        null, //database
+                                                        null, //database version
+                                                        peptideSequence.toUpperCase(), //sequence
+                                                        start, //start
+                                                        hyperscore, //score
+                                                        null, //threshold
+                                                        iTraqNorm, iTraqUT, iTraqRatio,
+                                                        cVParams, userParams, peptideModifications));
+                                            }
                                         }
                                     }
                                 }
@@ -2944,7 +3007,7 @@ public class PRIDEConverter {
                                                                         modificationNameShort.toUpperCase(),
                                                                         null,
                                                                         (CvParamImpl) userProperties.getCVTermMappings().
-                                                                        get(modificationName));
+                                                                        get(modificationName), false);
 
                                                                 properties.getAlreadyChoosenModifications().
                                                                         add(modificationName);
@@ -3024,7 +3087,8 @@ public class PRIDEConverter {
                                                                         modificationName,
                                                                         modificationNameShort.toUpperCase(),
                                                                         null,
-                                                                        (CvParamImpl) userProperties.getCVTermMappings().get(modificationName));
+                                                                        (CvParamImpl) userProperties.getCVTermMappings().get(modificationName),
+                                                                        true);
 
                                                                 properties.getAlreadyChoosenModifications().add(modificationName);
                                                             } else {
@@ -6741,7 +6805,8 @@ public class PRIDEConverter {
                                                 key,
                                                 modInfo.getAminoacid(),
                                                 modInfo.getMassDiff(),
-                                                (CvParamImpl) userProperties.getCVTermMappings().get(key));
+                                                (CvParamImpl) userProperties.getCVTermMappings().get(key),
+                                                false);
                                         properties.getAlreadyChoosenModifications().add(key);
                                     } else {
                                         //do nothing, mapping already choosen
@@ -7555,7 +7620,7 @@ public class PRIDEConverter {
                 if (!properties.getAlreadyChoosenModifications().contains(modName)) {
                     new ModificationMapping(outputFrame, true, progressDialog,
                             (Modification) fixedModifications.get(i),
-                            (CvParamImpl) userProperties.getCVTermMappings().get(modName));
+                            (CvParamImpl) userProperties.getCVTermMappings().get(modName), true);
 
                     properties.getAlreadyChoosenModifications().add(modName);
                 } else {
@@ -7570,7 +7635,7 @@ public class PRIDEConverter {
                 if (!properties.getAlreadyChoosenModifications().contains(modName)) {
                     new ModificationMapping(outputFrame, true, progressDialog,
                             (Modification) variableModifications.get(i),
-                            (CvParamImpl) userProperties.getCVTermMappings().get(modName));
+                            (CvParamImpl) userProperties.getCVTermMappings().get(modName), false);
                     properties.getAlreadyChoosenModifications().add(modName);
                 } else {
                     //do nothing, mapping already choosen
@@ -8267,7 +8332,7 @@ public class PRIDEConverter {
                         omssaModificationDetails.get(fixedModifications.get(i)).getModResiduesAsString(),
                         omssaModificationDetails.get(fixedModifications.get(i)).getModMonoMass(),
                         (CvParamImpl) userProperties.getCVTermMappings().get(
-                        omssaModificationDetails.get(fixedModifications.get(i)).getModName()));
+                        omssaModificationDetails.get(fixedModifications.get(i)).getModName()), true);
             }
 
             // variable modifications
@@ -8279,7 +8344,7 @@ public class PRIDEConverter {
                         omssaModificationDetails.get(variableModifications.get(i)).getModResiduesAsString(),
                         omssaModificationDetails.get(variableModifications.get(i)).getModMonoMass(),
                         (CvParamImpl) userProperties.getCVTermMappings().get(
-                        omssaModificationDetails.get(variableModifications.get(i)).getModName()));
+                        omssaModificationDetails.get(variableModifications.get(i)).getModName()), false);
             }
 
             results = omxFile.getSpectrumToHitSetMap();
@@ -8856,7 +8921,7 @@ public class PRIDEConverter {
                                     new ModificationMapping(outputFrame,
                                             true, progressDialog, modificationName,
                                             "N-terminal", null,
-                                            (CvParamImpl) userProperties.getCVTermMappings().get(modificationName));
+                                            (CvParamImpl) userProperties.getCVTermMappings().get(modificationName), false);
                                     properties.getAlreadyChoosenModifications().add(modificationName);
                                 } else {
                                     //do nothing, mapping already choosen
@@ -8898,7 +8963,7 @@ public class PRIDEConverter {
                                             true, progressDialog, modificationName,
                                             "C-terminal", null,
                                             (CvParamImpl) userProperties.getCVTermMappings().
-                                            get(modificationName));
+                                            get(modificationName), false);
                                     properties.getAlreadyChoosenModifications().
                                             add(modificationName);
                                 } else {
@@ -8957,7 +9022,7 @@ public class PRIDEConverter {
                                     new ModificationMapping(outputFrame,
                                             true, progressDialog, modificationName, "-", null,
                                             (CvParamImpl) userProperties.getCVTermMappings().
-                                            get(modificationName));
+                                            get(modificationName), false);
                                     properties.getAlreadyChoosenModifications().add(modificationName);
                                 } else {
                                     //do nothing, mapping already choosen

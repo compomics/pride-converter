@@ -4,6 +4,7 @@ import no.uib.prideconverter.PRIDEConverter;
 import be.proteomics.mascotdatfile.util.interfaces.Modification;
 import java.awt.Window;
 import java.rmi.RemoteException;
+import java.util.Iterator;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.xml.rpc.ServiceException;
@@ -40,7 +41,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
      * @param cvParam
      */
     public ModificationMapping(java.awt.Frame parent, boolean modal, ProgressDialog progressDialog,
-            Modification modification, CvParamImpl cvParam) {
+            Modification modification, CvParamImpl cvParam, boolean fixedModification) {
         super(parent, modal);
         initComponents();
 
@@ -48,6 +49,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
         this.progressDialog = progressDialog;
         this.prideConverter = outputDetails.getPRIDEConverterReference();
         this.selectedCvTerm = cvParam;
+        this.fixedModification = fixedModification;
 
         if (selectedCvTerm != null) {
             psiModJTextField.setText(selectedCvTerm.getName() + " [" +
@@ -82,30 +84,9 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
      * @param position
      * @param modificationMass
      * @param cvParam
-     * @param fixedModification
      */
     public ModificationMapping(java.awt.Frame parent, boolean modal, ProgressDialog progressDialog,
             String modName, String position, Double modificationMass, CvParamImpl cvParam, boolean fixedModification) {
-
-        this.fixedModification = fixedModification;
-
-        new ModificationMapping(parent, modal, progressDialog,
-                modName, position, modificationMass, cvParam);
-    }
-
-    /**
-     * Creates a new ModificationMapping dialog.
-     * 
-     * @param parent
-     * @param modal
-     * @param progressDialog
-     * @param modName
-     * @param position
-     * @param modificationMass
-     * @param cvParam
-     */
-    public ModificationMapping(java.awt.Frame parent, boolean modal, ProgressDialog progressDialog,
-            String modName, String position, Double modificationMass, CvParamImpl cvParam) {
         super(parent, modal);
         initComponents();
 
@@ -113,6 +94,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
         this.progressDialog = progressDialog;
         this.prideConverter = outputDetails.getPRIDEConverterReference();
         this.selectedCvTerm = cvParam;
+        this.fixedModification = fixedModification;
 
         if (selectedCvTerm != null) {
             psiModJTextField.setText(selectedCvTerm.getName() + " [" +
@@ -354,6 +336,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     /**
      * Opens an About PRIDE Converter dialog.
      * 
@@ -387,8 +370,8 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
 
         String searchTerm = "";
 
-        if(psiModJTextField.getText().length() > 0){
-            searchTerm = psiModJTextField.getText().substring(0, psiModJTextField.getText().indexOf("[") -1);
+        if (psiModJTextField.getText().length() > 0) {
+            searchTerm = psiModJTextField.getText().substring(0, psiModJTextField.getText().indexOf("[") - 1);
             searchTerm = searchTerm.replaceAll("-", " ");
             searchTerm = searchTerm.replaceAll(":", " ");
             searchTerm = searchTerm.replaceAll("\\(", " ");
@@ -397,7 +380,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
             searchTerm = searchTerm.replaceAll("\\+", " ");
             searchTerm = searchTerm.replaceAll("\\[", " ");
             searchTerm = searchTerm.replaceAll("\\]", " ");
-        } else{
+        } else {
             searchTerm = nameJTextField.getText();
         }
 
@@ -456,10 +439,26 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
                 ontologyShort = "MOD";
             }
 
-            Map map = qs.getTermMetadata(accession, ontologyShort);
+            try {
+                Map map = qs.getTermXrefs(accession, ontologyShort);
+                //Map map = qs.getTermMetadata(accession, ontologyShort);
 
-            if (map.get("DiffMono") != null) {
-                modificationMass = new Double("" + map.get("DiffMono"));
+                Iterator iterator = map.keySet().iterator();
+
+                while (iterator.hasNext()) {
+                    Object key = iterator.next();
+                    String temp = "" + map.get(key);
+
+                    if (temp.lastIndexOf("DiffMono\"") != -1) {
+                        modificationMass = new Double(temp.substring(temp.indexOf("\"") + 1, temp.length() - 1));
+                    }
+                }
+
+//            if (map.get("DiffMono") != null) {
+//                modificationMass = new Double("" + map.get("DiffMono"));
+//            }
+            } catch (IndexOutOfBoundsException e) {
+                Util.writeToErrorLog("An error occured while trying to get the mono mass for modification \'" + accession + "\'");
             }
 
             if (!massJTextField.getText().equalsIgnoreCase("-")) {
@@ -469,42 +468,34 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
 
                     // sequest fixed modifications has to be handled separatly as they  
                     // include the total mass and not the modification mass
-                    if (map.get("MassMono") != null) {
-
-                        double monoMass = new Double((String) map.get("MassMono")).doubleValue();
-
-                        if (Math.abs(monoMass) -
-                                Math.abs(new Double(massJTextField.getText()).doubleValue()) >
-                                1) {
-                            this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-                            int option = JOptionPane.showConfirmDialog(
-                                    this, "The distance between the mass of the PSI-MOD and the mass of the detected modification is " +
-                                    roundDouble(
-                                    Math.abs(monoMass) -
-                                    Math.abs(new Double(massJTextField.getText()).doubleValue()), 4) +
-                                    " Da.\nAre you sure you have selected the correct PSI-MOD modification?",
-                                    "Verify Modification", JOptionPane.YES_NO_CANCEL_OPTION);
-
-                            if (option != 0) {
-                                error = true;
-                            }
-                        }
-                    }
+//                    if (modificationMass != null) {
+//
+//                        if (Math.abs(modificationMass) -
+//                                Math.abs(new Double(massJTextField.getText()).doubleValue()) > 1) {
+//                            this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+//                            int option = JOptionPane.showConfirmDialog(
+//                                    this, "The distance between the mass of the PSI-MOD and the mass of the detected modification is " +
+//                                    roundDouble(
+//                                    Math.abs(modificationMass) -
+//                                    Math.abs(new Double(massJTextField.getText()).doubleValue()), 4) +
+//                                    " Da.\nAre you sure you have selected the correct PSI-MOD modification?",
+//                                    "Verify Modification", JOptionPane.YES_NO_CANCEL_OPTION);
+//
+//                            if (option != 0) {
+//                                error = true;
+//                            }
+//                        }
+//                    }
                 } else {
 
-                    if (map.get("DiffMono") != null) {
+                    if (modificationMass != null) {
 
-                        double monoMass = new Double((String) map.get("DiffMono")).doubleValue();
-
-                        if (Math.abs(monoMass) -
-                                Math.abs(new Double(massJTextField.getText()).doubleValue()) >
-                                1) {
+                        if (diffGreaterThan(modificationMass, new Double(massJTextField.getText()).doubleValue(), 1.0)) {
                             this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
                             int option = JOptionPane.showConfirmDialog(
                                     this, "The distance between the mass of the PSI-MOD and the mass of " +
                                     "the detected modification is " +
-                                    roundDouble(Math.abs(monoMass) -
-                                    Math.abs(new Double(massJTextField.getText()).doubleValue()), 4) +
+                                    roundDouble(getDistance(modificationMass, new Double(massJTextField.getText()).doubleValue()), 4) +
                                     " Da.\nAre you sure you have selected the correct PSI-MOD modification?",
                                     "Verify Modification", JOptionPane.YES_NO_CANCEL_OPTION);
 
@@ -541,6 +532,55 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
     }//GEN-LAST:event_okJButtonActionPerformed
 
     /**
+     * Returns true if the distance between the two numbers are greater
+     * than the given distance.
+     *
+     * @param numberA
+     * @param numberB
+     * @param maxDiff
+     * @return true if the distance between the two numbers are greater
+     *         than the given distance
+     */
+    private boolean diffGreaterThan(double numberA, double numberB, double maxDiff){
+
+        double diff;
+
+        if(numberA > 0 && numberB > 0){
+            diff = Math.abs(numberA - numberB);
+        } else if(numberA < 0 && numberB < 0){
+            diff = Math.abs(Math.abs(numberA) - Math.abs(numberB));
+        } else{
+            diff = Math.abs(numberA) + Math.abs(numberB);
+        }
+        
+        return diff > maxDiff;
+    }
+
+    /**
+     * Returns the distance between the two numbers.
+     *
+     * @param numberA
+     * @param numberB
+     * @return the distance between the two numbers
+     */
+    private double getDistance(double numberA, double numberB){
+
+        double diff;
+
+        if(numberA > 0 && numberB > 0){
+            diff = Math.abs(numberA - numberB);
+        } else if(numberA < 0 && numberB < 0){
+            diff = Math.abs(Math.abs(numberA) - Math.abs(numberB));
+        } else{
+            diff = Math.abs(numberA) + Math.abs(numberB);
+        }
+
+        return diff;
+    }
+
+
+
+    /**
      * See cancelJButtonActionPerformed
      */
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -565,6 +605,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
     private javax.swing.JButton psiModJButton;
     private javax.swing.JTextField psiModJTextField;
     // End of variables declaration//GEN-END:variables
+
     /**
      * See OLSInputable
      */

@@ -1079,47 +1079,10 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                                 while (currentLine != null) {
 
-                                    spectraCounter++;
-
-                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
-                                            new Object[]{
-                                                null,
-                                                new File(currentSpectraFile).getName(),
-                                                spectraCounter,
-                                                new Boolean(identifiedSpectraIds.contains(
-                                                new File(currentSpectraFile).getName() + "_" + spectraCounter)),
-                                                new Boolean(identifiedSpectraIds.contains(
-                                                new File(currentSpectraFile).getName() + "_" + spectraCounter))
-                                            });
-
-                                    if (identifiedSpectraIds.contains(
-                                            new File(currentSpectraFile).getName() + "_" + spectraCounter)) {
-                                        numberOfSelectedSpectra++;
-                                    }
-
-                                    numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-                                            "/" + spectraJXTable.getRowCount());
-
                                     currentLine = b.readLine();
 
-                                    while (currentLine != null && currentLine.length() > 0) {
-                                        currentLine = b.readLine();
-                                    }
-
-                                    if(currentLine != null){
-                                        currentLine = b.readLine();
-                                    }
-                                }
-                            } else if (currentSpectraFile.toLowerCase().endsWith(".pkl")) {
-
-                                currentLine = b.readLine();
-
-                                while (currentLine != null) {
-
-                                    tok = new StringTokenizer(currentLine);
-
-                                    if (tok.countTokens() == 3) {
-
+                                    // we found a non-empty spectrum
+                                    if (currentLine != null && currentLine.trim().length() > 0) {
                                         spectraCounter++;
 
                                         ((DefaultTableModel) spectraJXTable.getModel()).addRow(
@@ -1142,7 +1105,54 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                                 "/" + spectraJXTable.getRowCount());
                                     }
 
-                                    currentLine = b.readLine();
+                                    while (currentLine != null && currentLine.trim().length() > 0) {
+                                        currentLine = b.readLine();
+                                    }
+
+                                    if (currentLine != null) {
+                                        currentLine = b.readLine();
+                                    }
+                                }
+                            } else if (currentSpectraFile.toLowerCase().endsWith(".pkl")) {
+
+                                currentLine = b.readLine();
+
+                                while (currentLine != null) {
+
+                                    tok = new StringTokenizer(currentLine);
+
+                                    if (tok.countTokens() == 3) {
+
+                                        currentLine = b.readLine();
+
+                                        if (currentLine != null && currentLine.trim().length() > 0) {
+
+                                            spectraCounter++;
+
+                                            ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                                    new Object[]{
+                                                        null,
+                                                        new File(currentSpectraFile).getName(),
+                                                        spectraCounter,
+                                                        new Boolean(identifiedSpectraIds.contains(
+                                                        new File(currentSpectraFile).getName() + "_" + spectraCounter)),
+                                                        new Boolean(identifiedSpectraIds.contains(
+                                                        new File(currentSpectraFile).getName() + "_" + spectraCounter))
+                                                    });
+
+                                            if (identifiedSpectraIds.contains(
+                                                    new File(currentSpectraFile).getName() + "_" + spectraCounter)) {
+                                                numberOfSelectedSpectra++;
+                                            }
+
+                                            numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
+                                                    "/" + spectraJXTable.getRowCount());
+                                        }
+                                    }
+
+                                    if(currentLine != null){
+                                        currentLine = b.readLine();
+                                    }
                                 }
 
                             } else if (currentSpectraFile.toLowerCase().endsWith(".mzdata")) {
