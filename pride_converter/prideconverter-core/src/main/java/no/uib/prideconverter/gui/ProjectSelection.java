@@ -262,7 +262,7 @@ public class ProjectSelection extends javax.swing.JFrame {
     public void insertProjects() {
 
         progressDialog = new ProgressDialog(this, true);
-        progressDialog.setTitle("Retrieving Project Data. Please Wait.");
+        progressDialog.setTitle("Retrieving Project Data. Please Wait...");
         progressDialog.setIntermidiate(true);
         progressDialog.doNothingOnClose();
 

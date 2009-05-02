@@ -125,7 +125,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
     private void loadMzDataFile() {
 
         progressDialog = new ProgressDialog(this, true);
-        progressDialog.setTitle("Loading mzData. Please wait.");
+        progressDialog.setTitle("Loading mzData. Please Wait...");
         progressDialog.setString(null);
         progressDialog.setIntermidiate(true);
 
@@ -208,7 +208,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
     private void loadMzMLFile() {
 
         progressDialog = new ProgressDialog(this, true);
-        progressDialog.setTitle("Loading mzData. Please wait.");
+        progressDialog.setTitle("Loading mzData. Please Wait...");
         progressDialog.setString(null);
         progressDialog.setIntermidiate(true);
 

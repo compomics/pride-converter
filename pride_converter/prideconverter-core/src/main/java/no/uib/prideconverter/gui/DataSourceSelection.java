@@ -123,9 +123,8 @@ public class DataSourceSelection extends javax.swing.JFrame {
             descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br><b>PRIDE Converter</b><br><br>" +
                     "<b>PRIDE Converter</b> converts mass spectrometry data sets into valid PRIDE XML<br>" +
                     "for submission to the online <a href=\"http://www.ebi.ac.uk/pride/\">PRIDE repository</a>.<br><br>" +
-                    "To get started, select one of the supported data sources above and click on Next.<br><br>" +
-                    "Additional help can be found by clicking on the help icons " +
-                    "in the lower left corner of each frame.<br><br>" +
+                    "To get started select one of the supported data sources above and click Next.<br><br>" +
+                    "For additional help click the help icons in the lower left corner of each frame.<br><br>" +
                     "More information about <b>PRIDE Converter</b> can be found here:<br>" +
                     "<a href=\"http://code.google.com/p/pride-converter\">" +
                     "http://code.google.com/p/pride-converter</a>");

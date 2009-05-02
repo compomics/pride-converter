@@ -37,6 +37,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import no.uib.prideconverter.util.Util;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTableHeader;
+import org.jdesktop.swingx.decorator.SortOrder;
 import org.systemsbiology.jrap.MSXMLParser;
 import org.systemsbiology.jrap.Scan;
 import org.w3c.dom.Document;
@@ -812,7 +813,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         numberOfSelectedSpectra = 0;
 
         progressDialog = new ProgressDialog(this, true);
-        progressDialog.setTitle("Loading Spectra. Please Wait.");
+        progressDialog.setTitle("Loading Spectra. Please Wait...");
         progressDialog.setIntermidiate(true);
 
         Thread t = new Thread(new Runnable() {
@@ -1633,19 +1634,16 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
     }//GEN-LAST:event_loadSpectraJButtonActionPerformed
 
     /**
-     * Makes sure that the number of selected spectra is updated when the 
-     * user selects or deselects a spectra in the list. Right clicking in 
-     * the last column open a popup menu with advanced selection option.
-     * 
-     * @param evt
-     */
-    /**
      * Selects all the spectra in the table.
      * 
      * @param evt
      */
     private void selectAllJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectAllJMenuItemActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+
+        int sortedTableColumn = spectraJXTable.getSortedColumn().getModelIndex();
+        SortOrder sortOrder = spectraJXTable.getSortOrder(sortedTableColumn);
+        spectraJXTable.setSortable(false);
 
         if (selectAll) {
             for (int i = 0; i <
@@ -1681,6 +1679,9 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
         selectAll = !selectAll;
 
+        spectraJXTable.setSortable(true);
+        spectraJXTable.setSortOrder(sortedTableColumn, sortOrder);
+
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_selectAllJMenuItemActionPerformed
 
@@ -1691,6 +1692,10 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
      */
     private void invertSelectionJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invertSelectionJMenuItemActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+
+        int sortedTableColumn = spectraJXTable.getSortedColumn().getModelIndex();
+        SortOrder sortOrder = spectraJXTable.getSortOrder(sortedTableColumn);
+        spectraJXTable.setSortable(false);
 
         numberOfSelectedSpectra = 0;
 
@@ -1712,6 +1717,9 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
             nextJButton.setEnabled(true);
         }
 
+        spectraJXTable.setSortable(true);
+        spectraJXTable.setSortOrder(sortedTableColumn, sortOrder);
+
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_invertSelectionJMenuItemActionPerformed
 
@@ -1722,6 +1730,10 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
      */
     private void selectIdentifiedJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectIdentifiedJMenuItemActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+
+        int sortedTableColumn = spectraJXTable.getSortedColumn().getModelIndex();
+        SortOrder sortOrder = spectraJXTable.getSortOrder(sortedTableColumn);
+        spectraJXTable.setSortable(false);
 
         numberOfSelectedSpectra = 0;
 
@@ -1743,6 +1755,9 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         } else {
             nextJButton.setEnabled(true);
         }
+
+        spectraJXTable.setSortable(true);
+        spectraJXTable.setSortOrder(sortedTableColumn, sortOrder);
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_selectIdentifiedJMenuItemActionPerformed

@@ -22,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
 import no.uib.prideconverter.util.Util;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTableHeader;
+import org.jdesktop.swingx.decorator.SortOrder;
 import org.systemsbiology.jrap.MSXMLParser;
 import org.systemsbiology.jrap.Scan;
 import uk.ac.ebi.jmzml.model.mzml.Spectrum;
@@ -137,9 +138,12 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
             }
         });
 
-        selectAllJCheckBox.setSelected(prideConverter.getProperties().selectAllSpectra());
+        
 
         if (prideConverter.getProperties().getSpectrumTableModel() != null) {
+
+            selectAllJCheckBox.setSelected(prideConverter.getProperties().selectAllSpectra());
+
             spectraJXTable.setModel(prideConverter.getProperties().getSpectrumTableModel());
             loadSpectraJButton.setEnabled(false);
             selectedSpectraJLabel.setEnabled(true);
@@ -157,6 +161,9 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
             numberOfSelectedSpectraJTextField.setText("" +
                     numberOfSelectedSpectra + "/" +
                     spectraJXTable.getRowCount());
+        } else{
+            prideConverter.getProperties().setSelectAllSpectra(true);
+            selectAllJCheckBox.setSelected(prideConverter.getProperties().selectAllSpectra());
         }
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
@@ -553,7 +560,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         numberOfSelectedSpectra = 0;
 
         progressDialog = new ProgressDialog(this, true);
-        progressDialog.setTitle("Loading Spectra. Please Wait.");
+        progressDialog.setTitle("Loading Spectra. Please Wait...");
         progressDialog.setIntermidiate(true);
 
         Thread t = new Thread(new Runnable() {
@@ -1038,6 +1045,10 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
     private void selectAllJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectAllJMenuItemActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
+        int sortedTableColumn = spectraJXTable.getSortedColumn().getModelIndex();
+        SortOrder sortOrder = spectraJXTable.getSortOrder(sortedTableColumn);
+        spectraJXTable.setSortable(false);
+
         if (selectAll) {
             for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
                 if (!(((Boolean) spectraJXTable.getValueAt(i, 5)).booleanValue())) {
@@ -1071,6 +1082,9 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
         selectAll = !selectAll;
 
+        spectraJXTable.setSortable(true);
+        spectraJXTable.setSortOrder(sortedTableColumn, sortOrder);
+
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_selectAllJMenuItemActionPerformed
 
@@ -1081,6 +1095,10 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
      */
     private void invertSelectionJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invertSelectionJMenuItemActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+
+        int sortedTableColumn = spectraJXTable.getSortedColumn().getModelIndex();
+        SortOrder sortOrder = spectraJXTable.getSortOrder(sortedTableColumn);
+        spectraJXTable.setSortable(false);
 
         numberOfSelectedSpectra = 0;
 
@@ -1101,6 +1119,9 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         } else {
             nextJButton.setEnabled(true);
         }
+
+        spectraJXTable.setSortable(true);
+        spectraJXTable.setSortOrder(sortedTableColumn, sortOrder);
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_invertSelectionJMenuItemActionPerformed

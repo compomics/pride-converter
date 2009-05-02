@@ -116,7 +116,7 @@ import uk.ac.ebi.tpp_to_pride.wrappers.peptideprophet.*;
 public class PRIDEConverter {
 
     private static String wizardName = "PRIDE Converter";
-    private static String prideConverterVersionNumber = "v1.17_beta";//"v1.16.2";
+    private static String prideConverterVersionNumber = "v1.17";
     private static ArrayList<IdentificationGeneral> ids;
     private static Collection identifications;
     private static int totalNumberOfSpectra = 0;
@@ -379,10 +379,10 @@ public class PRIDEConverter {
 
                 if (properties.getDataSource().equalsIgnoreCase("ms_lims")) {
                     progressDialog.setIntermidiate(false);
-                    progressDialog.setTitle("Retrieving Spectra. Please Wait.");
+                    progressDialog.setTitle("Retrieving Spectra. Please Wait...");
                 } else {
                     progressDialog.setIntermidiate(true);
-                    progressDialog.setTitle("Transforming Spectra. Please Wait.");
+                    progressDialog.setTitle("Transforming Spectra. Please Wait...");
                 }
 
                 progressDialog.setVisible(true);
@@ -416,7 +416,7 @@ public class PRIDEConverter {
 
                     try {
                         progressDialog.setString(null);
-                        progressDialog.setTitle("Transforming Spectra. Please Wait.");
+                        progressDialog.setTitle("Transforming Spectra. Please Wait...");
                         progressDialog.setIntermidiate(true);
                         progressDialog.setString(null);
                     } catch (NullPointerException e) {
@@ -473,7 +473,7 @@ public class PRIDEConverter {
                     progressDialog.setString(null);
 
                     try {
-                        progressDialog.setTitle("Creating mzData. Please Wait.");
+                        progressDialog.setTitle("Creating mzData. Please Wait...");
                         progressDialog.setIntermidiate(true);
                     } catch (NullPointerException e) {
                         Util.writeToErrorLog("Progress bar: NullPointerException!!!\n" + e.toString());
@@ -530,7 +530,7 @@ public class PRIDEConverter {
                     int unidentifedSpectraCounter = 0;
 
                     try {
-                        progressDialog.setTitle("Removing Duplicated Spectra. Please Wait.");
+                        progressDialog.setTitle("Removing Duplicated Spectra. Please Wait...");
                         progressDialog.setIntermidiate(false);
                         progressDialog.setMax(ids.size());
                     } catch (NullPointerException e) {
@@ -576,7 +576,7 @@ public class PRIDEConverter {
                     }
 
                     try {
-                        progressDialog.setTitle("Grouping Identifications. Please Wait.");
+                        progressDialog.setTitle("Grouping Identifications. Please Wait...");
                         progressDialog.setIntermidiate(false);
                         progressDialog.setMax(omitDuplicates.size());
                     } catch (NullPointerException e) {
@@ -711,7 +711,7 @@ public class PRIDEConverter {
                     }
 
                     try {
-                        progressDialog.setTitle("Converting Identifications. Please Wait.");
+                        progressDialog.setTitle("Converting Identifications. Please Wait...");
                         progressDialog.setIntermidiate(false);
                         progressDialog.setMax(groupedIds.size());
                     } catch (NullPointerException e) {
@@ -839,7 +839,7 @@ public class PRIDEConverter {
                     }
 
                     try {
-                        progressDialog.setTitle("Creating XML File. Please Wait.");
+                        progressDialog.setTitle("Creating XML File. Please Wait...");
                         progressDialog.setIntermidiate(true);
                     } catch (NullPointerException e) {
                         Util.writeToErrorLog("Progress bar: NullPointerException!!!\n" + e.toString());
@@ -857,7 +857,7 @@ public class PRIDEConverter {
                     }
 
                     try {
-                        progressDialog.setTitle("Validating XML File. Please Wait.");
+                        progressDialog.setTitle("Validating XML File. Please Wait...");
                         progressDialog.setIntermidiate(true);
                     } catch (NullPointerException e) {
                         Util.writeToErrorLog("Progress bar: NullPointerException!!!\n" + e.toString());
@@ -5027,7 +5027,7 @@ public class PRIDEConverter {
         final Pattern START_WITH_A_LETTER = Pattern.compile("^[a-zA-Z].*");
 
         progressDialog.setString(null);
-        progressDialog.setTitle("Transforming Spectra. Please Wait.");
+        progressDialog.setTitle("Transforming Spectra. Please Wait...");
         progressDialog.setIntermidiate(true);
         progressDialog.setString(null);
 
@@ -5280,7 +5280,7 @@ public class PRIDEConverter {
             HashMap<String, InnerID> allIds = new HashMap<String, InnerID>();
 
             progressDialog.setString(null);
-            progressDialog.setTitle("Parsing DTASelect File. Please Wait.");
+            progressDialog.setTitle("Parsing DTASelect File. Please Wait...");
             progressDialog.setIntermidiate(true);
             progressDialog.setString(null);
 
@@ -5840,7 +5840,7 @@ public class PRIDEConverter {
                 // adding the CV and user params inserted in the previous steps of the converter
 
                 progressDialog.setString(null);
-                progressDialog.setTitle("Creating mzData File. Please Wait.");
+                progressDialog.setTitle("Creating mzData File. Please Wait...");
                 progressDialog.setIntermidiate(true);
                 progressDialog.setString(null);
 
@@ -6511,7 +6511,7 @@ public class PRIDEConverter {
 //        long timerStart = System.currentTimeMillis();
 
         progressDialog.setString(null);
-        progressDialog.setTitle("Reading PeptideProphet File. Please Wait.");
+        progressDialog.setTitle("Reading PeptideProphet File. Please Wait...");
         progressDialog.setIntermidiate(true);
         progressDialog.setString(null);
 
@@ -6541,7 +6541,7 @@ public class PRIDEConverter {
             br.close();
 
             progressDialog.setString(null);
-            progressDialog.setTitle("Reading ProteinProphet File. Please Wait.");
+            progressDialog.setTitle("Reading ProteinProphet File. Please Wait...");
             progressDialog.setIntermidiate(true);
             progressDialog.setString(null);
 
@@ -6556,7 +6556,7 @@ public class PRIDEConverter {
             br.close();
 
             progressDialog.setString(null);
-            progressDialog.setTitle("Creating Protein Map. Please Wait.");
+            progressDialog.setTitle("Creating Protein Map. Please Wait...");
             progressDialog.setIntermidiate(true);
             progressDialog.setString(null);
 
@@ -6576,7 +6576,7 @@ public class PRIDEConverter {
             Iterator iter = runs.values().iterator();
 
             progressDialog.setString(null);
-            progressDialog.setTitle("Creating Lookup Tables. Please Wait.");
+            progressDialog.setTitle("Creating Lookup Tables. Please Wait...");
             progressDialog.setIntermidiate(true);
             progressDialog.setString(null);
 
@@ -6612,7 +6612,7 @@ public class PRIDEConverter {
             List mzDataSpectra = new ArrayList();
 
             progressDialog.setString(null);
-            progressDialog.setTitle("Transforming Spectra. Please Wait.");
+            progressDialog.setTitle("Transforming Spectra. Please Wait...");
             progressDialog.setIntermidiate(true);
             progressDialog.setString(null);
 
@@ -6620,7 +6620,7 @@ public class PRIDEConverter {
             ppxp.addAllSpectra(mzDataSpectra, runAndScanToSpectrumID, progressDialog);
 
             progressDialog.setString(null);
-            progressDialog.setTitle("Extracting Identifications. Please Wait.");
+            progressDialog.setTitle("Extracting Identifications. Please Wait...");
             progressDialog.setIntermidiate(false);
             progressDialog.setValue(0);
             progressDialog.setMax(proteins.size());
@@ -7023,7 +7023,7 @@ public class PRIDEConverter {
             if (!cancelConversion) {
 
                 progressDialog.setString(null);
-                progressDialog.setTitle("Creating mzData File. Please Wait.");
+                progressDialog.setTitle("Creating mzData File. Please Wait...");
                 progressDialog.setIntermidiate(true);
                 progressDialog.setString(null);
 
@@ -8854,7 +8854,7 @@ public class PRIDEConverter {
         progressDialog.setIntermidiate(false);
         progressDialog.setValue(0);
         progressDialog.setMax(selectedSpectra.size());
-        progressDialog.setTitle("Getting Spectra IDs. Please wait.");
+        progressDialog.setTitle("Getting Spectra IDs. Please Wait...");
 
         for (int i = 0; i < selectedSpectra.size() && !cancelConversion; i++) {
 
