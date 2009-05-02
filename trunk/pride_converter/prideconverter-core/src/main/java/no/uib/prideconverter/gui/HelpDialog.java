@@ -102,7 +102,7 @@ public class HelpDialog extends javax.swing.JDialog {
         } else {
 
             setTitle("About");
-            setSize(400, 400);
+            setSize(410, 410);
             setLocationRelativeTo(parent);
         }
 
@@ -221,7 +221,7 @@ public class HelpDialog extends javax.swing.JDialog {
                     (int) parentContainer.getLocation().getY());
         } else {
             setTitle("About");
-            setSize(400, 400);
+            setSize(410, 410);
             setLocationRelativeTo(parent);
         }
 
