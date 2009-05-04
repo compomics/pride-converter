@@ -751,6 +751,13 @@ public class PRIDEConverter {
                                 properties.getExperimentProject()));
                     }
 
+                    // add the Experiment Description CV term
+                    if (!properties.getExperimentProject().equalsIgnoreCase("")) {
+                        experimentAdditionalCvParams.add(new CvParamImpl(
+                                "PRIDE:0000040", "PRIDE", "Experiment Description", new Long(1),
+                                properties.getExperimentDescription()));
+                    }
+
                     // the experiment properties
                     Experiment experiment = new ExperimentImpl(
                             properties.getPrideAccessionNumber(),
