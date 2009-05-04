@@ -74,6 +74,13 @@ public class ExperimentProperties extends javax.swing.JFrame {
         experimentTitleJTextArea.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, set);
         experimentTitleJTextArea.getInputMap().put(ctrlTab, "insert-tab");
 
+        set = new HashSet(descriptionJTextArea.getFocusTraversalKeys(
+                KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
+        set.remove(ctrlTab);
+        set.add(tab);
+        descriptionJTextArea.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, set);
+        descriptionJTextArea.getInputMap().put(ctrlTab, "insert-tab");
+
         // sets the icon of the frame
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
                 getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
@@ -85,6 +92,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
         columnToolTips.add("Digital Object Identifier");
 
         experimentTitleJTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
+        descriptionJTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
 
         referencesJTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         referencesJTable.getTableHeader().setReorderingAllowed(false);
@@ -296,6 +304,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
      */
     private void insertStoredInformation() {
         experimentTitleJTextArea.setText(prideConverter.getProperties().getExperimentTitle());
+        descriptionJTextArea.setText(prideConverter.getProperties().getExperimentDescription());
         experimentLabelJTextField.setText(prideConverter.getProperties().getExperimentLabel());
         projectJTextField.setText(prideConverter.getProperties().getExperimentProject());
 
@@ -566,6 +575,9 @@ public class ExperimentProperties extends javax.swing.JFrame {
         experimentTitleJTextArea = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         projectJTextField = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        descriptionJTextArea = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jPanel5 = new javax.swing.JPanel();
@@ -730,6 +742,15 @@ public class ExperimentProperties extends javax.swing.JFrame {
 
         projectJTextField.setToolTipText("Allows experiments to be grouped or organised under projects");
 
+        jLabel2.setText("Description:");
+
+        descriptionJTextArea.setColumns(20);
+        descriptionJTextArea.setLineWrap(true);
+        descriptionJTextArea.setRows(2);
+        descriptionJTextArea.setToolTipText("A general free-text description of the experiment");
+        descriptionJTextArea.setWrapStyleWord(true);
+        jScrollPane4.setViewportView(descriptionJTextArea);
+
         org.jdesktop.layout.GroupLayout jPanel9Layout = new org.jdesktop.layout.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
@@ -737,14 +758,16 @@ public class ExperimentProperties extends javax.swing.JFrame {
             .add(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabel19)
+                    .add(jLabel2)
                     .add(jLabel1)
-                    .add(jLabel20)
-                    .add(jLabel19))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                    .add(jLabel20))
+                .add(14, 14, 14)
                 .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
-                    .add(experimentLabelJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
-                    .add(projectJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, experimentLabelJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, projectJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel9Layout.setVerticalGroup(
@@ -755,6 +778,13 @@ public class ExperimentProperties extends javax.swing.JFrame {
                         .addContainerGap()
                         .add(jLabel19))
                     .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel9Layout.createSequentialGroup()
+                        .add(6, 6, 6)
+                        .add(jScrollPane4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jPanel9Layout.createSequentialGroup()
+                        .add(17, 17, 17)
+                        .add(jLabel2)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel20)
@@ -828,7 +858,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(addContactJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -893,7 +923,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
+                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(addRowJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -922,7 +952,6 @@ public class ExperimentProperties extends javax.swing.JFrame {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jPanel9, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -936,14 +965,15 @@ public class ExperimentProperties extends javax.swing.JFrame {
                         .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(jSeparator2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
                     .add(jLabel3)
-                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 122, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jPanel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -1477,6 +1507,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
         prideConverter.getProperties().setExperimentTitle(experimentTitleJTextArea.getText());
+        prideConverter.getProperties().setExperimentDescription(descriptionJTextArea.getText());
         prideConverter.getProperties().setExperimentLabel(experimentLabelJTextField.getText());
         prideConverter.getProperties().setExperimentProject(projectJTextField.getText());
 
@@ -1503,11 +1534,13 @@ public class ExperimentProperties extends javax.swing.JFrame {
     private javax.swing.JMenuItem conMoveUpJMenuItem;
     private javax.swing.JTable contactsJTable;
     private javax.swing.JPopupMenu contactsPopupJMenu;
+    private javax.swing.JTextArea descriptionJTextArea;
     private javax.swing.JTextField experimentLabelJTextField;
     private javax.swing.JTextArea experimentTitleJTextArea;
     private javax.swing.JButton helpJButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
@@ -1516,6 +1549,7 @@ public class ExperimentProperties extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;

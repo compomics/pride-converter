@@ -125,6 +125,7 @@ public class Properties {
     
     // experiment proper
     private String experimentTitle = "";
+    private String experimentDescription = "";
     private String experimentLabel = "";
     private String experimentProject = "";
     private Collection experimentProtocolSteps = null;
@@ -900,6 +901,24 @@ public class Properties {
      */
     public void setExperimentTitle(String experimentTitle) {
         this.experimentTitle = experimentTitle;
+    }
+
+    /**
+     * Returns the experiment description.
+     *
+     * @return the experiment description
+     */
+    public String getExperimentDescription() {
+        return experimentDescription;
+    }
+
+    /**
+     * Sets the experiment description.
+     *
+     * @param experimentDescription
+     */
+    public void setExperimentDescription(String experimentDescription) {
+        this.experimentDescription = experimentDescription;
     }
 
     /**
