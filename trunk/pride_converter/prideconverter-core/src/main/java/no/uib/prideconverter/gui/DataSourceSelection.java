@@ -360,7 +360,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(ms_limsJRadioButton);
-        ms_limsJRadioButton.setText("ms_lims");
+        ms_limsJRadioButton.setText("ms_lims 6");
         ms_limsJRadioButton.setToolTipText("Mass Spectrometry Laboratory Information Managment System");
         ms_limsJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         ms_limsJRadioButton.setIconTextGap(20);
@@ -709,12 +709,13 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         this.nextJButton.setEnabled(true);
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
-                "<b>ms_lims</b><br><br>" +
+                "<b>ms_lims 6</b><br><br>" +
                 "The ms_lims suite of software is mainly designed to " +
                 "automate data flow in the high-throughput proteomics lab. Taking in spectrum " +
                 "files from a variety of fileformats, it transforms these to the Mascot " +
                 "Generic Format and stores them in the database.<br><br>" +
                 "These can then be submitted to a search engine, e.g., Mascot from Matrix Science.<br><br>" +
+                "PRIDE Converter currently supports ms_lims 6.<br><br>" + 
                 "Homepage: <a href=\"http://genesis.ugent.be/ms_lims\">http://genesis.ugent.be/ms_lims</a>");
         descriptionJEditorPane.setCaretPosition(0);
 

@@ -169,13 +169,14 @@ public class PRIDEConverter {
                     userProperties.getSchema(), props);
             connectionSuccessfull = true;
 
-            //test to check if the latest version of ms_lims is used
+            //test to check if the supported version of ms_lims is used
             try {
                 Identification.getIdentification(conn, "");
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(dataBaseDetails,
-                        "Database connection not established:" +
-                        "\n Please check that you are using the latest version of MS_LIMS.",
+                        "Database connection not established:\n" +
+                        "Please check that you are using the supported version of ms_lims,\n" +
+                        "and upgrade if necessary: http://genesis.ugent.be/ms_lims.",
                         "Database Error", JOptionPane.ERROR_MESSAGE);
                 connectionSuccessfull = false;
                 closeDataBaseConnection();
@@ -737,24 +738,33 @@ public class PRIDEConverter {
                         identifications.add(lInnerID.getGelFreeIdentification());
                     }
 
-                    ArrayList experimentAdditionalCvParams = new ArrayList(2);
+                    ArrayList experimentAdditionalCvParams = new ArrayList();
 
-                    // add a CV term for PRIDE Converter
+                    // add a CV term for the PRIDE Converter version
                     experimentAdditionalCvParams.add(new CvParamImpl(
                             "PRIDE:0000175", "PRIDE", "XML generation software",
-                            new Long(0), (wizardName + " " + prideConverterVersionNumber)));
+                            new Long(experimentAdditionalCvParams.size()),
+                            (wizardName + " " + prideConverterVersionNumber)));
+
+                    // add a CV term for the original MS data file format
+                    experimentAdditionalCvParams.add(new CvParamImpl(
+                            "PRIDE:0000218", "PRIDE", "Original MS data file format",
+                            new Long(experimentAdditionalCvParams.size()),
+                            properties.getDataSource()));
 
                     // add the Project CV term
                     if (!properties.getExperimentProject().equalsIgnoreCase("")) {
                         experimentAdditionalCvParams.add(new CvParamImpl(
-                                "PRIDE:0000097", "PRIDE", "Project", new Long(1),
+                                "PRIDE:0000097", "PRIDE", "Project",
+                                new Long(experimentAdditionalCvParams.size()),
                                 properties.getExperimentProject()));
                     }
 
                     // add the Experiment Description CV term
                     if (!properties.getExperimentProject().equalsIgnoreCase("")) {
                         experimentAdditionalCvParams.add(new CvParamImpl(
-                                "PRIDE:0000040", "PRIDE", "Experiment Description", new Long(1),
+                                "PRIDE:0000040", "PRIDE", "Experiment description",
+                                new Long(experimentAdditionalCvParams.size()),
                                 properties.getExperimentDescription()));
                     }
 
