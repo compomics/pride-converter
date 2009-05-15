@@ -3,6 +3,15 @@
 
 ----
 
+*Changes in PRIDE Converter v1.17.1 - (May 15. 2009):*
+ * Added an experiment description text field.
+ * Added a CV term for the original MS data file format. (Automatically added by the converter.)
+ * Improved the information about the supported ms_lims version.
+ * Fixed a minor GUI bug in the New Contact dialog. (Not all the buttons had the same horizontal position.)
+ * Fixed a minor GUI bug in the Experiment Properties frame. (The two tables did not have the same height.)
+
+----
+
 *Changes in PRIDE Converter v1.17 - (May 02. 2009):*
  * PRIDE Converter now only requires Java 1.5 (previuolsy 1.6).
  * Fixed a bug resulting in the precursor mass for the DTA files being set to the MH+ value and not the m/z value (affected DTA and Sequest result file conversions).
@@ -23,6 +32,7 @@
  * Fixed a bug in the table sorting where autosorting had to be turned off before using select all etc. The fix speeds up the selection/sorting.
  * Fixed a bug where the select all spectra could be deselected automatically.
 
+Download Count: 19
 
 ----
 
