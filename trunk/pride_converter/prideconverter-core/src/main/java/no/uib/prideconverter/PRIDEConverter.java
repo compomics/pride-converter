@@ -116,7 +116,7 @@ import uk.ac.ebi.tpp_to_pride.wrappers.peptideprophet.*;
 public class PRIDEConverter {
 
     private static String wizardName = "PRIDE Converter";
-    private static String prideConverterVersionNumber = "v1.17";
+    private static String prideConverterVersionNumber = "v1.17.1";
     private static ArrayList<IdentificationGeneral> ids;
     private static Collection identifications;
     private static int totalNumberOfSpectra = 0;
@@ -761,7 +761,7 @@ public class PRIDEConverter {
                     }
 
                     // add the Experiment Description CV term
-                    if (!properties.getExperimentProject().equalsIgnoreCase("")) {
+                    if (!properties.getExperimentDescription().equalsIgnoreCase("")) {
                         experimentAdditionalCvParams.add(new CvParamImpl(
                                 "PRIDE:0000040", "PRIDE", "Experiment description",
                                 new Long(experimentAdditionalCvParams.size()),
