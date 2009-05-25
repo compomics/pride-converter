@@ -435,30 +435,12 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
      */
     private void nextJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextJButtonActionPerformed
 
-        boolean cancel = false;
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        new SpectraSelectionWithIdentifications(prideConverter, this.getLocation());
+        this.setVisible(false);
+        this.dispose();
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        // for X!Tandem you can only convert one pair of spectra / identification files at once
-        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
-
-            if (selectedSpectraFilesJTable.getRowCount() > 1 ||
-                    selectedIdentificationFilesJTable.getRowCount() > 1) {
-                JOptionPane.showMessageDialog(this,
-                        "For X!Tandem you can currently only convert one\n" +
-                        "pair of spectra and identification files. Please\n" +
-                        "reduce the selected set of files before continuing.",
-                        "X!Tandem Conversion Limitation",
-                        JOptionPane.WARNING_MESSAGE);
-                cancel = true;
-            }
-        }
-
-        if (!cancel) {
-            this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-            new SpectraSelectionWithIdentifications(prideConverter, this.getLocation());
-            this.setVisible(false);
-            this.dispose();
-            this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        }
     }//GEN-LAST:event_nextJButtonActionPerformed
 
     /**
