@@ -900,7 +900,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                     } else if (line.startsWith("CHARGE")) {
                                         // CHARGE line found.
                                         // Note the extra parsing to read a Mascot Generic File charge (eg., 1+).
-                                        precursorCharge = extractCharge(line.substring(equalSignIndex + 1));
+                                        precursorCharge = Util.extractCharge(line.substring(equalSignIndex + 1));
                                     }
                                 }
                             }
@@ -1138,7 +1138,6 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
             } else {
                 nextJButton.setEnabled(true);
             }
-
         } else {
             nextJButton.setEnabled(true);
         }
@@ -1237,52 +1236,6 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         }
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-    }
-
-    /**
-     * This method extracts an integer from Mascot Generic File charge notation, eg.,
-     * 1+.
-     * Remark that the charge can also be annotated as "+2,+3", in those rather cases the charge is also "not known." So we save a zero value.
-     *
-     * @param aCharge   String with the Mascot Generic File charge notation (eg., 1+).
-     * @return  int with the corresponding integer.
-     */
-    private static int extractCharge(String aCharge) {
-        int charge = 0;
-
-        // Trim the charge String.
-        String trimmedCharge = aCharge.trim();
-
-        boolean negate = false;
-        boolean multiCharge = false;
-
-        // See if there is a '-' in the charge String.
-        if (trimmedCharge.indexOf("-") >= 0) {
-            negate = true;
-        }
-
-        // See if there are multiple charges assigned to this spectrum.
-        if (trimmedCharge.indexOf(",") >= 0) {
-            multiCharge = true;
-        }
-
-        if (!multiCharge) {
-            // Charge is now: trimmedCharge without the sign character,
-            // negated if necessary.
-
-            if (trimmedCharge.endsWith("+")) {
-                charge = Integer.parseInt(trimmedCharge.substring(0, trimmedCharge.length() -
-                        1));
-            } else {
-                charge = Integer.parseInt(trimmedCharge);
-            }
-
-            if (negate) {
-                charge = -charge;
-            }
-        }
-
-        return charge;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

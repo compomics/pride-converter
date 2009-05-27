@@ -66,15 +66,10 @@ public class UserProperties {
             String path;
             File file;
 
-            //makes it possible to run the program within netbeans
-            if (prideConverter.useHardcodedPaths()) {
-                path = "D:/PRIDE_ms_lims/ms_lims_to_PRIDE/PRIDEConverter/Release/Properties/UserProperties.prop";
-            } else {
-                path = "" + this.getClass().getProtectionDomain().getCodeSource().getLocation();
-                path = path.substring(5, path.lastIndexOf("/"));
-                path = path.substring(0, path.lastIndexOf("/") + 1) + "Properties/UserProperties.prop";
-                path = path.replace("%20", " ");
-            }
+            path = "" + this.getClass().getProtectionDomain().getCodeSource().getLocation();
+            path = path.substring(5, path.lastIndexOf("/"));
+            path = path.substring(0, path.lastIndexOf("/") + 1) + "Properties/UserProperties.prop";
+            path = path.replace("%20", " ");
 
             // use the default settings file
             if (settingsFile == null) {
@@ -568,15 +563,10 @@ public class UserProperties {
 
             String path;
 
-            if (prideConverter.useHardcodedPaths()) {
-                path = "D:/PRIDE_ms_lims/ms_lims_to_PRIDE/PRIDEConverter/Release/Properties/UserProperties.prop";
-            } else {
-
-                path = "" + this.getClass().getProtectionDomain().getCodeSource().getLocation();
-                path = path.substring(5, path.lastIndexOf("/"));
-                path = path.substring(0, path.lastIndexOf("/") + 1) + "Properties/UserProperties.prop";
-                path = path.replace("%20", " ");
-            }
+            path = "" + this.getClass().getProtectionDomain().getCodeSource().getLocation();
+            path = path.substring(5, path.lastIndexOf("/"));
+            path = path.substring(0, path.lastIndexOf("/") + 1) + "Properties/UserProperties.prop";
+            path = path.replace("%20", " ");
 
             File file = new File(path);
             file.getAbsolutePath();

@@ -83,16 +83,10 @@ public class NewContactNoMenu extends javax.swing.JDialog {
      */
     public void readContactsFromFile() {
 
-        if (experimentPropertiesFrame.getPRIDEConverterReference().useHardcodedPaths()) {
-            contactPath = "D:/PRIDE_ms_lims/ms_lims_to_PRIDE/PRIDEConverter/Release/Properties/Contacts/";
-        } else {
-            contactPath = "" +
-                    this.getClass().getProtectionDomain().getCodeSource().getLocation();
-            contactPath = contactPath.substring(5, contactPath.lastIndexOf("/"));
-            contactPath = contactPath.substring(0, contactPath.lastIndexOf("/") +
-                    1) + "Properties/Contacts/";
-            contactPath = contactPath.replace("%20", " ");
-        }
+        contactPath = "" + this.getClass().getProtectionDomain().getCodeSource().getLocation();
+        contactPath = contactPath.substring(5, contactPath.lastIndexOf("/"));
+        contactPath = contactPath.substring(0, contactPath.lastIndexOf("/") + 1) + "Properties/Contacts/";
+        contactPath = contactPath.replace("%20", " ");
 
         File file = new File(contactPath);
         String tempContactName = null;
