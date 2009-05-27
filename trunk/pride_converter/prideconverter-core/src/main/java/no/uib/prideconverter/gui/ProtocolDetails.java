@@ -71,17 +71,11 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         protocolStepsJTable.getColumn(" ").setMinWidth(40);
         protocolStepsJTable.getColumn(" ").setMaxWidth(40);
 
-        if (prideConverter.useHardcodedPaths()) {
-            protocolPath = "D:/PRIDE_ms_lims/ms_lims_to_PRIDE/PRIDEConverter/Release/Properties/Protocols/";
-        } else {
-            protocolPath = "" +
-                    this.getClass().getProtectionDomain().getCodeSource().getLocation();
-            protocolPath = protocolPath.substring(5, protocolPath.lastIndexOf("/"));
-            protocolPath = protocolPath.substring(0, protocolPath.lastIndexOf("/") +
-                    1) +
-                    "Properties/Protocols/";
-            protocolPath = protocolPath.replace("%20", " ");
-        }
+        protocolPath = "" + this.getClass().getProtectionDomain().getCodeSource().getLocation();
+        protocolPath = protocolPath.substring(5, protocolPath.lastIndexOf("/"));
+        protocolPath = protocolPath.substring(0, protocolPath.lastIndexOf("/") +
+                1) + "Properties/Protocols/";
+        protocolPath = protocolPath.replace("%20", " ");
 
         // set the identification type (2D gel or gel free)
         if (prideConverter.getProperties().isGelFree()) {
@@ -663,8 +657,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
         Object[] tempRow = new Object[]{
             protocolStepsJTable.getValueAt(selectedRow + 1, 0),
-            protocolStepsJTable.getValueAt(selectedRow + 1, 1),
-        };
+            protocolStepsJTable.getValueAt(selectedRow + 1, 1)};
 
         ((DefaultTableModel) protocolStepsJTable.getModel()).removeRow(selectedRow + 1);
         ((DefaultTableModel) protocolStepsJTable.getModel()).insertRow(selectedRow, tempRow);
@@ -707,8 +700,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
         Object[] tempRow = new Object[]{
             protocolStepsJTable.getValueAt(selectedRow - 1, 0),
-            protocolStepsJTable.getValueAt(selectedRow - 1, 1),
-        };
+            protocolStepsJTable.getValueAt(selectedRow - 1, 1),};
 
         ((DefaultTableModel) protocolStepsJTable.getModel()).removeRow(selectedRow - 1);
         ((DefaultTableModel) protocolStepsJTable.getModel()).insertRow(selectedRow, tempRow);

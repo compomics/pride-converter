@@ -151,16 +151,11 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
         purityCorrectionsJTextField.setText(temp);
 
-        if (prideConverter.useHardcodedPaths()) {
-            samplePath = "D:/PRIDE_ms_lims/ms_lims_to_PRIDE/PRIDEConverter/Release/Properties/Samples/";
-        } else {
-            samplePath = "" +
-                    this.getClass().getProtectionDomain().getCodeSource().getLocation();
-            samplePath = samplePath.substring(5, samplePath.lastIndexOf("/"));
-            samplePath = samplePath.substring(0, samplePath.lastIndexOf("/") + 1) +
-                    "Properties/Samples/";
-            samplePath = samplePath.replace("%20", " ");
-        }
+        samplePath = "" + this.getClass().getProtectionDomain().getCodeSource().getLocation();
+        samplePath = samplePath.substring(5, samplePath.lastIndexOf("/"));
+        samplePath = samplePath.substring(0, samplePath.lastIndexOf("/") + 1) +
+                "Properties/Samples/";
+        samplePath = samplePath.replace("%20", " ");
 
         setLocation(location);
         setVisible(true);

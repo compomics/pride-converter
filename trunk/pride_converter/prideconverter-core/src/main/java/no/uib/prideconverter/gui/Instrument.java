@@ -101,21 +101,15 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         setLocation(location);
         setVisible(true);
 
-        //makes it possible to run the program within netbeans
-        if (prideConverter.useHardcodedPaths()) {
-            instrumentPath =
-                    "D:/PRIDE_ms_lims/ms_lims_to_PRIDE/PRIDEConverter/Release/Properties/Instruments/";
-        } else {
-            instrumentPath = "" +
-                    this.getClass().getProtectionDomain().getCodeSource().getLocation();
-            instrumentPath = instrumentPath.substring(5, instrumentPath.lastIndexOf("/"));
-            instrumentPath = instrumentPath.substring(0, instrumentPath.lastIndexOf("/") + 1) + "Properties/Instruments/";
-            instrumentPath = instrumentPath.replace("%20", " ");
-        }
+        instrumentPath = "" +
+                this.getClass().getProtectionDomain().getCodeSource().getLocation();
+        instrumentPath = instrumentPath.substring(5, instrumentPath.lastIndexOf("/"));
+        instrumentPath = instrumentPath.substring(0, instrumentPath.lastIndexOf("/") + 1) + "Properties/Instruments/";
+        instrumentPath = instrumentPath.replace("%20", " ");
+
 
         // for mzXML, mzData and TPP information about the instrument is extraced from the file
-        if ((prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")
-                || prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) &&
+        if ((prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") || prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) &&
                 !prideConverter.getProperties().areInstrumentDetailsExtracted()) {
             extractInstrumentDetailsFromFile();
         } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP") &&
@@ -268,7 +262,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                         saveInstrument(instrumentName);
                     }
-                } else{
+                } else {
                     useExistingInstrument = true;
                 }
             } else {
@@ -1631,8 +1625,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
         Object[] tempRow = new Object[]{
             analyzerJTable.getValueAt(selectedRow - 1, 0),
-            analyzerJTable.getValueAt(selectedRow - 1, 1),
-        };
+            analyzerJTable.getValueAt(selectedRow - 1, 1)};
 
         ((DefaultTableModel) analyzerJTable.getModel()).removeRow(selectedRow - 1);
         ((DefaultTableModel) analyzerJTable.getModel()).insertRow(selectedRow, tempRow);
@@ -1674,8 +1667,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
         Object[] tempRow = new Object[]{
             analyzerJTable.getValueAt(selectedRow + 1, 0),
-            analyzerJTable.getValueAt(selectedRow + 1, 1),
-        };
+            analyzerJTable.getValueAt(selectedRow + 1, 1),};
 
         ((DefaultTableModel) analyzerJTable.getModel()).removeRow(selectedRow + 1);
         ((DefaultTableModel) analyzerJTable.getModel()).insertRow(selectedRow, tempRow);
@@ -2585,8 +2577,8 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
         valuesChanged = true;
 
-        if(value != null){
-            if(value.equalsIgnoreCase("null")){
+        if (value != null) {
+            if (value.equalsIgnoreCase("null")) {
                 value = null;
             }
         }

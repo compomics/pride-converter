@@ -145,45 +145,6 @@ public class MascotGenericFile_MultipleSpectra {
     }
 
     /**
-     * This method extracts an integer from Mascot Generic File charge notation, eg., 1+.
-     * Remark that the charge can also be annotated as "+2,+3", in those rather cases the charge
-     * is also "not known." So we save a zero value.
-     *
-     * @param aCharge   String with the Mascot Generic File charge notation (eg., 1+).
-     * @return  int with the corresponding integer.
-     */
-    private int extractCharge(String aCharge) {
-        int charge = 0;
-
-        // Trim the charge String.
-        String trimmedCharge = aCharge.trim();
-
-        boolean negate = false;
-        boolean multiCharge = false;
-
-        // See if there is a '-' in the charge String.
-        if (trimmedCharge.indexOf("-") >= 0) {
-            negate = true;
-        }
-
-        // See if there are multiple charges assigned to this spectrum.
-        if (trimmedCharge.indexOf(",") >= 0) {
-            multiCharge = true;
-        }
-
-        if (!multiCharge) {
-            // Charge is now: trimmedCharge without the sign character,
-            // negated if necessary.
-            charge = Integer.parseInt(trimmedCharge.substring(0, trimmedCharge.length() - 1));
-            if (negate) {
-                charge = -charge;
-            }
-        }
-
-        return charge;
-    }
-
-    /**
      * This method will parse the input String and read all the information present into
      * a MascotGenericFile object.
      *
@@ -276,7 +237,7 @@ public class MascotGenericFile_MultipleSpectra {
                     } else if (line.startsWith(CHARGE)) {
                         // CHARGE line found.
                         // Note the extra parsing to read a Mascot Generic File charge (eg., 1+).
-                        this.setCharge(this.extractCharge(line.substring(equalSignIndex + 1)));
+                        this.setCharge(Util.extractCharge(line.substring(equalSignIndex + 1)));
                     } else {
                         // This is an extra embedded parameter!
                         String aKey = line.substring(0, equalSignIndex);
@@ -300,7 +261,7 @@ public class MascotGenericFile_MultipleSpectra {
                         Double intensity = new Double(temp);
                         this.iPeaks.put(mass, intensity);
                         if (st.hasMoreTokens()) {
-                            int charge = this.extractCharge(st.nextToken());
+                            int charge = Util.extractCharge(st.nextToken());
                             iCharges.put(mass, new Integer(charge));
                         }
                     } else {
