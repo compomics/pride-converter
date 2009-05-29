@@ -186,17 +186,21 @@ public class OLSDialog extends javax.swing.JDialog {
             ontologyJComboBox.setSelectedItem(selectedOntology);
         } catch (RemoteException ex) {
             JOptionPane.showMessageDialog(
-                    this, "Not able to contact the OLS. Make sure that you are online and try again.\n" +
-                    "You may also want to check your firewall settings.",
-                    "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+                    this,
+                    "Not able to contact the OLS. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall (and proxy) settings.\n\n" +
+                    "See the Troubleshooting section at the PRIDE Converter home page for details.",
+                    "Failed To Contact OLS", JOptionPane.ERROR_MESSAGE);
             Util.writeToErrorLog("Error when trying to access OLS: ");
             ex.printStackTrace();
             error = true;
         } catch (ServiceException ex) {
             JOptionPane.showMessageDialog(
-                    this, "Not able to contact the OLS. Make sure that you are online and try again.\n" +
-                    "You may also want to check your firewall settings.",
-                    "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+                    this,
+                    "Not able to contact the OLS. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall (and proxy) settings.\n\n" +
+                    "See the Troubleshooting section at the PRIDE Converter home page for details.",
+                    "Failed To Contact OLS", JOptionPane.ERROR_MESSAGE);
             Util.writeToErrorLog("Error when trying to access OLS: ");
             ex.printStackTrace();
             error = true;
@@ -532,16 +536,20 @@ public class OLSDialog extends javax.swing.JDialog {
             }
         } catch (RemoteException ex) {
             JOptionPane.showMessageDialog(
-                    this, "Not able to contact the OLS. Make sure that you are online and try again.\n" +
-                    "You may also want to check your firewall settings.",
-                    "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+                    this,
+                    "Not able to contact the OLS. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall (and proxy) settings.\n\n" +
+                    "See the Troubleshooting section at the PRIDE Converter home page for details.",
+                    "Failed To Contact OLS", JOptionPane.ERROR_MESSAGE);
             Util.writeToErrorLog("Error when trying to access OLS: ");
             ex.printStackTrace();
         } catch (ServiceException ex) {
             JOptionPane.showMessageDialog(
-                    this, "Not able to contact the OLS. Make sure that you are online and try again.\n" +
-                    "You may also want to check your firewall settings.",
-                    "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+                    this,
+                    "Not able to contact the OLS. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall (and proxy) settings.\n\n" +
+                    "See the Troubleshooting section at the PRIDE Converter home page for details.",
+                    "Failed To Contact OLS", JOptionPane.ERROR_MESSAGE);
             Util.writeToErrorLog("Error when trying to access OLS: ");
             ex.printStackTrace();
         }
@@ -581,16 +589,20 @@ public class OLSDialog extends javax.swing.JDialog {
 
         } catch (RemoteException ex) {
             JOptionPane.showMessageDialog(
-                    this, "Not able to contact the OLS. Make sure that you are online and try again.\n" +
-                    "You may also want to check your firewall settings.",
-                    "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+                    this,
+                    "Not able to contact the OLS. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall (and proxy) settings.\n\n" +
+                    "See the Troubleshooting section at the PRIDE Converter home page for details.",
+                    "Failed To Contact OLS", JOptionPane.ERROR_MESSAGE);
             Util.writeToErrorLog("Error when trying to access OLS: ");
             ex.printStackTrace();
         } catch (ServiceException ex) {
             JOptionPane.showMessageDialog(
-                    this, "Not able to contact the OLS. Make sure that you are online and try again.\n" +
-                    "You may also want to check your firewall settings.",
-                    "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+                    this,
+                    "Not able to contact the OLS. Make sure that you are online and try again.\n" +
+                    "You may also want to check your firewall (and proxy) settings.\n\n" +
+                    "See the Troubleshooting section at the PRIDE Converter home page for details.",
+                    "Failed To Contact OLS", JOptionPane.ERROR_MESSAGE);
             Util.writeToErrorLog("Error when trying to access OLS: ");
             ex.printStackTrace();
         }
@@ -670,16 +682,20 @@ public class OLSDialog extends javax.swing.JDialog {
 
                 } catch (RemoteException ex) {
                     JOptionPane.showMessageDialog(
-                            this, "Not able to contact the OLS. Make sure that you are online and try again.\n" +
-                            "You may also want to check your firewall settings.",
-                            "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+                            this,
+                            "Not able to contact the OLS. Make sure that you are online and try again.\n" +
+                            "You may also want to check your firewall (and proxy) settings.\n\n" +
+                            "See the Troubleshooting section at the PRIDE Converter home page for details.",
+                            "Failed To Contact OLS", JOptionPane.ERROR_MESSAGE);
                     Util.writeToErrorLog("Error when trying to access OLS: ");
                     ex.printStackTrace();
                 } catch (ServiceException ex) {
                     JOptionPane.showMessageDialog(
-                            this, "Not able to contact the OLS. Make sure that you are online and try again.\n" +
-                            "You may also want to check your firewall settings.",
-                            "OLS Not Available", JOptionPane.ERROR_MESSAGE);
+                            this,
+                            "Not able to contact the OLS. Make sure that you are online and try again.\n" +
+                            "You may also want to check your firewall (and proxy) settings.\n\n" +
+                            "See the Troubleshooting section at the PRIDE Converter home page for details.",
+                            "Failed To Contact OLS", JOptionPane.ERROR_MESSAGE);
                     Util.writeToErrorLog("Error when trying to access OLS: ");
                     ex.printStackTrace();
                 }
