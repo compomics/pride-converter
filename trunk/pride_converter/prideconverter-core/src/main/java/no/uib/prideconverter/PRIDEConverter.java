@@ -26,6 +26,7 @@ import java.net.URL;
 
 import be.proteomics.lims.db.accessors.Spectrumfile;
 import be.proteomics.lims.db.accessors.Identification;
+import be.proteomics.lims.db.accessors.Protocol;
 import be.proteomics.lims.util.fileio.MascotGenericFile;
 import be.proteomics.mascotdatfile.util.interfaces.MascotDatfileInf;
 import be.proteomics.mascotdatfile.util.interfaces.Modification;
@@ -170,7 +171,8 @@ public class PRIDEConverter {
 
             //test to check if the supported version of ms_lims is used
             try {
-                Identification.getIdentification(conn, "");
+                Protocol.getAllProtocols(conn); // test for ms_lims 7
+                //Identification.getIdentification(conn, ""); // test for ms_lims 6
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(dataBaseDetails,
                         "Database connection not established:\n" +
@@ -1596,7 +1598,7 @@ public class PRIDEConverter {
                                     // precursor m/z
                                     ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
                                         "MassToChargeRatio", ionSelection.size(), Double.toString(
-                                        ((precursorMh + precursorCharge - properties.HYDROGEN_MASS) / precursorCharge))));
+                                        ((precursorMh - properties.HYDROGEN_MASS + precursorCharge*properties.HYDROGEN_MASS) / precursorCharge))));
 
                                     // precursor MH+
 //                                  ionSelection.add(new CvParamImpl("PRIDE:??",
@@ -1721,7 +1723,7 @@ public class PRIDEConverter {
                             // precursor m/z
                             ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
                                     "MassToChargeRatio", ionSelection.size(), Double.toString(
-                                    ((precursorMh + precursorCharge - properties.HYDROGEN_MASS) / precursorCharge))));
+                                    ((precursorMh - properties.HYDROGEN_MASS + precursorCharge*properties.HYDROGEN_MASS) / precursorCharge))));
 
                             // precursor MH+
 //                          ionSelection.add(new CvParamImpl("PRIDE:??",
@@ -2473,7 +2475,7 @@ public class PRIDEConverter {
 
                                                 iTRAQValues = new iTRAQ(tempSpectrumImpl.getMzArrayBinary().getDoubleArray(),
                                                         tempSpectrumImpl.getIntenArrayBinary().getDoubleArray(),
-                                                        ((precursorMh + precursorCharge - properties.HYDROGEN_MASS) / precursorCharge),
+                                                        ((precursorMh - properties.HYDROGEN_MASS + precursorCharge*properties.HYDROGEN_MASS) / precursorCharge),
                                                         precursorCharge,
                                                         userProperties.getPeakIntegrationRangeLower(),
                                                         userProperties.getPeakIntegrationRangeUpper(),
@@ -3537,7 +3539,7 @@ public class PRIDEConverter {
                                     if (properties.getSampleDescriptionCVParamsQuantification().
                                             size() > 0 && !cancelConversion) {
                                         iTRAQValues =
-                                                new iTRAQ(arrays, ((precursorMh + precursorCharge - properties.HYDROGEN_MASS) / precursorCharge),
+                                                new iTRAQ(arrays, ((precursorMh - properties.HYDROGEN_MASS + precursorCharge*properties.HYDROGEN_MASS) / precursorCharge),
                                                 precursorCharge,
                                                 userProperties.getPeakIntegrationRangeLower(),
                                                 userProperties.getPeakIntegrationRangeUpper(),
@@ -3655,7 +3657,7 @@ public class PRIDEConverter {
                             // precursor m/z
                             ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
                                 "MassToChargeRatio", ionSelection.size(), Double.toString(
-                                 ((precursorMh + precursorCharge - properties.HYDROGEN_MASS) / precursorCharge))));
+                                 ((precursorMh - properties.HYDROGEN_MASS + precursorCharge*properties.HYDROGEN_MASS) / precursorCharge))));
                             
                             // precursor MH+
 //                          ionSelection.add(new CvParamImpl("PRIDE:??",
@@ -8567,8 +8569,7 @@ public class PRIDEConverter {
      *                                 mzData spectra. Please note that this is a
      *                                 reference parameter.
      */
-    private static HashMap transformSpectraFrom_ms_lims(
-            ArrayList aTransformedSpectra) throws IOException {
+    private static HashMap transformSpectraFrom_ms_lims(ArrayList aTransformedSpectra) throws IOException {
 
         HashMap mapping = new HashMap();
 
