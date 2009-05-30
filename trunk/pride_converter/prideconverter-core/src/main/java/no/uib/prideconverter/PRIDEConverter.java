@@ -54,6 +54,7 @@ import de.proteinms.omxparser.util.MSSpectrum;
 
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -960,6 +961,19 @@ public class PRIDEConverter {
                                 properties.NUMBER_OF_BYTES_PER_MEGABYTE), 2),
                                 completeFileName);
                     }
+
+                    // memory clean up
+                    ids.clear();
+                    filenameToSpectrumID.clear();
+                    mzDataSpectra.clear();
+                    mzData = null;
+                    groupedIds.clear();
+                    omitDuplicates.clear();
+                    experiment = null;
+                    bw.close();
+                    reader.close();
+                    xmlOut = null;
+
                 } catch (OutOfMemoryError error) {
                     outputFrame.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
                     progressDialog.setVisible(false);
@@ -967,8 +981,9 @@ public class PRIDEConverter {
                     Runtime.getRuntime().gc();
                     JOptionPane.showMessageDialog(null,
                             "The task used up all the available memory and had to be stopped.\n" +
-                            "Memory boundaries are set in ../Properties/JavaOptions.txt.\n" +
-                            "PRIDE XML file not created.\n\n" +
+                            "Memory boundaries are set in ../Properties/JavaOptions.txt. See\n" +
+                            "the Troubleshooting section at the PRIDE Converter home page for\n" +
+                            "details. The PRIDE XML file was not created.\n\n" +
                             "If the data sets are too big for your computer, e-mail a support\n" +
                             "request to the PRIDE team at the EBI: pride-support@ebi.ac.uk",
                             "Out of Memory Error",
@@ -1395,13 +1410,15 @@ public class PRIDEConverter {
                                 }
 
                                 // Spectrum description comments.
-                                spectrumDescriptionComments = null;
-//                        spectrumDescriptionComments = new ArrayList(1);
-//                        spectrumDescriptionComments.add(new SpectrumDescCommentImpl(comments));
+                                spectrumDescriptionComments = new ArrayList();
 
                                 if (arrays[properties.MZ_ARRAY].length > 0) {
 
                                     totalSpectraCounter++;
+
+                                    spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+                                            properties.getSpectrumCvParams().get(spectrumKey),
+                                            properties.getSpectrumUserParams().get(spectrumKey));
 
                                     mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
                                     mzRangeStop = new Double(
@@ -1419,13 +1436,11 @@ public class PRIDEConverter {
                                             null,
                                             totalSpectraCounter, precursors,
                                             spectrumDescriptionComments,
-                                            properties.getSpectrumCvParams().get(spectrumKey),
-                                            properties.getSpectrumUserParams().get(spectrumKey),
+                                            null, null,
                                             null, null);
 
                                     // Store (spectrumKey, spectrumid) mapping.
-                                    mapping.put(spectrumKey,
-                                            new Long(totalSpectraCounter));
+                                    mapping.put(spectrumKey, new Long(totalSpectraCounter));
 
                                     // Store the transformed spectrum.
                                     aTransformedSpectra.add(fragmentation);
@@ -1595,19 +1610,20 @@ public class PRIDEConverter {
                                                 Integer.toString(charge)));
                                     }
 
-                                    // precursor m/z
-                                    ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                        "MassToChargeRatio", ionSelection.size(), Double.toString(
+                                    // calculated precursor m/z
+                                    ionSelection.add(new CvParamImpl("PRIDE:0000220", "PRIDE",
+                                        "Calculated Mass To Charge Ratio", ionSelection.size(), Double.toString(
                                         ((precursorMh - properties.HYDROGEN_MASS + precursorCharge*properties.HYDROGEN_MASS) / precursorCharge))));
 
                                     // precursor MH+
-//                                  ionSelection.add(new CvParamImpl("PRIDE:??",
-//                                      "PRIDE", "MH+??", ionSelection.size(), Double.toString(precursorMh)));
+//                                  ionSelection.add(new CvParamImpl("PRIDE:0000051",
+//                                      "PRIDE", "(M+H)+", ionSelection.size(), Double.toString(precursorMh)));
 
                                     precursors.add(new PrecursorImpl(null, null,
                                             ionSelection, null, msLevel - 1, 0, 0));
 
-                                    spectrumDescriptionComments = null;
+                                    // Spectrum description comments.
+                                    spectrumDescriptionComments = new ArrayList();
 
                                     if (arrays[properties.MZ_ARRAY].length > 0) {
 
@@ -1616,6 +1632,10 @@ public class PRIDEConverter {
                                         mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
                                         mzRangeStop = new Double(
                                                 arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+
+                                        spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+                                                properties.getSpectrumCvParams().get(spectrumKey),
+                                                properties.getSpectrumUserParams().get(spectrumKey));
 
                                         // Create new mzData spectrum for the fragmentation spectrum.
                                         fragmentation = new SpectrumImpl(
@@ -1630,10 +1650,8 @@ public class PRIDEConverter {
                                                 null,
                                                 totalSpectraCounter, precursors,
                                                 spectrumDescriptionComments,
-                                                properties.getSpectrumCvParams().get(spectrumKey),
-                                                properties.getSpectrumUserParams().get(spectrumKey),
-                                                null,
-                                                null);
+                                                null, null,
+                                                null, null);
 
                                         mapping.put(spectrumKey, new Long(totalSpectraCounter));
 
@@ -1720,19 +1738,19 @@ public class PRIDEConverter {
                                         "ChargeState", ionSelection.size(), Integer.toString(charge)));
                             }
 
-                            // precursor m/z
-                            ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                    "MassToChargeRatio", ionSelection.size(), Double.toString(
+                            // calculated precursor m/z
+                            ionSelection.add(new CvParamImpl("PRIDE:0000220", "PRIDE",
+                                    "Calculated Mass To Charge Ratio", ionSelection.size(), Double.toString(
                                     ((precursorMh - properties.HYDROGEN_MASS + precursorCharge*properties.HYDROGEN_MASS) / precursorCharge))));
 
                             // precursor MH+
-//                          ionSelection.add(new CvParamImpl("PRIDE:??",
-//                                    "PRIDE", "MH+??", ionSelection.size(), Double.toString(precursorMh)));
+//                          ionSelection.add(new CvParamImpl("PRIDE:0000051",
+//                                    "PRIDE", "(M+H)+", ionSelection.size(), Double.toString(precursorMh)));
 
                             precursors.add(new PrecursorImpl(null, null, ionSelection,
                                     null, msLevel - 1, 0, 0));
 
-                            spectrumDescriptionComments = null;
+                            spectrumDescriptionComments = new ArrayList();
 
                             if (arrays[properties.MZ_ARRAY].length > 0) {
 
@@ -1741,6 +1759,10 @@ public class PRIDEConverter {
                                 mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
                                 mzRangeStop = new Double(
                                         arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+
+                                spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+                                                properties.getSpectrumCvParams().get(spectrumKey),
+                                                properties.getSpectrumUserParams().get(spectrumKey));
 
                                 // Create new mzData spectrum for the fragmentation spectrum.
                                 fragmentation = new SpectrumImpl(
@@ -1755,8 +1777,7 @@ public class PRIDEConverter {
                                         null,
                                         totalSpectraCounter, precursors,
                                         spectrumDescriptionComments,
-                                        properties.getSpectrumCvParams().get(spectrumKey),
-                                        properties.getSpectrumUserParams().get(spectrumKey),
+                                        null, null,
                                         null, null);
 
                                 mapping.put(spectrumKey, new Long(totalSpectraCounter));
@@ -1879,7 +1900,7 @@ public class PRIDEConverter {
                                 precursors.add(new PrecursorImpl(null, null,
                                         ionSelection, null, msLevel - 1, 0, 0));
 
-                                spectrumDescriptionComments = null;
+                                spectrumDescriptionComments = new ArrayList();
 
                                 if (arrays[properties.MZ_ARRAY].length > 0) {
 
@@ -1888,6 +1909,10 @@ public class PRIDEConverter {
                                     mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
                                     mzRangeStop = new Double(
                                             arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+
+                                    spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+                                                properties.getSpectrumCvParams().get(spectrumKey),
+                                                properties.getSpectrumUserParams().get(spectrumKey));
 
                                     // Create new mzData spectrum for the fragmentation spectrum.
                                     fragmentation = new SpectrumImpl(
@@ -1902,10 +1927,8 @@ public class PRIDEConverter {
                                             null,
                                             totalSpectraCounter, precursors,
                                             spectrumDescriptionComments,
-                                            properties.getSpectrumCvParams().get(spectrumKey),
-                                            properties.getSpectrumUserParams().get(spectrumKey),
-                                            null,
-                                            null);
+                                            null, null,
+                                            null, null);
 
                                     mapping.put(spectrumKey, new Long(totalSpectraCounter));
 
@@ -1997,10 +2020,9 @@ public class PRIDEConverter {
                                 "MassToChargeRatio", ionSelection.size(), Double.toString(
                                 precursorMz)));
 
-                        precursors.add(new PrecursorImpl(null, null, ionSelection,
-                                null, msLevel - 1, 0, 0));
+                        precursors.add(new PrecursorImpl(null, null, ionSelection, null, msLevel - 1, 0, 0));
 
-                        spectrumDescriptionComments = null;
+                        spectrumDescriptionComments = new ArrayList();
 
                         if (arrays[properties.MZ_ARRAY].length > 0) {
 
@@ -2009,6 +2031,10 @@ public class PRIDEConverter {
                             mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
                             mzRangeStop = new Double(
                                     arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+
+                            spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+                                                properties.getSpectrumCvParams().get(spectrumKey),
+                                                properties.getSpectrumUserParams().get(spectrumKey));
 
                             // Create new mzData spectrum for the fragmentation spectrum.
                             fragmentation = new SpectrumImpl(
@@ -2023,8 +2049,7 @@ public class PRIDEConverter {
                                     null,
                                     totalSpectraCounter, precursors,
                                     spectrumDescriptionComments,
-                                    properties.getSpectrumCvParams().get(spectrumKey),
-                                    properties.getSpectrumUserParams().get(spectrumKey),
+                                    null, null,
                                     null, null);
 
                             mapping.put(spectrumKey, new Long(totalSpectraCounter));
@@ -2106,7 +2131,7 @@ public class PRIDEConverter {
                                     null, 1, 0, 0));
 
                             // Spectrum description comments.
-                            spectrumDescriptionComments = null;
+                            spectrumDescriptionComments = new ArrayList();
 
                             if (arraysFloat[properties.MZ_ARRAY].length > 0) {
 
@@ -2115,6 +2140,10 @@ public class PRIDEConverter {
                                 mzRangeStart = new Double(arraysFloat[properties.MZ_ARRAY][0]);
                                 mzRangeStop = new Double(
                                         arraysFloat[properties.MZ_ARRAY][arraysFloat[properties.MZ_ARRAY].length - 1]);
+
+                                spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+                                                properties.getSpectrumCvParams().get(spectrumKey),
+                                                properties.getSpectrumUserParams().get(spectrumKey));
 
                                 if (msLevel == 1) {
                                     spectrum = new SpectrumImpl(
@@ -2127,11 +2156,10 @@ public class PRIDEConverter {
                                             new Double(arraysFloat[properties.MZ_ARRAY][arraysFloat[properties.MZ_ARRAY].length -
                                             1]), //null,
                                             null,
-                                            totalSpectraCounter, null, null,
-                                            properties.getSpectrumCvParams().get(spectrumKey),
-                                            properties.getSpectrumUserParams().get(spectrumKey),
-                                            null,
-                                            null);
+                                            totalSpectraCounter, null,
+                                            spectrumDescriptionComments,
+                                            null, null,
+                                            null, null);
                                 } else {//msLevel == 2){
                                     spectrum = new SpectrumImpl(
                                             new BinaryArrayImpl(arraysFloat[properties.INTENSITIES_ARRAY],
@@ -2144,10 +2172,8 @@ public class PRIDEConverter {
                                             null,
                                             totalSpectraCounter, precursors,
                                             spectrumDescriptionComments,
-                                            properties.getSpectrumCvParams().get(spectrumKey),
-                                            properties.getSpectrumUserParams().get(spectrumKey),
-                                            null,
-                                            null);
+                                            null, null,
+                                            null, null);
                                 }
 
                                 // Create new mzData spectrum for the fragmentation spectrum.
@@ -2817,7 +2843,7 @@ public class PRIDEConverter {
 
                     try {
                         // Spectrum description comments.
-                        spectrumDescriptionComments = new ArrayList(1);
+                        spectrumDescriptionComments = new ArrayList();
 
                         identified = "Not identified";
 
@@ -3654,14 +3680,14 @@ public class PRIDEConverter {
                         if (properties.getDataSource().equalsIgnoreCase("Sequest DTA File") ||
                                 properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
                             
-                            // precursor m/z
-                            ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                "MassToChargeRatio", ionSelection.size(), Double.toString(
+                            // calculated precursor m/z
+                            ionSelection.add(new CvParamImpl("PRIDE:0000220", "PRIDE",
+                                "Calculated Mass To Charge Ratio", ionSelection.size(), Double.toString(
                                  ((precursorMh - properties.HYDROGEN_MASS + precursorCharge*properties.HYDROGEN_MASS) / precursorCharge))));
                             
                             // precursor MH+
-//                          ionSelection.add(new CvParamImpl("PRIDE:??",
-//                              "PRIDE", "MH+??", ionSelection.size(), Double.toString(precursorMh)));
+//                          ionSelection.add(new CvParamImpl("PRIDE:0000051",
+//                              "PRIDE", "(M+H)+", ionSelection.size(), Double.toString(precursorMh)));
                         }
 
                         if (properties.getDataSource().equalsIgnoreCase("Spectrum Mill")) {
@@ -3674,6 +3700,10 @@ public class PRIDEConverter {
                                 ionSelection, null, msLevel - 1, 0, 0));
 
                         spectrumDescriptionComments.add(new SpectrumDescCommentImpl(identified));
+
+                        spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+                            properties.getSpectrumCvParams().get(spectrumKey),
+                            properties.getSpectrumUserParams().get(spectrumKey));
 
                         if (arrays[properties.MZ_ARRAY].length > 0) {
                             mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
@@ -3691,8 +3721,7 @@ public class PRIDEConverter {
                                     null,
                                     spectraCounter, precursors,
                                     spectrumDescriptionComments,
-                                    properties.getSpectrumCvParams().get(spectrumKey),
-                                    properties.getSpectrumUserParams().get(spectrumKey),
+                                    null, null,
                                     null, null);
 
                             if (properties.getDataSource().equalsIgnoreCase("Spectrum Mill") ||
@@ -3815,7 +3844,8 @@ public class PRIDEConverter {
         StringTokenizer tok;
         Double mzRangeStart, mzRangeStop;
 
-        ArrayList spectrumDescriptionComments, supDataArrays, cVParams, supDescArrays;
+        Collection spectrumDescriptionComments;
+        ArrayList supDataArrays, cVParams, supDescArrays;
 
         boolean errorDetected;
         FileReader f;
@@ -3987,7 +4017,7 @@ public class PRIDEConverter {
                             precursors.add(new PrecursorImpl(null, null,
                                     ionSelection, null, msLevel - 1, 0, 0));
 
-                            spectrumDescriptionComments = new ArrayList(1);
+                            spectrumDescriptionComments = new ArrayList();
                             spectrumDescriptionComments.add(new SpectrumDescCommentImpl("Not identified"));
 
                             if (properties.getDataSource().equalsIgnoreCase("VEMS")) {
@@ -4011,9 +4041,14 @@ public class PRIDEConverter {
                             }
 
                             if (arrays[properties.MZ_ARRAY].length > 0) {
+
                                 mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
                                 mzRangeStop = new Double(
                                         arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+
+                                spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+                                    properties.getSpectrumCvParams().get(spectrumKey),
+                                    properties.getSpectrumUserParams().get(spectrumKey));
 
                                 // Create new mzData spectrum for the fragmentation spectrum.
                                 fragmentation = new SpectrumImpl(
@@ -4028,8 +4063,7 @@ public class PRIDEConverter {
                                         null,
                                         spectraCounter, precursors,
                                         spectrumDescriptionComments,
-                                        properties.getSpectrumCvParams().get(spectrumKey),
-                                        properties.getSpectrumUserParams().get(spectrumKey),
+                                        null, null,
                                         null,
                                         supDescArrays);
 
@@ -4148,7 +4182,7 @@ public class PRIDEConverter {
 
                     precursors.add(new PrecursorImpl(null, null, ionSelection, null, msLevel - 1, 0, 0));
 
-                    spectrumDescriptionComments = new ArrayList(1);
+                    spectrumDescriptionComments = new ArrayList();
                     spectrumDescriptionComments.add(new SpectrumDescCommentImpl("Not identified"));
 
                     if (properties.getDataSource().equalsIgnoreCase("VEMS")) {
@@ -4172,9 +4206,14 @@ public class PRIDEConverter {
                     }
 
                     if (arrays[properties.MZ_ARRAY].length > 0) {
+
                         mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
                         mzRangeStop = new Double(
                                 arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+
+                        spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+                                properties.getSpectrumCvParams().get(spectrumKey),
+                                properties.getSpectrumUserParams().get(spectrumKey));
 
                         // Create new mzData spectrum for the fragmentation spectrum.
                         fragmentation = new SpectrumImpl(
@@ -4189,8 +4228,7 @@ public class PRIDEConverter {
                                 null,
                                 spectraCounter, precursors,
                                 spectrumDescriptionComments,
-                                properties.getSpectrumCvParams().get(spectrumKey),
-                                properties.getSpectrumUserParams().get(spectrumKey),
+                                null, null,
                                 null, supDescArrays);
 
                         mapping.put((new File(properties.getSelectedSourceFiles().
@@ -4369,10 +4407,14 @@ public class PRIDEConverter {
 ////                    precursors.add(new PrecursorImpl(null, null, ionSelection, null, 1, spectraCounter, 0));
 //
 //                    // Spectrum description comments.
-//                    spectrumDescriptionComments = new ArrayList(1);
+//                    spectrumDescriptionComments = new ArrayList();
 //
 //                    identified = "Not identified";
 //                    spectrumDescriptionComments.add(new SpectrumDescCommentImpl(identified));
+//
+//                      spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+//                          properties.getSpectrumCvParams().get(spectrumKey),
+//                          properties.getSpectrumUserParams().get(spectrumKey));
 //
 ////                    new BinaryArrayImpl(mzValues.get, orderIndexInstrumentSourceParameter, dataSource, softwareVersion)
 ////                    
@@ -4385,7 +4427,7 @@ public class PRIDEConverter {
 ////                                new Double(arraysFloat[MZ_ARRAY][arraysFloat[MZ_ARRAY].length -
 ////                                1]), //null, 
 ////                                null,
-////                                spectraCounter, null, null, null, null, null, null);
+////                                spectraCounter, null, spectrumDescriptionComments, null, null, null, null);
 ////                    } else {//msLevel == 2){
 ////                        spectrum = new SpectrumImpl(
 ////                                new BinaryArrayImpl(arraysFloat[INTENSITIES_ARRAY], BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
@@ -4536,15 +4578,20 @@ public class PRIDEConverter {
                     precursors.add(new PrecursorImpl(null, null, ionSelection, null, 1, 0, 0));
 
                     // Spectrum description comments.
-                    spectrumDescriptionComments = new ArrayList(1);
+                    spectrumDescriptionComments = new ArrayList();
 
                     identified = "Not identified";
                     spectrumDescriptionComments.add(new SpectrumDescCommentImpl(identified));
 
                     if (arraysFloat[properties.MZ_ARRAY].length > 0) {
+
                         mzRangeStart = new Double(arraysFloat[properties.MZ_ARRAY][0]);
                         mzRangeStop = new Double(
                                 arraysFloat[properties.MZ_ARRAY][arraysFloat[properties.MZ_ARRAY].length - 1]);
+
+                        spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+                            properties.getSpectrumCvParams().get(spectrumKey),
+                            properties.getSpectrumUserParams().get(spectrumKey));
 
                         if (msLevel == 1) {
                             spectrum = new SpectrumImpl(
@@ -4557,11 +4604,10 @@ public class PRIDEConverter {
                                     new Double(arraysFloat[properties.MZ_ARRAY][arraysFloat[properties.MZ_ARRAY].length -
                                     1]), //null, 
                                     null,
-                                    spectraCounter, null, null,
-                                    properties.getSpectrumCvParams().get(spectrumKey),
-                                    properties.getSpectrumUserParams().get(spectrumKey),
-                                    null,
-                                    null);
+                                    spectraCounter, null,
+                                    spectrumDescriptionComments,
+                                    null, null,
+                                    null, null);
                         } else {//msLevel == 2){
                             spectrum = new SpectrumImpl(
                                     new BinaryArrayImpl(arraysFloat[properties.INTENSITIES_ARRAY],
@@ -4574,10 +4620,8 @@ public class PRIDEConverter {
                                     null,
                                     spectraCounter, precursors,
                                     spectrumDescriptionComments,
-                                    properties.getSpectrumCvParams().get(spectrumKey),
-                                    properties.getSpectrumUserParams().get(spectrumKey),
-                                    null,
-                                    null);
+                                    null, null,
+                                    null, null);
                         }
 
                         // Create new mzData spectrum for the fragmentation spectrum.
@@ -4754,14 +4798,17 @@ public class PRIDEConverter {
                         }
 
                         // Spectrum description comments.
-                        spectrumDescriptionComments = null;
-//                        spectrumDescriptionComments = new ArrayList(1);
-//                        spectrumDescriptionComments.add(new SpectrumDescCommentImpl(comments));
+                        spectrumDescriptionComments = new ArrayList();
 
                         if (arrays[properties.MZ_ARRAY].length > 0) {
+
                             mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
                             mzRangeStop = new Double(
                                     arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+
+                            spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+                                    properties.getSpectrumCvParams().get(spectrumKey),
+                                    properties.getSpectrumUserParams().get(spectrumKey));
 
                             fragmentation =
                                     new SpectrumImpl(
@@ -4775,8 +4822,7 @@ public class PRIDEConverter {
                                     null,
                                     spectraCounter, precursors,
                                     spectrumDescriptionComments,
-                                    properties.getSpectrumCvParams().get(spectrumKey),
-                                    properties.getSpectrumUserParams().get(spectrumKey),
+                                    null, null,
                                     null, null);
 
                             // Store (spectrumfileid, spectrumid) mapping.
@@ -7193,14 +7239,19 @@ public class PRIDEConverter {
                                     ionSelection, null, msLevel - 1, 0, 0));
 
                             // Spectrum description comments.
-                            spectrumDescriptionComments = new ArrayList(1);
+                            spectrumDescriptionComments = new ArrayList();
 
                             identified = "Not identified";
                             spectrumDescriptionComments.add(new SpectrumDescCommentImpl(identified));
 
                             if (arrays[properties.MZ_ARRAY].length > 0) {
+
                                 mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
                                 mzRangeStop = new Double(arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+
+                                spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+                                        properties.getSpectrumCvParams().get(spectrumKey),
+                                        properties.getSpectrumUserParams().get(spectrumKey));
 
                                 fragmentation =
                                         new SpectrumImpl(
@@ -7214,8 +7265,7 @@ public class PRIDEConverter {
                                         null,
                                         spectraCounter, precursors,
                                         spectrumDescriptionComments,
-                                        properties.getSpectrumCvParams().get(spectrumKey),
-                                        properties.getSpectrumUserParams().get(spectrumKey),
+                                        null, null,
                                         null, null);
 
                                 // Store (spectrumfileid, spectrumid) mapping.
@@ -7355,14 +7405,19 @@ public class PRIDEConverter {
                         precursors.add(new PrecursorImpl(null, null, ionSelection, null, 1, 0, 0));
 
                         // Spectrum description comments.
-                        spectrumDescriptionComments = new ArrayList(1);
+                        spectrumDescriptionComments = new ArrayList();
 
                         identified = "Not identified";
                         spectrumDescriptionComments.add(new SpectrumDescCommentImpl(identified));
 
                         if (arrays[properties.MZ_ARRAY].length > 0) {
+
                             mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
                             mzRangeStop = new Double(arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+
+                            spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+                                    properties.getSpectrumCvParams().get(spectrumKey),
+                                    properties.getSpectrumUserParams().get(spectrumKey));
 
                             fragmentation =
                                     new SpectrumImpl(
@@ -7376,8 +7431,7 @@ public class PRIDEConverter {
                                     null,
                                     spectraCounter, precursors,
                                     spectrumDescriptionComments,
-                                    properties.getSpectrumCvParams().get(spectrumKey),
-                                    properties.getSpectrumUserParams().get(spectrumKey),
+                                    null, null,
                                     null, null);
 
                             // Store (spectrumfileid, spectrumid) mapping.
@@ -7538,7 +7592,7 @@ public class PRIDEConverter {
                 currentQuery = queries.nextElement();
                 matchFound = false;
                 fileName = currentQuery.getFilename();
-                spectrumKey = fileName + "_null";
+                spectrumKey = fileName + "_" + tempMascotDatfile.getFileName() + "_" + currentQuery.getQueryNumber();
 
                 if (properties.getSelectedSpectraKeys().size() > 0) {
                     for (int i = 0; i < properties.getSelectedSpectraKeys().size() && !matchFound; i++) {
@@ -7631,7 +7685,7 @@ public class PRIDEConverter {
                             precursors.add(new PrecursorImpl(null, null, ionSelection, null, 1, 0, 0));
 
                             // Spectrum description comments.
-                            spectrumDescriptionComments = new ArrayList(1);
+                            spectrumDescriptionComments = new ArrayList();
 
                             tempPeptideHit =
                                     queryToPeptideMap.getPeptideHitOfOneQuery(currentQuery.getQueryNumber());
@@ -7679,6 +7733,10 @@ public class PRIDEConverter {
 
                             if (addPeptide) {
 
+                                spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+                                    properties.getSpectrumCvParams().get(spectrumKey),
+                                    properties.getSpectrumUserParams().get(spectrumKey));
+
                                 // Create new mzData spectrum for the fragmentation spectrum.
                                 fragmentation = new SpectrumImpl(
                                         new BinaryArrayImpl(arrays[properties.INTENSITIES_ARRAY],
@@ -7692,8 +7750,7 @@ public class PRIDEConverter {
                                         null,
                                         idCounter, precursors,
                                         spectrumDescriptionComments,
-                                        properties.getSpectrumCvParams().get(spectrumKey),
-                                        properties.getSpectrumUserParams().get(spectrumKey),
+                                        null, null,
                                         null, null);
 
                                 // Store (spectrumfileid, spectrumid) mapping.
@@ -7703,6 +7760,10 @@ public class PRIDEConverter {
 
                                 // Store the transformed spectrum.
                                 aTransformedSpectra.add(fragmentation);
+
+                                // memory clean up
+                                arrays = null;
+                                peakList = null;
 
                                 // extract the peptide identifications
                                 if (peptideIsIdentified) {
@@ -7904,8 +7965,14 @@ public class PRIDEConverter {
                     }
                 }
             }
-        }
 
+            // memory clean up
+            queries = null;
+            queryToPeptideMap = null;
+            tempFile = null;
+            tempMascotDatfile = null;
+        }
+       
         totalNumberOfSpectra = idCounter - 1;
         return mapping;
     }
@@ -8307,7 +8374,7 @@ public class PRIDEConverter {
                     precursors.add(new PrecursorImpl(null, null, ionSelection, null, 1, 0, 0));
 
                     // Spectrum description comments.
-                    spectrumDescriptionComments = new ArrayList(1);
+                    spectrumDescriptionComments = new ArrayList();
 
                     if (results.get(tempSpectrum).MSHitSet_hits.MSHits.size() > 0) {
                         spectrumDescriptionComments.add(new SpectrumDescCommentImpl("Identified"));
@@ -8359,8 +8426,7 @@ public class PRIDEConverter {
 
                         // OMSSA question: how to handle protein isoforms?
                         // Currently handled by simply selection the first peptide hit (in the xml file)
-                        currentMSPepHit =
-                                currentMSHit.MSHits_pephits.MSPepHit.get(0);
+                        currentMSPepHit = currentMSHit.MSHits_pephits.MSPepHit.get(0);
 
                         //String accession = currentMSHit.MSHits_libaccession;
                         if (currentMSPepHit.MSPepHit_accession != null) {
@@ -8369,8 +8435,7 @@ public class PRIDEConverter {
                             accession = "gi|" + currentMSPepHit.MSPepHit_gi;
                         }
 
-                        if (omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_db !=
-                                null) {
+                        if (omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_db != null) {
                             database = omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_db;
                         }
 
@@ -8385,8 +8450,7 @@ public class PRIDEConverter {
                             peptideModifications = new ArrayList();
 
                             for (int i = 0; i < fixedModifications.size(); i++) {
-                                modifiedResidues =
-                                        omssaModificationDetails.get(fixedModifications.get(i)).getModResidues();
+                                modifiedResidues = omssaModificationDetails.get(fixedModifications.get(i)).getModResidues();
 
                                 for (int j = 0; j < modifiedResidues.size(); j++) {
 
@@ -8412,7 +8476,7 @@ public class PRIDEConverter {
                                             monoMasses.add(
                                                     new MonoMassDeltaImpl(omssaModificationDetails.get(
                                                     fixedModifications.get(i)).getModMonoMass()));
-                                        //monoMasses = null;
+                                            //monoMasses = null;
                                         }
 
                                         peptideModifications.add(new ModificationImpl(
@@ -8522,9 +8586,14 @@ public class PRIDEConverter {
                     }
 
                     if (arrays[properties.MZ_ARRAY].length > 0) {
+
                         mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
                         mzRangeStop = new Double(
                                 arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+
+                        spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+                                properties.getSpectrumCvParams().get(spectrumKey),
+                                properties.getSpectrumUserParams().get(spectrumKey));
 
                         // Create new mzData spectrum for the fragmentation spectrum.
                         fragmentation =
@@ -8539,8 +8608,7 @@ public class PRIDEConverter {
                                 mzRangeStop,
                                 null,
                                 idCounter, precursors, spectrumDescriptionComments,
-                                properties.getSpectrumCvParams().get(spectrumKey),
-                                properties.getSpectrumUserParams().get(spectrumKey),
+                                null, null,
                                 null, null);
 
                         // Store (spectrumfileid, spectrumid) mapping.
@@ -8647,7 +8715,7 @@ public class PRIDEConverter {
             idCounter++;
 
             // Spectrum description comments.
-            spectrumDescriptionComments = new ArrayList(1);
+            spectrumDescriptionComments = new ArrayList();
             identificationCount = dbSpectrum.getIdentified();
             identified = (identificationCount > 0 ? "Identified" : "Not identified");
             spectrumDescriptionComments.add(new SpectrumDescCommentImpl(identified));
@@ -8655,6 +8723,10 @@ public class PRIDEConverter {
             if (arrays[properties.MZ_ARRAY].length > 0) {
                 mzRangeStart = new Double(arrays[properties.MZ_ARRAY][0]);
                 mzRangeStop = new Double(arrays[properties.MZ_ARRAY][arrays[properties.MZ_ARRAY].length - 1]);
+
+                spectrumDescriptionComments = addUserSpectrumComments(spectrumDescriptionComments,
+                        properties.getSpectrumCvParams().get(spectrumKey),
+                        properties.getSpectrumUserParams().get(spectrumKey));
 
                 fragmentation =
                         new SpectrumImpl(
@@ -8666,8 +8738,7 @@ public class PRIDEConverter {
                         mzRangeStop,
                         null,
                         idCounter, precursors, spectrumDescriptionComments,
-                        properties.getSpectrumCvParams().get(spectrumKey),
-                        properties.getSpectrumUserParams().get(spectrumKey),
+                        null, null,
                         null, null);
 
                 // Store (spectrumfileid, spectrumid) mapping.
@@ -10109,5 +10180,43 @@ public class PRIDEConverter {
         spectrumKey = spectrumKey.substring(0, spectrumKey.length() - 1);
 
         return spectrumKey;
+    }
+
+    /**
+     * Adds the user defined parameters (CV- and UserParams) to the SpectrumComments.
+     *
+     * @param spectrumComments the orginal spectrum comments
+     * @param cvParams the user defined spectrum cv params
+     * @param userParams the user defined spectrum user params
+     * @return the updated list of spectrum comments
+     */
+    private static Collection addUserSpectrumComments(Collection spectrumComments,
+            ArrayList<CvParam> cvParams, ArrayList<UserParam> userParams){
+
+        //(NB: spectrum comments are simply text, not real CV- and UserParams
+
+        // add user cv params
+        if(cvParams != null){
+            for(int i=0; i<cvParams.size(); i++){
+
+                String comment = cvParams.get(i).getAccession() + " " + cvParams.get(i).getName();
+
+                if(cvParams.get(i).getValue() != null){
+                    comment += ": " + cvParams.get(i).getValue();
+                }
+
+                spectrumComments.add(new SpectrumDescCommentImpl(comment));
+            }
+        }
+
+        // add user user params
+        if(userParams != null){
+            for(int i=0; i<userParams.size(); i++){
+                String comment = userParams.get(i).getName() + ": " + userParams.get(i).getValue();
+                spectrumComments.add(new SpectrumDescCommentImpl(comment));
+            }
+        }
+
+        return spectrumComments;
     }
 }
