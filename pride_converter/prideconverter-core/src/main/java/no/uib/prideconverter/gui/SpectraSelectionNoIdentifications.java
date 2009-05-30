@@ -231,7 +231,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         selectAllJCheckBox = new javax.swing.JCheckBox();
 
         selectAllJMenuItem.setMnemonic('A');
-        selectAllJMenuItem.setText("Select All");
+        selectAllJMenuItem.setText("Select/Deselect All");
         selectAllJMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectAllJMenuItemActionPerformed(evt);
@@ -1045,9 +1045,16 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
     private void selectAllJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectAllJMenuItemActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        int sortedTableColumn = spectraJXTable.getSortedColumn().getModelIndex();
-        SortOrder sortOrder = spectraJXTable.getSortOrder(sortedTableColumn);
-        spectraJXTable.setSortable(false);
+        boolean columnWasSorted = false;
+        int sortedTableColumn = -1;
+        SortOrder sortOrder = null;
+
+        if(spectraJXTable.getSortedColumn() != null){
+            sortedTableColumn = spectraJXTable.getSortedColumn().getModelIndex();
+            sortOrder = spectraJXTable.getSortOrder(sortedTableColumn);
+            spectraJXTable.setSortable(false);
+            columnWasSorted = true;
+        }
 
         if (selectAll) {
             for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
@@ -1082,8 +1089,10 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
         selectAll = !selectAll;
 
-        spectraJXTable.setSortable(true);
-        spectraJXTable.setSortOrder(sortedTableColumn, sortOrder);
+        if(columnWasSorted){
+            spectraJXTable.setSortable(true);
+            spectraJXTable.setSortOrder(sortedTableColumn, sortOrder);
+        }
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_selectAllJMenuItemActionPerformed
@@ -1096,9 +1105,16 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
     private void invertSelectionJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invertSelectionJMenuItemActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        int sortedTableColumn = spectraJXTable.getSortedColumn().getModelIndex();
-        SortOrder sortOrder = spectraJXTable.getSortOrder(sortedTableColumn);
-        spectraJXTable.setSortable(false);
+        boolean columnWasSorted = false;
+        int sortedTableColumn = -1;
+        SortOrder sortOrder = null;
+
+        if(spectraJXTable.getSortedColumn() != null){
+            sortedTableColumn = spectraJXTable.getSortedColumn().getModelIndex();
+            sortOrder = spectraJXTable.getSortOrder(sortedTableColumn);
+            spectraJXTable.setSortable(false);
+            columnWasSorted = true;
+        }
 
         numberOfSelectedSpectra = 0;
 
@@ -1120,8 +1136,10 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
             nextJButton.setEnabled(true);
         }
 
-        spectraJXTable.setSortable(true);
-        spectraJXTable.setSortOrder(sortedTableColumn, sortOrder);
+        if(columnWasSorted){
+            spectraJXTable.setSortable(true);
+            spectraJXTable.setSortOrder(sortedTableColumn, sortOrder);
+        }
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_invertSelectionJMenuItemActionPerformed
