@@ -579,16 +579,20 @@ public class PeptideProphetXMLParser {
         if (!(aParser.getEventType() == XmlPullParser.END_TAG && SEARCH_SUMMARY.equals(aParser.getName()))) {
             logger.warn("Current tag should be the 'search_summary' end tag, instead it was: " + aParser.getName() + "!");
         }
+
         // OK, create the corresponding wrapper instance.
         PeptideProphetSearch pps = new PeptideProphetSearch(precursor_mass_type, fragment_mass_type, search_enzyme,
                 max_number_internal_cleavages, min_number_termini, modifications, search_parameters, filename, type,
                 search_engine);
 
         aParser.moveToNextStartTagWithEndBreaker(SEARCH_SUMMARY);
+
         // The next few tags are skipped, these are all timestamps.
         while (aParser.getName().indexOf("timestamp") >= 0) {
-            aParser.moveToNextStartTagWithEndBreaker(SEARCH_SUMMARY);
+            //aParser.moveToNextStartTagWithEndBreaker(SEARCH_SUMMARY);
+            aParser.moveToNextStartTagWithEndBreaker(MSMS_RUN_SUMMARY);
         }
+        
         Collection queries = new ArrayList();
 
         // Right, now cycle the spectrum queries.

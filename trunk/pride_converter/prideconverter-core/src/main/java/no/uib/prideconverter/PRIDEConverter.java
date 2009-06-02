@@ -54,7 +54,6 @@ import de.proteinms.omxparser.util.MSSpectrum;
 
 import java.io.InputStreamReader;
 import java.sql.Connection;
-import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -289,8 +288,8 @@ public class PRIDEConverter {
                         int option = JOptionPane.showConfirmDialog(null,
                                 "A newer version of PRIDE Converter is available.\n" +
                                 "Do you want to upgrade?\n\n" +
-                                "Selecting \'Yes\' will open the PRIDE Converter web page\n" +
-                                "where you can download the latest version.",
+                                "Selecting \'Yes\' will open the PRIDE Converter web page where you " +
+                                "can see a list of the changes and download the latest version.",
                                 "PRIDE Converter - Upgrade Available",
                                 JOptionPane.YES_NO_CANCEL_OPTION);
                         if (option == JOptionPane.YES_OPTION) {
@@ -1611,13 +1610,13 @@ public class PRIDEConverter {
                                     }
 
                                     // calculated precursor m/z
-                                    ionSelection.add(new CvParamImpl("PRIDE:0000220", "PRIDE",
-                                        "Calculated Mass To Charge Ratio", ionSelection.size(), Double.toString(
+                                    ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
+                                        "MassToChargeRatio", ionSelection.size(), Double.toString(
                                         ((precursorMh - properties.HYDROGEN_MASS + precursorCharge*properties.HYDROGEN_MASS) / precursorCharge))));
 
                                     // precursor MH+
-//                                  ionSelection.add(new CvParamImpl("PRIDE:0000051",
-//                                      "PRIDE", "(M+H)+", ionSelection.size(), Double.toString(precursorMh)));
+                                    ionSelection.add(new CvParamImpl("PRIDE:0000051",
+                                        "PRIDE", "(M+H)+", ionSelection.size(), Double.toString(precursorMh)));
 
                                     precursors.add(new PrecursorImpl(null, null,
                                             ionSelection, null, msLevel - 1, 0, 0));
@@ -1739,13 +1738,13 @@ public class PRIDEConverter {
                             }
 
                             // calculated precursor m/z
-                            ionSelection.add(new CvParamImpl("PRIDE:0000220", "PRIDE",
-                                    "Calculated Mass To Charge Ratio", ionSelection.size(), Double.toString(
+                            ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
+                                    "MassToChargeRatio", ionSelection.size(), Double.toString(
                                     ((precursorMh - properties.HYDROGEN_MASS + precursorCharge*properties.HYDROGEN_MASS) / precursorCharge))));
 
                             // precursor MH+
-//                          ionSelection.add(new CvParamImpl("PRIDE:0000051",
-//                                    "PRIDE", "(M+H)+", ionSelection.size(), Double.toString(precursorMh)));
+                            ionSelection.add(new CvParamImpl("PRIDE:0000051",
+                                    "PRIDE", "(M+H)+", ionSelection.size(), Double.toString(precursorMh)));
 
                             precursors.add(new PrecursorImpl(null, null, ionSelection,
                                     null, msLevel - 1, 0, 0));
@@ -1883,18 +1882,18 @@ public class PRIDEConverter {
                                 charge = precursorCharge;
                                 if (charge > 0) {
                                     ionSelection.add(new CvParamImpl("PSI:1000041",
-                                            "PSI", "ChargeState", 0,
+                                            "PSI", "ChargeState", ionSelection.size(),
                                             Integer.toString(charge)));
                                 }
 
                                 // precursor intensity
                                 ionSelection.add(new CvParamImpl("PSI:1000042",
-                                        "PSI", "Intensity", 1,
+                                        "PSI", "Intensity", ionSelection.size(),
                                         Double.toString(precursorIntensty)));
 
                                 // precursor m/z
                                 ionSelection.add(new CvParamImpl("PSI:1000040",
-                                        "PSI", "MassToChargeRatio", 2, Double.toString(
+                                        "PSI", "MassToChargeRatio", ionSelection.size(), Double.toString(
                                         precursorMz)));
 
                                 precursors.add(new PrecursorImpl(null, null,
@@ -3681,13 +3680,13 @@ public class PRIDEConverter {
                                 properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
                             
                             // calculated precursor m/z
-                            ionSelection.add(new CvParamImpl("PRIDE:0000220", "PRIDE",
-                                "Calculated Mass To Charge Ratio", ionSelection.size(), Double.toString(
+                            ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
+                                "MassToChargeRatio", ionSelection.size(), Double.toString(
                                  ((precursorMh - properties.HYDROGEN_MASS + precursorCharge*properties.HYDROGEN_MASS) / precursorCharge))));
                             
                             // precursor MH+
-//                          ionSelection.add(new CvParamImpl("PRIDE:0000051",
-//                              "PRIDE", "(M+H)+", ionSelection.size(), Double.toString(precursorMh)));
+                            ionSelection.add(new CvParamImpl("PRIDE:0000051",
+                                "PRIDE", "(M+H)+", ionSelection.size(), Double.toString(precursorMh)));
                         }
 
                         if (properties.getDataSource().equalsIgnoreCase("Spectrum Mill")) {
