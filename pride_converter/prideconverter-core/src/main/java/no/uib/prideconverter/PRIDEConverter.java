@@ -1203,6 +1203,11 @@ public class PRIDEConverter {
                     //get the factory
                     dbf = DocumentBuilderFactory.newInstance();
 
+                    dbf.setValidating(false);
+                    dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+                    dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+                    dbf.setAttribute("http://xml.org/sax/features/validation", false);
+
                     //Using factory get an instance of document builder
                     db = dbf.newDocumentBuilder();
 
@@ -2236,6 +2241,11 @@ public class PRIDEConverter {
             try {
                 //get the factory
                 dbf = DocumentBuilderFactory.newInstance();
+
+                dbf.setValidating(false);
+                dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+                dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+                dbf.setAttribute("http://xml.org/sax/features/validation", false);
 
                 //Using factory get an instance of document builder
                 db = dbf.newDocumentBuilder();
@@ -8061,6 +8071,11 @@ public class PRIDEConverter {
                     //get the factory
                     dbf = DocumentBuilderFactory.newInstance();
 
+                    dbf.setValidating(false);
+                    dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+                    dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+                    dbf.setAttribute("http://xml.org/sax/features/validation", false);
+
                     //Using factory get an instance of document builder
                     db = dbf.newDocumentBuilder();
 
@@ -8142,6 +8157,11 @@ public class PRIDEConverter {
 
                     //get the factory
                     dbf = DocumentBuilderFactory.newInstance();
+
+                    dbf.setValidating(false);
+                    dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+                    dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+                    dbf.setAttribute("http://xml.org/sax/features/validation", false);
 
                     //Using factory get an instance of document builder
                     db = dbf.newDocumentBuilder();
@@ -8238,6 +8258,7 @@ public class PRIDEConverter {
             variableModifications =
                     omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_variable.MSMod;
 
+            // default to 100 if not found
             int omssaResponseScale =
                     omxFile.getParserResult().MSSearch_response.MSResponse.get(0).MSResponse_scale;
 
@@ -8257,8 +8278,7 @@ public class PRIDEConverter {
             }
 
             // variable modifications
-            for (int i = 0; i <
-                    variableModifications.size(); i++) {
+            for (int i = 0; i < variableModifications.size(); i++) {
 
                 new ModificationMapping(outputFrame, true, progressDialog, "" +
                         omssaModificationDetails.get(variableModifications.get(i)).getModName(),
@@ -8282,7 +8302,12 @@ public class PRIDEConverter {
                 tempSpectrum = iterator.next();
 
                 // OMSSA question: possible with more than one file name per spectrum??
-                fileName = tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.get(0);
+                // spectrum name is not mandatory, use spectrum number if no name is given
+                if(tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.size() == 0){
+                    fileName = "" + tempSpectrum.MSSpectrum_number;
+                } else{
+                    fileName = tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.get(0);
+                }
 
                 matchFound = false;
 
