@@ -709,13 +709,13 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         this.nextJButton.setEnabled(true);
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
-                "<b>ms_lims 6</b><br><br>" +
+                "<b>ms_lims 7</b><br><br>" +
                 "The ms_lims suite of software is mainly designed to " +
                 "automate data flow in the high-throughput proteomics lab. Taking in spectrum " +
                 "files from a variety of fileformats, it transforms these to the Mascot " +
                 "Generic Format and stores them in the database.<br><br>" +
                 "These can then be submitted to a search engine, e.g., Mascot from Matrix Science.<br><br>" +
-                "PRIDE Converter currently supports ms_lims 7." +
+                "PRIDE Converter currently supports ms_lims 7. " +
                 "If you are using and older version you first need to update ms_lims.<br><br>" +
                 "Homepage: <a href=\"http://genesis.ugent.be/ms_lims\">http://genesis.ugent.be/ms_lims</a>");
         descriptionJEditorPane.setCaretPosition(0);

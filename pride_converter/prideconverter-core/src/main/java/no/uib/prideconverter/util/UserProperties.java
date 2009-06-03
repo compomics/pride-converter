@@ -29,7 +29,7 @@ public class UserProperties {
     private String sourceFileLocation = "";
     private String userName = ""; //database user name
     private String serverHost = "localhost"; //database serverhost
-    private String schema = "ms_lims_6"; //database schema
+    private String schema = "ms_lims_7"; //database schema
     private String lastSelectedOntology = "Mass Spectroscopy CV (PSI-MS) [PSI]";
     private String lastSelectedSampleOntology = "NEWT UniProt Taxonomy Database [NEWT]";
     private String currentSelectedInstrument = "";
@@ -164,7 +164,8 @@ public class UserProperties {
                     version.equalsIgnoreCase("v1.16.2") ||
                     version.equalsIgnoreCase("v1.17_beta") ||
                     version.equalsIgnoreCase("v1.17") ||
-                    version.equalsIgnoreCase("v1.17.1")) {
+                    version.equalsIgnoreCase("v1.17.1") ||
+                    version.equalsIgnoreCase("v1.18")) {
                 s = b.readLine();
                 fileNameSelectionCriteriaSeparator = s.substring(s.indexOf(": ") + 2);
                 s = b.readLine();
@@ -205,7 +206,8 @@ public class UserProperties {
                     version.equalsIgnoreCase("v1.16.2") ||
                     version.equalsIgnoreCase("v1.17_beta") ||
                     version.equalsIgnoreCase("v1.17") ||
-                    version.equalsIgnoreCase("v1.17.1")) {
+                    version.equalsIgnoreCase("v1.17.1") ||
+                    version.equalsIgnoreCase("v1.18")) {
 
                 // read the iTRAQ settings values
                 s = b.readLine();
@@ -249,7 +251,8 @@ public class UserProperties {
                     version.equalsIgnoreCase("v1.16.1") ||
                     version.equalsIgnoreCase("v1.17_beta") ||
                     version.equalsIgnoreCase("v1.17") ||
-                    version.equalsIgnoreCase("v1.17.1")) {
+                    version.equalsIgnoreCase("v1.17.1") ||
+                    version.equalsIgnoreCase("v1.18")) {
 
                 s = b.readLine();
                 omssaInstallDir = s.substring(s.indexOf(": ") + 2);
@@ -289,7 +292,8 @@ public class UserProperties {
                     version.equalsIgnoreCase("v1.16.2") ||
                     version.equalsIgnoreCase("v1.17_beta") ||
                     version.equalsIgnoreCase("v1.17") ||
-                    version.equalsIgnoreCase("v1.17.1")) {
+                    version.equalsIgnoreCase("v1.17.1") ||
+                    version.equalsIgnoreCase("v1.18")) {
 
                 s = b.readLine();
                 s = b.readLine();
