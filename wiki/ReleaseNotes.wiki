@@ -3,12 +3,32 @@
 
 ----
 
+*Changes in PRIDE Converter v1.18 - (Jun. 03. 2009):*
+ * PRIDE Converter now supports ms_lims 7 (ms_lims 6 is no longer supported).
+ * X!Tandem conversion is no longer limited to one file per conversion.
+ * When converting MH+ values to m/z values the mass of a hydrogen is now used instead of the mass of a proton.
+ * When converting MH+ values to m/z values the original MH+ value is now also included as a CV term.
+ * Improved the error message given when failing to contact OLS.
+ * Fixed a bug in the select all and invert selection features in the spectra selection tables. 
+ * Fixed a bug so that individual spectrum comments now can be added for Mascot Dat Files (again). 
+ * Individual spectrum comments are now added as spectrum description comments. 
+ * Tried to add some memory clean ups to keep the converter from running out of memory when converting multiple files in a row. (Focused especially on Mascot Dat Files.)
+ * Added a reference to the release notes in the dialog informing about new version.
+ * Fixed a bug in parsing of PeptideProphet files where empty msms runs resulted in problems.
+ * Update the omssa-parser version to 1.3.2.
+ * Turned off schema validation for OMSSA and X!Tandem parsing.
+ * Improved the OMSSA support by handling spectra with no filenames, given that filenames does not seem to be mandatory.
+
+----
+
 *Changes in PRIDE Converter v1.17.1 - (May 15. 2009):*
  * Added an experiment description text field.
  * Added a CV term for the original MS data file format. (Automatically added by the converter.)
  * Improved the information about the supported ms_lims version.
  * Fixed a minor GUI bug in the New Contact dialog. (Not all the buttons had the same horizontal position.)
  * Fixed a minor GUI bug in the Experiment Properties frame. (The two tables did not have the same height.)
+
+Download Count: 21
 
 ----
 
