@@ -891,6 +891,11 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                         try {
                             //get the factory
                             dbf = DocumentBuilderFactory.newInstance();
+                            
+                            dbf.setValidating(false);
+                            dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+                            dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+                            dbf.setAttribute("http://xml.org/sax/features/validation", false);
 
                             //Using factory get an instance of document builder
                             db = dbf.newDocumentBuilder();
@@ -1364,10 +1369,19 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                             numberOfSelectedSpectra++;
                                         }
 
+                                        String fileName;
+
+                                        // spectrum name is not mandatory, use spectrum number if no name is given
+                                        if(tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.size() == 0){
+                                            fileName = "" + tempSpectrum.MSSpectrum_number;
+                                        } else{
+                                            fileName = tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.get(0);
+                                        }
+
                                         ((DefaultTableModel) spectraJXTable.getModel()).addRow(
                                                 new Object[]{
                                                     null,
-                                                    tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.get(0),
+                                                    fileName,
                                                     tempSpectrum.MSSpectrum_number,
                                                     new Boolean(results.get(tempSpectrum).MSHitSet_hits.MSHits.size() > 0),
                                                     new Boolean(selected)
