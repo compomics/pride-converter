@@ -117,7 +117,7 @@ import uk.ac.ebi.tpp_to_pride.wrappers.peptideprophet.*;
 public class PRIDEConverter {
 
     private static String wizardName = "PRIDE Converter";
-    private static String prideConverterVersionNumber = "v1.17.1";
+    private static String prideConverterVersionNumber = "v1.18";
     private static ArrayList<IdentificationGeneral> ids;
     private static Collection identifications;
     private static int totalNumberOfSpectra = 0;
@@ -288,7 +288,7 @@ public class PRIDEConverter {
                         int option = JOptionPane.showConfirmDialog(null,
                                 "A newer version of PRIDE Converter is available.\n" +
                                 "Do you want to upgrade?\n\n" +
-                                "Selecting \'Yes\' will open the PRIDE Converter web page where you " +
+                                "Selecting \'Yes\' will open the PRIDE Converter web page where you\n" +
                                 "can see a list of the changes and download the latest version.",
                                 "PRIDE Converter - Upgrade Available",
                                 JOptionPane.YES_NO_CANCEL_OPTION);
