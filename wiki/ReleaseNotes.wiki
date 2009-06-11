@@ -3,7 +3,7 @@
 
 ----
 
-*Changes in PRIDE Converter v1.18.1 - (Jun. 1. 2009):*
+*Changes in PRIDE Converter v1.18.1 - (Jun. 11. 2009):*
  * FEATURE IMPROVEMENT: Added more default PSI-MOD modification mappings.
  * BUG FIX: Fixed a bug resulting in the conversion sometimes failing (with no error message) during the conversion when using the converter on Linux or Mac OS.  
  * LIBRARY UPDATE: Updated the MascotDatFile library to version 2.1.4.
