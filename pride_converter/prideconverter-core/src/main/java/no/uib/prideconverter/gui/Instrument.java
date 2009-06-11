@@ -109,7 +109,8 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
 
         // for mzXML, mzData and TPP information about the instrument is extraced from the file
-        if ((prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") || prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) &&
+        if ((prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")
+                || prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) &&
                 !prideConverter.getProperties().areInstrumentDetailsExtracted()) {
             extractInstrumentDetailsFromFile();
         } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP") &&

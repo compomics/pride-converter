@@ -1,5 +1,5 @@
 PRIDEConverter
-v1.17.1*
+v1.18.1*
 OutputPath: user.home
 UserName: 
 ServerHost: localhost
@@ -53,3 +53,24 @@ Dioxidation|MOD:00256|MOD|oxidation to L-methionine sulfone|31.989829|
 Q=-17.0265|MOD:00040|MOD|2-pyrrolidone-5-carboxylic acid (Gln)|-17.026549|
 E=-18.0106|MOD:00420|MOD|2-pyrrolidone-5-carboxylic acid (Glu)|-18.010565|
 C=57.022|MOD:01214|MOD|iodoacetamide -site C|57.021464|
+M=15.9949|MOD:00425|MOD|monohydroxylated residue|15.994915|
+C=57.0215|MOD:01214|MOD|iodoacetamide -site C|57.021464|
+P=15.9949|MOD:00425|MOD|monohydroxylated residue|15.994915|
+S=79.9663|MOD:00042|MOD|L-aspartic 4-phosphoric anhydride|79.966331|
+R=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
+T=79.9663|MOD:00042|MOD|L-aspartic 4-phosphoric anhydride|79.966331|
+F=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
+M=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
+V=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
+E=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
+P=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
+L=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
+A=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
+G=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
+D=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
+Y=79.9663|MOD:00042|MOD|L-aspartic 4-phosphoric anhydride|79.966331|
+S=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
+K=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
+W=15.9949|MOD:00425|MOD|monohydroxylated residue|15.994915|
+T=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
+M=31.9898|MOD:00256|MOD|oxidation to L-methionine sulfone|31.989829|

@@ -4,7 +4,7 @@
     <groupId>no.uib</groupId>
     <artifactId>prideconverter-core</artifactId>
     <packaging>jar</packaging>
-    <version>1.18</version>
+    <version>1.18.1</version>
     <name>prideconverter-core</name>
     <description>PRIDE Converter converts MS data into valid PRIDE XML for submission to the publicly available PRIDE database.
 It presents a convenient, wizard-like graphical user interface, and includes efficient access to the Ontology Lookup Service (OLS).</description>
@@ -225,7 +225,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         <dependency>
             <groupId>kenny</groupId>
             <artifactId>mascot_datfile</artifactId>
-            <version>2.0.3</version>
+            <version>2.1.4</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -240,7 +240,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         <dependency>
             <groupId>uk.ac.ebi.pride</groupId>
             <artifactId>pride-core</artifactId>
-            <version>2.5.6</version>
+            <version>2.6.1</version>
             <exclusions>
                 <exclusion>
                     <artifactId>activation</artifactId>

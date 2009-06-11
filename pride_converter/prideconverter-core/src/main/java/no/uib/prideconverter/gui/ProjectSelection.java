@@ -275,9 +275,15 @@ public class ProjectSelection extends javax.swing.JFrame {
 
         t.start();
 
-        // wait until progress dialog is visible
-        // (was not needed in Java 1.6...)
-        while (!progressDialog.isVisible()) {
+        // Wait until progress dialog is visible.
+        //
+        // The following is not needed in Java 1.6, but seemed to be needed in 1.5.
+        //
+        // Not including the lines _used to_ result in a crash on Windows, but not anymore.
+        // Including the lines results in a crash on Linux and Mac.
+        if(System.getProperty("os.name").toLowerCase().lastIndexOf("windows") != -1){
+            while (!progressDialog.isVisible()) {
+            }
         }
 
         Thread t2 = new Thread(new Runnable() {

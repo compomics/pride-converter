@@ -117,7 +117,7 @@ import uk.ac.ebi.tpp_to_pride.wrappers.peptideprophet.*;
 public class PRIDEConverter {
 
     private static String wizardName = "PRIDE Converter";
-    private static String prideConverterVersionNumber = "v1.18";
+    private static String prideConverterVersionNumber = "v1.18.1";
     private static ArrayList<IdentificationGeneral> ids;
     private static Collection identifications;
     private static int totalNumberOfSpectra = 0;
@@ -391,9 +391,15 @@ public class PRIDEConverter {
 
         t.start();
 
-        // wait until progress dialog is visible
-        // (is not needed in Java 1.6, but seems to be needed in 1.5)
-        while (!progressDialog.isVisible()) {
+        // Wait until progress dialog is visible.
+        //
+        // The following is not needed in Java 1.6, but seemed to be needed in 1.5.
+        // 
+        // Not including the lines _used to_ result in a crash on Windows, but not anymore.
+        // Including the lines results in a crash on Linux and Mac.
+        if(System.getProperty("os.name").toLowerCase().lastIndexOf("windows") != -1){
+            while (!progressDialog.isVisible()) {
+            }
         }
 
         new Thread("ConverterThread") {
@@ -2443,7 +2449,7 @@ public class PRIDEConverter {
                                                                             properties.getAlreadyChoosenModifications().add(modificationName);
                                                                         } else {
                                                                             //do nothing, mapping already choosen
-                                                                            }
+                                                                        }
 
                                                                         CvParamImpl tempCvParam =
                                                                                 (CvParamImpl) userProperties.getCVTermMappings().get(modificationName);
@@ -7016,8 +7022,7 @@ public class PRIDEConverter {
                 ArrayList sampleDescriptionUserParams = new ArrayList(
                         properties.getSampleDescriptionUserSubSampleNames().size());
 
-                for (int i = 0; i <
-                        properties.getSampleDescriptionUserSubSampleNames().size(); i++) {
+                for (int i = 0; i < properties.getSampleDescriptionUserSubSampleNames().size(); i++) {
                     sampleDescriptionUserParams.add(new UserParamImpl(
                             "SUBSAMPLE_" + (i + 1),
                             i, (String) properties.getSampleDescriptionUserSubSampleNames().
@@ -7120,8 +7125,7 @@ public class PRIDEConverter {
         progressDialog.setString(null);
         progressDialog.setIntermidiate(true);
 
-        for (int j = 0; j <
-                properties.getSelectedSourceFiles().size() && !cancelConversion; j++) {
+        for (int j = 0; j < properties.getSelectedSourceFiles().size() && !cancelConversion; j++) {
 
             //long start = System.currentTimeMillis();
 
@@ -7848,7 +7852,7 @@ public class PRIDEConverter {
 
                                                 if (!alreadySelected) {
 
-                                                    if (/*!progressDialog.isVisible() ||*/cancelConversion) {
+                                                    if (cancelConversion) {
                                                         outputFrame.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
                                                         outputFrame.setConvertButtonEnabled(true);
                                                         return null;
@@ -9617,7 +9621,6 @@ public class PRIDEConverter {
                     selectedSpectra.add(Spectrumfile.getFromName(
                             (String) ((Object[]) properties.getSelectedSpectraKeys().get(i))[0], conn));
                 }
-
             } else {
 
                 Spectrumfile[] dbSpectra;
