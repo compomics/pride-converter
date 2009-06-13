@@ -63,7 +63,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <outputDirectory>${project.build.directory}/PRIDE_Converter_v${project.version}/lib</outputDirectory>
                             <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                             <excludeTransitive>false</excludeTransitive>
@@ -84,6 +84,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                             <classpathPrefix>lib</classpathPrefix>
                         </manifest>
                     </archive>
+                    <outputDirectory>${project.build.directory}/PRIDE_Converter_v${project.version}</outputDirectory>
                 </configuration>
             </plugin>
 
@@ -99,10 +100,10 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/Properties</outputDirectory>
+                            <outputDirectory>${project.build.directory}/PRIDE_Converter_v${project.version}</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>src/main/resources/Properties</directory>
+                                    <directory>src/main/resources</directory>
                                 </resource>
                             </resources>              
                         </configuration>
