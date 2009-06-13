@@ -46,18 +46,6 @@ public class UserProperties {
     private String omssaInstallDir = null;
 
     /**
-     * Contains all supported PRIDE Converter version numbers
-     */
-    private String[] allVersionNumbers = {
-        "v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5", "v1.6", "v1.7", 
-        "v1.8", "v1.8_beta", "v1.9", "v1.9_beta", "v1.9.1", "v1.10",
-        "v1.10.1", "v1.11", "v1.11.1", "v1.11.2", "v1.11.3", "v1.11.4",
-        "v1.12", "v1.13", "v1.13.1", "v1.13.2", "v1.13.3", "v1.14",
-        "v1.14.1", "v1.14.2", "v1.15", "v1.15.1", "v1.15.2", "v1.15.3",
-        "v1.16", "v1.16.1", "v1.16.2", "v1.17_beta", "v1.17", "v1.17.1",
-        "v1.18", "v1.18.1"};
-
-    /**
      * Contains all PRIDE Converter version numbers that did not include
      * ITraq support.
      */
@@ -115,13 +103,12 @@ public class UserProperties {
         boolean importOldProperties = false;
 
         try {
-            String path;
-            File file;
-
-            path = "" + this.getClass().getProtectionDomain().getCodeSource().getLocation();
+            String path = "" + this.getClass().getProtectionDomain().getCodeSource().getLocation();
             path = path.substring(5, path.lastIndexOf("/"));
             path = path.substring(0, path.lastIndexOf("/") + 1) + "Properties/UserProperties.prop";
             path = path.replace("%20", " ");
+
+            File file;
 
             // use the default settings file
             if (settingsFile == null) {
@@ -144,7 +131,6 @@ public class UserProperties {
                         "Upgrading PRIDE Converter?", JOptionPane.YES_NO_OPTION);
 
                 if (option == JOptionPane.YES_OPTION) {
-
                     option = JOptionPane.showConfirmDialog(null,
                             "Do you want to import the settings from the previous version?",
                             "Import Settings?", JOptionPane.YES_NO_OPTION);
@@ -180,16 +166,10 @@ public class UserProperties {
             currentProtocol = s.substring(s.indexOf(": ") + 2);
             s = b.readLine();
             currentContact = s.substring(s.indexOf(": ") + 2);
-
-            if(versionInList(version, allVersionNumbers)){
-                s = b.readLine();
-                fileNameSelectionCriteriaSeparator = s.substring(s.indexOf(": ") + 2);
-                s = b.readLine();
-                sourceFileLocation = s.substring(s.indexOf(": ") + 2);
-            } else {
-                fileNameSelectionCriteriaSeparator = ",";
-                sourceFileLocation = "";
-            }
+            s = b.readLine();
+            fileNameSelectionCriteriaSeparator = s.substring(s.indexOf(": ") + 2);
+            s = b.readLine();
+            sourceFileLocation = s.substring(s.indexOf(": ") + 2);
 
             if(!versionInList(version, versionNumbersWithoutITraqSupport)){
 
@@ -225,7 +205,7 @@ public class UserProperties {
 
             if(!versionInList(version, versionNumbersWithoutCvMappings)){
 
-                s = b.readLine();
+                b.readLine();
                 s = b.readLine();
 
                 // read the CV term mappings
@@ -493,11 +473,9 @@ public class UserProperties {
      * Tries to save the user properties to file.
      */
     public void saveUserPropertiesToFile() {
+
         try {
-
-            String path;
-
-            path = "" + this.getClass().getProtectionDomain().getCodeSource().getLocation();
+            String path = "" + this.getClass().getProtectionDomain().getCodeSource().getLocation();
             path = path.substring(5, path.lastIndexOf("/"));
             path = path.substring(0, path.lastIndexOf("/") + 1) + "Properties/UserProperties.prop";
             path = path.replace("%20", " ");
@@ -536,13 +514,11 @@ public class UserProperties {
             f.write("OmssaInstallDir: " + omssaInstallDir + "\n");
             f.write("CVTermMappings:");
 
-            String key;
-
             Iterator iter = cvTermMappings.keySet().iterator();
 
             while (iter.hasNext()) {
 
-                key = (String) iter.next();
+                String key = (String) iter.next();
 
                 f.write("\n" + key + "|");
                 f.write(((CvParamImpl) cvTermMappings.get(key)).getAccession() + "|");
