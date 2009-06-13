@@ -160,6 +160,7 @@ public class PRIDEConverter {
         try {
             // DB driver loading.
             Driver driver = (Driver) Class.forName("com.mysql.jdbc.Driver").newInstance();
+
             // DB user and password setting.
             java.util.Properties props = new java.util.Properties();
             props.put("user", userProperties.getUserName());
@@ -185,7 +186,6 @@ public class PRIDEConverter {
         } catch (Exception e) {
 
             if (e.getMessage().lastIndexOf("Communications link failure") != -1) {
-
                 // this is the most likely option as far as I can see
                 JOptionPane.showMessageDialog(dataBaseDetails, "Database connection not established:" +
                         "\n" + "Verify server host.", "Database Error", JOptionPane.ERROR_MESSAGE);
@@ -202,14 +202,17 @@ public class PRIDEConverter {
      * Closes the ms_lims database connection
      */
     public void closeDataBaseConnection() {
+
         // Close DB connection.
         if (conn != null) {
             try {
                 conn.close();
+
                 if (debug) {
                     System.out.println("DB connection closed.");
                 }
             } catch (SQLException sqle) {
+
                 // Nothing to be done.
                 JOptionPane.showMessageDialog(
                         null, "An error occured when attempting to close the DB connection." +
@@ -254,8 +257,7 @@ public class PRIDEConverter {
                     URL downloadPage = new URL(
                             "http://code.google.com/p/pride-converter/downloads/detail?name=PRIDE_Converter_" +
                             prideConverterVersionNumber + ".zip");
-                    int respons =
-                            ((java.net.HttpURLConnection) downloadPage.openConnection()).getResponseCode();
+                    int respons = ((java.net.HttpURLConnection) downloadPage.openConnection()).getResponseCode();
 
                     // 404 means that the file no longer exists, which means that 
                     // the running version is no longer available for download, 
@@ -430,9 +432,7 @@ public class PRIDEConverter {
                     }
 
                     // Transform all selected spectra into mzData spectra and retrieve the identifications.
-                    ArrayList mzDataSpectra;
-
-                    mzDataSpectra = new ArrayList();
+                    ArrayList mzDataSpectra = new ArrayList();
 
                     HashMap filenameToSpectrumID = new HashMap();
 
@@ -498,7 +498,6 @@ public class PRIDEConverter {
                         mzData = combineMzDataFiles(new HashMap(), mzDataSpectra);
 
                     } else if (properties.getDataSource().equalsIgnoreCase("X!Tandem")) {
-
                         if (properties.getSelectedSourceFiles().get(0).toLowerCase().endsWith(".mzdata")) {
                             // the spectra has already been extracted
                         } else {
@@ -593,6 +592,7 @@ public class PRIDEConverter {
                     Iterator iter = omitDuplicates.values().iterator();
 
                     int counter = 0;
+
                     while (iter.hasNext()) {
 
                         if (cancelConversion) {
@@ -607,9 +607,7 @@ public class PRIDEConverter {
 
                         String accession = peptideIdentification.getPeptideAccession();
                         String accessionVersion = null;
-
                         Integer tempStartIndex = peptideIdentification.getPeptideStart();
-
 
                         // special case for DBToolkit ([0-9]*-[0-9]*)
                         String dbToolKitPattern = "\\([\\d]\\+?-[\\d]\\+?\\)";
@@ -788,7 +786,6 @@ public class PRIDEConverter {
                     experiments.add(experiment);
 
                     String tempLabel = properties.getExperimentLabel().replaceAll(" ", "_");
-
                     String completeFileName;
 
                     // write the output
@@ -1136,8 +1133,7 @@ public class PRIDEConverter {
 
         Integer precursorCharge;
 
-        NodeList idNodes,
-                proteinNodes, peptideNodes;
+        NodeList idNodes, proteinNodes, peptideNodes;
         DocumentBuilderFactory dbf;
         DocumentBuilder db;
         Document dom;
@@ -1148,17 +1144,15 @@ public class PRIDEConverter {
         boolean matchFound = false;
         NodeList nodes, parameterNodes;
         int spectrumID = -1;
-        Double precursorMz = 0.0;
-        Double precursorIntensty = 0.0;
+        Double precursorMz = 0.0, precursorIntensty = 0.0;
         precursorCharge = 0;
         double hyperscore = 0.0;
 
         String upstreamFlankingSequence = null;
         String downstreamFlankingSequence = null;
 
-        String label = "";
+        String label = "", peptideSequence = "";
         int start = -1;
-        String peptideSequence = "";
         Integer msLevel;
         ids = new ArrayList<IdentificationGeneral>();
 
@@ -1181,9 +1175,7 @@ public class PRIDEConverter {
         progressDialog.setIntermidiate(true);
 
         Vector masses, intensities, charges;
-
         ArrayList<String> identifiedSpectraIds = new ArrayList<String>();
-
         String spectrumTag = "";
 
         int spectraCounter = 0;
@@ -1629,8 +1621,7 @@ public class PRIDEConverter {
                                     ionSelection.add(new CvParamImpl("PRIDE:0000051",
                                         "PRIDE", "(M+H)+", ionSelection.size(), Double.toString(precursorMh)));
 
-                                    precursors.add(new PrecursorImpl(null, null,
-                                            ionSelection, null, msLevel - 1, 0, 0));
+                                    precursors.add(new PrecursorImpl(null, null, ionSelection, null, msLevel - 1, 0, 0));
 
                                     // Spectrum description comments.
                                     spectrumDescriptionComments = new ArrayList();
@@ -1679,7 +1670,6 @@ public class PRIDEConverter {
                             currentLine = br.readLine();
 
                             tok = new StringTokenizer(currentLine);
-
                             precursorMh = new Double(tok.nextToken()).doubleValue();
                             precursorCharge = new Integer(tok.nextToken()).intValue();
 
@@ -1757,8 +1747,7 @@ public class PRIDEConverter {
                             ionSelection.add(new CvParamImpl("PRIDE:0000051",
                                     "PRIDE", "(M+H)+", ionSelection.size(), Double.toString(precursorMh)));
 
-                            precursors.add(new PrecursorImpl(null, null, ionSelection,
-                                    null, msLevel - 1, 0, 0));
+                            precursors.add(new PrecursorImpl(null, null, ionSelection, null, msLevel - 1, 0, 0));
 
                             spectrumDescriptionComments = new ArrayList();
 
@@ -1904,11 +1893,9 @@ public class PRIDEConverter {
 
                                 // precursor m/z
                                 ionSelection.add(new CvParamImpl("PSI:1000040",
-                                        "PSI", "MassToChargeRatio", ionSelection.size(), Double.toString(
-                                        precursorMz)));
+                                        "PSI", "MassToChargeRatio", ionSelection.size(), Double.toString(precursorMz)));
 
-                                precursors.add(new PrecursorImpl(null, null,
-                                        ionSelection, null, msLevel - 1, 0, 0));
+                                precursors.add(new PrecursorImpl(null, null, ionSelection, null, msLevel - 1, 0, 0));
 
                                 spectrumDescriptionComments = new ArrayList();
 
@@ -2137,8 +2124,7 @@ public class PRIDEConverter {
                             ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
                                     "MassToChargeRatio", 2, "" + precursorMz));
 
-                            precursors.add(new PrecursorImpl(null, null, ionSelection,
-                                    null, 1, 0, 0));
+                            precursors.add(new PrecursorImpl(null, null, ionSelection, null, 1, 0, 0));
 
                             // Spectrum description comments.
                             spectrumDescriptionComments = new ArrayList();
@@ -2261,7 +2247,6 @@ public class PRIDEConverter {
 
                 //get the root elememt
                 docEle = dom.getDocumentElement();
-
                 nodes = docEle.getChildNodes();
 
                 spectrumTag = "";
@@ -2270,10 +2255,8 @@ public class PRIDEConverter {
                 for (int i = 0; i < nodes.getLength() && !cancelConversion; i++) {
                     if (nodes.item(i).getAttributes() != null) {
                         if (nodes.item(i).getAttributes().getNamedItem("type") != null) {
-                            if (nodes.item(i).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase(
-                                    "parameters") &&
-                                    nodes.item(i).getAttributes().getNamedItem("label").getNodeValue().equalsIgnoreCase(
-                                    "input parameters")) {
+                            if (nodes.item(i).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase("parameters") &&
+                                    nodes.item(i).getAttributes().getNamedItem("label").getNodeValue().equalsIgnoreCase("input parameters")) {
                                 parameterNodes = nodes.item(i).getChildNodes();
 
                                 for (int m = 0; m < parameterNodes.getLength(); m++) {
@@ -2426,8 +2409,7 @@ public class PRIDEConverter {
 
                                                                         modificationMap = peptideNodes.item(n).getChildNodes().item(c).getAttributes();
 
-                                                                        modificationName =
-                                                                                modificationMap.getNamedItem("type").getNodeValue();
+                                                                        modificationName =  modificationMap.getNamedItem("type").getNodeValue();
                                                                         modificationLocation = "" +
                                                                                 (new Integer(modificationMap.getNamedItem("at").getNodeValue()).intValue() -
                                                                                 start + 1);
@@ -2877,8 +2859,7 @@ public class PRIDEConverter {
                                 tempFileName = tempFileName.substring(
                                         tempFileName.lastIndexOf(File.separator) + 1);
 
-                                matchFound = tempFileName.equalsIgnoreCase(
-                                        currentFileName + ".spo");
+                                matchFound = tempFileName.equalsIgnoreCase(currentFileName + ".spo");
 
                                 if (matchFound) {
                                     identificationFile = new File(properties.getSelectedIdentificationFiles().get(i));
@@ -2911,8 +2892,7 @@ public class PRIDEConverter {
 
                                 while (currentLine != null) {
 
-                                    if (currentLine.startsWith("database") &&
-                                            !currentLine.startsWith("database_date")) {
+                                    if (currentLine.startsWith("database") && !currentLine.startsWith("database_date")) {
                                         tok = new StringTokenizer(currentLine);
                                         tok.nextToken();
                                         database = tok.nextToken();
@@ -2987,11 +2967,8 @@ public class PRIDEConverter {
 
                                                         currentMod = modTok.nextToken();
 
-                                                        modificationNameShort =
-                                                                currentMod.substring(0,
-                                                                currentMod.indexOf(":"));
-                                                        modificationName = currentMod.substring(
-                                                                currentMod.indexOf(":") + 1);
+                                                        modificationNameShort = currentMod.substring(0, currentMod.indexOf(":"));
+                                                        modificationName = currentMod.substring(currentMod.indexOf(":") + 1);
 
                                                         currentIndex = 0;
 
@@ -3037,7 +3014,6 @@ public class PRIDEConverter {
                                                                 monoMasses = null;
                                                             }
 
-
                                                             peptideModifications.add(new ModificationImpl(
                                                                     tempCvParam.getAccession(),
                                                                     modificationLocation,
@@ -3068,24 +3044,17 @@ public class PRIDEConverter {
                                                     while (modTok.hasMoreTokens() && !cancelConversion) {
 
                                                         currentMod = modTok.nextToken();
-
-                                                        modificationNameShort =
-                                                                currentMod.substring(0,
-                                                                currentMod.indexOf(":"));
-                                                        modificationName = currentMod.substring(
-                                                                currentMod.indexOf(":") + 1);
+                                                        modificationNameShort = currentMod.substring(0, currentMod.indexOf(":"));
+                                                        modificationName = currentMod.substring(currentMod.indexOf(":") + 1);
 
                                                         currentIndex = 0;
 
                                                         while (sequence.indexOf(modificationNameShort,
-                                                                currentIndex) !=
-                                                                -1 && !cancelConversion) {
+                                                                currentIndex) != -1 && !cancelConversion) {
 
                                                             modificationLocation = new Integer(
-                                                                    sequence.indexOf(
-                                                                    modificationNameShort, currentIndex) + 1);
-                                                            currentIndex = sequence.indexOf(
-                                                                    modificationNameShort, currentIndex) + 1;
+                                                                    sequence.indexOf(modificationNameShort, currentIndex) + 1);
+                                                            currentIndex = sequence.indexOf(modificationNameShort, currentIndex) + 1;
 
                                                             if (!properties.getAlreadyChoosenModifications().contains(modificationName)) {
                                                                 new ModificationMapping(outputFrame,
@@ -3173,13 +3142,11 @@ public class PRIDEConverter {
 
                                 cVParams.add(new CvParamImpl("PRIDE:0000177",
                                         "PRIDE", "Spectrum Mill Peptide Score",
-                                        cVParams.size(), "" +
-                                        score));
+                                        cVParams.size(), "" + score));
 
                                 if (upstreamFlankingSequence != null) {
 
-                                    upstreamFlankingSequence = upstreamFlankingSequence.trim().
-                                            substring(1, 2);
+                                    upstreamFlankingSequence = upstreamFlankingSequence.trim().substring(1, 2);
 
                                     if (!upstreamFlankingSequence.equalsIgnoreCase("-")) {
                                         cVParams.add(new CvParamImpl("PRIDE:0000065",
@@ -3233,9 +3200,7 @@ public class PRIDEConverter {
 
                             identificationFile = new File("");
 
-                            for (int i = 0; i <
-                                    properties.getSelectedIdentificationFiles().size() &&
-                                    !matchFound && !cancelConversion; i++) {
+                            for (int i = 0; i < properties.getSelectedIdentificationFiles().size() && !matchFound && !cancelConversion; i++) {
 
                                 tempFileName = properties.getSelectedIdentificationFiles().get(i);
 
@@ -3315,14 +3280,10 @@ public class PRIDEConverter {
 
                                         while (matcher.find() && !cancelConversion) {
 
-                                            currentModification = matcher.group().
-                                                    substring(1, matcher.group().length() - 1);
+                                            currentModification = matcher.group().substring(1, matcher.group().length() - 1);
 
-                                            modificationName =
-                                                    currentModification.substring(0,
-                                                    currentModification.indexOf(" "));
-                                            modificationNameShort =
-                                                    modificationName.substring(0, 1);
+                                            modificationName = currentModification.substring(0, currentModification.indexOf(" "));
+                                            modificationNameShort = modificationName.substring(0, 1);
                                             modificationMass = new Double(currentModification.substring(
                                                     currentModification.indexOf(" ") + 1)).doubleValue();
 
@@ -3349,9 +3310,7 @@ public class PRIDEConverter {
 
                                             currentModification = matcher.group();
 
-                                            modificationName =
-                                                    currentModification.substring(
-                                                    0, currentModification.indexOf("="));
+                                            modificationName = currentModification.substring(0, currentModification.indexOf("="));
                                             modificationNameShort = modificationName.substring(0, 1);
                                             modificationMass = new Double(currentModification.substring(
                                                     currentModification.indexOf("=") + 1)).doubleValue();
@@ -3371,7 +3330,6 @@ public class PRIDEConverter {
                                                 //do nothing, mapping already choosen
                                             }
                                         }
-
 
                                         currentLine = b.readLine();
                                         currentLine = b.readLine();
@@ -3571,7 +3529,6 @@ public class PRIDEConverter {
                                 b.close();
                                 f.close();
 
-
                                 if (!outFileIsEmpty) {
 
                                     //calculate itraq values
@@ -3707,8 +3664,7 @@ public class PRIDEConverter {
 
                         if (properties.getDataSource().equalsIgnoreCase("Spectrum Mill")) {
                             ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                    "MassToChargeRatio", ionSelection.size(), Double.toString(
-                                    precursorMz)));
+                                    "MassToChargeRatio", ionSelection.size(), Double.toString(precursorMz)));
                         }
 
                         precursors.add(new PrecursorImpl(null, null,
@@ -3753,8 +3709,7 @@ public class PRIDEConverter {
                                 } else if (properties.selectAllIdentifiedSpectra() &&
                                         identified.equalsIgnoreCase("Identified")) {
                                     // Store (spectrumfileid, spectrumid) mapping.
-                                    mapping.put(new File(properties.getSelectedSourceFiles().
-                                            get(j)).getName(),
+                                    mapping.put(new File(properties.getSelectedSourceFiles().get(j)).getName(),
                                             new Long(spectraCounter));
                                     spectraCounter++;
 
@@ -3847,8 +3802,8 @@ public class PRIDEConverter {
      *                                 mzData spectra. Please note that this is a
      *                                 reference parameter.
      */
-    private static HashMap transformSpectraFromPKLAndPKXFiles(
-            ArrayList aTransformedSpectra) throws IOException {
+    private static HashMap transformSpectraFromPKLAndPKXFiles(ArrayList aTransformedSpectra)
+            throws IOException {
 
         HashMap mapping = new HashMap();
 
@@ -4304,7 +4259,8 @@ public class PRIDEConverter {
     private static HashMap transformSpectraFromMzML(ArrayList aTransformedSpectra)
             throws IOException {
 
-        //NB: NOT COMPLETED!!
+        //NOT YET IMPLEMENTED!!
+
         JOptionPane.showMessageDialog(null, "Currently not supported!");
 
         HashMap mapping = new HashMap();
@@ -4682,11 +4638,9 @@ public class PRIDEConverter {
 
         Vector masses, intensities, charges;
         String[] values;
-        Double precursorMz = null;
-        Double precursorIntensity = null;
+        Double precursorMz = null, precursorIntensity = null;
         Integer precursorCharge = null;
-        Double mzRangeStart;
-        Double mzRangeStop;
+        Double mzRangeStart, mzRangeStop;
 
         progressDialog.setString(null);
         progressDialog.setIntermidiate(true);
@@ -5924,17 +5878,15 @@ public class PRIDEConverter {
         for (int i = 0; i < peptideSequence.length() && !cancelConversion; i++) {
 
             if (i == peptideSequence.length() - 1) {
-                sequenceArray[index++] = peptideSequence.substring(peptideSequence.length() -
-                        1, peptideSequence.length());
+                sequenceArray[index++] = 
+                        peptideSequence.substring(peptideSequence.length() - 1, peptideSequence.length());
             } else {
 
                 String secondAminoAcid = peptideSequence.substring(i + 1, i + 2);
 
                 if (!aminoAcids.contains(secondAminoAcid)) {
-
                     sequenceArray[index++] = peptideSequence.substring(i, i + 2);
                     i++;
-
                 } else {
                     sequenceArray[index++] = peptideSequence.substring(i, i + 1);
                 }
@@ -5999,8 +5951,6 @@ public class PRIDEConverter {
                         } else {
                             //do nothing, mapping already choosen
                         }
-
-
 
                         CvParamImpl tempCvParam =
                                 (CvParamImpl) userProperties.getCVTermMappings().get(sequenceArray[i]);
@@ -6180,7 +6130,9 @@ public class PRIDEConverter {
                 ArrayList intensities = new ArrayList();
 
                 while ((currentLine = br.readLine()) != null) {
+
                     lineCount++;
+
                     if (!(currentLine.equals(""))) {
 
                         // Take the precursor mass
@@ -6209,6 +6161,7 @@ public class PRIDEConverter {
                                 if (scanNumber.length() == 6) {
                                     scanNumber = scanNumber.substring(1, scanNumber.length());
                                 }
+                                
                                 // We are going to use the file name and the scanNumber to build the HashMap
                                 aMappings.put(usedFileName + "_" + scanNumber, new Long(idCount));
 
@@ -7025,8 +6978,7 @@ public class PRIDEConverter {
                 for (int i = 0; i < properties.getSampleDescriptionUserSubSampleNames().size(); i++) {
                     sampleDescriptionUserParams.add(new UserParamImpl(
                             "SUBSAMPLE_" + (i + 1),
-                            i, (String) properties.getSampleDescriptionUserSubSampleNames().
-                            get(i)));
+                            i, (String) properties.getSampleDescriptionUserSubSampleNames().get(i)));
                 }
 
                 for (int i = 0; i < properties.getSampleDescriptionCVParamsQuantification().size(); i++) {
@@ -7609,8 +7561,6 @@ public class PRIDEConverter {
 
                 if (properties.getSelectedSpectraKeys().size() > 0) {
                     for (int i = 0; i < properties.getSelectedSpectraKeys().size() && !matchFound; i++) {
-                        //if (((String) ((Object[]) properties.getSelectedSpectraKeys().get(i))[0]).equalsIgnoreCase(
-                        //        fileName)) {
                         if (((String) ((Object[]) properties.getSelectedSpectraKeys().get(i))[1]).equalsIgnoreCase(
                                 (currentFileName + "_" + currentQuery.getQueryNumber()))) {
                             matchFound = true;
@@ -7700,8 +7650,7 @@ public class PRIDEConverter {
                             // Spectrum description comments.
                             spectrumDescriptionComments = new ArrayList();
 
-                            tempPeptideHit =
-                                    queryToPeptideMap.getPeptideHitOfOneQuery(currentQuery.getQueryNumber());
+                            tempPeptideHit = queryToPeptideMap.getPeptideHitOfOneQuery(currentQuery.getQueryNumber());
 
                             if (tempPeptideHit != null) {
 
@@ -7780,8 +7729,7 @@ public class PRIDEConverter {
 
                                 // extract the peptide identifications
                                 if (peptideIsIdentified) {
-                                    properties.setTempProteinHit(
-                                            (ProteinHit) tempPeptideHit.getProteinHits().get(0));
+                                    properties.setTempProteinHit((ProteinHit) tempPeptideHit.getProteinHits().get(0));
 
                                     if (tempPeptideHit.getProteinHits().size() > 1) {
 
@@ -7801,9 +7749,7 @@ public class PRIDEConverter {
 
                                             alreadySelected = false;
 
-                                            for (int w = 0; w <
-                                                    tempPeptideHit.getProteinHits().size() &&
-                                                    !alreadySelected; w++) {
+                                            for (int w = 0; w < tempPeptideHit.getProteinHits().size() && !alreadySelected; w++) {
                                                 if (properties.getSelectedProteinHits().contains(
                                                         ((ProteinHit) tempPeptideHit.getProteinHits().get(w)).getAccession())) {
                                                     alreadySelected = true;
@@ -7840,12 +7786,9 @@ public class PRIDEConverter {
                                             } else {//not found. do manual selection
                                                 alreadySelected = false;
 
-                                                for (int w = 0; w <
-                                                        tempPeptideHit.getProteinHits().size() &&
-                                                        !alreadySelected; w++) {
+                                                for (int w = 0; w < tempPeptideHit.getProteinHits().size() && !alreadySelected; w++) {
                                                     if (properties.getSelectedProteinHits().contains(
-                                                            ((ProteinHit) tempPeptideHit.getProteinHits().
-                                                            get(w)).getAccession())) {
+                                                            ((ProteinHit) tempPeptideHit.getProteinHits().get(w)).getAccession())) {
                                                         alreadySelected = true;
                                                     }
                                                 }
@@ -8318,8 +8261,7 @@ public class PRIDEConverter {
                 spectrumKey = fileName + "_" + tempSpectrum.MSSpectrum_number;
 
                 if (properties.getSelectedSpectraKeys().size() > 0) {
-                    for (int i = 0; i <
-                            properties.getSelectedSpectraKeys().size() && !matchFound; i++) {
+                    for (int i = 0; i < properties.getSelectedSpectraKeys().size() && !matchFound; i++) {
                         if (((String) ((Object[]) properties.getSelectedSpectraKeys().get(i))[0]).equalsIgnoreCase(
                                 fileName)) {
                             matchFound = true;
@@ -8697,6 +8639,7 @@ public class PRIDEConverter {
         progressDialog.setIntermidiate(false);
         progressDialog.setValue(0);
         progressDialog.setMax(selectedSpectra.size());
+        
         int progressCounter = 0;
 
         while (iter.hasNext() && !cancelConversion) {
@@ -8770,8 +8713,7 @@ public class PRIDEConverter {
                         null, null);
 
                 // Store (spectrumfileid, spectrumid) mapping.
-                mapping.put("" + dbSpectrum.getSpectrumfileid(),
-                        new Long(idCounter));
+                mapping.put("" + dbSpectrum.getSpectrumfileid(), new Long(idCounter));
 
                 // Store the transformed spectrum.
                 aTransformedSpectra.add(fragmentation);
@@ -8801,8 +8743,7 @@ public class PRIDEConverter {
 
             try {
                 progressDialog.setValue(i);
-                tempIdentification =
-                        Identification.getIdentification(conn,
+                tempIdentification = Identification.getIdentification(conn,
                         ((Spectrumfile) selectedSpectra.get(i)).getFilename());
 
                 if (tempIdentification != null) {
@@ -8871,15 +8812,12 @@ public class PRIDEConverter {
                                 }
 
                                 modificationCVParams = new ArrayList();
-                                modificationCVParams.add(userProperties.getCVTermMappings().
-                                        get(modificationName));
+                                modificationCVParams.add(userProperties.getCVTermMappings().get(modificationName));
 
                                 peptideModifications.add(new ModificationImpl(
-                                        ((CvParamImpl) userProperties.getCVTermMappings().
-                                        get(modificationName)).getAccession(),
+                                        ((CvParamImpl) userProperties.getCVTermMappings().get(modificationName)).getAccession(),
                                         0,
-                                        ((CvParamImpl) userProperties.getCVTermMappings().
-                                        get(modificationName)).getCVLookup(),
+                                        ((CvParamImpl) userProperties.getCVTermMappings().get(modificationName)).getCVLookup(),
                                         null,
                                         null,
                                         null,
@@ -8900,10 +8838,8 @@ public class PRIDEConverter {
                                     new ModificationMapping(outputFrame,
                                             true, progressDialog, modificationName,
                                             "C-terminal", null,
-                                            (CvParamImpl) userProperties.getCVTermMappings().
-                                            get(modificationName), false);
-                                    properties.getAlreadyChoosenModifications().
-                                            add(modificationName);
+                                            (CvParamImpl) userProperties.getCVTermMappings().get(modificationName), false);
+                                    properties.getAlreadyChoosenModifications().add(modificationName);
                                 } else {
                                     //do nothing, mapping already choosen
                                 }
@@ -8913,15 +8849,12 @@ public class PRIDEConverter {
                                 }
 
                                 modificationCVParams = new ArrayList();
-                                modificationCVParams.add(userProperties.getCVTermMappings().
-                                        get(modificationName));
+                                modificationCVParams.add(userProperties.getCVTermMappings().get(modificationName));
 
                                 peptideModifications.add(new ModificationImpl(
-                                        ((CvParamImpl) userProperties.getCVTermMappings().
-                                        get(modificationName)).getAccession(),
+                                        ((CvParamImpl) userProperties.getCVTermMappings().get(modificationName)).getAccession(),
                                         peptideSequence.length() + 1,
-                                        ((CvParamImpl) userProperties.getCVTermMappings().
-                                        get(modificationName)).getCVLookup(),
+                                        ((CvParamImpl) userProperties.getCVTermMappings().get(modificationName)).getCVLookup(),
                                         null,
                                         null,
                                         null,
@@ -9038,8 +8971,8 @@ public class PRIDEConverter {
      *                     corresponding intensities. Note that the arrays will be sorted
      *                     by m/z.
      */
-    private static double[][] transformPeakListToArrays_ms_lims(HashMap aPeakList,
-            TreeSet treeSet) {
+    private static double[][] transformPeakListToArrays_ms_lims(HashMap aPeakList, TreeSet treeSet) {
+
         double[][] result = new double[2][aPeakList.size()];
 
         // Use a TreeSet to sort the keys (m/z values).
@@ -9227,6 +9160,7 @@ public class PRIDEConverter {
             Iterator iter = iScores.iterator();
             double temp = 0.0;
             int counter = 0;
+            
             while (iter.hasNext()) {
                 temp += ((Double) iter.next()).doubleValue();
                 counter++;
@@ -9251,6 +9185,7 @@ public class PRIDEConverter {
             Iterator iter = iThresholds.iterator();
             double temp = 0.0;
             int counter = 0;
+            
             while (iter.hasNext()) {
                 temp += ((Double) iter.next()).doubleValue();
                 counter++;
@@ -9927,7 +9862,7 @@ public class PRIDEConverter {
                     properties.getSampleDescriptionCVParamsQuantification().get(i));
         }
 
-// Create the mzData object.
+        // Create the mzData object.
         MzData tempMzData = new MzDataImpl(
                 mzDataSpectra,
                 properties.getSoftwareCompletionTime(),
@@ -10113,20 +10048,16 @@ public class PRIDEConverter {
      * @return the updated CV param list
      */
     private static ArrayList addItraqCVTerms(ArrayList cvParams, iTRAQ iTRAQValues) {
-        cvParams.add(
-                new CvParamImpl(
+        cvParams.add(new CvParamImpl(
                 "PRIDE:000018", "PRIDE", "iTRAQ intensity 114", cvParams.size(),
                 ((String[]) iTRAQValues.getAllNorms().get(0))[0]));
-        cvParams.add(
-                new CvParamImpl(
+        cvParams.add(new CvParamImpl(
                 "PRIDE:000019", "PRIDE", "iTRAQ intensity 115", cvParams.size(),
                 ((String[]) iTRAQValues.getAllNorms().get(0))[1]));
-        cvParams.add(
-                new CvParamImpl(
+        cvParams.add(new CvParamImpl(
                 "PRIDE:000020", "PRIDE", "iTRAQ intensity 116", cvParams.size(),
                 ((String[]) iTRAQValues.getAllNorms().get(0))[2]));
-        cvParams.add(
-                new CvParamImpl(
+        cvParams.add(new CvParamImpl(
                 "PRIDE:000021", "PRIDE", "iTRAQ intensity 117", cvParams.size(),
                 ((String[]) iTRAQValues.getAllNorms().get(0))[3]));
 
@@ -10198,6 +10129,7 @@ public class PRIDEConverter {
      * @return the generated spectrum key
      */
     private static String generateSpectrumKey(Object[] subKeys) {
+        
         spectrumKey = "";
 
         for (int i = 0; i < subKeys.length; i++) {
