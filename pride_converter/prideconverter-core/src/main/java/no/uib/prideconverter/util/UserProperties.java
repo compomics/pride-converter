@@ -24,7 +24,7 @@ import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
  */
 public class UserProperties {
 
-    // defaults
+    // defaults user settings, used if the UserProperties file can not be read
     private String outputPath = "user.home";
     private String sourceFileLocation = "";
     private String userName = ""; //database user name
@@ -46,6 +46,40 @@ public class UserProperties {
     private String omssaInstallDir = null;
 
     /**
+     * Contains all supported PRIDE Converter version numbers
+     */
+    private String[] allVersionNumbers = {
+        "v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5", "v1.6", "v1.7", 
+        "v1.8", "v1.8_beta", "v1.9", "v1.9_beta", "v1.9.1", "v1.10",
+        "v1.10.1", "v1.11", "v1.11.1", "v1.11.2", "v1.11.3", "v1.11.4",
+        "v1.12", "v1.13", "v1.13.1", "v1.13.2", "v1.13.3", "v1.14",
+        "v1.14.1", "v1.14.2", "v1.15", "v1.15.1", "v1.15.2", "v1.15.3",
+        "v1.16", "v1.16.1", "v1.16.2", "v1.17_beta", "v1.17", "v1.17.1",
+        "v1.18", "v1.18.1"};
+
+    /**
+     * Contains all PRIDE Converter version numbers that did not include
+     * ITraq support.
+     */
+    private String[] versionNumbersWithoutITraqSupport = {
+        "v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"};
+
+    /**
+     * Contains all PRIDE Converter version numbers that did not include
+     * the OMSSA directory in the UserProperties file.
+     */
+    private String[] versionNumbersWithoutOMSSADir = {
+        "v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5", "v1.6", "v1.7", 
+        "v1.8", "v1.8_beta", "v1.9", "v1.9_beta", "v1.9.1"};
+    
+    /**
+     * Contains all PRIDE Converter version numbers that did not include
+     * CV term mappings in the UserProperties file.
+     */
+    private String[] versionNumbersWithoutCvMappings = {
+        "v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5", "v1.6", "v1.7"};
+
+    /**
      * Creates a new UserProperties object
      * 
      * @param prideConverter
@@ -53,6 +87,24 @@ public class UserProperties {
     public UserProperties(PRIDEConverter prideConverter) {
         this.prideConverter = prideConverter;
         cvTermMappings = new HashMap();
+    }
+
+    /**
+     * Returns true of the the given version number is in the list provided list.
+     *
+     * @return true of the the given version number is in the list provided list.
+     */
+    private boolean versionInList(String currentVersion, String[] versionNumbers) {
+
+        boolean versionInList = false;
+
+        for (int i = 0; i < versionNumbers.length && !versionInList; i++) {
+            if(versionNumbers[i].equalsIgnoreCase(currentVersion)){
+                versionInList = true;
+            }
+        }
+
+        return versionInList;
     }
 
     /**
@@ -102,7 +154,9 @@ public class UserProperties {
                     }
                 }
 
-                // removes the '*' at the end of the version number
+                // Removes the '*' at the end of the version number
+                // The '*' is used as a marker showing that the user as
+                // not been asked to import old user setting.
                 version = version.substring(0, version.length() - 1);
             }
 
@@ -127,46 +181,7 @@ public class UserProperties {
             s = b.readLine();
             currentContact = s.substring(s.indexOf(": ") + 2);
 
-            if (version.equalsIgnoreCase("v1.0") ||
-                    version.equalsIgnoreCase("v1.1") ||
-                    version.equalsIgnoreCase("v1.2") ||
-                    version.equalsIgnoreCase("v1.3") ||
-                    version.equalsIgnoreCase("v1.4") ||
-                    version.equalsIgnoreCase("v1.5") ||
-                    version.equalsIgnoreCase("v1.6") ||
-                    version.equalsIgnoreCase("v1.7") ||
-                    version.equalsIgnoreCase("v1.8") ||
-                    version.equalsIgnoreCase("v1.8_beta") ||
-                    version.equalsIgnoreCase("v1.9") ||
-                    version.equalsIgnoreCase("v1.9_beta") ||
-                    version.equalsIgnoreCase("v1.9.1") ||
-                    version.equalsIgnoreCase("v1.10") ||
-                    version.equalsIgnoreCase("v1.10.1") ||
-                    version.equalsIgnoreCase("v1.11") ||
-                    version.equalsIgnoreCase("v1.11.1") ||
-                    version.equalsIgnoreCase("v1.11.2") ||
-                    version.equalsIgnoreCase("v1.11.3") ||
-                    version.equalsIgnoreCase("v1.11.4") ||
-                    version.equalsIgnoreCase("v1.12") ||
-                    version.equalsIgnoreCase("v1.13") ||
-                    version.equalsIgnoreCase("v1.13.1") ||
-                    version.equalsIgnoreCase("v1.13.2") ||
-                    version.equalsIgnoreCase("v1.13.3") ||
-                    version.equalsIgnoreCase("v1.14") ||
-                    version.equalsIgnoreCase("v1.14.1") ||
-                    version.equalsIgnoreCase("v1.14.2") ||
-                    version.equalsIgnoreCase("v1.15") ||
-                    version.equalsIgnoreCase("v1.15.1") ||
-                    version.equalsIgnoreCase("v1.15.2") ||
-                    version.equalsIgnoreCase("v1.15.3") ||
-                    version.equalsIgnoreCase("v1.16") ||
-                    version.equalsIgnoreCase("v1.16.1") ||
-                    version.equalsIgnoreCase("v1.16.2") ||
-                    version.equalsIgnoreCase("v1.17_beta") ||
-                    version.equalsIgnoreCase("v1.17") ||
-                    version.equalsIgnoreCase("v1.17.1") ||
-                    version.equalsIgnoreCase("v1.18") ||
-                    version.equalsIgnoreCase("v1.18.1")) {
+            if(versionInList(version, allVersionNumbers)){
                 s = b.readLine();
                 fileNameSelectionCriteriaSeparator = s.substring(s.indexOf(": ") + 2);
                 s = b.readLine();
@@ -176,40 +191,7 @@ public class UserProperties {
                 sourceFileLocation = "";
             }
 
-            if (version.equalsIgnoreCase("v1.6") ||
-                    version.equalsIgnoreCase("v1.7") ||
-                    version.equalsIgnoreCase("v1.8") ||
-                    version.equalsIgnoreCase("v1.8_beta") ||
-                    version.equalsIgnoreCase("v1.9") ||
-                    version.equalsIgnoreCase("v1.9_beta") ||
-                    version.equalsIgnoreCase("v1.9.1") ||
-                    version.equalsIgnoreCase("v1.10") ||
-                    version.equalsIgnoreCase("v1.10.1") ||
-                    version.equalsIgnoreCase("v1.11") ||
-                    version.equalsIgnoreCase("v1.11.1") ||
-                    version.equalsIgnoreCase("v1.11.2") ||
-                    version.equalsIgnoreCase("v1.11.3") ||
-                    version.equalsIgnoreCase("v1.11.4") ||
-                    version.equalsIgnoreCase("v1.12") ||
-                    version.equalsIgnoreCase("v1.13") ||
-                    version.equalsIgnoreCase("v1.13.1") ||
-                    version.equalsIgnoreCase("v1.13.2") ||
-                    version.equalsIgnoreCase("v1.13.3") ||
-                    version.equalsIgnoreCase("v1.14") ||
-                    version.equalsIgnoreCase("v1.14.1") ||
-                    version.equalsIgnoreCase("v1.14.2") ||
-                    version.equalsIgnoreCase("v1.15") ||
-                    version.equalsIgnoreCase("v1.15.1") ||
-                    version.equalsIgnoreCase("v1.15.2") ||
-                    version.equalsIgnoreCase("v1.15.3") ||
-                    version.equalsIgnoreCase("v1.16") ||
-                    version.equalsIgnoreCase("v1.16.1") ||
-                    version.equalsIgnoreCase("v1.16.2") ||
-                    version.equalsIgnoreCase("v1.17_beta") ||
-                    version.equalsIgnoreCase("v1.17") ||
-                    version.equalsIgnoreCase("v1.17.1") ||
-                    version.equalsIgnoreCase("v1.18") ||
-                    version.equalsIgnoreCase("v1.18.1")) {
+            if(!versionInList(version, versionNumbersWithoutITraqSupport)){
 
                 // read the iTRAQ settings values
                 s = b.readLine();
@@ -230,33 +212,7 @@ public class UserProperties {
                 }
             }
 
-            if (version.equalsIgnoreCase("v1.10") ||
-                    version.equalsIgnoreCase("v1.10.1") ||
-                    version.equalsIgnoreCase("v1.11") ||
-                    version.equalsIgnoreCase("v1.11.1") ||
-                    version.equalsIgnoreCase("v1.11.2") ||
-                    version.equalsIgnoreCase("v1.11.3") ||
-                    version.equalsIgnoreCase("v1.11.4") ||
-                    version.equalsIgnoreCase("v1.12") ||
-                    version.equalsIgnoreCase("v1.13") ||
-                    version.equalsIgnoreCase("v1.13.1") ||
-                    version.equalsIgnoreCase("v1.13.2") ||
-                    version.equalsIgnoreCase("v1.13.3") ||
-                    version.equalsIgnoreCase("v1.14") ||
-                    version.equalsIgnoreCase("v1.14.1") ||
-                    version.equalsIgnoreCase("v1.14.2") ||
-                    version.equalsIgnoreCase("v1.15") ||
-                    version.equalsIgnoreCase("v1.15.1") ||
-                    version.equalsIgnoreCase("v1.15.2") ||
-                    version.equalsIgnoreCase("v1.15.3") ||
-                    version.equalsIgnoreCase("v1.16") ||
-                    version.equalsIgnoreCase("v1.16.1") ||
-                    version.equalsIgnoreCase("v1.17_beta") ||
-                    version.equalsIgnoreCase("v1.17") ||
-                    version.equalsIgnoreCase("v1.17.1") ||
-                    version.equalsIgnoreCase("v1.18") ||
-                    version.equalsIgnoreCase("v1.18.1")) {
-
+            if(!versionInList(version, versionNumbersWithoutOMSSADir)){
                 s = b.readLine();
                 omssaInstallDir = s.substring(s.indexOf(": ") + 2);
 
@@ -267,37 +223,7 @@ public class UserProperties {
                 omssaInstallDir = null;
             }
 
-            if (version.equalsIgnoreCase("v1.8") ||
-                    version.equalsIgnoreCase("v1.8_beta") ||
-                    version.equalsIgnoreCase("v1.9") ||
-                    version.equalsIgnoreCase("v1.9_beta") ||
-                    version.equalsIgnoreCase("v1.9.1") ||
-                    version.equalsIgnoreCase("v1.10") ||
-                    version.equalsIgnoreCase("v1.10.1") ||
-                    version.equalsIgnoreCase("v1.11") ||
-                    version.equalsIgnoreCase("v1.11.1") ||
-                    version.equalsIgnoreCase("v1.11.2") ||
-                    version.equalsIgnoreCase("v1.11.3") ||
-                    version.equalsIgnoreCase("v1.11.4") ||
-                    version.equalsIgnoreCase("v1.12") ||
-                    version.equalsIgnoreCase("v1.13") ||
-                    version.equalsIgnoreCase("v1.13.1") ||
-                    version.equalsIgnoreCase("v1.13.2") ||
-                    version.equalsIgnoreCase("v1.13.3") ||
-                    version.equalsIgnoreCase("v1.14") ||
-                    version.equalsIgnoreCase("v1.14.1") ||
-                    version.equalsIgnoreCase("v1.14.2") ||
-                    version.equalsIgnoreCase("v1.15") ||
-                    version.equalsIgnoreCase("v1.15.1") ||
-                    version.equalsIgnoreCase("v1.15.3") ||
-                    version.equalsIgnoreCase("v1.16") ||
-                    version.equalsIgnoreCase("v1.16.1") ||
-                    version.equalsIgnoreCase("v1.16.2") ||
-                    version.equalsIgnoreCase("v1.17_beta") ||
-                    version.equalsIgnoreCase("v1.17") ||
-                    version.equalsIgnoreCase("v1.17.1") ||
-                    version.equalsIgnoreCase("v1.18") ||
-                    version.equalsIgnoreCase("v1.18.1")) {
+            if(!versionInList(version, versionNumbersWithoutCvMappings)){
 
                 s = b.readLine();
                 s = b.readLine();
