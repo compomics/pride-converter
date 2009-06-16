@@ -30,7 +30,6 @@ import uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum;
  */
 public class PeptideProphetXMLParser {
 
-    private static final String INPUTFILE = "inputfile";
     private static final String MSMS_RUN_SUMMARY = "msms_run_summary";
     private static final String SEARCH_SUMMARY = "search_summary";
     private static final String AMINOACID_MODIFICATION = "aminoacid_modification";
@@ -391,7 +390,9 @@ public class PeptideProphetXMLParser {
      * @throws XmlPullParserException   when the XML parsing generated an error.
      * @throws java.io.IOException  when the output file could not be read.
      */
-    public HashMap readPeptideProphet(XmlPullParserPlus aParser, double aThreshold) throws XmlPullParserException, IOException {
+    public HashMap readPeptideProphet(XmlPullParserPlus aParser, double aThreshold)
+            throws XmlPullParserException, IOException {
+
         HashMap result = new HashMap();
 
         int eventType = -1;
@@ -445,6 +446,7 @@ public class PeptideProphetXMLParser {
      */
     private PeptideProphetMSMSRun processMSMSRun(XmlPullParserPlus aParser, double aThreshold)
             throws XmlPullParserException, IOException {
+
         // Start with the MS/MS summary data.
         String baseName = aParser.getAttributeValue(null, "base_name");
         // Remove paths from base_name.
@@ -459,28 +461,35 @@ public class PeptideProphetXMLParser {
         // Next tag is the enzyme.
         aParser.moveToNextStartTag(true);
         String enzymeName = aParser.getAttributeValue(null, "name");
+
         // Now the data for this enzyme.
         aParser.moveToNextStartTag(true);
         String cut = aParser.getAttributeValue(null, "cut");
         String noCut = aParser.getAttributeValue(null, "no_cut");
         String sense = aParser.getAttributeValue(null, "sense");
+
         // Create the enzyme.
         PeptideProphetEnzyme enzyme = new PeptideProphetEnzyme(enzymeName, cut, noCut, sense);
 
         // Move on to the search summary.
         aParser.moveToNextStartTag(true);
+
         // The search engine used.
         String search_engine = aParser.getAttributeValue(null, "search_engine");
+
         // Can be monoisotopic or average, for instance.
         String precursor_mass_type = aParser.getAttributeValue(null, "precursor_mass_type");
+
         // Can be monoisotopic or average, for instance.
         String fragment_mass_type = aParser.getAttributeValue(null, "fragment_mass_type");
 
         // Next tag is a subtag - the search database
         aParser.moveToNextStartTag(true);
         String filename = aParser.getAttributeValue(null, "local_path");
+
         // Remove the path stuff; we only need the exact name.
         filename = filename.substring(filename.lastIndexOf("/") + 1);
+
         // Amino acids (AA) or nucleic acids (NA?)
         String type = aParser.getAttributeValue(null, "type");
 
@@ -489,13 +498,18 @@ public class PeptideProphetXMLParser {
         String search_enzyme = null;
         int max_number_internal_cleavages = 0;
         int min_number_termini = 0;
+
         if (aParser.getName().equals("enzymatic_search_constraint")) {
+
             // Name of the enzyme used.
             search_enzyme = aParser.getAttributeValue(null, "enzyme");
+
             // Internal (missed) cleavages allowed.
             max_number_internal_cleavages = Integer.parseInt(aParser.getAttributeValue(null, "max_num_internal_cleavages"));
+
             // Number of correct enzymatic termini to be found.
             min_number_termini = Integer.parseInt(aParser.getAttributeValue(null, "min_number_termini"));
+            
             // Move to the next tag.
             aParser.moveToNextStartTagWithEndBreaker(SEARCH_SUMMARY);
         } else {
@@ -504,19 +518,24 @@ public class PeptideProphetXMLParser {
 
         // Next tag is another subtag - sequence search constraint used (is optional).
         String sequence_constraint_AA = null;
+
         if (aParser.getName().equals("sequence_search_constraint")) {
+
             // Name of the enzyme used.
             sequence_constraint_AA = aParser.getAttributeValue(null, "sequence");
+
             // Move to the next tag.
             aParser.moveToNextStartTagWithEndBreaker(SEARCH_SUMMARY);
         }
 
         // Now a series of modifications are reported.
         HashMap modifications = new HashMap();
+
         while (AMINOACID_MODIFICATION.equals(aParser.getName())) {
             String aminoacid = aParser.getAttributeValue(null, "aminoacid");
             double massDiff = Double.parseDouble(aParser.getAttributeValue(null, "massdiff"));
             double mass = Double.parseDouble(aParser.getAttributeValue(null, "mass"));
+
             // Now there is a 'Y' or 'N' to indicate whether a modification
             // is variable or not.
             boolean variable = false;
@@ -527,6 +546,7 @@ public class PeptideProphetXMLParser {
             }
 
             String symbol = aParser.getAttributeValue(null, "symbol");
+
             // Add the modification to the HashMap.
             Object temp = modifications.put(aminoacid + " " + mass, new PeptideProphetModification(aminoacid, mass, massDiff, symbol, variable));
 
@@ -541,8 +561,10 @@ public class PeptideProphetXMLParser {
         // Finally, a set of parameters as key-value pairs. These are stored in a HashMap.
         HashMap search_parameters = new HashMap();
         while (PARAMETER.equals(aParser.getName())) {
+
             // Read parameter.
             search_parameters.put(aParser.getAttributeValue(null, "name"), aParser.getAttributeValue(null, "value"));
+
             // Move to the next start tag.
             aParser.moveToNextStartTagWithEndBreaker(SEARCH_SUMMARY);
         }
@@ -592,21 +614,27 @@ public class PeptideProphetXMLParser {
             //aParser.moveToNextStartTagWithEndBreaker(SEARCH_SUMMARY);
             aParser.moveToNextStartTagWithEndBreaker(MSMS_RUN_SUMMARY);
         }
-        
+
         Collection queries = new ArrayList();
 
         // Right, now cycle the spectrum queries.
         while (SPECTRUM_QUERY.equals(aParser.getName())) {
+
             // The run name.
             String run = aParser.getAttributeValue(null, "spectrum");
+
             // Start scan.
             String start_scan = aParser.getAttributeValue(null, "start_scan");
+
             // End scan.
             String end_scan = aParser.getAttributeValue(null, "end_scan");
+
             // Precursor neutral mass.
             double precMass = Double.parseDouble(aParser.getAttributeValue(null, "precursor_neutral_mass"));
+
             // Assumed charge state.
             int assumed_charge = Integer.parseInt(aParser.getAttributeValue(null, "assumed_charge"));
+            
             // The index.
             int index = Integer.parseInt(aParser.getAttributeValue(null, "index"));
 
@@ -648,137 +676,163 @@ public class PeptideProphetXMLParser {
 
             // Sanity check.
             if (baseName.indexOf(run) < 0) {
-                logger.error("Found a spectrum query at line " + aParser.getLineNumber() + " which references run '" + run + "' while it is contained in run element '" + baseName + "'!");
-                throw new IOException("Found a spectrum query at line " + aParser.getLineNumber() + " which references run '" + run + "' while it is contained in run element '" + baseName + "'!");
+                logger.error("Found a spectrum query at line " + aParser.getLineNumber() + " which references run '"
+                        + run + "' while it is contained in run element '" + baseName + "'!");
+                throw new IOException("Found a spectrum query at line " + aParser.getLineNumber()
+                        + " which references run '" + run + "' while it is contained in run element '" + baseName + "'!");
             }
 
             // Now let's process the corresponding search result.
             // The first tag is the search_result.
             aParser.moveToNextStartTag(true);
+
             // Next tag is the search_hit.
             aParser.moveToNextStartTag(true);
-            // Read all the necessary attributes.
-            int hit_rank = Integer.parseInt(aParser.getAttributeValue(null, "hit_rank"));
-            String sequence = aParser.getAttributeValue(null, "peptide");
-            String previous_AA = aParser.getAttributeValue(null, "peptid_prev_aa");
-            String next_AA = aParser.getAttributeValue(null, "peptide_next_aa");
-            String protein_accession = aParser.getAttributeValue(null, "protein");
-            int proteinCount = Integer.parseInt(aParser.getAttributeValue(null, "num_tot_proteins"));
-            int matchedIons = Integer.parseInt(aParser.getAttributeValue(null, "num_matched_ions").trim());
-            int totalIons = Integer.parseInt(aParser.getAttributeValue(null, "tot_num_ions").trim());
-            double calculatedMass = Double.parseDouble(aParser.getAttributeValue(null, "calc_neutral_pep_mass"));
-            String massDiff = aParser.getAttributeValue(null, "massdiff");
-            int num_tol_term = Integer.parseInt(aParser.getAttributeValue(null, "num_tol_term"));
-            int num_missed_cleavages = Integer.parseInt(aParser.getAttributeValue(null, "num_missed_cleavages"));
-            int isRejected = Integer.parseInt(aParser.getAttributeValue(null, "is_rejected"));
-            String protein_description = aParser.getAttributeValue(null, "protein_descr");
-            PeptideProphetProteinID proteinID = new PeptideProphetProteinID(protein_accession, protein_description, num_tol_term);
-            // If there was more than one protein, the additional ones are listed here.
-            aParser.moveToNextStartTag(true);
-            int tempProteinCount = proteinCount - 1;
-            Collection alternateProteins = new ArrayList(tempProteinCount);
 
-            while (tempProteinCount > 0) {
+            // the <search_result> tag could be empty
+            if (!aParser.getName().equals("search_hit")) {
+                logger.warn("There are no search results for spectrum_query spectrum run " + run + ". Start scan= "
+                        + start_scan + ". End scan= " + end_scan);
+            } else {
 
-                if (!ALTERNATIVE_PROTEIN.equals(aParser.getName())) {
-                    logger.warn("There should have been an 'alternative_protein' at line " + aParser.getLineNumber() + " (" + tempProteinCount + " alternative proteins left), instead, there was a '" + aParser.getName() + "' tag!");
-                    break;
-                }
+                // Read all the necessary attributes.
+                int hit_rank = Integer.parseInt(aParser.getAttributeValue(null, "hit_rank"));
+                String sequence = aParser.getAttributeValue(null, "peptide");
+                String previous_AA = aParser.getAttributeValue(null, "peptid_prev_aa");
+                String next_AA = aParser.getAttributeValue(null, "peptide_next_aa");
+                String protein_accession = aParser.getAttributeValue(null, "protein");
+                int proteinCount = Integer.parseInt(aParser.getAttributeValue(null, "num_tot_proteins"));
+                int matchedIons = Integer.parseInt(aParser.getAttributeValue(null, "num_matched_ions").trim());
+                int totalIons = Integer.parseInt(aParser.getAttributeValue(null, "tot_num_ions").trim());
+                double calculatedMass = Double.parseDouble(aParser.getAttributeValue(null, "calc_neutral_pep_mass"));
+                String massDiff = aParser.getAttributeValue(null, "massdiff");
+                int num_tol_term = Integer.parseInt(aParser.getAttributeValue(null, "num_tol_term"));
+                int num_missed_cleavages = Integer.parseInt(aParser.getAttributeValue(null, "num_missed_cleavages"));
+                int isRejected = Integer.parseInt(aParser.getAttributeValue(null, "is_rejected"));
+                String protein_description = aParser.getAttributeValue(null, "protein_descr");
+                PeptideProphetProteinID proteinID = new PeptideProphetProteinID(protein_accession, protein_description, num_tol_term);
 
-                String alt_protein_accession = aParser.getAttributeValue(null, "protein");
-                String alt_protein_description = aParser.getAttributeValue(null, "protein_descr");
-
-                String temp = aParser.getAttributeValue(null, "num_tol_term");
-
-                int alt_num_tol_term = -1;
-                if (temp != null) {
-                    alt_num_tol_term = Integer.parseInt(temp);
-                }
-
-                alternateProteins.add(new PeptideProphetProteinID(alt_protein_accession, alt_protein_description, alt_num_tol_term));
-                tempProteinCount--;
+                // If there was more than one protein, the additional ones are listed here.
                 aParser.moveToNextStartTag(true);
-            }
+                int tempProteinCount = proteinCount - 1;
+                Collection alternateProteins = new ArrayList(tempProteinCount);
 
-            // There can be modifications here.
-            // Otherwise, the modseq is simply the original sequence.
-            String modSeq = sequence;
-            Collection modifiedAA = new ArrayList();
-            if (MODIFICATION_INFO.equals(aParser.getName())) {
-                // OK, there are modifications. First read the modified
-                // sequence attribute.
-                modSeq = aParser.getAttributeValue(null, "modified_peptide");
-                // Now read all the individual modifications.
-                aParser.moveToNextStartTag(true);
-                while (MOD_AMINOACID_MASS.equals(aParser.getName())) {
-                    // Get the position and the mass.
-                    int position = Integer.parseInt(aParser.getAttributeValue(null, "position"));
-                    double mass = Double.parseDouble(aParser.getAttributeValue(null, "mass"));
-                    modifiedAA.add(new PeptideProphetModifiedAminoAcid(position, mass));
+                while (tempProteinCount > 0) {
+
+                    if (!ALTERNATIVE_PROTEIN.equals(aParser.getName())) {
+                        logger.warn("There should have been an 'alternative_protein' at line " + aParser.getLineNumber() 
+                                + " (" + tempProteinCount + " alternative proteins left), instead, there was a '"
+                                + aParser.getName() + "' tag!");
+                        break;
+                    }
+
+                    String alt_protein_accession = aParser.getAttributeValue(null, "protein");
+                    String alt_protein_description = aParser.getAttributeValue(null, "protein_descr");
+
+                    String temp = aParser.getAttributeValue(null, "num_tol_term");
+
+                    int alt_num_tol_term = -1;
+                    if (temp != null) {
+                        alt_num_tol_term = Integer.parseInt(temp);
+                    }
+
+                    alternateProteins.add(new PeptideProphetProteinID(alt_protein_accession, alt_protein_description, alt_num_tol_term));
+                    tempProteinCount--;
                     aParser.moveToNextStartTag(true);
                 }
-            }
-            // Next tags are the different search scores, each has a name and a value
-            // so we store these in a HashMap.
-            HashMap searchScores = new HashMap();
-            while (SEARCH_SCORE.equals(aParser.getName())) {
-                String name = aParser.getAttributeValue(null, "name");
-                String value = aParser.getAttributeValue(null, "value");
-                searchScores.put(name, value);
+
+                // There can be modifications here.
+                // Otherwise, the modseq is simply the original sequence.
+                String modSeq = sequence;
+                Collection modifiedAA = new ArrayList();
+                if (MODIFICATION_INFO.equals(aParser.getName())) {
+
+                    // OK, there are modifications. First read the modified
+                    // sequence attribute.
+                    modSeq = aParser.getAttributeValue(null, "modified_peptide");
+
+                    // Now read all the individual modifications.
+                    aParser.moveToNextStartTag(true);
+                    while (MOD_AMINOACID_MASS.equals(aParser.getName())) {
+
+                        // Get the position and the mass.
+                        int position = Integer.parseInt(aParser.getAttributeValue(null, "position"));
+                        double mass = Double.parseDouble(aParser.getAttributeValue(null, "mass"));
+                        modifiedAA.add(new PeptideProphetModifiedAminoAcid(position, mass));
+                        aParser.moveToNextStartTag(true);
+                    }
+                }
+
+                // Next tags are the different search scores, each has a name and a value
+                // so we store these in a HashMap.
+                HashMap searchScores = new HashMap();
+                while (SEARCH_SCORE.equals(aParser.getName())) {
+                    String name = aParser.getAttributeValue(null, "name");
+                    String value = aParser.getAttributeValue(null, "value");
+                    searchScores.put(name, value);
+                    aParser.moveToNextStartTag(true);
+                }
+
+                // Next tag should be analysis_result.
+                String analysis = aParser.getAttributeValue(null, "analysis");
                 aParser.moveToNextStartTag(true);
-            }
 
-            // Next tag should be analysis_result.
-            String analysis = aParser.getAttributeValue(null, "analysis");
-            aParser.moveToNextStartTag(true);
-            // Now the result value for the actual analysis program.
-            double probability = Double.parseDouble(aParser.getAttributeValue(null, "probability"));
-            String all_ntt_prob = aParser.getAttributeValue(null, "all_ntt_prob");
-            // Next tag is the search_score_summary, which contains a list of key-value pairs,
-            // as 'parameter' tags, which we HashMap again.
-            aParser.moveToNextStartTag(true);
-            aParser.moveToNextStartTag(true);
+                // Now the result value for the actual analysis program.
+                double probability = Double.parseDouble(aParser.getAttributeValue(null, "probability"));
+                String all_ntt_prob = aParser.getAttributeValue(null, "all_ntt_prob");
 
-            HashMap search_score_summary = new HashMap();
-            while (PARAMETER.equals(aParser.getName())) {
-                String name = aParser.getAttributeValue(null, "name");
-                String value = aParser.getAttributeValue(null, "value");
-                search_score_summary.put(name, value);
+                // Next tag is the search_score_summary, which contains a list of key-value pairs,
+                // as 'parameter' tags, which we HashMap again.
                 aParser.moveToNextStartTag(true);
-            }
-
-            // there could be more than one analysis tag, these will be ignored
-            // note that this assumes that the first analysis tag is the
-            // <analysis_result analysis="peptideprophet"> !!!
-            while (aParser.getName() != null &&
-                    !aParser.getName().equalsIgnoreCase("spectrum_query") &&
-                    !aParser.getName().equalsIgnoreCase("msms_run_summary")) {
-
                 aParser.moveToNextStartTag(true);
-            }
 
-            // Ignore all queries with hits below the probability threshold.
-            // Note that probability threshold is rounded.
-            double roundedProbability = new BigDecimal(probability).setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
-            if (roundedProbability >= aThreshold) {
-                // The hit.
-                PeptideProphetSearchHit ppsh = new PeptideProphetSearchHit(
-                        alternateProteins, all_ntt_prob, analysis, calculatedMass, hit_rank, isRejected,
-                        massDiff, matchedIons, modifiedAA, modSeq, next_AA, num_missed_cleavages, previous_AA,
-                        probability, roundedProbability, proteinID, proteinCount, searchScores, search_score_summary,
-                        sequence, totalIons);
-                // The query.
-                PeptideProphetQuery ppq = new PeptideProphetQuery(
-                        assumed_charge, end_scan, index, precMass, run, ppsh, start_scan, spectrumTitle);
-                // Add the query to the collection.
-                queries.add(ppq);
-            } else {
-                logger.debug("Skipped query and peptidehit (" + sequence + ") with a probability (" + probability + ") below " + aThreshold + ".");
+                HashMap search_score_summary = new HashMap();
+                while (PARAMETER.equals(aParser.getName())) {
+                    String name = aParser.getAttributeValue(null, "name");
+                    String value = aParser.getAttributeValue(null, "value");
+                    search_score_summary.put(name, value);
+                    aParser.moveToNextStartTag(true);
+                }
+
+                // there could be more than one analysis tag, these will be ignored
+                // note that this assumes that the first analysis tag is the
+                // <analysis_result analysis="peptideprophet"> !!!
+                while (aParser.getName() != null &&
+                        !aParser.getName().equalsIgnoreCase("spectrum_query") &&
+                        !aParser.getName().equalsIgnoreCase("msms_run_summary")) {
+
+                    aParser.moveToNextStartTag(true);
+                }
+
+                // Ignore all queries with hits below the probability threshold.
+                // Note that probability threshold is rounded.
+                double roundedProbability = new BigDecimal(probability).setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+                if (roundedProbability >= aThreshold) {
+
+                    // The hit.
+                    PeptideProphetSearchHit ppsh = new PeptideProphetSearchHit(
+                            alternateProteins, all_ntt_prob, analysis, calculatedMass, hit_rank, isRejected,
+                            massDiff, matchedIons, modifiedAA, modSeq, next_AA, num_missed_cleavages, previous_AA,
+                            probability, roundedProbability, proteinID, proteinCount, searchScores, search_score_summary,
+                            sequence, totalIons);
+
+                    // The query.
+                    PeptideProphetQuery ppq = new PeptideProphetQuery(
+                            assumed_charge, end_scan, index, precMass, run, ppsh, start_scan, spectrumTitle);
+                    
+                    // Add the query to the collection.
+                    queries.add(ppq);
+
+                } else {
+                    logger.debug("Skipped query and peptidehit (" + sequence + ") with a probability (" + probability
+                            + ") below " + aThreshold + ".");
+                }
             }
         }
 
         // Create the complete MS/MS run instance
-        PeptideProphetMSMSRun run = new PeptideProphetMSMSRun(baseName, enzyme, msDetector, msIonization, msManufacturer, msMassAnalyzer, msModel, pps, queries);
+        PeptideProphetMSMSRun run = new PeptideProphetMSMSRun(baseName, enzyme, msDetector, msIonization,
+                msManufacturer, msMassAnalyzer, msModel, pps, queries);
 
         // Return it.
         logger.info("Processed MS/MS run '" + baseName + "'.");
