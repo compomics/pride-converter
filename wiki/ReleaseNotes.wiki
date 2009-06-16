@@ -3,11 +3,18 @@
 
 ----
 
+*Changes in PRIDE Converter v1.18.2 - (Jun. 16. 2009):*
+ * BUG FIX: When converting Peptide-/ProteinProphet projects the search_result tags can now be empty.
+
+----
+
 *Changes in PRIDE Converter v1.18.1 - (Jun. 11. 2009):*
  * FEATURE IMPROVEMENT: Added more default PSI-MOD modification mappings.
  * BUG FIX: Fixed a bug resulting in the conversion sometimes failing (with no error message) during the conversion when using the converter on Linux or Mac OS.  
  * LIBRARY UPDATE: Updated the MascotDatFile library to version 2.1.4.
  * LIBRARY UPDATE: Updated the pride-core library to version 2.6.1.
+
+Download Count: 11
 
 ----
 
