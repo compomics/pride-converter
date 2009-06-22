@@ -296,16 +296,12 @@ public class ProjectSelection extends javax.swing.JFrame {
                     //sort projects on project id
                     int min;
 
-                    for (int i = 0; i <
-                            projects.length - 1; i++) {
+                    for (int i = 0; i < projects.length - 1; i++) {
 
                         min = i;
 
-                        for (int j = i + 1; j <
-                                projects.length; j++) {
-
-                            if (projects[min].getProjectid() >
-                                    projects[j].getProjectid()) {
+                        for (int j = i + 1; j < projects.length; j++) {
+                            if (projects[min].getProjectid() > projects[j].getProjectid()) {
                                 min = j;
                             }
                         }
