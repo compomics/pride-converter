@@ -67,7 +67,7 @@
               <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="276" max="32767" attributes="0"/>
+              <EmptySpace pref="280" max="32767" attributes="0"/>
               <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
@@ -150,8 +150,8 @@
                   </Group>
                   <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="userNameJTextField" pref="440" max="32767" attributes="1"/>
-                      <Component id="passordJPasswordField" alignment="0" pref="440" max="32767" attributes="1"/>
+                      <Component id="passordJPasswordField" pref="440" max="32767" attributes="1"/>
+                      <Component id="userNameJTextField" alignment="0" pref="440" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -167,7 +167,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="passordJPasswordField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="passordJPasswordField" alignment="3" min="-2" pref="19" max="-2" attributes="0"/>
                       <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -313,7 +313,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="11" style="2"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Insert the information needed to log on the the ms_lims database, and click on &apos;Next&apos; to continue."/>
+        <Property name="text" type="java.lang.String" value="Insert the information needed to log on the ms_lims database, and click on &apos;Next&apos; to continue."/>
       </Properties>
     </Component>
   </SubComponents>

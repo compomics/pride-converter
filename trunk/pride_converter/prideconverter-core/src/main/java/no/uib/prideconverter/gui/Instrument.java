@@ -1847,9 +1847,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                 if (value == JOptionPane.YES_OPTION) {
 
-                    String newName =
-                            instrumentPath + lastSelectedInstrumentName +
-                            ".int";
+                    String newName = instrumentPath + lastSelectedInstrumentName + ".int";
 
                     try {
 
@@ -1866,40 +1864,26 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                                 "\n");
                         bw.write("cvLookup: " +
                                 prideConverter.getProperties().
-                                getCVLookupInstrumentSourceParameter() +
-                                "\n");
+                                getCVLookupInstrumentSourceParameter() + "\n");
                         bw.write("Name: " +
-                                prideConverter.getProperties().
-                                getNameInstrumentSourceParameter() +
-                                "\n\n");
+                                prideConverter.getProperties().getNameInstrumentSourceParameter() + "\n\n");
 
                         bw.write("#instrument detector\n");
                         bw.write("Accession: " +
-                                prideConverter.getProperties().
-                                getAccessionInstrumentDetectorParamater() +
-                                "\n");
+                                prideConverter.getProperties().getAccessionInstrumentDetectorParamater() + "\n");
                         bw.write("cvLookup: " +
-                                prideConverter.getProperties().
-                                getCVLookupInstrumentDetectorParamater() +
-                                "\n");
+                                prideConverter.getProperties().getCVLookupInstrumentDetectorParamater() + "\n");
                         bw.write("Name: " +
-                                prideConverter.getProperties().
-                                getNameInstrumentDetectorParamater() +
-                                "\n\n");
+                                prideConverter.getProperties().getNameInstrumentDetectorParamater() + "\n\n");
 
                         bw.write("#analyzers\n");
-                        bw.write(prideConverter.getProperties().getAnalyzerList().
-                                size() +
-                                "\n");
+                        bw.write(prideConverter.getProperties().getAnalyzerList().size() + "\n");
 
-                        if (prideConverter.getProperties().getAnalyzerList().
-                                size() ==
-                                0) {
+                        if (prideConverter.getProperties().getAnalyzerList().size() == 0) {
                             bw.write("\n");
                         }
 
-                        Iterator analyzers = prideConverter.getProperties().
-                                getAnalyzerList().iterator();
+                        Iterator analyzers = prideConverter.getProperties().getAnalyzerList().iterator();
                         Iterator cvTerms;
 
                         AnalyzerImpl tempAnalyzer;
@@ -1912,13 +1896,9 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                             tempAnalyzer = (AnalyzerImpl) analyzers.next();
 
-                            cvTerms =
-                                    tempAnalyzer.getAnalyzerCvParameterList().
-                                    iterator();
+                            cvTerms = tempAnalyzer.getAnalyzerCvParameterList().iterator();
 
-                            bw.write(tempAnalyzer.getAnalyzerCvParameterList().
-                                    size() +
-                                    "\n");
+                            bw.write(tempAnalyzer.getAnalyzerCvParameterList().size() + "\n");
 
                             tempA = "";
                             numberOfTerms = 0;
@@ -1926,19 +1906,15 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                             while (cvTerms.hasNext()) {
                                 cvParams = (CvParamImpl) cvTerms.next();
 
-                                bw.write("Accession: " + cvParams.getAccession() +
-                                        "\n");
-                                bw.write("CVLookup: " + cvParams.getCVLookup() +
-                                        "\n");
+                                bw.write("Accession: " + cvParams.getAccession() + "\n");
+                                bw.write("CVLookup: " + cvParams.getCVLookup() + "\n");
                                 bw.write("Name: " + cvParams.getName() + "\n");
-                                bw.write("Value: " + cvParams.getValue() +
-                                        "\n\n");
+                                bw.write("Value: " + cvParams.getValue() + "\n\n");
                             }
                         }
 
                         bw.write("#processing methods\n");
-                        bw.write(tempProcessingMethods.size() +
-                                "\n");
+                        bw.write(tempProcessingMethods.size() + "\n");
 
                         if (tempProcessingMethods.size() == 0) {
                             bw.write("\n");
@@ -1946,8 +1922,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                         CvParamImpl temp;
 
-                        for (int i = 0; i <
-                                processingMethodsJTable.getRowCount(); i++) {
+                        for (int i = 0; i < processingMethodsJTable.getRowCount(); i++) {
 
                             temp = (CvParamImpl) tempProcessingMethods.get(i);
 
@@ -1955,10 +1930,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                             bw.write("CVLookup: " + temp.getCVLookup() + "\n");
                             bw.write("Name: " + temp.getName() + "\n");
 
-                            bw.write("Value: " +
-                                    (String) processingMethodsJTable.getValueAt(i,
-                                    2) +
-                                    "\n\n");
+                            bw.write("Value: " + (String) processingMethodsJTable.getValueAt(i, 2) + "\n\n");
                         }
 
                         bw.write("#software\n");
@@ -1995,9 +1967,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                         String newName;
 
-                        newName = instrumentPath +
-                                instrumentName +
-                                ".int";
+                        newName = instrumentPath + instrumentName + ".int";
 
                         while (new File(newName).exists()) {
                             instrumentName =
@@ -2005,9 +1975,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                                     "This name is already in use. Please provide a new name: ",
                                     "Instrument Name", JOptionPane.PLAIN_MESSAGE);
 
-                            newName = instrumentPath +
-                                    instrumentName +
-                                    ".int";
+                            newName = instrumentPath + instrumentName + ".int";
                         }
 
                         if (instrumentName != null) {
@@ -2018,48 +1986,32 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                                 BufferedWriter bw = new BufferedWriter(r);
 
                                 bw.write("#instrument name\n");
-                                bw.write("Name: " + instrumentName +
-                                        "\n\n");
+                                bw.write("Name: " + instrumentName + "\n\n");
 
                                 bw.write("#instrument source\n");
                                 bw.write("Accession: " +
-                                        prideConverter.getProperties().
-                                        getAccessionInstrumentSourceParameter() +
-                                        "\n");
+                                        prideConverter.getProperties().getAccessionInstrumentSourceParameter() + "\n");
                                 bw.write("cvLookup: " +
-                                        prideConverter.getProperties().
-                                        getCVLookupInstrumentSourceParameter() +
-                                        "\n");
+                                        prideConverter.getProperties().getCVLookupInstrumentSourceParameter() + "\n");
                                 bw.write("Name: " +
-                                        prideConverter.getProperties().
-                                        getNameInstrumentSourceParameter() +
-                                        "\n\n");
+                                        prideConverter.getProperties().getNameInstrumentSourceParameter() + "\n\n");
 
                                 bw.write("#instrument detector\n");
                                 bw.write("Accession: " +
-                                        prideConverter.getProperties().
-                                        getAccessionInstrumentDetectorParamater() +
-                                        "\n");
+                                        prideConverter.getProperties().getAccessionInstrumentDetectorParamater() + "\n");
                                 bw.write("cvLookup: " +
-                                        prideConverter.getProperties().
-                                        getCVLookupInstrumentDetectorParamater() +
-                                        "\n");
+                                        prideConverter.getProperties().getCVLookupInstrumentDetectorParamater() + "\n");
                                 bw.write("Name: " +
-                                        prideConverter.getProperties().
-                                        getNameInstrumentDetectorParamater() +
-                                        "\n\n");
+                                        prideConverter.getProperties().getNameInstrumentDetectorParamater() + "\n\n");
 
                                 bw.write("#analyzers\n");
-                                bw.write(prideConverter.getProperties().
-                                        getAnalyzerList().size() +
-                                        "\n");
+                                bw.write(prideConverter.getProperties().getAnalyzerList().size() + "\n");
 
                                 if (prideConverter.getProperties().getAnalyzerList().size() == 0) {
                                     bw.write("\n");
                                 }
 
-                                Iterator analyzers = prideConverter.getProperties().
-                                        getAnalyzerList().iterator();
+                                Iterator analyzers = prideConverter.getProperties().getAnalyzerList().iterator();
                                 Iterator cvTerms;
 
                                 AnalyzerImpl tempAnalyzer;
@@ -2072,13 +2024,9 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                                     tempAnalyzer = (AnalyzerImpl) analyzers.next();
 
-                                    cvTerms =
-                                            tempAnalyzer.getAnalyzerCvParameterList().
-                                            iterator();
+                                    cvTerms = tempAnalyzer.getAnalyzerCvParameterList().iterator();
 
-                                    bw.write(tempAnalyzer.getAnalyzerCvParameterList().
-                                            size() +
-                                            "\n");
+                                    bw.write(tempAnalyzer.getAnalyzerCvParameterList().size() + "\n");
 
                                     tempA = "";
                                     numberOfTerms = 0;
@@ -2086,22 +2034,15 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                                     while (cvTerms.hasNext()) {
                                         cvParams = (CvParamImpl) cvTerms.next();
 
-                                        bw.write("Accession: " +
-                                                cvParams.getAccession() +
-                                                "\n");
-                                        bw.write("CVLookup: " +
-                                                cvParams.getCVLookup() +
-                                                "\n");
-                                        bw.write("Name: " + cvParams.getName() +
-                                                "\n");
-                                        bw.write("Value: " + cvParams.getValue() +
-                                                "\n\n");
+                                        bw.write("Accession: " + cvParams.getAccession() + "\n");
+                                        bw.write("CVLookup: " + cvParams.getCVLookup() + "\n");
+                                        bw.write("Name: " + cvParams.getName() + "\n");
+                                        bw.write("Value: " + cvParams.getValue() + "\n\n");
                                     }
                                 }
 
                                 bw.write("#processing methods\n");
-                                bw.write(tempProcessingMethods.size() +
-                                        "\n");
+                                bw.write(tempProcessingMethods.size() + "\n");
 
                                 if (tempProcessingMethods.size() == 0) {
                                     bw.write("\n");
@@ -2109,8 +2050,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                                 CvParamImpl temp;
 
-                                for (int i = 0; i <
-                                        processingMethodsJTable.getRowCount(); i++) {
+                                for (int i = 0; i < processingMethodsJTable.getRowCount(); i++) {
 
                                     temp = (CvParamImpl) tempProcessingMethods.get(i);
 
@@ -2118,17 +2058,12 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                                     bw.write("CVLookup: " + temp.getCVLookup() + "\n");
                                     bw.write("Name: " + temp.getName() + "\n");
 
-                                    bw.write("Value: " +
-                                            (String) processingMethodsJTable.getValueAt(i,
-                                            2) + "\n\n");
+                                    bw.write("Value: " + (String) processingMethodsJTable.getValueAt(i, 2) + "\n\n");
                                 }
 
                                 bw.write("#software\n");
-                                bw.write("Name: " +
-                                        softwareNameJTextField.getText() +
-                                        "\n");
-                                bw.write("Version: " +
-                                        softwareVersionJTextField.getText());
+                                bw.write("Name: " + softwareNameJTextField.getText() + "\n");
+                                bw.write("Version: " + softwareVersionJTextField.getText());
 
                                 valuesChanged = false;
 
@@ -2171,10 +2106,8 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         }
 
         if (!cancel) {
-            lastSelectedInstrumentName =
-                    (String) instrumentNameJComboBox.getSelectedItem();
-            String selectedInstrumentName =
-                    (String) instrumentNameJComboBox.getSelectedItem();
+            lastSelectedInstrumentName = (String) instrumentNameJComboBox.getSelectedItem();
+            String selectedInstrumentName = (String) instrumentNameJComboBox.getSelectedItem();
 
             prideConverter.getUserProperties().setCurrentSelectedInstrument(selectedInstrumentName);
 
@@ -2363,9 +2296,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         instrumentSourceJTextField.setCaretPosition(0);
                     }
 
-                    if (prideConverter.getProperties().
-                            getNameInstrumentDetectorParamater().length() >
-                            0) {
+                    if (prideConverter.getProperties().getNameInstrumentDetectorParamater().length() > 0) {
                         this.instrumentDetectorJTextField.setText(prideConverter.getProperties().
                                 getNameInstrumentDetectorParamater() +
                                 " [" +
@@ -2435,8 +2366,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         "The file could not be deleted!");
             } else {
                 lastSelectedInstrumentName = null;
-                valuesChanged =
-                        false;
+                valuesChanged = false;
                 readInstrumentsFromFile();
             }
         }
