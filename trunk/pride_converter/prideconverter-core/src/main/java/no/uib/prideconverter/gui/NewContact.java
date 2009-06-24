@@ -15,7 +15,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import no.uib.prideconverter.util.ComboBoxInputable;
+import no.uib.prideconverter.util.MyComboBoxRenderer;
 import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.implementation.mzData.ContactImpl;
 
@@ -45,6 +47,8 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
         super(parent, modal);
         this.experimentPropertiesFrame = experimentProperties;
         initComponents();
+
+        namesJComboBox.setRenderer(new MyComboBoxRenderer(null, SwingConstants.CENTER));
 
         // alters the usage if TAB so that it can be used to move between fields
         KeyStroke ctrlTab = KeyStroke.getKeyStroke("ctrl TAB");

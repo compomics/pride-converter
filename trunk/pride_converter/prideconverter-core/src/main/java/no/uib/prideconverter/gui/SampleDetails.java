@@ -29,6 +29,7 @@ import javax.swing.table.JTableHeader;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.StringTokenizer;
+import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import no.uib.prideconverter.util.ComboBoxInputable;
@@ -430,7 +431,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
             comboboxTooltips.add(null);
 
-            namesJComboBox.setRenderer(new MyComboBoxRenderer(comboboxTooltips));
+            namesJComboBox.setRenderer(new MyComboBoxRenderer(comboboxTooltips, SwingConstants.CENTER));
 
             sampleNames.insertElementAt("- Please select a sample set -", 0);
             sampleNames.add("   Create a new sample set...");
