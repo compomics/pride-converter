@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import no.uib.prideconverter.util.ComboBoxInputable;
 import no.uib.prideconverter.util.MyComboBoxRenderer;
@@ -144,7 +145,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
             protocolNames.insertElementAt("- Please select a protocol -", 0);
             protocolNames.add("   Create a new protocol...");
 
-            namesJComboBox.setRenderer(new MyComboBoxRenderer(comboboxTooltips));
+            namesJComboBox.setRenderer(new MyComboBoxRenderer(comboboxTooltips, SwingConstants.CENTER));
             namesJComboBox.setModel(new DefaultComboBoxModel(protocolNames));
             namesJComboBox.setSelectedItem(prideConverter.getUserProperties().getCurrentProtocol());
 

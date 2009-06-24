@@ -12,8 +12,10 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import no.uib.prideconverter.util.BareBonesBrowserLaunch;
+import no.uib.prideconverter.util.MyComboBoxRenderer;
 import no.uib.prideconverter.util.OLSInputable;
 import no.uib.prideconverter.util.Util;
 
@@ -85,6 +87,8 @@ public class OLSDialog extends javax.swing.JDialog {
         this.mappedTerm = term;
 
         initComponents();
+
+        ontologyJComboBox.setRenderer(new MyComboBoxRenderer(null, SwingConstants.CENTER));
 
         olsResultsJTable.getTableHeader().setReorderingAllowed(false);
 

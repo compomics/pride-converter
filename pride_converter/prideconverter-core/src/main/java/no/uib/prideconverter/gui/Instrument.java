@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -567,12 +568,10 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             instrumentNames.insertElementAt("- Please select an instrument -", 0);
             instrumentNames.add("   Create a new instrument...");
 
-            instrumentNameJComboBox.setRenderer(new MyComboBoxRenderer(comboboxTooltips));
+            instrumentNameJComboBox.setRenderer(new MyComboBoxRenderer(comboboxTooltips, SwingConstants.CENTER));
             instrumentNameJComboBox.setModel(new DefaultComboBoxModel(instrumentNames));
-            instrumentNameJComboBox.setSelectedItem(prideConverter.getUserProperties().
-                    getCurrentSelectedInstrument());
-            lastSelectedInstrumentName = prideConverter.getUserProperties().
-                    getCurrentSelectedInstrument();
+            instrumentNameJComboBox.setSelectedItem(prideConverter.getUserProperties().getCurrentSelectedInstrument());
+            lastSelectedInstrumentName = prideConverter.getUserProperties().getCurrentSelectedInstrument();
 
             instrumentNameJComboBoxActionPerformed(null);
         } catch (FileNotFoundException ex) {
