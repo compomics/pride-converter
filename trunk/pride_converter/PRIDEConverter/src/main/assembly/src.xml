@@ -1,0 +1,51 @@
+<assembly>
+    
+    <formats>
+        <format>zip</format>
+    </formats>
+
+    <files>
+        <file>
+              <source>src/main/properties/Properties/UserProperties.prop</source>
+              <outputDirectory>${assembly.dir}/Properties</outputDirectory>
+              <filtered>true</filtered>
+            </file>
+    </files>
+
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+
+    <fileSets>
+
+        <fileSet>
+            <directory>src/main/properties</directory>
+            <includes>
+            </includes>
+            <excludes>
+                <exclude>Properties/UserProperties.prop</exclude>
+            </excludes>
+            <outputDirectory>${assembly.dir}</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>target</directory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+            <outputDirectory>${assembly.dir}</outputDirectory>
+        </fileSet>
+
+    </fileSets>
+
+
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>${assembly.dir}/lib</outputDirectory>
+            <unpack>false</unpack>
+            <scope>runtime</scope>
+            <excludes>
+                <exclude>no.uib:PRIDEConverter</exclude>
+            </excludes>
+        </dependencySet>
+    </dependencySets>
+</assembly>
