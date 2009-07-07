@@ -18,7 +18,7 @@
     <fileSets>
 
         <fileSet>
-            <directory>src/main/properties</directory>
+            <directory>src/main/props</directory>
             <includes>
             </includes>
             <excludes>
