@@ -4,18 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.sql.Driver;
 import java.sql.SQLException;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.math.BigDecimal;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,7 +44,7 @@ import de.proteinms.omxparser.util.MSModHit;
 import de.proteinms.omxparser.util.MSPepHit;
 import de.proteinms.omxparser.util.MSSpectrum;
 
-import java.io.InputStreamReader;
+import java.io.*;
 import java.sql.Connection;
 import java.util.Arrays;
 import java.util.Collection;
@@ -117,7 +109,7 @@ import uk.ac.ebi.tpp_to_pride.wrappers.peptideprophet.*;
 public class PRIDEConverter {
 
     private static String wizardName = "PRIDE Converter";
-    private static String prideConverterVersionNumber = "v1.18.2";
+    private static String prideConverterVersionNumber = "v" + getVersion();
     private static ArrayList<IdentificationGeneral> ids;
     private static Collection identifications;
     private static int totalNumberOfSpectra = 0;
@@ -135,7 +127,7 @@ public class PRIDEConverter {
     private static boolean useErrorLog = true;
     private static boolean debug = false;
 
-    /** 
+    /**
      * Creates a new instance of PRIDEConverter.
      * 
      * Opens the first frame of the wizard (Data Source Selection).
@@ -145,6 +137,19 @@ public class PRIDEConverter {
         userProperties.readUserPropertiesFromFile(null);
         properties = new Properties();
         new DataSourceSelection(this, null);
+    }
+
+    private static String getVersion() {
+
+        java.util.Properties p = new java.util.Properties();
+        try {
+            InputStream is = PRIDEConverter.class.getClassLoader().getResourceAsStream("prideconverter.properties");
+            p.load( is );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return p.getProperty("converter.version");
     }
 
     /**
@@ -1114,7 +1119,6 @@ public class PRIDEConverter {
      * This method transforms spectra from X!Tandem files, returning
      * a HashMap that maps the filenames to their mzData spectrumID.
      *
-     * @param    aSpectra   Collection with the Spectrumfile instances to to transform.
      * @param    aTransformedSpectra   ArrayList that will contain the transformed
      *                                 mzData spectra. Please note that this is a
      *                                 reference parameter.
@@ -2591,7 +2595,6 @@ public class PRIDEConverter {
      * This method transforms spectra from Spectrum Mill and Sequest files,
      * returning a HashMap that maps the filenames to their mzData spectrumID.
      *
-     * @param    aSpectra   Collection with the Spectrumfile instances to to transform.
      * @param    aTransformedSpectra   ArrayList that will contain the transformed
      *                                 mzData spectra. Please note that this is a
      *                                 reference parameter.
@@ -3797,7 +3800,6 @@ public class PRIDEConverter {
      * This method transforms spectra from PKL and PKX files, returning
      * a HashMap that maps the filenames to their mzData spectrumID.
      *
-     * @param    aSpectra   Collection with the Spectrumfile instances to to transform.
      * @param    aTransformedSpectra   ArrayList that will contain the transformed
      *                                 mzData spectra. Please note that this is a
      *                                 reference parameter.
@@ -4251,7 +4253,6 @@ public class PRIDEConverter {
      * This method transforms spectra from mxML files, returning
      * a HashMap that maps the filenames to their mzData spectrumID.
      *
-     * @param    aSpectra   Collection with the Spectrumfile instances to to transform.
      * @param    aTransformedSpectra   ArrayList that will contain the transformed
      *                                 mzData spectra. Please note that this is a
      *                                 reference parameter.
@@ -4449,7 +4450,6 @@ public class PRIDEConverter {
      * This method transforms spectra from mzXML files, returning
      * a HashMap that maps the filenames to their mzData spectrumID.
      *
-     * @param    aSpectra   Collection with the Spectrumfile instances to to transform.
      * @param    aTransformedSpectra   ArrayList that will contain the transformed
      *                                 mzData spectra. Please note that this is a
      *                                 reference parameter.
@@ -4616,7 +4616,6 @@ public class PRIDEConverter {
      * This method transforms spectra from Mascot Generic files, returning
      * a HashMap that maps the filenames to their mzData spectrumID.
      *
-     * @param    aSpectra   Collection with the Spectrumfile instances to to transform.
      * @param    aTransformedSpectra   ArrayList that will contain the transformed
      *                                 mzData spectra. Please note that this is a
      *                                 reference parameter.
@@ -4889,7 +4888,6 @@ public class PRIDEConverter {
      * When completed "identification" contains all the identifications, and mzDataFile contains
      * the spectra as mzData.
      *
-     * @param    aSpectra   Collection with the Spectrumfile instances to to transform.
      * @param    aTransformedSpectra   ArrayList that will contain the transformed
      *                                 mzData spectra. Please note that this is a
      *                                 reference parameter.
@@ -6420,7 +6418,6 @@ public class PRIDEConverter {
      * This method transforms spectra from TPP files, returning
      * a HashMap that maps the filenames to their mzData spectrumID.
      *
-     * @param    aSpectra   Collection with the Spectrumfile instances to transform.
      * @param    aTransformedSpectra   ArrayList that will contain the transformed
      *                                 mzData spectra. Please note that this is a
      *                                 reference parameter.
@@ -7044,7 +7041,6 @@ public class PRIDEConverter {
      * This method transforms spectra from MS2 files, returning
      * a HashMap that maps the filenames to their mzData spectrumID.
      *
-     * @param    aSpectra   Collection with the Spectrumfile instances to to transform.
      * @param    aTransformedSpectra   ArrayList that will contain the transformed
      *                                 mzData spectra. Please note that this is a
      *                                 reference parameter.
@@ -7420,7 +7416,6 @@ public class PRIDEConverter {
      * This method transforms spectra from Mascot Dat files, returning
      * a HashMap that maps the filenames to their mzData spectrumID.
      *
-     * @param    aSpectra   Collection with the Spectrumfile instances to to transform.
      * @param    aTransformedSpectra   ArrayList that will contain the transformed
      *                                 mzData spectra. Please note that this is a
      *                                 reference parameter.
@@ -7937,7 +7932,6 @@ public class PRIDEConverter {
      * This method transforms spectra from OMSSA files, returning
      * a HashMap that maps the filenames to their mzData spectrumID.
      *
-     * @param    aSpectra   Collection with the Spectrumfile instances to to transform.
      * @param    aTransformedSpectra   ArrayList that will contain the transformed
      *                                 mzData spectra. Please note that this is a
      *                                 reference parameter.
@@ -8602,7 +8596,6 @@ public class PRIDEConverter {
      * This method transforms spectra from ms_lims, returning
      * a HashMap that maps the filenames to their mzData spectrumID.
      *
-     * @param    aSpectra   Collection with the Spectrumfile instances to to transform.
      * @param    aTransformedSpectra   ArrayList that will contain the transformed
      *                                 mzData spectra. Please note that this is a
      *                                 reference parameter.
@@ -9468,7 +9461,7 @@ public class PRIDEConverter {
         /**
          * Sets the list of CV parameters
          *
-         * @param the list of CV parameters
+         * @param aCvParams the list of CV parameters
          */
         public void setCvParams(Collection aCvParams) {
             this.cvParams = aCvParams;
@@ -9486,7 +9479,7 @@ public class PRIDEConverter {
         /**
          * Sets the list of user parameters
          *
-         * @param the list of user parameters
+         * @param aUserParams the list of user parameters
          */
         public void setUserParams(Collection aUserParams) {
             this.userParams = aUserParams;
@@ -9504,7 +9497,7 @@ public class PRIDEConverter {
         /**
          * Sets the scan number
          *
-         * @param the scan number
+         * @param scanNumber the scan number
          */
         public void setScanNumber(Integer scanNumber) {
             this.scanNumber = scanNumber;
@@ -9522,7 +9515,7 @@ public class PRIDEConverter {
         /**
          * Sets the sequence
          *
-         * @param the sequence
+         * @param sequence the sequence
          */
         public void setSequence(String sequence) {
             this.sequence = sequence;

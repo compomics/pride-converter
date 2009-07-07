@@ -1,5 +1,5 @@
 PRIDEConverter
-v1.18.2*
+${version.number}*
 OutputPath: user.home
 UserName: 
 ServerHost: localhost

@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>no.uib</groupId>
+        <artifactId>prideconverter-master</artifactId>
+        <version>1</version>
+    </parent>
+
     <groupId>no.uib</groupId>
     <artifactId>PRIDEConverter</artifactId>
     <packaging>jar</packaging>
-    <version>1.18.2</version>
+    <version>${version.number}</version>
+
     <name>PRIDEConverter</name>
     <description>PRIDE Converter converts MS data into valid PRIDE XML for submission to the publicly available PRIDE database.
-It presents a convenient, wizard-like graphical user interface, and includes efficient access to the Ontology Lookup Service (OLS).</description>
+        It presents a convenient, wizard-like graphical user interface, and includes efficient access to the Ontology Lookup Service (OLS).</description>
     <url>http://code.google.com/p/pride-converter/</url>
 
 
@@ -36,9 +44,23 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         </developer>
     </developers>
 
+    <properties>
+        <assembly.dir>PRIDE_Converter_v${version.number}</assembly.dir>
+    </properties>
 
     <!-- Build -->
     <build>
+
+        <resources>
+            <resource>
+                <directory>../</directory>
+                <includes>
+                    <include>prideconverter.properties</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
 
             <!-- Compiler plugin -->
@@ -49,27 +71,6 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                     <source>1.4</source>
                     <target>1.4</target>
                 </configuration>
-            </plugin>
-
-            <!-- Dependency plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/PRIDE_Converter_v${project.version}/lib</outputDirectory>
-                            <overWriteReleases>true</overWriteReleases>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                            <excludeTransitive>false</excludeTransitive>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
 
             <!-- Jar plugin -->
@@ -84,31 +85,34 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                             <classpathPrefix>lib</classpathPrefix>
                         </manifest>
                     </archive>
-                    <outputDirectory>${project.build.directory}/PRIDE_Converter_v${project.version}</outputDirectory>
+                    <excludes>
+                        <exclude>src/main/resources</exclude>
+                        <exclude>src/main/resources/*.ico</exclude>
+                        <exclude>src/main/resources/*.txt</exclude>
+                    </excludes>
+                    <!--<outputDirectory>${project.build.directory}/PRIDE_Converter_v${project.version}</outputDirectory>-->
+                    <outputDirectory>${project.build.directory}</outputDirectory>
                 </configuration>
             </plugin>
 
-            <!-- Resources plugin -->
+            <!-- Assembly plugin to assemble the release package -->
             <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.3</version>
+                <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
+                        <id>assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>copy-resources</goal>
+                            <goal>assembly</goal>
                         </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/PRIDE_Converter_v${project.version}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/resources</directory>
-                                </resource>
-                            </resources>              
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <finalName>${assembly.dir}</finalName>
+                    <descriptors>
+                        <descriptor>${basedir}/src/main/assembly/src.xml</descriptor>
+                    </descriptors>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -119,7 +123,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         <dependency>
             <groupId>no.uib</groupId>
             <artifactId>prideconverter-core</artifactId>
-            <version>1.18.2</version>
+            <version>${version.number}</version>
         </dependency>
     </dependencies>
 </project>

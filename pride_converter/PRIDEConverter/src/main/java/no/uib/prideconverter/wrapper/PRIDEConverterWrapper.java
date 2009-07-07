@@ -21,14 +21,17 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class PRIDEConverterWrapper {
 
     private boolean debug = false;
-    private String jarFileName = "PRIDEConverter-1.18.2.jar";
-    private String prideConverterSourceJarFileName = "prideconverter-core-1.18.2.jar";
+    private String jarFileName;
+    private String prideConverterSourceJarFileName;
 
     /**
      * Starts the launcher by calling the launch method. Use this as the 
      * main class in the jar file.
      */
     public PRIDEConverterWrapper() {
+        String versionEnding = getVersion() + ".jar";
+        jarFileName = "PRIDEConverter-" + versionEnding;
+        prideConverterSourceJarFileName = "prideconverter-core-" + versionEnding;
         try {
             PlasticLookAndFeel.setPlasticTheme(new SkyKrupp());
             UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
@@ -41,6 +44,19 @@ public class PRIDEConverterWrapper {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String getVersion() {
+
+        Properties p = new Properties();
+        try {
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream("prideconverter.properties");
+            p.load( is );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return p.getProperty("converter.version");
     }
 
     /**
