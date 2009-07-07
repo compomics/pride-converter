@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import uk.ac.ebi.pride.model.implementation.core.ModificationImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.UserParamImpl;
+import uk.ac.ebi.pride.model.interfaces.core.FragmentIon;
 
 /**
  * This class contains information about an identification.
@@ -29,6 +30,7 @@ public class IdentificationGeneral {
     private ArrayList<CvParamImpl> cvParams;
     private ArrayList<ModificationImpl> modifications;
     private ArrayList<UserParamImpl> userParams;
+    private ArrayList<FragmentIon> fragmentIons;
 
     /**
      * Creates a new IdentificationGeneral object that store details on a 
@@ -49,6 +51,7 @@ public class IdentificationGeneral {
      * @param cvParams cv parameters associated with the identification
      * @param userParameters user parameters associated with the identification
      * @param modifications the peptide modifications
+     * @param fragmentIons the fragment ions
      */
     public IdentificationGeneral(String spectrumFileId, String peptideAccession,
             String searchEngine, String database, String databaseVersion,
@@ -57,7 +60,8 @@ public class IdentificationGeneral {
             String[] iTraqNorm, String[] iTraqUT, String[][] iTraqRatio,
             ArrayList<CvParamImpl> cvParams,
             ArrayList<UserParamImpl> userParameters,
-            ArrayList<ModificationImpl> modifications) {
+            ArrayList<ModificationImpl> modifications,
+            ArrayList<FragmentIon> fragmentIons) {
 
         this.spectrumFileId = spectrumFileId;
         this.peptideAccession = peptideAccession;
@@ -74,6 +78,7 @@ public class IdentificationGeneral {
         this.cvParams = cvParams;
         this.userParams = userParameters;
         this.modifications = modifications;
+        this.fragmentIons = fragmentIons;
     }
 
     /**
@@ -344,5 +349,23 @@ public class IdentificationGeneral {
      */
     public void setModifications(ArrayList<ModificationImpl> modifications) {
         this.modifications = modifications;
+    }
+
+    /**
+     * Returns the fragment ions
+     *
+     * @return the fragmentIons
+     */
+    public ArrayList<FragmentIon> getFragmentIons() {
+        return fragmentIons;
+    }
+
+    /**
+     * Sets the fragment ions
+     *
+     * @param fragmentIons the fragmentIons to set
+     */
+    public void setFragmentIons(ArrayList<FragmentIon> fragmentIons) {
+        this.fragmentIons = fragmentIons;
     }
 }
