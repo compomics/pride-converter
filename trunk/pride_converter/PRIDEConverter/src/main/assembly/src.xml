@@ -6,7 +6,7 @@
 
     <files>
         <file>
-              <source>src/main/properties/Properties/UserProperties.prop</source>
+              <source>src/main/props/Properties/UserProperties.prop</source>
               <outputDirectory>${assembly.dir}/Properties</outputDirectory>
               <filtered>true</filtered>
             </file>
