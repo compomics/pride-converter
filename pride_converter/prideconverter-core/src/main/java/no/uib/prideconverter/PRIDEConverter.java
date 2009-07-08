@@ -180,7 +180,7 @@ public class PRIDEConverter {
             //test to check if the supported version of ms_lims is used
             try {
                 Protocol.getAllProtocols(conn); // test for ms_lims 7
-                //Identification.getIdentification(conn, ""); // test for ms_lims 6
+            //Identification.getIdentification(conn, ""); // test for ms_lims 6
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(dataBaseDetails,
                         "Database connection not established:\n" +
@@ -883,7 +883,7 @@ public class PRIDEConverter {
                     }
 
                     try {
-                        progressDialog.setTitle("Validating XML File. Please Wait...");
+                        progressDialog.setTitle("Validating PRIDE XML File. Please Wait...");
                         progressDialog.setIntermidiate(true);
                     } catch (NullPointerException e) {
                         Util.writeToErrorLog("Progress bar: NullPointerException!!!\n" + e.toString());
@@ -902,13 +902,15 @@ public class PRIDEConverter {
                     FileReader reader = new FileReader(completeFileName);
                     XMLValidationErrorHandler xmlErrors = PrideXmlValidator.validate(reader);
 
-                    progressDialog.setVisible(false);
-                    progressDialog.dispose();
-                    outputFrame.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
                     xmlValidated = xmlErrors.noErrors();
                     reader.close();
 
                     if (!xmlValidated) {
+
+                        progressDialog.setVisible(false);
+                        progressDialog.dispose();
+                        outputFrame.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
                         Util.writeToErrorLog("PRIDE XML validation failed!");
                         Util.writeToErrorLog(xmlErrors.getErrorsFormattedAsPlainText());
                         JOptionPane.showMessageDialog(
@@ -918,9 +920,22 @@ public class PRIDEConverter {
                                 "PRIDE XML Validation Failed",
                                 JOptionPane.ERROR_MESSAGE);
                     } else {
-                        
+
                         if (debug) {
                             System.out.println("PRIDE XML validated.");
+                        }
+
+
+                        // get the size (in MB) of the PRIDE XML file before zipping
+                        double sizeOfFileBeforeZipping = Util.roundDouble(((double) new File(completeFileName).length() /
+                                properties.NUMBER_OF_BYTES_PER_MEGABYTE), 2);
+
+
+                        try {
+                            progressDialog.setTitle("Zipping PRIDE XML File. Please Wait...");
+                            progressDialog.setIntermidiate(true);
+                        } catch (NullPointerException e) {
+                            Util.writeToErrorLog("Progress bar: NullPointerException!!!\n" + e.toString());
                         }
 
 
@@ -943,15 +958,23 @@ public class PRIDEConverter {
                         gzos.close();
 
 
+                        // get the size (in MB) of the PRIDE XML file after zipping
+                        double sizeOfZippedFile = Util.roundDouble(((double) new File(completeFileName + ".gz").length() /
+                                properties.NUMBER_OF_BYTES_PER_MEGABYTE), 2);
+
+
+                        progressDialog.setVisible(false);
+                        progressDialog.dispose();
+                        outputFrame.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
                         // delete the unzipped version of the PRIDE XML file
-                        if(!new File(completeFileName).delete()){
+                        if (!new File(completeFileName).delete()) {
                             JOptionPane.showMessageDialog(outputFrame,
                                     "Not able to delete the original (unzipped) PRIDE XML file " +
-                                completeFileName,
-                                "Could Not Delete File",
-                                JOptionPane.INFORMATION_MESSAGE);
+                                    completeFileName,
+                                    "Could Not Delete File",
+                                    JOptionPane.INFORMATION_MESSAGE);
                         }
-
 
                         int spectraCount = -1;
                         int peptideIdentificationsCount = -1;
@@ -983,14 +1006,12 @@ public class PRIDEConverter {
 
                         // present a dialog with information about the created file
                         JOptionPane.showMessageDialog(outputFrame, "PRIDE XML File Created Successfully:\n" +
-                                completeFileName +
+                                completeFileName  + ".gz" +
                                 "\n\nThe File Includes:\n" +
                                 "Spectra: " + spectraCount + "\n" +
                                 "Peptide Identifications: " + peptideIdentificationsCount + "\n" +
                                 "Protein Identifications: " + identifications.size() + "\n\n" +
-                                "PRIDE XML File Size: " +
-                                Util.roundDouble(((double) new File(completeFileName + ".gz").length() /
-                                properties.NUMBER_OF_BYTES_PER_MEGABYTE), 2) +
+                                "PRIDE XML File Size: " + sizeOfZippedFile +
                                 " MB",
                                 "PRIDE XML File Created",
                                 JOptionPane.INFORMATION_MESSAGE);
@@ -998,9 +1019,15 @@ public class PRIDEConverter {
                         // insert the information into the OutputDetails frame
                         outputFrame.insertConvertedFileDetails(spectraCount,
                                 peptideIdentificationsCount, identifications.size(),
-                                Util.roundDouble(((double) new File(completeFileName + ".gz").length() /
-                                properties.NUMBER_OF_BYTES_PER_MEGABYTE), 2),
+                                sizeOfZippedFile,
                                 completeFileName + ".gz");
+
+
+                        // check the size of the unzipped file and compare it to the
+                        // maximum size recommended before using the FTP server
+                        if (sizeOfFileBeforeZipping > 15) {
+                            new RequestFtpAccess(outputFrame, true);
+                        }
                     }
 
                     // memory clean up
@@ -9134,7 +9161,7 @@ public class PRIDEConverter {
         public void addPeptide(Long aSpectrumRef, String aSequence,
                 Integer aStart, Double aScore, Double aThreshold,
                 Collection modifications, Collection cVParams,
-                Collection aUserParams,  Collection<FragmentIon> aFragmentIons) {
+                Collection aUserParams, Collection<FragmentIon> aFragmentIons) {
 
             iPeptides.add(new PeptideImpl(aSpectrumRef, aSequence, aStart, modifications, cVParams, aUserParams, aFragmentIons));
             iScores.add(aScore);
