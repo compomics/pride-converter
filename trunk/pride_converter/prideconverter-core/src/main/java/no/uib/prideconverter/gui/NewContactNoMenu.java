@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
@@ -27,7 +28,7 @@ import uk.ac.ebi.pride.model.implementation.mzData.ContactImpl;
  */
 public class NewContactNoMenu extends javax.swing.JDialog {
 
-    private ExperimentProperties experimentPropertiesFrame;
+    private ContactInputable contactFrame;
     private int selectedRow = -1;
     private String contactPath;
     private String currentContactName;
@@ -41,18 +42,63 @@ public class NewContactNoMenu extends javax.swing.JDialog {
      * @param selectedRow the row to edit, -1 if adding new row
      * @param name
      */
-    public NewContactNoMenu(JFrame parent, ExperimentProperties experimentProperties, boolean modal, int selectedRow,
+    public NewContactNoMenu(JFrame parent, ContactInputable contactFrame, boolean modal, int selectedRow,
             String name, String eMail, String institution) {
         super(parent, modal);
-        this.experimentPropertiesFrame = experimentProperties;
-
-        initComponents();
+        this.contactFrame = contactFrame;
 
         this.selectedRow = selectedRow;
 
         contactNameJTextField.setText(name);
         contactInfoJTextField.setText(eMail);
         institutionJTextArea.setText(institution);
+
+        setUpDialog();
+ 
+        currentContactName = name;
+
+        readContactsFromFile();
+
+        setLocationRelativeTo(parent);
+        setVisible(true);
+    }
+
+    /**
+     * Opens a new NewContactNoMenu dialog
+     *
+     * @param experimentProperties a reference to the ExperimentProperties frame
+     * @param modal
+     * @param selectedRow the row to edit, -1 if adding new row
+     * @param name
+     */
+    public NewContactNoMenu(JDialog parent, ContactInputable contactFrame, boolean modal, int selectedRow,
+            String name, String eMail, String institution) {
+        super(parent, modal);
+        this.contactFrame = contactFrame;
+
+        this.selectedRow = selectedRow;
+
+        contactNameJTextField.setText(name);
+        contactInfoJTextField.setText(eMail);
+        institutionJTextArea.setText(institution);
+
+        setUpDialog();
+
+        currentContactName = name;
+
+        readContactsFromFile();
+
+        setLocationRelativeTo(parent);
+        setVisible(true);
+    }
+
+    /**
+     * Contains the code that is used by both constructors to keep from
+     * having to duplicate the code.
+     */
+    private void setUpDialog(){
+
+        initComponents();
 
         // alters the usage if TAB so that it can be used to move between fields
         KeyStroke ctrlTab = KeyStroke.getKeyStroke("ctrl TAB");
@@ -65,17 +111,10 @@ public class NewContactNoMenu extends javax.swing.JDialog {
         institutionJTextArea.getInputMap().put(ctrlTab, "insert-tab");
 
         // only works for Java 1.6 and newer
-//        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
-//                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
+        //        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+        //                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
 
         institutionJTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
-
-        currentContactName = name;
-
-        readContactsFromFile();
-
-        setLocationRelativeTo(experimentPropertiesFrame);
-        setVisible(true);
     }
 
     /**
@@ -336,7 +375,7 @@ public class NewContactNoMenu extends javax.swing.JDialog {
         boolean alreadyInTable = false;
 
         if (selectedRow == -1) {
-            alreadyInTable = experimentPropertiesFrame.contactAlreadyInTable(contactNameJTextField.getText());
+            alreadyInTable = contactFrame.contactAlreadyInTable(contactNameJTextField.getText());
         }
 
         if (!alreadyInTable) {
@@ -383,7 +422,7 @@ public class NewContactNoMenu extends javax.swing.JDialog {
                 ex.printStackTrace();
             }
 
-            experimentPropertiesFrame.addContact(
+            contactFrame.addContact(
                     new ContactImpl(
                     tempInstitution,
                     contactNameJTextField.getText(),

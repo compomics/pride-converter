@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -37,7 +38,7 @@ import uk.ac.ebi.pride.xml.MzDataXMLUnmarshaller;
  * 
  * Created March 2008
  */
-public class ExperimentProperties extends javax.swing.JFrame {
+public class ExperimentProperties extends javax.swing.JFrame implements ContactInputable {
 
     private PRIDEConverter prideConverter;
     private Vector columnToolTips;
@@ -1535,6 +1536,14 @@ public class ExperimentProperties extends javax.swing.JFrame {
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }
+
+    /**
+     * See ContactInputable
+     */
+    public Window getWindow() {
+        return (Window) this;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutJButton;
     private javax.swing.JButton addContactJButton;

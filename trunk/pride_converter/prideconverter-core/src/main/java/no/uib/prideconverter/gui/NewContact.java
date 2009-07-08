@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
@@ -30,7 +31,7 @@ import uk.ac.ebi.pride.model.implementation.mzData.ContactImpl;
  */
 public class NewContact extends javax.swing.JDialog implements ComboBoxInputable {
 
-    private ExperimentProperties experimentPropertiesFrame;
+    private ContactInputable contactFrame;
     private int selectedRow = -1;
     private String contactPath;
     private String currentContactName;
@@ -38,71 +39,39 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
     private boolean valuesChanged = false;
 
     /**
-     * Opens a new NewContact dialog
+     * Opens a new NewContact dialog with a JFrame as a parent
      * 
      * @param experimentProperties a reference to the ExperimentProperties frame
      * @param modal
      */
-    public NewContact(JFrame parent, ExperimentProperties experimentProperties, boolean modal) {
-        super(parent, modal);
-        this.experimentPropertiesFrame = experimentProperties;
-        initComponents();
+    public NewContact(JFrame frame, ContactInputable contactFrame, boolean modal) {
+        super(frame, modal);
+        this.contactFrame = contactFrame;
 
-        namesJComboBox.setRenderer(new MyComboBoxRenderer(null, SwingConstants.CENTER));
-
-        // alters the usage if TAB so that it can be used to move between fields
-        KeyStroke ctrlTab = KeyStroke.getKeyStroke("ctrl TAB");
-        KeyStroke tab = KeyStroke.getKeyStroke("TAB");
-        Set set = new HashSet(institutionJTextArea.getFocusTraversalKeys(
-                KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
-        set.remove(ctrlTab);
-        set.add(tab);
-        institutionJTextArea.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, set);
-        institutionJTextArea.getInputMap().put(ctrlTab, "insert-tab");
-
-        // only works for Java 1.6 and newer
-//        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
-//                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
-
-        institutionJTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
+        setUpDialog();
 
         currentContactName = null;
         readContactsFromFile();
 
-        setLocationRelativeTo(experimentProperties);
+        setLocationRelativeTo(contactFrame.getWindow());
         setVisible(true);
     }
 
     /**
-     * Opens a new NewContact dialog
+     * Opens a new NewContact dialog with a JFrame as a parent
      * 
      * @param experimentProperties a reference to the ExperimentProperties frame
      * @param modal
      * @param selectedRow the row to edit, -1 if adding new row
      * @param name
      */
-    public NewContact(JFrame parent, ExperimentProperties experimentProperties, boolean modal,
+    public NewContact(JFrame parent, ContactInputable contactFrame, boolean modal,
             int selectedRow, String name) {
         super(parent, modal);
-        this.experimentPropertiesFrame = experimentProperties;
+        this.contactFrame = contactFrame;
         this.selectedRow = selectedRow;
-        initComponents();
 
-        // alters the usage if TAB so that it can be used to move between fields
-        KeyStroke ctrlTab = KeyStroke.getKeyStroke("ctrl TAB");
-        KeyStroke tab = KeyStroke.getKeyStroke("TAB");
-        Set set = new HashSet(institutionJTextArea.getFocusTraversalKeys(
-                KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
-        set.remove(ctrlTab);
-        set.add(tab);
-        institutionJTextArea.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, set);
-        institutionJTextArea.getInputMap().put(ctrlTab, "insert-tab");
-
-        // only works for Java 1.6 and newer
-//        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
-//                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
-
-        institutionJTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
+        setUpDialog();
 
         currentContactName = name;
 
@@ -110,6 +79,76 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
 
         setLocationRelativeTo(parent);
         setVisible(true);
+    }
+
+    /**
+     * Opens a new NewContact dialog with a JDialog as a parent
+     *
+     * @param experimentProperties a reference to the ExperimentProperties frame
+     * @param modal
+     */
+    public NewContact(JDialog frame, ContactInputable contactFrame, boolean modal) {
+        super(frame, modal);
+        this.contactFrame = contactFrame;
+
+        setUpDialog();
+
+        currentContactName = null;
+        readContactsFromFile();
+
+        setLocationRelativeTo(contactFrame.getWindow());
+        setVisible(true);
+    }
+
+    /**
+     * Opens a new NewContact dialog with a JDialog as a parent
+     *
+     * @param experimentProperties a reference to the ExperimentProperties frame
+     * @param modal
+     * @param selectedRow the row to edit, -1 if adding new row
+     * @param name
+     */
+    public NewContact(JDialog parent, ContactInputable contactFrame, boolean modal,
+            int selectedRow, String name) {
+        super(parent, modal);
+        this.contactFrame = contactFrame;
+        this.selectedRow = selectedRow;
+
+        setUpDialog();
+
+        currentContactName = name;
+
+        readContactsFromFile();
+
+        setLocationRelativeTo(parent);
+        setVisible(true);
+    }
+
+    /**
+     * Contains the code that is used by both constructors to keep from
+     * having to duplicate the code.
+     */
+    private void setUpDialog(){
+
+        initComponents();
+
+        // alters the usage if TAB so that it can be used to move between fields
+        KeyStroke ctrlTab = KeyStroke.getKeyStroke("ctrl TAB");
+        KeyStroke tab = KeyStroke.getKeyStroke("TAB");
+        Set set = new HashSet(institutionJTextArea.getFocusTraversalKeys(
+                KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
+        set.remove(ctrlTab);
+        set.add(tab);
+        institutionJTextArea.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, set);
+        institutionJTextArea.getInputMap().put(ctrlTab, "insert-tab");
+
+        namesJComboBox.setRenderer(new MyComboBoxRenderer(null, SwingConstants.CENTER));
+        
+        // only works for Java 1.6 and newer
+        //        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
+        //                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
+
+        institutionJTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
     }
 
     /**
@@ -435,7 +474,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
         boolean alreadyInTable = false;
 
         if (selectedRow == -1) {
-            alreadyInTable = experimentPropertiesFrame.contactAlreadyInTable((String) namesJComboBox.getSelectedItem());
+            alreadyInTable = contactFrame.contactAlreadyInTable((String) namesJComboBox.getSelectedItem());
         }
 
         if (!alreadyInTable) {
@@ -482,7 +521,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
                 ex.printStackTrace();
             }
 
-            experimentPropertiesFrame.addContact(
+            contactFrame.addContact(
                     new ContactImpl(
                     tempInstitution,
                     (String) namesJComboBox.getSelectedItem(),
