@@ -43,9 +43,9 @@ ms_lims_z++-NH3|z ion -NH3|PRIDE:0000232|2
 #
 ms_lims_Prec|precursor|PRIDE:0000263|1
 ms_lims_Prec 1+|precursor|PRIDE:0000263|1
-ms_lims_Prec 2+|precursor|PRIDE:0000260|2
-ms_lims_Prec 3+|precursor|PRIDE:0000260|3
-ms_lims_Prec 4+|precursor|PRIDE:0000260|4 
+ms_lims_Prec 2+|precursor|PRIDE:0000263|2
+ms_lims_Prec 3+|precursor|PRIDE:0000263|3
+ms_lims_Prec 4+|precursor|PRIDE:0000263|4 
 ms_lims_Prec-H20 1+|precursor - H2O|PRIDE:0000261|1
 ms_lims_Prec-H20 2+|precursor - H2O|PRIDE:0000261|2
 ms_lims_Prec-H20 3+|precursor - H2O|PRIDE:0000261|3
@@ -122,9 +122,9 @@ Mascot Dat File_z++-NH3|z ion -NH3|PRIDE:0000232|2
 #
 Mascot Dat File_Prec|precursor|PRIDE:0000263|1
 Mascot Dat File_Prec 1+|precursor|PRIDE:0000263|1
-Mascot Dat File_Prec 2+|precursor|PRIDE:0000260|2
-Mascot Dat File_Prec 3+|precursor|PRIDE:0000260|3
-Mascot Dat File_Prec 4+|precursor|PRIDE:0000260|4 
+Mascot Dat File_Prec 2+|precursor|PRIDE:0000263|2
+Mascot Dat File_Prec 3+|precursor|PRIDE:0000263|3
+Mascot Dat File_Prec 4+|precursor|PRIDE:0000263|4 
 Mascot Dat File_Prec-H20 1+|precursor - H2O|PRIDE:0000261|1
 Mascot Dat File_Prec-H20 2+|precursor - H2O|PRIDE:0000261|2
 Mascot Dat File_Prec-H20 3+|precursor - H2O|PRIDE:0000261|3
