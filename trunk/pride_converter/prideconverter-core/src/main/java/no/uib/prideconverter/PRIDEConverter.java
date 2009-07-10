@@ -1,5 +1,6 @@
 package no.uib.prideconverter;
 
+import be.proteomics.lims.db.accessors.Fragmention;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.sql.Driver;
@@ -26,6 +27,7 @@ import be.proteomics.mascotdatfile.util.interfaces.QueryToPeptideMapInf;
 import be.proteomics.mascotdatfile.util.mascot.FixedModification;
 import be.proteomics.mascotdatfile.util.mascot.Peak;
 import be.proteomics.mascotdatfile.util.mascot.PeptideHit;
+import be.proteomics.mascotdatfile.util.mascot.PeptideHitAnnotation;
 import be.proteomics.mascotdatfile.util.mascot.ProteinHit;
 import be.proteomics.mascotdatfile.util.mascot.Query;
 import be.proteomics.mascotdatfile.util.mascot.VariableModification;
@@ -40,6 +42,7 @@ import com.jgoodies.looks.plastic.theme.SkyKrupp;
 import de.proteinms.omxparser.OmssaOmxFile;
 import de.proteinms.omxparser.util.MSHitSet;
 import de.proteinms.omxparser.util.MSHits;
+import de.proteinms.omxparser.util.MSMZHit;
 import de.proteinms.omxparser.util.MSModHit;
 import de.proteinms.omxparser.util.MSPepHit;
 import de.proteinms.omxparser.util.MSSpectrum;
@@ -58,6 +61,8 @@ import java.util.Vector;
 import java.util.zip.GZIPOutputStream;
 import no.uib.prideconverter.gui.*;
 import no.uib.prideconverter.util.BareBonesBrowserLaunch;
+import no.uib.prideconverter.util.FragmentIonMappedDetails;
+import no.uib.prideconverter.util.FragmentIonMappings;
 import no.uib.prideconverter.util.IdentificationGeneral;
 import no.uib.prideconverter.util.OmssaModification;
 import no.uib.prideconverter.util.Properties;
@@ -77,6 +82,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 import uk.ac.ebi.pride.model.implementation.mzData.*;
 import uk.ac.ebi.pride.model.implementation.core.ExperimentImpl;
+import uk.ac.ebi.pride.model.implementation.core.FragmentIonImpl;
 import uk.ac.ebi.pride.model.implementation.core.PeptideImpl;
 import uk.ac.ebi.pride.model.implementation.core.GelFreeIdentificationImpl;
 import uk.ac.ebi.pride.model.implementation.core.ModificationImpl;
@@ -121,6 +127,7 @@ public class PRIDEConverter {
     private static String spectrumKey = "";
     private static OutputDetails outputFrame;
     private static UserProperties userProperties;
+    private static FragmentIonMappings fragmentIonMappings;
     private static Properties properties;
     private static ProgressDialog progressDialog;
     private static Connection conn = null;
@@ -137,6 +144,8 @@ public class PRIDEConverter {
     public PRIDEConverter() {
         userProperties = new UserProperties(this);
         userProperties.readUserPropertiesFromFile(null);
+        fragmentIonMappings = new FragmentIonMappings(this);
+        fragmentIonMappings.readFragmentIonMappingsFromFile();
         properties = new Properties();
         new DataSourceSelection(this, null);
     }
@@ -361,6 +370,7 @@ public class PRIDEConverter {
     public void cancelConvertion() {
 
         userProperties.saveUserPropertiesToFile();
+        fragmentIonMappings.saveFragmentIonMappingsToFile();
 
         if (debug) {
             System.out.println("Converter closed.");
@@ -377,6 +387,7 @@ public class PRIDEConverter {
     public void convert(OutputDetails outputDetails) {
 
         userProperties.saveUserPropertiesToFile();
+        fragmentIonMappings.saveFragmentIonMappingsToFile();
         setCancelConversion(false);
 
         outputFrame = outputDetails;
@@ -1006,7 +1017,7 @@ public class PRIDEConverter {
 
                         // present a dialog with information about the created file
                         JOptionPane.showMessageDialog(outputFrame, "PRIDE XML File Created Successfully:\n" +
-                                completeFileName  + ".gz" +
+                                completeFileName + ".gz" +
                                 "\n\nThe File Includes:\n" +
                                 "Spectra: " + spectraCount + "\n" +
                                 "Peptide Identifications: " + peptideIdentificationsCount + "\n" +
@@ -7964,6 +7975,59 @@ public class PRIDEConverter {
                                         }
                                     }
 
+
+
+                                    // add fragment ions
+                                    fragmentIons = new ArrayList<FragmentIon>();
+
+                                    PeptideHitAnnotation peptideHitAnnotations =
+                                            tempPeptideHit.getPeptideHitAnnotation(
+                                            tempMascotDatfile.getMasses(), tempMascotDatfile.getParametersSection());
+
+                                    Vector currentFragmentIons = peptideHitAnnotations.getGeneralMatchedIonsAboveIntensityThreshold(
+                                            currentQuery.getPeakList(), currentQuery.getMaxIntensity());
+
+
+                                    for (int i = 0; i < currentFragmentIons.size(); i++) {
+
+                                        be.proteomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl currentFragmentIon =
+                                                (be.proteomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl) currentFragmentIons.get(i);
+
+
+                                        //System.out.println(properties.getDataSource() + "_" + currentFragmentIon.getType());
+
+                                        FragmentIonMappedDetails fragmentIonMappedDetails =
+                                                fragmentIonMappings.getCVTermMappings().get(
+                                                properties.getDataSource() + "_" + currentFragmentIon.getType());
+
+                                        if (fragmentIonMappedDetails == null) {
+                                            JOptionPane.showMessageDialog(outputFrame,
+                                                    "Unknown fragment ion \'" + currentFragmentIon.getType() + "\'. Ion not included in annotation.\n" +
+                                                    "Please contact the PRIDE support team at pride-support@ebi.ac.uk.",
+                                                    "Unknown Fragment Ion",
+                                                    JOptionPane.INFORMATION_MESSAGE);
+                                        } else {
+
+                                            if (!fragmentIonMappedDetails.getCvParamAccession().equalsIgnoreCase("-1")) {
+
+                                                ArrayList<CvParam> currentCvTerms =
+                                                        createFragmentIonCvParams(
+                                                        fragmentIonMappedDetails,
+                                                        currentFragmentIon.getMZ() + currentFragmentIon.getTheoreticalExperimantalMassError(),
+                                                        fragmentIonMappedDetails.getCharge(),
+                                                        currentFragmentIon.getNumber(),
+                                                        currentFragmentIon.getIntensity(),
+                                                        currentFragmentIon.getTheoreticalExperimantalMassError(),
+                                                        null);
+
+                                                fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
+                                            } else {
+                                                // ion type recognized but ignored (e.g. internal ions)
+                                            }
+                                        }
+                                    }
+
+
                                     ids.add(new IdentificationGeneral(
                                             currentQuery.getFilename(), // spectrumFileName
                                             properties.getTempProteinHit().getAccession(), // accession
@@ -7988,6 +8052,7 @@ public class PRIDEConverter {
 //                        Util.writeToErrorLog("Query without peak list: Exception caught..." +
 //                                e.toString());
                         emptySpectraCounter++;
+                        e.printStackTrace();
                     }
                 }
             }
@@ -8035,6 +8100,7 @@ public class PRIDEConverter {
         ArrayList cVParams, userParams;
         List<Integer> mzValues;
         List<Integer> intensityValues;
+        int omssaAbundanceScale;
         Collection spectrumDescriptionComments;
 
         MSModHit currentMSModHit;
@@ -8279,6 +8345,9 @@ public class PRIDEConverter {
             int omssaResponseScale =
                     omxFile.getParserResult().MSSearch_response.MSResponse.get(0).MSResponse_scale;
 
+            double ionCoverageErrorMargin =
+                    omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_msmstol;
+
 //            int omssaSearchSettingsScale =
 //                    omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_scale;
 
@@ -8379,12 +8448,11 @@ public class PRIDEConverter {
                     upstreamFlankingSequence = null;
                     downstreamFlankingSequence = null;
                     peptideModifications = null;
-                    fragmentIons = new ArrayList<FragmentIon>(); // TODO: Fragment ions are never added...
 
                     mzValues = tempSpectrum.MSSpectrum_mz.MSSpectrum_mz_E;
                     intensityValues = tempSpectrum.MSSpectrum_abundance.MSSpectrum_abundance_E;
 
-                    int omssaAbundanceScale = tempSpectrum.MSSpectrum_iscale;
+                    omssaAbundanceScale = tempSpectrum.MSSpectrum_iscale;
 
                     arrays = new double[2][mzValues.size()];
 
@@ -8608,6 +8676,96 @@ public class PRIDEConverter {
                         }
 
                         if (currentMSHit.MSHits_pvalue >= properties.getPeptideScoreThreshold()) {
+
+                            fragmentIons = new ArrayList<FragmentIon>();
+
+                            List<MSMZHit> currentFragmentIons = currentMSHit.MSHits_mzhits.MSMZHit;
+
+                            for (int i = 0; i < currentFragmentIons.size(); i++) {
+
+                                MSMZHit currentFragmentIon = currentFragmentIons.get(i);
+
+                                int msIonType = currentFragmentIon.MSMZHit_ion.MSIonType;
+                                String msIonNeutralLossTag = "";
+
+                                int msIonNeutralLoss = currentFragmentIon.MSMZHit_moreion.MSIon.MSIon_neutralloss.MSIonNeutralLoss;
+
+                                if(msIonNeutralLoss != -1){
+                                    msIonNeutralLossTag += "_" + msIonNeutralLoss;
+                                }
+
+
+                                // TODO: check for immomium ion.....
+
+
+                                FragmentIonMappedDetails fragmentIonMappedDetails =
+                                        fragmentIonMappings.getCVTermMappings().get(properties.getDataSource() +
+                                        "_" + msIonType + msIonNeutralLossTag);
+
+                                if (fragmentIonMappedDetails == null) {
+                                    JOptionPane.showMessageDialog(outputFrame,
+                                            "Unknown fragment ion \'" + currentFragmentIon.MSMZHit_ion.MSIonType + "\'. Ion not included in annotation.\n" +
+                                            "Please contact the PRIDE support team at pride-support@ebi.ac.uk.",
+                                            "Unknown Fragment Ion",
+                                            JOptionPane.INFORMATION_MESSAGE);
+                                } else {
+
+                                    if (!fragmentIonMappedDetails.getCvParamAccession().equalsIgnoreCase("-1")) {
+
+                                        int fragmentIonMzValueUnscaled = currentFragmentIon.MSMZHit_mz;
+
+                                        mzValues = tempSpectrum.MSSpectrum_mz.MSSpectrum_mz_E;
+                                        intensityValues = tempSpectrum.MSSpectrum_abundance.MSSpectrum_abundance_E;
+
+                                        double currentIntensityScale = tempSpectrum.MSSpectrum_iscale;
+                                        double fragmentIonIntensityScaled = -1;
+                                        double fragmentIonMassError = -1;
+
+                                        for (int j = 0; j < mzValues.size(); j++) {
+
+                                            // check if the fragment ion is within the mass error range
+                                            if (Math.abs(mzValues.get(j) - fragmentIonMzValueUnscaled) <= (ionCoverageErrorMargin * omssaResponseScale)) {
+
+                                                // select this peak if it's the most intense peak withing range
+                                                if ((intensityValues.get(j).doubleValue() / currentIntensityScale) > fragmentIonIntensityScaled) {
+                                                    fragmentIonIntensityScaled = intensityValues.get(j).doubleValue() / currentIntensityScale;
+
+                                                    // calculate the fragmet ion mass
+                                                    fragmentIonMassError = (mzValues.get(j).doubleValue() - fragmentIonMzValueUnscaled)
+                                                        / omssaResponseScale; // TODO: or the other way around??
+                                                }
+                                            }
+                                        }
+
+
+                                        if (fragmentIonIntensityScaled == -1) {
+
+                                            JOptionPane.showMessageDialog(outputFrame,
+                                                    "Unable to map the fragment ion \'" +
+                                                    currentFragmentIon.MSMZHit_ion.MSIonType + " " + currentFragmentIon.MSMZHit_number + "\'. Ion not included in annotation.\n" +
+                                                    "Please contact the PRIDE support team at pride-support@ebi.ac.uk.",
+                                                    "Unable To Map Fragment Ion",
+                                                    JOptionPane.INFORMATION_MESSAGE);
+                                        } else {
+
+                                            ArrayList<CvParam> currentCvTerms =
+                                                    createFragmentIonCvParams(
+                                                    fragmentIonMappedDetails,
+                                                    (((double) currentFragmentIon.MSMZHit_mz) / omssaResponseScale) + fragmentIonMassError,
+                                                    currentFragmentIon.MSMZHit_charge,
+                                                    new Integer(currentFragmentIon.MSMZHit_number),
+                                                    fragmentIonIntensityScaled,
+                                                    fragmentIonMassError,
+                                                    null);
+
+                                            fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
+                                        }
+
+                                    } else {
+                                        // ion type recognized but ignored (e.g. internal ions)
+                                    }
+                                }
+                            }
 
                             ids.add(new IdentificationGeneral(
                                     fileName, // spectrum file name
@@ -8863,7 +9021,48 @@ public class PRIDEConverter {
 
                         peptideModifications = null;
 
-                        fragmentIons = new ArrayList<FragmentIon>(); // TODO: Framgnet ions are never added...
+                        // add fragment ions
+                        fragmentIons = new ArrayList<FragmentIon>();
+
+                        Collection fragments =
+                                Fragmention.getAllFragmentions(conn, tempIdentification.getIdentificationid());
+
+                        Iterator fragmentIterator = fragments.iterator();
+
+                        while (fragmentIterator.hasNext()) {
+
+                            Fragmention currentFragmentIon = (Fragmention) fragmentIterator.next();
+
+                            FragmentIonMappedDetails fragmentIonMappedDetails = fragmentIonMappings.getCVTermMappings().get(
+                                    properties.getDataSource() + "_" + currentFragmentIon.getIonname());
+
+                            if (fragmentIonMappedDetails == null) {
+                                JOptionPane.showMessageDialog(outputFrame,
+                                        "Unknown fragment ion \'" + currentFragmentIon.getIonname() + "\'. Ion not included in annotation.\n" +
+                                        "Please contact the PRIDE support team at pride-support@ebi.ac.uk.",
+                                        "Unknown Fragment Ion",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            } else {
+
+                                if (!fragmentIonMappedDetails.getCvParamAccession().equalsIgnoreCase("-1")) {
+
+                                    ArrayList<CvParam> currentCvTerms =
+                                            createFragmentIonCvParams(
+                                            fragmentIonMappedDetails,
+                                            currentFragmentIon.getMz().doubleValue() + currentFragmentIon.getMassdelta().doubleValue(),
+                                            fragmentIonMappedDetails.getCharge(),
+                                            new Long(currentFragmentIon.getFragmentionnumber()).intValue(),
+                                            new Long(currentFragmentIon.getIntensity()).doubleValue(),
+                                            currentFragmentIon.getMassdelta().doubleValue(),
+                                            null);
+
+                                    fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
+                                } else {
+                                    // ion type recognized but ignored (e.g. internal ions)
+                                }
+                            }
+                        }
+
 
                         if (!nTerm.equalsIgnoreCase("NH2")) {
 
@@ -10255,5 +10454,83 @@ public class PRIDEConverter {
         }
 
         return spectrumComments;
+    }
+
+    /**
+     * Returns the fragment ion cv terms. Note: this method contains some hard coding of CV terms.
+     *
+     * @param fragmentIonMappedDetails
+     * @param mzValue
+     * @param charge can be Null
+     * @param fragmentIonNumber
+     * @param intensity
+     * @param massError can be Null
+     * @param retentionTimeError can be Null
+     * @return the fragment ion cv terms
+     */
+    private static ArrayList<CvParam> createFragmentIonCvParams(FragmentIonMappedDetails fragmentIonMappedDetails,
+            Double mzValue, Integer charge, Integer fragmentIonNumber, Double intensity, Double massError,
+            Double retentionTimeError) {
+
+        ArrayList<CvParam> currentCvParams = new ArrayList<CvParam>();
+
+        int orderIndex = 0;
+
+        // add fragment ion type and fragment ion number
+        currentCvParams.add(new CvParamImpl(
+                //"PLGS:00031",
+                fragmentIonMappedDetails.getCvParamAccession(),
+                "PRIDE",
+                fragmentIonMappedDetails.getName(),
+                orderIndex++,
+                fragmentIonNumber.toString()));
+
+        // add fragment ion mz value
+        currentCvParams.add(new CvParamImpl(
+                "PRIDE:0000188",
+                "PRIDE",
+                "product ion m/z",
+                orderIndex++,
+                mzValue.toString()));
+
+        // add fragment ion intensity
+        currentCvParams.add(new CvParamImpl(
+                "PRIDE:0000189",
+                "PRIDE",
+                "product ion intensity",
+                orderIndex++,
+                intensity.toString()));
+
+        // add fragment ion charge
+        if (charge != null) {
+            currentCvParams.add(new CvParamImpl(
+                    "PRIDE:0000204",
+                    "PRIDE",
+                    "product ion charge",
+                    orderIndex++,
+                    charge.toString()));
+        }
+
+        // add fragment ion mass error
+        if (massError != null) {
+            currentCvParams.add(new CvParamImpl(
+                    "PRIDE:0000190",
+                    "PRIDE",
+                    "product ion mass error",
+                    orderIndex++,
+                    massError.toString()));
+        }
+
+        // add fragment ion mass error
+        if (retentionTimeError != null) {
+            currentCvParams.add(new CvParamImpl(
+                    "PRIDE:0000191",
+                    "PRIDE",
+                    "product ion retention time error",
+                    orderIndex++,
+                    retentionTimeError.toString()));
+        }
+
+        return currentCvParams;
     }
 }
