@@ -1,6 +1,6 @@
 #summary Short summary of changes for the current build of the PRIDE Converter. (Note that this may not be the same as the released version.)
 
----
+----
 
  * FEATURE IMPROVEMENT: The contents of comboboxes are now centrally aligned.
  * BUG FIX: Fixed two minor GUI bugs in the DataBase Details frame.
