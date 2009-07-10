@@ -1,0 +1,10 @@
+#summary One-sentence summary of this page.
+
+= Release Notes - Current Build =
+
+ * FEATURE IMPROVEMENT: The contents of comboboxes are now centrally aligned.
+ * BUG FIX: Fixed two minor GUI bugs in the DataBase Details frame.
+ * LIBRARY UPDATE: Updated utilities to version 2.9.2.
+ * PRIDE XML result file is now zipped after conversion
+ * NEW FEATURE: A dialog telling you to request access to the PRIDE FTP server now appear if the (unzipped) PRIDE XML files size is larger than 15 MB.
+ * NEW FEATURE: Fragment Ion Annotations are now included for: ms_lims, Mascot Data Files and OMSSA.
