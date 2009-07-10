@@ -8017,7 +8017,7 @@ public class PRIDEConverter {
                                                         fragmentIonMappedDetails.getCharge(),
                                                         currentFragmentIon.getNumber(),
                                                         currentFragmentIon.getIntensity(),
-                                                        currentFragmentIon.getTheoreticalExperimantalMassError(),
+                                                        currentFragmentIon.getTheoreticalExperimantalMassError(), // TODO: use absolute value?
                                                         null);
 
                                                 fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
@@ -8719,6 +8719,7 @@ public class PRIDEConverter {
 
                                         double currentIntensityScale = tempSpectrum.MSSpectrum_iscale;
                                         double fragmentIonIntensityScaled = -1;
+                                        double observedPeakMzValue = -1;
                                         double fragmentIonMassError = -1;
 
                                         for (int j = 0; j < mzValues.size(); j++) {
@@ -8733,6 +8734,7 @@ public class PRIDEConverter {
                                                     // calculate the fragmet ion mass
                                                     fragmentIonMassError = (mzValues.get(j).doubleValue() - fragmentIonMzValueUnscaled)
                                                         / omssaResponseScale; // TODO: or the other way around??
+                                                    observedPeakMzValue = mzValues.get(j) / omssaResponseScale;
                                                 }
                                             }
                                         }
@@ -8751,11 +8753,11 @@ public class PRIDEConverter {
                                             ArrayList<CvParam> currentCvTerms =
                                                     createFragmentIonCvParams(
                                                     fragmentIonMappedDetails,
-                                                    (((double) currentFragmentIon.MSMZHit_mz) / omssaResponseScale) + fragmentIonMassError,
+                                                    observedPeakMzValue,
                                                     currentFragmentIon.MSMZHit_charge,
                                                     new Integer(currentFragmentIon.MSMZHit_number),
                                                     fragmentIonIntensityScaled,
-                                                    fragmentIonMassError,
+                                                    fragmentIonMassError, // TODO: use absolute value?
                                                     null);
 
                                             fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
@@ -9053,7 +9055,7 @@ public class PRIDEConverter {
                                             fragmentIonMappedDetails.getCharge(),
                                             new Long(currentFragmentIon.getFragmentionnumber()).intValue(),
                                             new Long(currentFragmentIon.getIntensity()).doubleValue(),
-                                            currentFragmentIon.getMassdelta().doubleValue(),
+                                            currentFragmentIon.getMassdelta().doubleValue(), // TODO: use absolute value?
                                             null);
 
                                     fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
