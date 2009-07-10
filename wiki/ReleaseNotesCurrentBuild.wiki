@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Short summary of changes for the current build of the PRIDE Converter. (Note that this may not be the same as the released version.)
 
 = Release Notes - Current Build =
 
