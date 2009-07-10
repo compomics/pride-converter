@@ -1,0 +1,209 @@
+#dataformat_name|cv_term_name|cv_term_accession|charge
+ms_lims_a|a ion|PRIDE:0000233|1
+ms_lims_a++|a ion|PRIDE:0000233|2 
+ms_lims_a-H2O|a ion -H2O|PRIDE:0000234|1
+ms_lims_a++-H2O|a ion -H2O|PRIDE:0000234|2
+ms_lims_a-NH3|a ion -NH3|PRIDE:0000235|1
+ms_lims_a++-NH3|a ion -NH3|PRIDE:0000235|2
+#
+ms_lims_b|b ion|PRIDE:0000194|1
+ms_lims_b++|b ion|PRIDE:0000194|2
+ms_lims_b-H2O|b ion -H2O|PRIDE:0000196|1
+ms_lims_b++-H2O|b ion -H2O|PRIDE:0000196|2
+ms_lims_b-NH3|b ion -NH3|PRIDE:0000196|1
+ms_lims_b++-NH3|b ion -NH3|PRIDE:0000195|2
+#
+ms_lims_c|c ion|PRIDE:0000236|1
+ms_lims_c++|c ion|PRIDE:0000236|2
+ms_lims_c-H2O|c ion -H2O|PRIDE:0000237|1
+ms_lims_c++-H2O|c ion -H2O|PRIDE:0000237|2
+ms_lims_c-NH3|c ion -NH3|PRIDE:0000238|1
+ms_lims_c++-NH3|c ion -NH3|PRIDE:0000238|2
+#
+ms_lims_x|x ion|PRIDE:0000227|1
+ms_lims_x++|x ion|PRIDE:0000227|2
+ms_lims_x-H2O|x ion -H2O|PRIDE:0000228|1
+ms_lims_x++-H2O|x ion -H2O|PRIDE:0000228|2
+ms_lims_x-NH3|x ion -NH3|PRIDE:0000229|1
+ms_lims_x++-NH3|x ion -NH3|PRIDE:0000229|2
+#
+ms_lims_y|y ion|PRIDE:0000193|1
+ms_lims_y++|y ion|PRIDE:0000193|2
+ms_lims_y-H2O|y ion -H20|PRIDE:0000197|1
+ms_lims_y++-H2O|y ion -H2O|PRIDE:0000197|2
+ms_lims_y-NH3|y ion -NH3|PRIDE:0000198|1
+ms_lims_y++-NH3|y ion -NH3|PRIDE:0000198|2
+#
+ms_lims_z|z ion|PRIDE:0000230|1
+ms_lims_z++|z ion|PRIDE:0000230|2
+ms_lims_z-H2O|z ion -H20|PRIDE:0000231|1
+ms_lims_z++-H2O|z ion -H2O|PRIDE:0000231|2
+ms_lims_z-NH3|z ion -NH3|PRIDE:0000232|1
+ms_lims_z++-NH3|z ion -NH3|PRIDE:0000232|2
+#
+ms_lims_Prec|precursor|PRIDE:0000263|1
+ms_lims_Prec 1+|precursor|PRIDE:0000263|1
+ms_lims_Prec 2+|precursor|PRIDE:0000260|2
+ms_lims_Prec 3+|precursor|PRIDE:0000260|3
+ms_lims_Prec 4+|precursor|PRIDE:0000260|4 
+ms_lims_Prec-H20 1+|precursor - H2O|PRIDE:0000261|1
+ms_lims_Prec-H20 2+|precursor - H2O|PRIDE:0000261|2
+ms_lims_Prec-H20 3+|precursor - H2O|PRIDE:0000261|3
+ms_lims_Prec-H20 4+|precursor - H2O|PRIDE:0000261|4 
+ms_lims_Prec-H20 5+|precursor - H2O|PRIDE:0000261|5
+ms_lims_Prec-NH3 1+|precursor - NH3|PRIDE:0000262|1 
+ms_lims_Prec-NH3 2+|precursor - NH3|PRIDE:0000262|2
+ms_lims_Prec-NH3 3+|precursor - NH3|PRIDE:0000262|3
+ms_lims_Prec-NH3 4+|precursor - NH3|PRIDE:0000262|4
+ms_lims_Prec-NH3 5+|precursor - NH3|PRIDE:0000262|5
+#
+ms_lims_iA|immonium A|PRIDE:0000240|1
+ms_lims_iC|immonium C|PRIDE:0000241|1
+ms_lims_iD|immonium D|PRIDE:0000242|1
+ms_lims_iE|immonium E|PRIDE:0000243|1
+ms_lims_iF|immonium F|PRIDE:0000244|1
+ms_lims_iG|immonium G|PRIDE:0000245|1  
+ms_lims_iH|immonium H|PRIDE:0000246|1
+ms_lims_iI|immonium I|PRIDE:0000247|1
+ms_lims_iK|immonium K|PRIDE:0000248|1
+ms_lims_iL|immonium L|PRIDE:0000249|1
+ms_lims_iM|immonium M|PRIDE:0000250|1
+ms_lims_iN|immonium N|PRIDE:0000251|1
+ms_lims_iP|immonium P|PRIDE:0000252|1 
+ms_lims_iQ|immonium Q|PRIDE:0000253|1
+ms_lims_iR|immonium R|PRIDE:0000254|1
+ms_lims_iS|immonium S|PRIDE:0000255|1
+ms_lims_iT|immonium T|PRIDE:0000256|1
+ms_lims_iV|immonium V|PRIDE:0000257|1
+ms_lims_iW|immonium W|PRIDE:0000258|1
+ms_lims_iY|immonium Y|PRIDE:0000259|1
+#
+Mascot Dat File_a|a ion|PRIDE:0000233|1
+Mascot Dat File_a++|a ion|PRIDE:0000233|2 
+Mascot Dat File_a-H2O|a ion -H2O|PRIDE:0000234|1
+Mascot Dat File_a++-H2O|a ion -H2O|PRIDE:0000234|2
+Mascot Dat File_a-NH3|a ion -NH3|PRIDE:0000235|1
+Mascot Dat File_a++-NH3|a ion -NH3|PRIDE:0000235|2
+#
+Mascot Dat File_b|b ion|PRIDE:0000194|1
+Mascot Dat File_b++|b ion|PRIDE:0000194|2
+Mascot Dat File_b-H2O|b ion -H2O|PRIDE:0000196|1
+Mascot Dat File_b++-H2O|b ion -H2O|PRIDE:0000196|2
+Mascot Dat File_b-NH3|b ion -NH3|PRIDE:0000195|1
+Mascot Dat File_b++-NH3|b ion -NH3|PRIDE:0000195|2
+#
+Mascot Dat File_c|c ion|PRIDE:0000236|1
+Mascot Dat File_c++|c ion|PRIDE:0000236|2
+Mascot Dat File_c-H2O|c ion -H2O|PRIDE:0000237|1
+Mascot Dat File_c++-H2O|c ion -H2O|PRIDE:0000237|2
+Mascot Dat File_c-NH3|c ion -NH3|PRIDE:0000238|1
+Mascot Dat File_c++-NH3|c ion -NH3|PRIDE:0000238|2
+#
+Mascot Dat File_x|x ion|PRIDE:0000227|1
+Mascot Dat File_x++|x ion|PRIDE:0000227|2
+Mascot Dat File_x-H2O|x ion -H2O|PRIDE:0000228|1
+Mascot Dat File_x++-H2O|x ion -H2O|PRIDE:0000228|2
+Mascot Dat File_x-NH3|x ion -NH3|PRIDE:0000229|1
+Mascot Dat File_x++-NH3|x ion -NH3|PRIDE:0000229|2
+#
+Mascot Dat File_y|y ion|PRIDE:0000193|1
+Mascot Dat File_y++|y ion|PRIDE:0000193|2
+Mascot Dat File_y-H2O|y ion -H20|PRIDE:0000197|1
+Mascot Dat File_y++-H2O|y ion -H2O|PRIDE:0000197|2
+Mascot Dat File_y-NH3|y ion -NH3|PRIDE:0000198|1
+Mascot Dat File_y++-NH3|y ion -NH3|PRIDE:0000198|2
+#
+Mascot Dat File_z|z ion|PRIDE:0000230|1
+Mascot Dat File_z++|z ion|PRIDE:0000230|2
+Mascot Dat File_z-H2O|z ion -H20|PRIDE:0000231|1
+Mascot Dat File_z++-H2O|z ion -H2O|PRIDE:0000231|2
+Mascot Dat File_z-NH3|z ion -NH3|PRIDE:0000232|1
+Mascot Dat File_z++-NH3|z ion -NH3|PRIDE:0000232|2
+#
+Mascot Dat File_Prec|precursor|PRIDE:0000263|1
+Mascot Dat File_Prec 1+|precursor|PRIDE:0000263|1
+Mascot Dat File_Prec 2+|precursor|PRIDE:0000260|2
+Mascot Dat File_Prec 3+|precursor|PRIDE:0000260|3
+Mascot Dat File_Prec 4+|precursor|PRIDE:0000260|4 
+Mascot Dat File_Prec-H20 1+|precursor - H2O|PRIDE:0000261|1
+Mascot Dat File_Prec-H20 2+|precursor - H2O|PRIDE:0000261|2
+Mascot Dat File_Prec-H20 3+|precursor - H2O|PRIDE:0000261|3
+Mascot Dat File_Prec-H20 4+|precursor - H2O|PRIDE:0000261|4 
+Mascot Dat File_Prec-H20 5+|precursor - H2O|PRIDE:0000261|5
+Mascot Dat File_Prec-NH3 1+|precursor - NH3|PRIDE:0000262|1 
+Mascot Dat File_Prec-NH3 2+|precursor - NH3|PRIDE:0000262|2
+Mascot Dat File_Prec-NH3 3+|precursor - NH3|PRIDE:0000262|3
+Mascot Dat File_Prec-NH3 4+|precursor - NH3|PRIDE:0000262|4
+Mascot Dat File_Prec-NH3 5+|precursor - NH3|PRIDE:0000262|5
+#
+Mascot Dat File_iA|immonium A|PRIDE:0000240|1
+Mascot Dat File_iC|immonium C|PRIDE:0000241|1
+Mascot Dat File_iD|immonium D|PRIDE:0000242|1
+Mascot Dat File_iE|immonium E|PRIDE:0000243|1
+Mascot Dat File_iF|immonium F|PRIDE:0000244|1
+Mascot Dat File_iG|immonium G|PRIDE:0000245|1  
+Mascot Dat File_iH|immonium H|PRIDE:0000246|1
+Mascot Dat File_iI|immonium I|PRIDE:0000247|1
+Mascot Dat File_iK|immonium K|PRIDE:0000248|1
+Mascot Dat File_iL|immonium L|PRIDE:0000249|1
+Mascot Dat File_iM|immonium M|PRIDE:0000250|1
+Mascot Dat File_iN|immonium N|PRIDE:0000251|1
+Mascot Dat File_iP|immonium P|PRIDE:0000252|1 
+Mascot Dat File_iQ|immonium Q|PRIDE:0000253|1
+Mascot Dat File_iR|immonium R|PRIDE:0000254|1
+Mascot Dat File_iS|immonium S|PRIDE:0000255|1
+Mascot Dat File_iT|immonium T|PRIDE:0000256|1
+Mascot Dat File_iV|immonium V|PRIDE:0000257|1
+Mascot Dat File_iW|immonium W|PRIDE:0000258|1
+Mascot Dat File_iY|immonium Y|PRIDE:0000259|1
+#
+OMSSA_0|a ion|PRIDE:0000233|null
+OMSSA_0_0|a ion -H2O|PRIDE:0000234|null
+OMSSA_0_1|a ion -NH3|PRIDE:0000235|null
+#
+OMSSA_1|b ion|PRIDE:0000194|null
+OMSSA_1_0|b ion -H2O|PRIDE:0000196|null
+OMSSA_1_1|b ion -NH3|PRIDE:0000195|null
+#
+OMSSA_2|c ion|PRIDE:0000236|null
+OMSSA_2_0|c ion -H2O|PRIDE:0000237|null
+OMSSA_2_1|c ion -NH3|PRIDE:0000238|null
+#
+OMSSA_3|x ion|PRIDE:0000227|null
+OMSSA_3_0|x ion -H2O|PRIDE:0000228|null
+OMSSA_3_1|x ion -NH3|PRIDE:0000229|null
+#
+OMSSA_4|y ion|PRIDE:0000193|null
+OMSSA_4_0|y ion -H2O|PRIDE:0000197|null
+OMSSA_4_1|y ion -NH3|PRIDE:0000198|null
+#
+OMSSA_5|z ion|PRIDE:0000230|null
+OMSSA_5_0|z ion -H2O|PRIDE:0000231|null
+OMSSA_5_1|z ion -NH3|PRIDE:0000232|null
+#
+OMSSA_6|parent|PRIDE:0000263|null
+OMSSA_7|internal|-1|null
+#
+OMSSA_8_A|immonium A|PRIDE:0000240|1
+OMSSA_8_C|immonium C|PRIDE:0000241|1
+OMSSA_8_D|immonium D|PRIDE:0000242|1
+OMSSA_8_E|immonium E|PRIDE:0000243|1
+OMSSA_8_F|immonium F|PRIDE:0000244|1
+OMSSA_8_G|immonium G|PRIDE:0000245|1  
+OMSSA_8_H|immonium H|PRIDE:0000246|1
+OMSSA_8_I|immonium I|PRIDE:0000247|1
+OMSSA_8_K|immonium K|PRIDE:0000248|1
+OMSSA_8_L|immonium L|PRIDE:0000249|1
+OMSSA_8_M|immonium M|PRIDE:0000250|1
+OMSSA_8_N|immonium N|PRIDE:0000251|1
+OMSSA_8_P|immonium P|PRIDE:0000252|1 
+OMSSA_8_Q|immonium Q|PRIDE:0000253|1
+OMSSA_8_R|immonium R|PRIDE:0000254|1
+OMSSA_8_S|immonium S|PRIDE:0000255|1
+OMSSA_8_T|immonium T|PRIDE:0000256|1
+OMSSA_8_V|immonium V|PRIDE:0000257|1
+OMSSA_8_W|immonium W|PRIDE:0000258|1
+OMSSA_8_Y|immonium Y|PRIDE:0000259|1
+#
+OMSSA_9|unknown|-1|null
+OMSSA_10|max|-1|null
