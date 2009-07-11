@@ -380,7 +380,10 @@ public class PRIDEConverter {
     }
 
     /**
-     * Tries to convert the selected file(s) into one PRIDE XML file
+     * Tries to convert the selected file(s) into one PRIDE XML file.
+     *
+     * This is where the actual conversion occurs. All the information
+     * inserted in the different frames are used in this method.
      * 
      * @param outputDetails a reference to the OutputDetails frame.
      */
@@ -393,6 +396,8 @@ public class PRIDEConverter {
         outputFrame = outputDetails;
         progressDialog = new ProgressDialog(outputDetails, true);
 
+        // this thread's only job is to make the progress dialog visible so that
+        // it can be updated independently of the converter thread
         final Thread t = new Thread(new Runnable() {
 
             public void run() {
@@ -422,6 +427,7 @@ public class PRIDEConverter {
             }
         }
 
+        // this thread does the actual conversion
         new Thread("ConverterThread") {
 
             @Override
@@ -452,8 +458,11 @@ public class PRIDEConverter {
                     // Transform all selected spectra into mzData spectra and retrieve the identifications.
                     ArrayList mzDataSpectra = new ArrayList();
 
+                    // a hashmap containing the filename (in some case a file id, i.e. a number) as the key
+                    // and the spectrum id (to be used in the PRIDE XML file as the element.
                     HashMap filenameToSpectrumID = new HashMap();
 
+                    // detect the data source used, and use the corresponding transformSpectra method
                     if (properties.getDataSource().equalsIgnoreCase("ms_lims")) {
                         filenameToSpectrumID = transformSpectraFrom_ms_lims(mzDataSpectra);
                     } else if (properties.getDataSource().equalsIgnoreCase("Mascot Dat File")) {
@@ -503,6 +512,7 @@ public class PRIDEConverter {
                         Util.writeToErrorLog("Progress bar: NullPointerException!!!\n" + e.toString());
                     }
 
+                    // create the mzData object. note the special cases for some data formats
                     if (properties.getDataSource().equalsIgnoreCase("TPP") ||
                             properties.getDataSource().equalsIgnoreCase("DTASelect")) {
 
@@ -605,8 +615,9 @@ public class PRIDEConverter {
                         Util.writeToErrorLog("Progress bar: NullPointerException!!!\n" + e.toString());
                     }
 
-                    // Cycle all unique identifications, grouping them by 
-                    // accession and retaining only relevant data.
+
+                    // Cycle all unique identifications, group them by 
+                    // accession and retain only relevant data.
                     Iterator iter = omitDuplicates.values().iterator();
 
                     int counter = 0;
@@ -640,6 +651,8 @@ public class PRIDEConverter {
                             accession = accession.substring(0, accession.lastIndexOf(" "));
                         }
 
+
+                        // @TODO: Improve the parsing of accession number
 
                         // parsing of the accession number if it includs more than one '|'
                         // if it does the part after the second '|' is removed
@@ -1197,7 +1210,7 @@ public class PRIDEConverter {
      */
     private static HashMap transformSpectraFromXTandemDataFile(ArrayList aTransformedSpectra) throws IOException {
 
-        // note: the xml parsing in this method is very far from perfect and should be reimplemented!
+        // @TODO: the xml parsing in this method is very far from perfect and should be reimplemented
 
         HashMap mapping = new HashMap();
 
@@ -1259,7 +1272,7 @@ public class PRIDEConverter {
 
         if (properties.selectAllIdentifiedSpectra()) {
 
-            // If 'select identified spectra' is selected, we need to find out which spectra
+            // @TODO: If 'select identified spectra' is selected, we need to find out which spectra
             // are identified. So we need to parse the X!Tandem files before parsing the
             // spectra. This means the X!Tandem files are parsed more than once, so maybe
             // this can be done in a better way.
@@ -2306,7 +2319,7 @@ public class PRIDEConverter {
             upstreamFlankingSequence = null;
             downstreamFlankingSequence = null;
 
-            // should be replaced by better and simpler xml parsing
+            //  @TODO: should be replaced by better and simpler xml parsing
             try {
                 //get the factory
                 dbf = DocumentBuilderFactory.newInstance();
@@ -2372,8 +2385,21 @@ public class PRIDEConverter {
                             if (nodes.item(i).getAttributes().getNamedItem("type") != null) {
 
                                 peptideModifications = null;
-                                fragmentIons = new ArrayList<FragmentIon>(); // TODO: Fragmention ions are not yet added
+                                fragmentIons = new ArrayList<FragmentIon>(); 
 
+
+
+                                // @TODO: Extract fragmention ion annotations (X!Tandem).
+
+                                // 1 - get the fragment ions from the X!Tandem xml file somehow
+                                //     (when you know where to find this information, you might want to move the
+                                //      extraction of the info into one of the if's further down in this code)
+                                // 2 - add them to the fragmentIons list (see Mascot Dat File for how to do this)
+                                // 3 - add new mappings to the FragmentIonsMapping.prop file
+                                // 4 - that's it, the rest is taken care of :)
+                                
+
+                                
                                 if (nodes.item(i).getAttributes().getNamedItem("type").
                                         getNodeValue().equalsIgnoreCase("model")) {
 
@@ -2701,6 +2727,7 @@ public class PRIDEConverter {
         String ions = null;
         String upstreamFlankingSequence = null;
         String downstreamFlankingSequence = null;
+        String fragmentIonMap = null;
         int spectraCounter = 1;
         String currentLine;
         Vector columnHeaders;
@@ -2964,7 +2991,7 @@ public class PRIDEConverter {
                                 mH = null;
 
                                 peptideModifications = new ArrayList();
-                                fragmentIons = new ArrayList<FragmentIon>(); // TODO: Fragment ions are never added
+                                fragmentIons = new ArrayList<FragmentIon>();
 
                                 f = new FileReader(identificationFile);
                                 b = new BufferedReader(f);
@@ -2973,6 +3000,7 @@ public class PRIDEConverter {
 
                                 while (currentLine != null) {
 
+                                    // first we try to extract some of the information from the header part of the file
                                     if (currentLine.startsWith("database") && !currentLine.startsWith("database_date")) {
                                         tok = new StringTokenizer(currentLine);
                                         tok.nextToken();
@@ -2982,6 +3010,9 @@ public class PRIDEConverter {
                                         tok.nextToken();
                                         prospectorVersion = tok.nextToken();
                                     } else if (currentLine.startsWith("num_hits_to_report")) {
+
+                                        // parse the identifications
+
                                         tok = new StringTokenizer(currentLine);
 
                                         tok.nextToken();
@@ -2994,8 +3025,12 @@ public class PRIDEConverter {
 
                                             index = 0;
 
+                                            // contains all the column headers (score, sequence, etc)
+                                            // which makes is easy to extract the value of a given column
+                                            // later on
                                             spectrumMillColumnHeaders = new HashMap<String, Integer>();
 
+                                            // parse the column header titles
                                             while (tok.hasMoreTokens()) {
                                                 spectrumMillColumnHeaders.put(tok.nextToken(), new Integer(index++));
                                             }
@@ -3027,6 +3062,21 @@ public class PRIDEConverter {
                                             downstreamFlankingSequence = spectrumMillValues.get(
                                                     spectrumMillColumnHeaders.get("next_aa").intValue());
 
+                                            fragmentIonMap = spectrumMillValues.get(
+                                                    spectrumMillColumnHeaders.get("fragmentIonMap"));
+
+                                            fragmentIons = new ArrayList<FragmentIon>();
+
+
+                                            // @TODO: Extract fragmention ion annotations (Spectrum Mill).
+
+                                            // 1 - use the fragmentIonMap to get the fragment ions
+                                            // 2 - add them to the fragmentIons list (see Mascot Dat File for how to do this)
+                                            // 3 - add new mappings to the FragmentIonsMapping.prop file
+                                            // 4 - that's it, the rest is taken care of :)
+
+
+
                                             coverage_map = spectrumMillValues.get(
                                                     spectrumMillColumnHeaders.get("coverage_map"));
 
@@ -3035,6 +3085,7 @@ public class PRIDEConverter {
 
                                             start = new Integer(startTok.nextToken()) + 1;
 
+                                            // parse the variable modifications, if any
                                             if (spectrumMillColumnHeaders.containsKey("varMods")) {
 
                                                 modificationName = spectrumMillValues.get(
@@ -3112,11 +3163,10 @@ public class PRIDEConverter {
                                             modificationName = null;
                                             modificationLocation = null;
 
-                                            if (spectrumMillColumnHeaders.containsKey("fixedMods") &&
-                                                    !cancelConversion) {
+                                            // parse the fixed modifications, if any
+                                            if (spectrumMillColumnHeaders.containsKey("fixedMods") && !cancelConversion) {
                                                 modificationName = spectrumMillValues.get(
-                                                        spectrumMillColumnHeaders.get("fixedMods").
-                                                        intValue());
+                                                        spectrumMillColumnHeaders.get("fixedMods").intValue());
 
                                                 if (!modificationName.equalsIgnoreCase(" ")) {
 
@@ -3316,7 +3366,7 @@ public class PRIDEConverter {
                                 rankSp = null;
                                 mH = null;
                                 peptideModifications = null;
-                                fragmentIons = new ArrayList<FragmentIon>(); // TODO: Fragment ions are never added
+                                fragmentIons = null; // Sequence does not include this information
 
                                 f = new FileReader(identificationFile);
                                 b = new BufferedReader(f);
@@ -7909,7 +7959,6 @@ public class PRIDEConverter {
                                     }
 
                                     peptideModifications = null;
-                                    fragmentIons = new ArrayList<FragmentIon>(); // TODO: Fragment ions are never added...
 
                                     int location;
 
@@ -7976,30 +8025,32 @@ public class PRIDEConverter {
                                     }
 
 
-
-                                    // add fragment ions
+                                    // add fragment ion annotation
                                     fragmentIons = new ArrayList<FragmentIon>();
 
+                                    // get the peptide annotations from the file
                                     PeptideHitAnnotation peptideHitAnnotations =
                                             tempPeptideHit.getPeptideHitAnnotation(
                                             tempMascotDatfile.getMasses(), tempMascotDatfile.getParametersSection());
 
+                                    // get the fragment ions
                                     Vector currentFragmentIons = peptideHitAnnotations.getGeneralMatchedIonsAboveIntensityThreshold(
                                             currentQuery.getPeakList(), currentQuery.getMaxIntensity());
 
-
+                                    // iterate the fragment ions, detect the type and create CV params for each of them
                                     for (int i = 0; i < currentFragmentIons.size(); i++) {
 
+                                        // Note: 'FragmentIon' is included in several projetcs so the complete path is required
                                         be.proteomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl currentFragmentIon =
                                                 (be.proteomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl) currentFragmentIons.get(i);
 
-
-                                        //System.out.println(properties.getDataSource() + "_" + currentFragmentIon.getType());
-
+                                        // map the reported fragment ion to its corresponding CV term by using the
+                                        // mappings given in the FragmentIonsMapping.prop file
                                         FragmentIonMappedDetails fragmentIonMappedDetails =
                                                 fragmentIonMappings.getCVTermMappings().get(
                                                 properties.getDataSource() + "_" + currentFragmentIon.getType());
 
+                                        // check if a mapping was found or not
                                         if (fragmentIonMappedDetails == null) {
                                             JOptionPane.showMessageDialog(outputFrame,
                                                     "Unknown fragment ion \'" + currentFragmentIon.getType() + "\'. Ion not included in annotation.\n" +
@@ -8008,8 +8059,12 @@ public class PRIDEConverter {
                                                     JOptionPane.INFORMATION_MESSAGE);
                                         } else {
 
+                                            // -1 means that a mapping was found but that that this particular fragment
+                                            // ion type is currently not being used. Update FragmentIonsMapping.prop if
+                                            // you want to add a mapping for this fragment ion type.
                                             if (!fragmentIonMappedDetails.getCvParamAccession().equalsIgnoreCase("-1")) {
 
+                                                // create the list of CV Params for the fragment ion
                                                 ArrayList<CvParam> currentCvTerms =
                                                         createFragmentIonCvParams(
                                                         fragmentIonMappedDetails,
@@ -8017,12 +8072,11 @@ public class PRIDEConverter {
                                                         fragmentIonMappedDetails.getCharge(),
                                                         currentFragmentIon.getNumber(),
                                                         currentFragmentIon.getIntensity(),
-                                                        currentFragmentIon.getTheoreticalExperimantalMassError(), // TODO: use absolute value?
+                                                        currentFragmentIon.getTheoreticalExperimantalMassError(), // @TODO: use absolute value?
                                                         null);
 
+                                                // add the created fragment ion to the list of all fragment ions
                                                 fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
-                                            } else {
-                                                // ion type recognized but ignored (e.g. internal ions)
                                             }
                                         }
                                     }
@@ -8098,8 +8152,7 @@ public class PRIDEConverter {
         MSHits currentMSHit;
 
         ArrayList cVParams, userParams;
-        List<Integer> mzValues;
-        List<Integer> intensityValues;
+        List<Integer> mzValues, intensityValues;
         int omssaAbundanceScale;
         Collection spectrumDescriptionComments;
 
@@ -8134,8 +8187,7 @@ public class PRIDEConverter {
 
         OmssaOmxFile omxFile;
 
-        List<Integer> fixedModifications;
-        List<Integer> variableModifications;
+        List<Integer> fixedModifications, variableModifications;
         HashMap<MSSpectrum, MSHitSet> results;
         Iterator<MSSpectrum> iterator;
         MSSpectrum tempSpectrum;
@@ -8333,7 +8385,7 @@ public class PRIDEConverter {
             progressDialog.setString(currentFileName + " (" + (k + 1) + "/" +
                     properties.getSelectedSourceFiles().size() + ")");
 
-            // @TODO move the parsing of the mods.xml and usermodsxml into the OmssaOmxFile
+            // @TODO move the parsing of the mods.xml and usermodsxml into OmssaOmxFile
             omxFile = new OmssaOmxFile(properties.getSelectedSourceFiles().get(k), null, null);
 
             fixedModifications =
@@ -8341,16 +8393,12 @@ public class PRIDEConverter {
             variableModifications =
                     omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_variable.MSMod;
 
-            // default to 100 if not found
+            // note: defaults to 100 if not found (as described in the OMSSA xsd file)
             int omssaResponseScale =
                     omxFile.getParserResult().MSSearch_response.MSResponse.get(0).MSResponse_scale;
 
             double ionCoverageErrorMargin =
                     omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_msmstol;
-
-//            int omssaSearchSettingsScale =
-//                    omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_scale;
-
 
             // fixed modifications
             for (int i = 0; i < fixedModifications.size(); i++) {
@@ -8387,7 +8435,8 @@ public class PRIDEConverter {
 
                 tempSpectrum = iterator.next();
 
-                // OMSSA question: possible with more than one file name per spectrum??
+                // @TODO: OMSSA question: possible with more than one file name per spectrum??
+                //
                 // spectrum name is not mandatory, use spectrum number if no name is given
                 if (tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.size() == 0) {
                     fileName = "" + tempSpectrum.MSSpectrum_number;
@@ -8467,7 +8516,7 @@ public class PRIDEConverter {
                     // Ion selection parameters.
                     ionSelection = new ArrayList(4);
 
-                    // OMSSA question: possible with more than one charge per spectrum??
+                    // @TODO: OMSSA question: possible with more than one charge per spectrum??
                     chargeString = "" + tempSpectrum.MSSpectrum_charge.MSSpectrum_charge_E.get(0);
                     chargeString = chargeString.replaceFirst("\\+", "");
 
@@ -8533,7 +8582,7 @@ public class PRIDEConverter {
 
                         peptideSequence = currentMSHit.MSHits_pepstring;
 
-                        // OMSSA question: how to handle protein isoforms?
+                        // @TODO: OMSSA question: how to handle protein isoforms?
                         // Currently handled by simply selection the first peptide hit (in the xml file)
                         currentMSPepHit = currentMSHit.MSHits_pephits.MSPepHit.get(0);
 
@@ -8551,7 +8600,7 @@ public class PRIDEConverter {
                         start = currentMSPepHit.MSPepHit_start + 1;
 
                         // handle the modifications
-                        // OMSSA question: more than one MSRequest??
+                        // @TODO: OMSSA question: more than one MSRequest??
 
                         // fixed modifications
                         if (fixedModifications.size() > 0) {
@@ -8585,7 +8634,7 @@ public class PRIDEConverter {
                                             monoMasses.add(
                                                     new MonoMassDeltaImpl(omssaModificationDetails.get(
                                                     fixedModifications.get(i)).getModMonoMass()));
-                                        //monoMasses = null;
+                                            //monoMasses = null;
                                         }
 
                                         peptideModifications.add(new ModificationImpl(
@@ -8677,31 +8726,46 @@ public class PRIDEConverter {
 
                         if (currentMSHit.MSHits_pvalue >= properties.getPeptideScoreThreshold()) {
 
+                            // find and add the fragment ions
                             fragmentIons = new ArrayList<FragmentIon>();
 
+                            // get the list of fragment ions for the current peptide identification
                             List<MSMZHit> currentFragmentIons = currentMSHit.MSHits_mzhits.MSMZHit;
 
+                            // iterate the fragment ions, detect the type and create CV params for each of them
                             for (int i = 0; i < currentFragmentIons.size(); i++) {
 
                                 MSMZHit currentFragmentIon = currentFragmentIons.get(i);
 
+                                // ion type is [0-10], 0 is a-ion, 1 is b-ion etc
+                                // see FragmentIonMappings.prop for complete list
                                 int msIonType = currentFragmentIon.MSMZHit_ion.MSIonType;
-                                String msIonNeutralLossTag = "";
 
-                                int msIonNeutralLoss = currentFragmentIon.MSMZHit_moreion.MSIon.MSIon_neutralloss.MSIonNeutralLoss;
+                                // tag used for netutal loss and immonium ion type
+                                String msIonNeutralLossOrImmoniumIonTag = "";
 
-                                if(msIonNeutralLoss != -1){
-                                    msIonNeutralLossTag += "_" + msIonNeutralLoss;
+                                int msIonNeutralLossType = currentFragmentIon.MSMZHit_moreion.MSIon.MSIon_neutralloss.MSIonNeutralLoss;
+
+                                // -1 means no neutral loss reported
+                                if(msIonNeutralLossType != -1){
+                                    msIonNeutralLossOrImmoniumIonTag += "_" + msIonNeutralLossType;
+                                } else{
+
+                                    // check for immonium ions
+                                    // note: assumes that a immonium ion can not have a neutral loss
+                                    if(currentFragmentIon.MSMZHit_moreion.MSIon.MSIon_immonium.MSImmonium.MSImmonium_parent != null){
+                                        msIonNeutralLossOrImmoniumIonTag += "_"
+                                                + currentFragmentIon.MSMZHit_moreion.MSIon.MSIon_immonium.MSImmonium.MSImmonium_parent;
+                                    }
                                 }
 
-
-                                // TODO: check for immomium ion.....
-
-
+                                // map the reported fragment ion to its corresponding CV term by using the
+                                // mappings given in the FragmentIonsMapping.prop file
                                 FragmentIonMappedDetails fragmentIonMappedDetails =
                                         fragmentIonMappings.getCVTermMappings().get(properties.getDataSource() +
-                                        "_" + msIonType + msIonNeutralLossTag);
+                                        "_" + msIonType + msIonNeutralLossOrImmoniumIonTag);
 
+                                // check if a mapping was found or not
                                 if (fragmentIonMappedDetails == null) {
                                     JOptionPane.showMessageDialog(outputFrame,
                                             "Unknown fragment ion \'" + currentFragmentIon.MSMZHit_ion.MSIonType + "\'. Ion not included in annotation.\n" +
@@ -8710,8 +8774,13 @@ public class PRIDEConverter {
                                             JOptionPane.INFORMATION_MESSAGE);
                                 } else {
 
+                                    // -1 means that a mapping was found but that that this particular fragment
+                                    // ion type is currently not being used. Update FragmentIonsMapping.prop if
+                                    // you want to add a mapping for this fragment ion type.
                                     if (!fragmentIonMappedDetails.getCvParamAccession().equalsIgnoreCase("-1")) {
 
+                                        // Now we have to map the reported fragment ion to its corresponding peak.
+                                        // Note that the values given in the OMSSA file are scaled.
                                         int fragmentIonMzValueUnscaled = currentFragmentIon.MSMZHit_mz;
 
                                         mzValues = tempSpectrum.MSSpectrum_mz.MSSpectrum_mz_E;
@@ -8722,6 +8791,8 @@ public class PRIDEConverter {
                                         double observedPeakMzValue = -1;
                                         double fragmentIonMassError = -1;
 
+                                        // Iterate the peaks and find the values within the fragment ion error range.
+                                        // If more than one match, use the most intense.
                                         for (int j = 0; j < mzValues.size(); j++) {
 
                                             // check if the fragment ion is within the mass error range
@@ -8733,13 +8804,13 @@ public class PRIDEConverter {
 
                                                     // calculate the fragmet ion mass
                                                     fragmentIonMassError = (mzValues.get(j).doubleValue() - fragmentIonMzValueUnscaled)
-                                                        / omssaResponseScale; // TODO: or the other way around??
+                                                        / omssaResponseScale; // @TODO: or the other way around?? The order decides the sign.
                                                     observedPeakMzValue = mzValues.get(j) / omssaResponseScale;
                                                 }
                                             }
                                         }
 
-
+                                        // check if any peaks in the spectrum matched the fragment ion
                                         if (fragmentIonIntensityScaled == -1) {
 
                                             JOptionPane.showMessageDialog(outputFrame,
@@ -8750,6 +8821,7 @@ public class PRIDEConverter {
                                                     JOptionPane.INFORMATION_MESSAGE);
                                         } else {
 
+                                            // create the list of CV Params for the fragment ion
                                             ArrayList<CvParam> currentCvTerms =
                                                     createFragmentIonCvParams(
                                                     fragmentIonMappedDetails,
@@ -8757,14 +8829,12 @@ public class PRIDEConverter {
                                                     currentFragmentIon.MSMZHit_charge,
                                                     new Integer(currentFragmentIon.MSMZHit_number),
                                                     fragmentIonIntensityScaled,
-                                                    fragmentIonMassError, // TODO: use absolute value?
+                                                    fragmentIonMassError, // @TODO: use absolute value?
                                                     null);
 
+                                            // add the created fragment ion to the list of all fragment ions
                                             fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
                                         }
-
-                                    } else {
-                                        // ion type recognized but ignored (e.g. internal ions)
                                     }
                                 }
                             }
@@ -9023,21 +9093,27 @@ public class PRIDEConverter {
 
                         peptideModifications = null;
 
-                        // add fragment ions
+
+                        // add the fragment ions
                         fragmentIons = new ArrayList<FragmentIon>();
 
+                        // extract the fragment ions from the database
                         Collection fragments =
                                 Fragmention.getAllFragmentions(conn, tempIdentification.getIdentificationid());
 
                         Iterator fragmentIterator = fragments.iterator();
 
+                        // iterate the fragment ions, detect the type and create CV params for each of them
                         while (fragmentIterator.hasNext()) {
 
                             Fragmention currentFragmentIon = (Fragmention) fragmentIterator.next();
 
+                            // map the reported fragment ion to its corresponding CV term by using the
+                            // mappings given in the FragmentIonsMapping.prop file
                             FragmentIonMappedDetails fragmentIonMappedDetails = fragmentIonMappings.getCVTermMappings().get(
                                     properties.getDataSource() + "_" + currentFragmentIon.getIonname());
 
+                            // check if a mapping was found or not
                             if (fragmentIonMappedDetails == null) {
                                 JOptionPane.showMessageDialog(outputFrame,
                                         "Unknown fragment ion \'" + currentFragmentIon.getIonname() + "\'. Ion not included in annotation.\n" +
@@ -9046,8 +9122,12 @@ public class PRIDEConverter {
                                         JOptionPane.INFORMATION_MESSAGE);
                             } else {
 
+                                // -1 means that a mapping was found but that that this particular fragment
+                                // ion type is currently not being used. Update FragmentIonsMapping.prop if
+                                // you want to add a mapping for this fragment ion type.
                                 if (!fragmentIonMappedDetails.getCvParamAccession().equalsIgnoreCase("-1")) {
 
+                                    // create the list of CV Params for the fragment ion
                                     ArrayList<CvParam> currentCvTerms =
                                             createFragmentIonCvParams(
                                             fragmentIonMappedDetails,
@@ -9055,12 +9135,11 @@ public class PRIDEConverter {
                                             fragmentIonMappedDetails.getCharge(),
                                             new Long(currentFragmentIon.getFragmentionnumber()).intValue(),
                                             new Long(currentFragmentIon.getIntensity()).doubleValue(),
-                                            currentFragmentIon.getMassdelta().doubleValue(), // TODO: use absolute value?
+                                            currentFragmentIon.getMassdelta().doubleValue(), // @TODO: use absolute value?
                                             null);
 
+                                    // add the created fragment ion to the list of all fragment ions
                                     fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
-                                } else {
-                                    // ion type recognized but ignored (e.g. internal ions)
                                 }
                             }
                         }
@@ -10461,13 +10540,16 @@ public class PRIDEConverter {
     /**
      * Returns the fragment ion cv terms. Note: this method contains some hard coding of CV terms.
      *
+     * NB: the fragment ion's m/z value has to be reported as the observed m/z value and
+     * not the theoretical m/z value in order for the annotation to be detected in PRIDE.
+     *
      * @param fragmentIonMappedDetails
-     * @param mzValue
-     * @param charge can be Null
+     * @param mzValue observed fragment ion m/z value (NB: <B>observed m/z</b> not theoretical m/z)
+     * @param charge can be null
      * @param fragmentIonNumber
      * @param intensity
-     * @param massError can be Null
-     * @param retentionTimeError can be Null
+     * @param massError can be null
+     * @param retentionTimeError can be null
      * @return the fragment ion cv terms
      */
     private static ArrayList<CvParam> createFragmentIonCvParams(FragmentIonMappedDetails fragmentIonMappedDetails,
@@ -10480,7 +10562,6 @@ public class PRIDEConverter {
 
         // add fragment ion type and fragment ion number
         currentCvParams.add(new CvParamImpl(
-                //"PLGS:00031",
                 fragmentIonMappedDetails.getCvParamAccession(),
                 "PRIDE",
                 fragmentIonMappedDetails.getName(),
@@ -10523,7 +10604,7 @@ public class PRIDEConverter {
                     massError.toString()));
         }
 
-        // add fragment ion mass error
+        // add fragment ion retention time error
         if (retentionTimeError != null) {
             currentCvParams.add(new CvParamImpl(
                     "PRIDE:0000191",
