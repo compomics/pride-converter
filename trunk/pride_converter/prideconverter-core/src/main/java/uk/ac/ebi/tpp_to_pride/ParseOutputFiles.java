@@ -441,6 +441,7 @@ public class ParseOutputFiles {
 
             // Create contacts.
             Collection contacts = new ArrayList();
+
             // @TODO Check contacts.
             String[] contactStrings = projectProperties.getProperty(MZDATA_CONTACT_LIST).split("\\[\\*\\]");
             if (contactStrings == null || contactStrings.length == 0) {
@@ -460,7 +461,7 @@ public class ParseOutputFiles {
             }
 
             // Process instrument info.
-            // @TODO for MGF files all instrument details has to be extracted from the projectProperties file
+            // @TODO for MGF files instrument details could be extracted from the projectProperties file
             MSInstrumentInfo instrumentInfo = null;
 
             String instrumentName = "unknown";
@@ -478,6 +479,7 @@ public class ParseOutputFiles {
             }
 
             Collection instrumentSourceCVParams = new ArrayList();
+
             // @TODO  Check instrument source stuff.
             instrumentSourceCVParams.add(new CvParamImpl(projectProperties.getProperty(MZDATA_SOURCE_CV_ACCESSION),
                     "PSI", projectProperties.getProperty(MZDATA_SOURCE_CV_NAME), 0, null));
@@ -555,8 +557,7 @@ public class ParseOutputFiles {
             cvLookups.add(new CVLookupImpl("2006-07-07", "The NEWT Ontology", "NEWT", "http://www.ebi.ac.uk/newt/"));
             cvLookups.add(new CVLookupImpl("1.0", "The PRIDE Ontology", "PRIDE", "http://www.ebi.ac.uk/pride"));
 
-            // @TODO for MGF files software details has to be extracted from the projectProperties file
-            // softwareName
+            // @TODO for MGF files software details has to be extracted from the projectProperties file softwareName
             String softwareName = "unknown";
 
             if (spectraAreMzXml) {
@@ -584,6 +585,7 @@ public class ParseOutputFiles {
 
             // Create references.
             Collection references = new ArrayList();
+
             // @TODO  Check references.
             // Get all the references.
             String[] referenceStrings = projectProperties.getProperty(REFERENCES).split("\\[\\*\\]");
@@ -637,6 +639,7 @@ public class ParseOutputFiles {
                     PRIDE_proteins, protocolName, mzData, experimentCvParams, null);
             Collection experiments = new ArrayList(1);
             experiments.add(experiment);
+
             // Output file.
             // @TODO  Check output file.
             // Marshall experiments in chunks.
