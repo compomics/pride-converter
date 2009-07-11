@@ -152,7 +152,8 @@ public class OutputDetails extends javax.swing.JFrame {
         prideRegistrationJButton = new javax.swing.JButton();
         prideLoginJButton = new javax.swing.JButton();
         fileContentsJLabel = new javax.swing.JLabel();
-        referenceJLabel = new javax.swing.JLabel();
+        referenceTextJLabel = new javax.swing.JLabel();
+        referencePMIDJLabel = new javax.swing.JLabel();
         helpJButton = new javax.swing.JButton();
         aboutJButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
@@ -341,9 +342,22 @@ public class OutputDetails extends javax.swing.JFrame {
         fileContentsJLabel.setText(" ");
         fileContentsJLabel.setEnabled(false);
 
-        referenceJLabel.setFont(referenceJLabel.getFont().deriveFont((referenceJLabel.getFont().getStyle() | java.awt.Font.ITALIC)));
-        referenceJLabel.setText("If you publish your data as part of a paper, please include a reference to PRIDE Converter.");
-        referenceJLabel.setEnabled(false);
+        referenceTextJLabel.setText("<html>If you publish your data as part of a paper, please include a reference to PRIDE Converter: </html>");
+        referenceTextJLabel.setEnabled(false);
+
+        referencePMIDJLabel.setText("<html> <a href=\\\"http://www.ncbi.nlm.nih.gov/pubmed/19587657\">PMID:19587657</a></html>");
+        referencePMIDJLabel.setEnabled(false);
+        referencePMIDJLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                referencePMIDJLabelMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                referencePMIDJLabelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                referencePMIDJLabelMouseExited(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -361,7 +375,10 @@ public class OutputDetails extends javax.swing.JFrame {
                         .add(fileNameJLabel)
                         .add(18, 18, 18)
                         .add(fileNameJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE))
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, referenceJLabel))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .add(referenceTextJLabel)
+                        .add(0, 0, 0)
+                        .add(referencePMIDJLabel)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -374,7 +391,9 @@ public class OutputDetails extends javax.swing.JFrame {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(fileContentsJLabel)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(referenceJLabel)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(referencePMIDJLabel)
+                    .add(referenceTextJLabel))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(prideLoginJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -706,7 +725,6 @@ public class OutputDetails extends javax.swing.JFrame {
         prideLoginJButton.setEnabled(true);
         prideRegistrationJButton.setEnabled(true);
         fileContentsJLabel.setEnabled(true);
-        referenceJLabel.setEnabled(true);
 
         fileContentsJLabel.setText(spectraCount + " spectra, " +
                 peptideIdentificationCount + " peptide identifications, " +
@@ -866,10 +884,11 @@ public class OutputDetails extends javax.swing.JFrame {
                 path += File.separator;
             }
 
-            if (!new File(path + "mods.xml").exists()) {
+            if (!new File(path + "mods.xml").exists() || !new File(path + "usermods.xml").exists()) {
+
                 JOptionPane.showMessageDialog(this,
-                        "The selected path does not contain the mods.xml file used by OMSSA.\n" +
-                        "The conversion can not be done without this file.\n\n" +
+                        "The selected folder does not contain \'mods.xml\' and \'usermods.xml\'.\n" +
+                        "OMSSA to PRIDE XML conversion can not be completed without these files.\n\n" +
                         "Please select the correct OMSSA installation folder.",
                         "Incorrect OMSSA Installation Folder",
                         JOptionPane.YES_NO_OPTION);
@@ -894,6 +913,33 @@ public class OutputDetails extends javax.swing.JFrame {
     private void useCommaAsDecimalSymbolJCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useCommaAsDecimalSymbolJCheckBoxActionPerformed
         convertJButton.setEnabled(true);
     }//GEN-LAST:event_useCommaAsDecimalSymbolJCheckBoxActionPerformed
+
+    /**
+     * Opens the the pubmed page showing the PRIDE Converter paper in the default web browser.
+     *
+     * @param evt
+     */
+    private void referencePMIDJLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_referencePMIDJLabelMouseClicked
+        BareBonesBrowserLaunch.openURL("http://www.ncbi.nlm.nih.gov/pubmed/19587657");
+}//GEN-LAST:event_referencePMIDJLabelMouseClicked
+
+    /**
+     * Changes the cursor to the hand cursor when over the PMID link.
+     *
+     * @param evt
+     */
+    private void referencePMIDJLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_referencePMIDJLabelMouseEntered
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+}//GEN-LAST:event_referencePMIDJLabelMouseEntered
+
+    /**
+     * Changes the cursor back to the default cursor when leaving the PMID link.
+     *
+     * @param evt
+     */
+    private void referencePMIDJLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_referencePMIDJLabelMouseExited
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+}//GEN-LAST:event_referencePMIDJLabelMouseExited
 
     /**
      * Enables or disables the convert button.
@@ -932,7 +978,8 @@ public class OutputDetails extends javax.swing.JFrame {
     private javax.swing.JTextField outPutPathJTextField;
     private javax.swing.JButton prideLoginJButton;
     private javax.swing.JButton prideRegistrationJButton;
-    private javax.swing.JLabel referenceJLabel;
+    private javax.swing.JLabel referencePMIDJLabel;
+    private javax.swing.JLabel referenceTextJLabel;
     private javax.swing.JCheckBox resubmissionJCheckBox;
     private javax.swing.JCheckBox roundDownScoreAndThresholdJCheckBox;
     private javax.swing.JCheckBox useCommaAsDecimalSymbolJCheckBox;
