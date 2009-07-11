@@ -329,9 +329,13 @@
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="fileNameJTextField" pref="502" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="referenceJLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="referenceTextJLabel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
+                          <Component id="referencePMIDJLabel" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -346,8 +350,11 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="fileContentsJLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
-                  <Component id="referenceJLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="referencePMIDJLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="referenceTextJLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="prideLoginJButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="prideRegistrationJButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -407,16 +414,22 @@
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="referenceJLabel">
+        <Component class="javax.swing.JLabel" name="referenceTextJLabel">
           <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-              <FontInfo relative="true">
-                <Font component="referenceJLabel" italic="true" property="font" relativeSize="true" size="0"/>
-              </FontInfo>
-            </Property>
-            <Property name="text" type="java.lang.String" value="If you publish your data as part of a paper, please include a reference to PRIDE Converter."/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;If you publish your data as part of a paper, please include a reference to PRIDE Converter: &lt;/html&gt;"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="referencePMIDJLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt; &lt;a href=\&quot;http://www.ncbi.nlm.nih.gov/pubmed/19587657&quot;&gt;PMID:19587657&lt;/a&gt;&lt;/html&gt;"/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="referencePMIDJLabelMouseClicked"/>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="referencePMIDJLabelMouseEntered"/>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="referencePMIDJLabelMouseExited"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
