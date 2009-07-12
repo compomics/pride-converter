@@ -8,6 +8,7 @@
 
     <name>PRIDE Converter Master</name>
 
+    <!-- Set the version number for the whole project -->
     <properties>
         <version.number>1.18.2</version.number>
     </properties>
@@ -20,6 +21,5 @@
             </resource>
         </resources>
     </build>
-
 
 </project>
