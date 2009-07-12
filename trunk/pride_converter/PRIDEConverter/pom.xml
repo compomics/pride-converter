@@ -42,11 +42,26 @@
             <email>lennart.martens@ebi.ac.uk</email>
             <organization>Proteomics Services Team, PANDA Group, EMBL-European Bioinformatics Institute</organization>
         </developer>
+        <developer>
+            <name>Florian Reisinger</name>
+            <id>florian</id>
+            <email>florian@ebi.ac.uk</email>
+            <organization>Proteomics Services Team, PANDA Group, EMBL-European Bioinformatics Institute</organization>
+        </developer>
+        <developer>
+            <name>Juan Antonio Vizcaino</name>
+            <id>juan</id>
+            <email>juan@ebi.ac.uk</email>
+            <organization>Proteomics Services Team, PANDA Group, EMBL-European Bioinformatics Institute</organization>
+        </developer>
     </developers>
 
+
+    <!-- Version Number -->
     <properties>
         <assembly.dir>PRIDE_Converter_v${version.number}</assembly.dir>
     </properties>
+
 
     <!-- Build -->
     <build>

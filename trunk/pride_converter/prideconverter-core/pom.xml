@@ -41,12 +41,23 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <email>lennart.martens@ebi.ac.uk</email>
             <organization>Proteomics Services Team, PANDA Group, EMBL-European Bioinformatics Institute</organization>
         </developer>
+        <developer>
+            <name>Florian Reisinger</name>
+            <id>florian</id>
+            <email>florian@ebi.ac.uk</email>
+            <organization>Proteomics Services Team, PANDA Group, EMBL-European Bioinformatics Institute</organization>
+        </developer>
+        <developer>
+            <name>Juan Antonio Vizcaino</name>
+            <id>juan</id>
+            <email>juan@ebi.ac.uk</email>
+            <organization>Proteomics Services Team, PANDA Group, EMBL-European Bioinformatics Institute</organization>
+        </developer>
     </developers>
 
 
     <!-- Build -->
     <build>
-
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
