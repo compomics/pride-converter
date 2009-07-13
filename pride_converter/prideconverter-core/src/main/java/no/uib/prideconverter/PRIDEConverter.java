@@ -8034,8 +8034,8 @@ public class PRIDEConverter {
                                             tempMascotDatfile.getMasses(), tempMascotDatfile.getParametersSection());
 
                                     // get the fragment ions
-                                    Vector currentFragmentIons = peptideHitAnnotations.getGeneralMatchedIonsAboveIntensityThreshold(
-                                            currentQuery.getPeakList(), currentQuery.getMaxIntensity());
+                                    Vector currentFragmentIons = peptideHitAnnotations.getFusedMatchedIons(
+                                            currentQuery.getPeakList(), tempPeptideHit.getPeaksUsedFromIons1(),  currentQuery.getMaxIntensity(), 0.05D);
 
                                     // iterate the fragment ions, detect the type and create CV params for each of them
                                     for (int i = 0; i < currentFragmentIons.size(); i++) {
