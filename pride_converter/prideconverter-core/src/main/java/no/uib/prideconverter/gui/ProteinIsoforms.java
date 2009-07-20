@@ -17,7 +17,7 @@ import no.uib.prideconverter.util.ExcelAdapter;
 public class ProteinIsoforms extends javax.swing.JDialog {
 
     private ProgressDialog progressDialog;
-    private PRIDEConverter prideConverter;
+//    private PRIDEConverter prideConverter;
     private OutputDetails outputDetails;
     private ExcelAdapter excelAdapter;
 
@@ -34,7 +34,7 @@ public class ProteinIsoforms extends javax.swing.JDialog {
 
         outputDetails = (OutputDetails) parent;
         this.progressDialog = progressDialog;
-        this.prideConverter = outputDetails.getPRIDEConverterReference();
+//        this.prideConverter = outputDetails.getPRIDEConverterReference();
 
         excelAdapter = new ExcelAdapter(peptideToProteinJXTable);
 
@@ -311,7 +311,7 @@ public class ProteinIsoforms extends javax.swing.JDialog {
      * @param evt
      */
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
-        prideConverter.setCancelConversion(true);
+        PRIDEConverter.setCancelConversion(true);
         progressDialog.setVisible(false);
         progressDialog.dispose();
         this.setVisible(false);
@@ -327,22 +327,22 @@ public class ProteinIsoforms extends javax.swing.JDialog {
     private void okJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okJButtonActionPerformed
 
         if (selectFirstJRadioButton.isSelected()) {
-            prideConverter.getProperties().setProteinIsoformSelectionType(
-                    prideConverter.getProperties().PROTEIN_ISOFORMS_ALWAYS_SELECT_FIRST);
+            PRIDEConverter.getProperties().setProteinIsoformSelectionType(
+                    PRIDEConverter.getProperties().PROTEIN_ISOFORMS_ALWAYS_SELECT_FIRST);
         } else if (manualSelectionJRadioButton.isSelected()) {
-            prideConverter.getProperties().setProteinIsoformSelectionType(
-                    prideConverter.getProperties().PROTEIN_ISOFORMS_MAUNAL_SELECTION);
+            PRIDEConverter.getProperties().setProteinIsoformSelectionType(
+                    PRIDEConverter.getProperties().PROTEIN_ISOFORMS_MAUNAL_SELECTION);
         } else {
-            prideConverter.getProperties().setProteinIsoformSelectionType(
-                    prideConverter.getProperties().PROTEIN_ISOFORMS_PROVIDE_LIST);
+            PRIDEConverter.getProperties().setProteinIsoformSelectionType(
+                    PRIDEConverter.getProperties().PROTEIN_ISOFORMS_PROVIDE_LIST);
 
-            prideConverter.getProperties().setSelectedIsoformAccessions(new ArrayList());
-            prideConverter.getProperties().setSelectedIsoformPeptideSequences(new ArrayList());
+            PRIDEConverter.getProperties().setSelectedIsoformAccessions(new ArrayList());
+            PRIDEConverter.getProperties().setSelectedIsoformPeptideSequences(new ArrayList());
 
             for (int i = 0; i < peptideToProteinJXTable.getRowCount(); i++) {
-                prideConverter.getProperties().getSelectedIsoformPeptideSequences().add(
+                PRIDEConverter.getProperties().getSelectedIsoformPeptideSequences().add(
                         peptideToProteinJXTable.getValueAt(i, 0));
-                prideConverter.getProperties().getSelectedIsoformAccessions().add(
+                PRIDEConverter.getProperties().getSelectedIsoformAccessions().add(
                         peptideToProteinJXTable.getValueAt(i, 1));
             }
         }

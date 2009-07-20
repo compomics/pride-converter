@@ -19,25 +19,22 @@ import uk.ac.ebi.pride.model.implementation.mzData.UserParamImpl;
  */
 public class UserParameters extends javax.swing.JFrame {
 
-    private PRIDEConverter prideConverter;
 
     /**
      * Opens a UserParameters frame.
      * 
-     * @param prideConverter
      * @param location
      */
-    public UserParameters(PRIDEConverter prideConverter, Point location) {
-        this.prideConverter = prideConverter;
+    public UserParameters(Point location) {
 
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH, 
-                prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
-                prideConverter.getProperties().FRAME_HEIGHT));
+        this.setPreferredSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setSize(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT);
+        this.setMaximumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setMinimumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
 
@@ -47,13 +44,13 @@ public class UserParameters extends javax.swing.JFrame {
         userParametersJTable.getTableHeader().setReorderingAllowed(false);
         userParametersJTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        setTitle(prideConverter.getWizardName() + " " + prideConverter.getPrideConverterVersionNumber() +
+        setTitle(PRIDEConverter.getWizardName() + " " + PRIDEConverter.getPrideConverterVersionNumber() +
                 " - " + getTitle());
 
         userParametersJTable.getColumn(" ").setMaxWidth(40);
         userParametersJTable.getColumn(" ").setMinWidth(40);
 
-        Iterator iterator = prideConverter.getProperties().getExperimentUserParameters().iterator();
+        Iterator iterator = PRIDEConverter.getProperties().getExperimentUserParameters().iterator();
 
         UserParamImpl temp;
 
@@ -388,7 +385,7 @@ public class UserParameters extends javax.swing.JFrame {
      */
     private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backJButtonActionPerformed
         saveInsertedInformation();
-        new Instrument(prideConverter, this.getLocation());
+        new Instrument(this.getLocation());
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_backJButtonActionPerformed
@@ -401,7 +398,7 @@ public class UserParameters extends javax.swing.JFrame {
      */
     private void nextJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextJButtonActionPerformed
         saveInsertedInformation();
-        new OutputDetails(prideConverter, this.getLocation());
+        new OutputDetails(this.getLocation());
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_nextJButtonActionPerformed
@@ -414,7 +411,7 @@ public class UserParameters extends javax.swing.JFrame {
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
         this.setVisible(false);
         this.dispose();
-        prideConverter.cancelConvertion();
+        PRIDEConverter.cancelConvertion();
     }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**
@@ -537,10 +534,10 @@ public class UserParameters extends javax.swing.JFrame {
     private void saveInsertedInformation(){
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        prideConverter.getProperties().setExperimentUserParameters(new ArrayList(userParametersJTable.getRowCount()));
+        PRIDEConverter.getProperties().setExperimentUserParameters(new ArrayList(userParametersJTable.getRowCount()));
 
         for (int i = 0; i < userParametersJTable.getRowCount(); i++) {
-            prideConverter.getProperties().getExperimentUserParameters().add(new UserParamImpl(
+            PRIDEConverter.getProperties().getExperimentUserParameters().add(new UserParamImpl(
                     (String) userParametersJTable.getValueAt(i, 1),
                     new Long(i),
                     (String) userParametersJTable.getValueAt(i, 2)));

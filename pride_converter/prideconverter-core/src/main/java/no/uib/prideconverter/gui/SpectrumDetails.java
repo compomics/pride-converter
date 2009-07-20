@@ -21,7 +21,6 @@ import uk.ac.ebi.pride.model.interfaces.mzdata.UserParam;
  */
 public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable {
 
-    private PRIDEConverter prideConverter;
     private String spectrumKey;
 
     /**
@@ -29,18 +28,16 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
      *
      * @param parent the parent frame of the dialog
      * @param modal
-     * @param prideConverter a reference to the PRIDEConverter class
      */
-    public SpectrumDetails(java.awt.Frame parent, boolean modal, PRIDEConverter prideConverter, String spectrumKey) {
+    public SpectrumDetails(java.awt.Frame parent, boolean modal, String spectrumKey) {
         super(parent, modal);
 
-        this.prideConverter = prideConverter;
         this.spectrumKey = spectrumKey;
 
         initComponents();
 
         // insert the stored CV params for this spectrum
-        ArrayList<CvParam> cvParams = prideConverter.getProperties().getSpectrumCvParams().get(spectrumKey);
+        ArrayList<CvParam> cvParams = PRIDEConverter.getProperties().getSpectrumCvParams().get(spectrumKey);
 
         if (cvParams != null) {
 
@@ -62,7 +59,7 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
         }
 
         // insert the stored user params for this spectrum
-        ArrayList<UserParam> userParams = prideConverter.getProperties().getSpectrumUserParams().get(spectrumKey);
+        ArrayList<UserParam> userParams = PRIDEConverter.getProperties().getSpectrumUserParams().get(spectrumKey);
 
         if (userParams != null) {
 
@@ -476,7 +473,7 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
      */
     private void olsSearchJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_olsSearchJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new OLSDialog(this, this, true, "cvterms", prideConverter.getUserProperties().getLastSelectedOntology(), null);
+        new OLSDialog(this, this, true, "cvterms", PRIDEConverter.getUserProperties().getLastSelectedOntology(), null);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_olsSearchJButtonActionPerformed
 
@@ -567,7 +564,7 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
         searchTerm = searchTerm.replaceAll("\\[", " ");
         searchTerm = searchTerm.replaceAll("\\]", " ");
 
-        new OLSDialog(this, this, true, "cvterms", prideConverter.getUserProperties().getLastSelectedOntology(),
+        new OLSDialog(this, this, true, "cvterms", PRIDEConverter.getUserProperties().getLastSelectedOntology(),
                 selectedRow, searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_editCvParamJMenuItemActionPerformed
@@ -752,7 +749,7 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
                     (String) cvTermsJTable.getValueAt(i, 4)));
         }
 
-        prideConverter.getProperties().getSpectrumCvParams().put(spectrumKey, cvParams);
+        PRIDEConverter.getProperties().getSpectrumCvParams().put(spectrumKey, cvParams);
 
         ArrayList<UserParam> userParams = new ArrayList<UserParam>();
 
@@ -763,7 +760,7 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
                     (String) userParametersJTable.getValueAt(i, 2)));
         }
 
-        prideConverter.getProperties().getSpectrumUserParams().put(spectrumKey, userParams);
+        PRIDEConverter.getProperties().getSpectrumUserParams().put(spectrumKey, userParams);
 
         this.setVisible(false);
         this.dispose();
@@ -842,7 +839,7 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
     public void insertOLSResult(String field, String selectedValue, String accession,
             String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm) {
 
-        prideConverter.getUserProperties().setLastSelectedOntology(ontologyLong);
+        PRIDEConverter.getUserProperties().setLastSelectedOntology(ontologyLong);
 
         if (modifiedRow == -1) {
             ((DefaultTableModel) this.cvTermsJTable.getModel()).addRow(

@@ -30,7 +30,7 @@ public class ProteinIsoFormSelection extends javax.swing.JDialog {
     private DefaultTableModel proteinIsoformsTableModel = null;
     private ButtonGroup buttonGroup;
     private ProgressDialog progressDialog;
-    private PRIDEConverter prideConverter;
+//    private PRIDEConverter prideConverter;
     private PeptideHit peptideHit;
 
     /**
@@ -50,7 +50,7 @@ public class ProteinIsoFormSelection extends javax.swing.JDialog {
         this.peptideHit = peptideHit;
         outputDetails = (OutputDetails) parent;
         this.progressDialog = progressDialog;
-        this.prideConverter = outputDetails.getPRIDEConverterReference();
+//        this.prideConverter = outputDetails.getPRIDEConverterReference();
 
         // only works for Java 1.6 and newer
 //        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
@@ -306,7 +306,7 @@ public class ProteinIsoFormSelection extends javax.swing.JDialog {
      * @param evt
      */
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
-        prideConverter.setCancelConversion(true);
+        PRIDEConverter.setCancelConversion(true);
         progressDialog.setVisible(false);
         progressDialog.dispose();
         this.setVisible(false);
@@ -335,11 +335,11 @@ public class ProteinIsoFormSelection extends javax.swing.JDialog {
             selectedIndex = 0;
         }
         
-        prideConverter.getProperties().setTempProteinHit((ProteinHit) peptideHit.getProteinHits().get(selectedIndex));
+        PRIDEConverter.getProperties().setTempProteinHit((ProteinHit) peptideHit.getProteinHits().get(selectedIndex));
 
         if (alwaysChooseIsoformJCheckBox.isSelected()) {
-            if (!prideConverter.getProperties().getSelectedProteinHits().contains(((ProteinHit) peptideHit.getProteinHits().get(selectedIndex)).getAccession())) {
-                prideConverter.getProperties().getSelectedProteinHits().add(((ProteinHit) peptideHit.getProteinHits().get(selectedIndex)).getAccession());
+            if (!PRIDEConverter.getProperties().getSelectedProteinHits().contains(((ProteinHit) peptideHit.getProteinHits().get(selectedIndex)).getAccession())) {
+                PRIDEConverter.getProperties().getSelectedProteinHits().add(((ProteinHit) peptideHit.getProteinHits().get(selectedIndex)).getAccession());
             }
         }
         

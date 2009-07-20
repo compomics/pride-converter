@@ -20,27 +20,23 @@ import no.uib.prideconverter.util.BareBonesBrowserLaunch;
  */
 public class DataSourceSelection extends javax.swing.JFrame {
 
-    private PRIDEConverter prideConverter;
 
     /** 
      * Opens a new DataSourceSelection frame, and inserts stored information.
      * 
-     * @param prideConverter
      * @param location where to position the frame
      */
-    public DataSourceSelection(PRIDEConverter prideConverter, Point location) {
-
-        this.prideConverter = prideConverter;
+    public DataSourceSelection(Point location) {
 
         // sets the default wizard frame size
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
+        this.setPreferredSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setSize(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT);
+        this.setMaximumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setMinimumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
 
@@ -54,67 +50,67 @@ public class DataSourceSelection extends javax.swing.JFrame {
         ((TitledBorder) descriptionJPanel.getBorder()).setTitle("Data Source Description");
 
         // insert the information about the selected data source
-        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims")) {
+        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims")) {
             ms_limsJRadioButton.setSelected(true);
             ms_limsJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
             mascotDatFileJRadioButton.setSelected(true);
             mascotDatFileJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Generic File")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Generic File")) {
             mgfJRadioButton.setSelected(true);
             mgfJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File")) {
             sequestDTAFilesJRadioButton.setSelected(true);
             sequestDTAFilesJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
             xTandemJRadioButton.setSelected(true);
             xTandemJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Micromass PKL File")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Micromass PKL File")) {
             pklFilesJRadioButton.setSelected(true);
             pklFilesJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
             spectrumMillJRadioButton.setSelected(true);
             spectrumMillJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
             sequestResultsJRadioButton.setSelected(true);
             sequestResultsJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")) {
             mzXMLJRadioButton.setSelected(true);
             mzXMLJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
             omssaJRadioButton.setSelected(true);
             omssaJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzML")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzML")) {
             mzMLJRadioButton.setSelected(true);
             mzMLJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
             mzDataJRadioButton.setSelected(true);
             mzDataJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("VEMS")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("VEMS")) {
             vemsJRadioButton.setSelected(true);
             vemsJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("MS2")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("MS2")) {
             ms2JRadioButton.setSelected(true);
             ms2JRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
             tppJRadioButton.setSelected(true);
             tppJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("DTASelect")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("DTASelect")) {
             dtaSelectJRadioButton.setSelected(true);
             dtaSelectJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
@@ -137,8 +133,8 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         //helpJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("../resources/icons/help.GIF")));
 
-        setTitle(prideConverter.getWizardName() + " " +
-                prideConverter.getPrideConverterVersionNumber() + " - " + getTitle());
+        setTitle(PRIDEConverter.getWizardName() + " " +
+                PRIDEConverter.getPrideConverterVersionNumber() + " - " + getTitle());
 
         if (location != null) {
             setLocation(location);
@@ -598,7 +594,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
         this.setVisible(false);
         this.dispose();
-        prideConverter.cancelConvertion();
+        PRIDEConverter.cancelConvertion();
     }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**
@@ -611,53 +607,53 @@ public class DataSourceSelection extends javax.swing.JFrame {
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
         if (ms_limsJRadioButton.isSelected()) {
-            prideConverter.getProperties().setDataSource("ms_lims");
-            new DataBaseDetails(prideConverter, this.getLocation());
+            PRIDEConverter.getProperties().setDataSource("ms_lims");
+            new DataBaseDetails(this.getLocation());
         } else if (mascotDatFileJRadioButton.isSelected()) {
-            prideConverter.getProperties().setDataSource("Mascot Dat File");
-            new DataFileSelection(prideConverter, this.getLocation());
+            PRIDEConverter.getProperties().setDataSource("Mascot Dat File");
+            new DataFileSelection(this.getLocation());
         } else if (mgfJRadioButton.isSelected()) {
-            prideConverter.getProperties().setDataSource("Mascot Generic File");
-            new DataFileSelection(prideConverter, this.getLocation());
+            PRIDEConverter.getProperties().setDataSource("Mascot Generic File");
+            new DataFileSelection(this.getLocation());
         } else if (sequestDTAFilesJRadioButton.isSelected()) {
-            prideConverter.getProperties().setDataSource("Sequest DTA File");
-            new DataFileSelection(prideConverter, this.getLocation());
+            PRIDEConverter.getProperties().setDataSource("Sequest DTA File");
+            new DataFileSelection(this.getLocation());
         } else if (xTandemJRadioButton.isSelected()) {
-            prideConverter.getProperties().setDataSource("X!Tandem");
-            new DataFileSelectionTwoFileTypes(prideConverter, this.getLocation());
+            PRIDEConverter.getProperties().setDataSource("X!Tandem");
+            new DataFileSelectionTwoFileTypes(this.getLocation());
         } else if (pklFilesJRadioButton.isSelected()) {
-            prideConverter.getProperties().setDataSource("Micromass PKL File");
-            new DataFileSelection(prideConverter, this.getLocation());
+            PRIDEConverter.getProperties().setDataSource("Micromass PKL File");
+            new DataFileSelection(this.getLocation());
         } else if (spectrumMillJRadioButton.isSelected()) {
-            prideConverter.getProperties().setDataSource("Spectrum Mill");
-            new DataFileSelectionTwoFileTypes(prideConverter, this.getLocation());
+            PRIDEConverter.getProperties().setDataSource("Spectrum Mill");
+            new DataFileSelectionTwoFileTypes(this.getLocation());
         } else if (sequestResultsJRadioButton.isSelected()) {
-            prideConverter.getProperties().setDataSource("Sequest Result File");
-            new DataFileSelectionTwoFileTypes(prideConverter, this.getLocation());
+            PRIDEConverter.getProperties().setDataSource("Sequest Result File");
+            new DataFileSelectionTwoFileTypes(this.getLocation());
         } else if (mzXMLJRadioButton.isSelected()) {
-            prideConverter.getProperties().setDataSource("mzXML");
-            new DataFileSelection(prideConverter, this.getLocation());
+            PRIDEConverter.getProperties().setDataSource("mzXML");
+            new DataFileSelection(this.getLocation());
         } else if (omssaJRadioButton.isSelected()) {
-            prideConverter.getProperties().setDataSource("OMSSA");
-            new DataFileSelection(prideConverter, this.getLocation());
+            PRIDEConverter.getProperties().setDataSource("OMSSA");
+            new DataFileSelection(this.getLocation());
         } else if (mzMLJRadioButton.isSelected()) {
-            prideConverter.getProperties().setDataSource("mzML");
-            new DataFileSelection(prideConverter, this.getLocation());
+            PRIDEConverter.getProperties().setDataSource("mzML");
+            new DataFileSelection(this.getLocation());
         } else if (mzDataJRadioButton.isSelected()) {
-            prideConverter.getProperties().setDataSource("mzData");
-            new DataFileSelection(prideConverter, this.getLocation());
+            PRIDEConverter.getProperties().setDataSource("mzData");
+            new DataFileSelection(this.getLocation());
         } else if (vemsJRadioButton.isSelected()) {
-            prideConverter.getProperties().setDataSource("VEMS");
-            new DataFileSelection(prideConverter, this.getLocation());
+            PRIDEConverter.getProperties().setDataSource("VEMS");
+            new DataFileSelection(this.getLocation());
         } else if (ms2JRadioButton.isSelected()) {
-            prideConverter.getProperties().setDataSource("MS2");
-            new DataFileSelection(prideConverter, this.getLocation());
+            PRIDEConverter.getProperties().setDataSource("MS2");
+            new DataFileSelection(this.getLocation());
         } else if (tppJRadioButton.isSelected()) {
-            prideConverter.getProperties().setDataSource("TPP");
-            new DataFileSelectionTPP(prideConverter, this.getLocation());
+            PRIDEConverter.getProperties().setDataSource("TPP");
+            new DataFileSelectionTPP(this.getLocation());
         } else if (dtaSelectJRadioButton.isSelected()) {
-            prideConverter.getProperties().setDataSource("DTASelect");
-            new DataFileSelectionDTASelect(prideConverter, this.getLocation());
+            PRIDEConverter.getProperties().setDataSource("DTASelect");
+            new DataFileSelectionDTASelect(this.getLocation());
         }
 
         this.setVisible(false);
@@ -720,7 +716,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "Homepage: <a href=\"http://genesis.ugent.be/ms_lims\">http://genesis.ugent.be/ms_lims</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims")) {
             resetDataSourceProperties();
         }
     }//GEN-LAST:event_ms_limsJRadioButtonActionPerformed
@@ -744,7 +740,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "Homepage: <a href=\"http://www.matrixscience.com\">www.matrixscience.com</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
             resetDataSourceProperties();
         }
     }//GEN-LAST:event_mascotDatFileJRadioButtonActionPerformed
@@ -768,7 +764,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "Homepage: <a href=\"http://www.matrixscience.com\">www.matrixscience.com</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Generic File")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Generic File")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_mgfJRadioButtonActionPerformed
@@ -794,7 +790,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "Homepage: <a href=\"http://www.thegpm.org/TANDEM\">www.thegpm.org/TANDEM</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_xTandemJRadioButtonActionPerformed
@@ -818,7 +814,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "Homepage: <a href=\"http://fields.scripps.edu/?q=content/software\">http://fields.scripps.edu/?q=content/software</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_sequestResultsJRadioButtonActionPerformed
@@ -841,7 +837,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "http://pubchem.ncbi.nlm.nih.gov/omssa</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_omssaJRadioButtonActionPerformed
@@ -865,7 +861,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "www.chem.agilent.com</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_spectrumMillJRadioButtonActionPerformed
@@ -892,7 +888,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "www.matrixscience.com/help/data_file_help.html#DTA</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_sequestDTAFilesJRadioButtonActionPerformed
@@ -942,7 +938,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "www.matrixscience.com/help/data_file_help.html#QTOF</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Micromass PKL File")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Micromass PKL File")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_pklFilesJRadioButtonActionPerformed
@@ -965,7 +961,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "http://tools.proteomecenter.org/wiki/index.php?title=Formats:mzXML</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_mzXMLJRadioButtonActionPerformed
@@ -992,7 +988,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "<a href=\"http://proteinprophet.sourceforge.net\">http://proteinprophet.sourceforge.net</a><br><br><br>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_tppJRadioButtonActionPerformed
@@ -1015,7 +1011,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "http://www.psidev.info/index.php?q=node/257</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzML")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzML")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_mzMLJRadioButtonActionPerformed
@@ -1038,7 +1034,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "www.psidev.info/index.php?q=node/80#mzdata</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_mzDataJRadioButtonActionPerformed
@@ -1059,7 +1055,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "http://www.genebio.com/products/phenyx/</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Phenyx")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Phenyx")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_phenyxJRadioButtonActionPerformed
@@ -1083,7 +1079,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "http://personal.cicbiogune.es/rmatthiesen/</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("VEMS")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("VEMS")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_vemsJRadioButtonActionPerformed
@@ -1107,7 +1103,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "http://doi.wiley.com/10.1002/rcm.1603</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("MS2")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("MS2")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_ms2JRadioButtonActionPerformed
@@ -1132,7 +1128,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "<br>If you find any bugs please let us know.</b>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("DTASelect")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("DTASelect")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_dtaSelectJRadioButtonActionPerformed
@@ -1142,11 +1138,11 @@ public class DataSourceSelection extends javax.swing.JFrame {
      * the spectra table etc.
      */
     private void resetDataSourceProperties() {
-        prideConverter.getProperties().setSelectedSourceFiles(null);
-        prideConverter.getProperties().setSelectedIdentificationFiles(null);
-        prideConverter.getProperties().setSpectrumTableModel(null);
-        prideConverter.getProperties().setSpectraSelectionCriteria(null);
-        prideConverter.getProperties().setProjectIds(new ArrayList<Long>());
+        PRIDEConverter.getProperties().setSelectedSourceFiles(null);
+        PRIDEConverter.getProperties().setSelectedIdentificationFiles(null);
+        PRIDEConverter.getProperties().setSpectrumTableModel(null);
+        PRIDEConverter.getProperties().setSpectraSelectionCriteria(null);
+        PRIDEConverter.getProperties().setProjectIds(new ArrayList<Long>());
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutJButton;

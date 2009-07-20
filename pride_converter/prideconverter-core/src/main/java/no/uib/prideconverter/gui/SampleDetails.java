@@ -47,7 +47,6 @@ import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
  */
 public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputable, OLSInputable {
 
-    private PRIDEConverter prideConverter;
     private String lastSelectedSampleName;
     private String samplePath;
     private boolean valuesChanged = false;
@@ -58,21 +57,19 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     /**
      * Opens a new SampleDetails frame.
      * 
-     * @param prideConverter
      * @param location where to locate the frame on the screen
      */
-    public SampleDetails(PRIDEConverter prideConverter, Point location) {
-        this.prideConverter = prideConverter;
+    public SampleDetails(Point location) {
 
         // sets the default wizard frame size
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
+        this.setPreferredSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setSize(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT);
+        this.setMaximumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setMinimumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
 
@@ -115,8 +112,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                     }
                 });
 
-        setTitle(prideConverter.getWizardName() + " " +
-                prideConverter.getPrideConverterVersionNumber() + " - " + getTitle());
+        setTitle(PRIDEConverter.getWizardName() + " " +
+                PRIDEConverter.getPrideConverterVersionNumber() + " - " + getTitle());
 
         singleSampleDetailsJTable.getColumn(" ").setMaxWidth(40);
         singleSampleDetailsJTable.getColumn(" ").setMinWidth(40);
@@ -131,24 +128,24 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         columnToolTips.add(null);
         columnToolTips.add("Quantification method used");
 
-        if (prideConverter.getProperties().getCurrentQuantificationSelection() == null) {
-            prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+        if (PRIDEConverter.getProperties().getCurrentQuantificationSelection() == null) {
+            PRIDEConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
         }
 
         lowerRangeJTextField.setText("" +
-                prideConverter.getUserProperties().getPeakIntegrationRangeLower());
+                PRIDEConverter.getUserProperties().getPeakIntegrationRangeLower());
         upperRangeJTextField.setText("" +
-                prideConverter.getUserProperties().getPeakIntegrationRangeUpper());
+                PRIDEConverter.getUserProperties().getPeakIntegrationRangeUpper());
         intensityThresholdJTextField.setText("" +
-                prideConverter.getUserProperties().getReporterIonIntensityThreshold());
+                PRIDEConverter.getUserProperties().getReporterIonIntensityThreshold());
 
         String temp = "";
 
-        for (int i = 0; i < prideConverter.getUserProperties().getPurityCorrections().length - 1; i++) {
-            temp += prideConverter.getUserProperties().getPurityCorrections()[i] + ",";
+        for (int i = 0; i < PRIDEConverter.getUserProperties().getPurityCorrections().length - 1; i++) {
+            temp += PRIDEConverter.getUserProperties().getPurityCorrections()[i] + ",";
         }
 
-        temp += prideConverter.getUserProperties().getPurityCorrections()[prideConverter.getUserProperties().getPurityCorrections().length - 1];
+        temp += PRIDEConverter.getUserProperties().getPurityCorrections()[PRIDEConverter.getUserProperties().getPurityCorrections().length - 1];
 
         purityCorrectionsJTextField.setText(temp);
 
@@ -162,8 +159,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         setVisible(true);
 
         // if the file is an mzData file the sample details are extracted
-        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData") &&
-                !prideConverter.getProperties().areSampleDetailsExtracted()) {
+        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzData") &&
+                !PRIDEConverter.getProperties().areSampleDetailsExtracted()) {
             extractSampleDetailsFromFile();
         }
 
@@ -182,9 +179,9 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         String sampleName;
         Iterator<CvParam> iterator;
 
-        Collection<CvParam> cvParams = prideConverter.getProperties().getMzDataFile().getSampleDescriptionCvParams();
+        Collection<CvParam> cvParams = PRIDEConverter.getProperties().getMzDataFile().getSampleDescriptionCvParams();
 
-        prideConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
+        PRIDEConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
         tempSampleCvParameters = new Vector();
 
         if (cvParams != null) {
@@ -206,9 +203,9 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             }
         }
 
-        sampleName = prideConverter.getProperties().getMzDataFile().getSampleName();
-        prideConverter.getProperties().setSampleDescriptionUserSubSampleNames(new ArrayList());
-        prideConverter.getUserProperties().setCurrentSampleSet(sampleName);
+        sampleName = PRIDEConverter.getProperties().getMzDataFile().getSampleName();
+        PRIDEConverter.getProperties().setSampleDescriptionUserSubSampleNames(new ArrayList());
+        PRIDEConverter.getUserProperties().setCurrentSampleSet(sampleName);
 
         String newName = samplePath + sampleName + ".sam";
 
@@ -256,7 +253,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                         newName = samplePath + sampleName + ".sam";
                     }
 
-                    prideConverter.getUserProperties().setCurrentSampleSet(sampleName);
+                    PRIDEConverter.getUserProperties().setCurrentSampleSet(sampleName);
 
                     try {
                         FileWriter r = new FileWriter(newName);
@@ -287,8 +284,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                         bw.close();
                         r.close();
 
-                        prideConverter.getProperties().setSampleDescriptionCVParamsQuantification(new ArrayList());
-                        prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+                        PRIDEConverter.getProperties().setSampleDescriptionCVParamsQuantification(new ArrayList());
+                        PRIDEConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
 
                     } catch (FileNotFoundException ex) {
                         JOptionPane.showMessageDialog(
@@ -335,8 +332,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 bw.close();
                 r.close();
 
-                prideConverter.getProperties().setSampleDescriptionCVParamsQuantification(new ArrayList());
-                prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+                PRIDEConverter.getProperties().setSampleDescriptionCVParamsQuantification(new ArrayList());
+                PRIDEConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
 
             } catch (FileNotFoundException ex) {
                 JOptionPane.showMessageDialog(
@@ -353,7 +350,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             }
         }
 
-        prideConverter.getProperties().setSampleDetailsExtracted(true);
+        PRIDEConverter.getProperties().setSampleDetailsExtracted(true);
     }
 
     /**
@@ -437,9 +434,9 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             sampleNames.add("   Create a new sample set...");
 
             namesJComboBox.setModel(new DefaultComboBoxModel(sampleNames));
-            namesJComboBox.setSelectedItem(prideConverter.getUserProperties().getCurrentSampleSet());
+            namesJComboBox.setSelectedItem(PRIDEConverter.getUserProperties().getCurrentSampleSet());
 
-            lastSelectedSampleName = prideConverter.getUserProperties().getCurrentSampleSet();
+            lastSelectedSampleName = PRIDEConverter.getUserProperties().getCurrentSampleSet();
 
             namesJComboBoxActionPerformed(null);
 
@@ -1094,7 +1091,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
         if (selectedRow != -1) {
 
-            //prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().remove(selectedRow);
+            //PRIDEConverter.getProperties().getSampleDescriptionUserSubSampleNames().remove(selectedRow);
 
             ((DefaultTableModel) singleSampleDetailsJTable.getModel()).removeRow(selectedRow);
 
@@ -1150,7 +1147,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         } else {
 
             if (saveInsertedInformation()) {
-                new ProtocolDetails(prideConverter, this.getLocation());
+                new ProtocolDetails(this.getLocation());
                 this.setVisible(false);
                 this.dispose();
             }
@@ -1164,7 +1161,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
      */
     private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backJButtonActionPerformed
         if (saveInsertedInformation()) {
-            new ExperimentProperties(prideConverter, this.getLocation());
+            new ExperimentProperties(this.getLocation());
             this.setVisible(false);
             this.dispose();
         }
@@ -1178,7 +1175,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
         this.setVisible(false);
         this.dispose();
-        prideConverter.cancelConvertion();
+        PRIDEConverter.cancelConvertion();
     }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**
@@ -1188,7 +1185,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
      */
     private void sampleDetailsJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleDetailsJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new OLSDialog(this, this, true, "singleSample", prideConverter.getUserProperties().getLastSelectedSampleOntology(), null);
+        new OLSDialog(this, this, true, "singleSample", PRIDEConverter.getUserProperties().getLastSelectedSampleOntology(), null);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_sampleDetailsJButtonActionPerformed
 
@@ -1213,7 +1210,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         searchTerm = searchTerm.replaceAll("\\]", " ");
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new OLSDialog(this, this, true, "singleSample", prideConverter.getUserProperties().getLastSelectedSampleOntology(), selectedRow, searchTerm);
+        new OLSDialog(this, this, true, "singleSample", PRIDEConverter.getUserProperties().getLastSelectedSampleOntology(), selectedRow, searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_editJMenuItemActionPerformed
 
@@ -1321,7 +1318,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
      * @param evt
      */
     private void namesJComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_namesJComboBoxItemStateChanged
-        prideConverter.getUserProperties().setCurrentSampleSet((String) namesJComboBox.getSelectedItem());
+        PRIDEConverter.getUserProperties().setCurrentSampleSet((String) namesJComboBox.getSelectedItem());
         mandatoryFieldsCheck();
     }//GEN-LAST:event_namesJComboBoxItemStateChanged
 
@@ -1342,14 +1339,14 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
             if (multipleSamplesDetailsJTable.getRowCount() > 0) { // multiple samples
 
-                Iterator iterator = prideConverter.getProperties().getSampleDescriptionCVParams().iterator();
+                Iterator iterator = PRIDEConverter.getProperties().getSampleDescriptionCVParams().iterator();
 
                 CvParamImpl temp;
 
-                bw.write(prideConverter.getProperties().getSampleDescriptionCVParams().size() + "\n");
+                bw.write(PRIDEConverter.getProperties().getSampleDescriptionCVParams().size() + "\n");
 
-                for (int i = 0; i < prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().size(); i++) {
-                    bw.write(prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(i) + "\n");
+                for (int i = 0; i < PRIDEConverter.getProperties().getSampleDescriptionUserSubSampleNames().size(); i++) {
+                    bw.write(PRIDEConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(i) + "\n");
                 }
 
                 bw.write("#\n");
@@ -1364,8 +1361,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 }
             } else { // single sample
 
-                prideConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
-                prideConverter.getProperties().setSampleDescriptionUserSubSampleNames(new ArrayList());
+                PRIDEConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
+                PRIDEConverter.getProperties().setSampleDescriptionUserSubSampleNames(new ArrayList());
 
                 bw.write(tempSampleCvParameters.size() + "\n");
                 bw.write("Name: " + sampleName + "\n");
@@ -1386,7 +1383,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                     bw.write("Name: " + temp.getName() + "\n");
                     bw.write("Value: " + value + "\n\n");
 
-                    prideConverter.getProperties().getSampleDescriptionCVParams().add(
+                    PRIDEConverter.getProperties().getSampleDescriptionCVParams().add(
                             new CvParamImpl(temp.getAccession(),
                             temp.getCVLookup(),
                             temp.getName(),
@@ -1471,8 +1468,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
                         if (newSampleName != null) {
 
-                            prideConverter.getProperties().setSampleDescriptionCVParamsQuantification(new ArrayList());
-                            prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+                            PRIDEConverter.getProperties().setSampleDescriptionCVParamsQuantification(new ArrayList());
+                            PRIDEConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
 
                             saveSample(newName, newSampleName);
 
@@ -1482,18 +1479,18 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                         } else {
                             cancel = true;
                             namesJComboBox.setSelectedItem(lastSelectedSampleName);
-                            prideConverter.getUserProperties().setCurrentSampleSet(lastSelectedSampleName);
+                            PRIDEConverter.getUserProperties().setCurrentSampleSet(lastSelectedSampleName);
                         }
                     } else {
                         cancel = true;
                         namesJComboBox.setSelectedItem(lastSelectedSampleName);
-                        prideConverter.getUserProperties().setCurrentSampleSet(lastSelectedSampleName);
+                        PRIDEConverter.getUserProperties().setCurrentSampleSet(lastSelectedSampleName);
                     }
                 }
             } else if (value == JOptionPane.CANCEL_OPTION) {
                 cancel = true;
                 namesJComboBox.setSelectedItem(lastSelectedSampleName);
-                prideConverter.getUserProperties().setCurrentSampleSet(lastSelectedSampleName);
+                PRIDEConverter.getUserProperties().setCurrentSampleSet(lastSelectedSampleName);
             }
         }
 
@@ -1502,7 +1499,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             lastSelectedSampleName = (String) namesJComboBox.getSelectedItem();
             String selectedSampleName = (String) namesJComboBox.getSelectedItem();
 
-            prideConverter.getUserProperties().setCurrentSampleSet(selectedSampleName);
+            PRIDEConverter.getUserProperties().setCurrentSampleSet(selectedSampleName);
 
             //empty the tables
             while (singleSampleDetailsJTable.getRowCount() > 0) {
@@ -1513,20 +1510,20 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 ((DefaultTableModel) multipleSamplesDetailsJTable.getModel()).removeRow(0);
             }
 
-            prideConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
-            prideConverter.getProperties().setSampleDescriptionUserSubSampleNames(new ArrayList());
+            PRIDEConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
+            PRIDEConverter.getProperties().setSampleDescriptionUserSubSampleNames(new ArrayList());
 
             if (namesJComboBox.getSelectedIndex() == 0) {
                 sampleDetailsJButton.setEnabled(false);
                 addSampleJButton.setEnabled(false);
                 valuesChanged = false;
-                prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+                PRIDEConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
             } else if (namesJComboBox.getSelectedIndex() == namesJComboBox.getItemCount() - 1) {
 
                 sampleDetailsJButton.setEnabled(false);
                 addSampleJButton.setEnabled(false);
                 valuesChanged = false;
-                prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+                PRIDEConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
 
                 ComboBoxInputDialog input = new ComboBoxInputDialog(this, this, true);
                 input.setTitle("Create New Sample Set");
@@ -1535,7 +1532,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             } else {
 
                 if (!keepQuantificationSelection) {
-                    prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+                    PRIDEConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
                 }
 
                 sampleDetailsJButton.setEnabled(true);
@@ -1589,7 +1586,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                         while (!subSampleName.equalsIgnoreCase("#")) {
 
                             if (multipleSamples) {
-                                prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().add(subSampleName);
+                                PRIDEConverter.getProperties().getSampleDescriptionUserSubSampleNames().add(subSampleName);
                             }
 
                             subSampleName = b.readLine();
@@ -1654,9 +1651,9 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                         addSampleDetails(null, names, accessions, ontologies, -1);
                     }
 
-                    if (prideConverter.getProperties().getCurrentQuantificationSelection().size() > 0) {
-                        for (int i = 0; i < prideConverter.getProperties().getCurrentQuantificationSelection().size(); i++) {
-                            multipleSamplesDetailsJTable.setValueAt(prideConverter.getProperties().getCurrentQuantificationSelection().get(i), i, 2);
+                    if (PRIDEConverter.getProperties().getCurrentQuantificationSelection().size() > 0) {
+                        for (int i = 0; i < PRIDEConverter.getProperties().getCurrentQuantificationSelection().size(); i++) {
+                            multipleSamplesDetailsJTable.setValueAt(PRIDEConverter.getProperties().getCurrentQuantificationSelection().get(i), i, 2);
                         }
                     }
 
@@ -1706,7 +1703,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
             boolean deleted = new File(newName).delete();
 
-            prideConverter.getProperties().setSampleDescriptionCVParamsQuantification(new ArrayList());
+            PRIDEConverter.getProperties().setSampleDescriptionCVParamsQuantification(new ArrayList());
 
             if (!deleted) {
                 JOptionPane.showMessageDialog(this, "The file could not be deleted!");
@@ -1809,7 +1806,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
      */
     private void addSampleJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSampleJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new NewSample(this, true, prideConverter);
+        new NewSample(this, true);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_addSampleJButtonActionPerformed
 
@@ -1822,7 +1819,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         int selectedRow = multipleSamplesDetailsJTable.getSelectedRow();
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new NewSample(this, true, prideConverter, selectedRow);
+        new NewSample(this, true, selectedRow);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_editMultipleSamplesJMenuItemActionPerformed
 
@@ -1851,17 +1848,17 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         valuesChanged = true;
 
         //move in data structure as well
-        Object tempSubSampleName = prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(
+        Object tempSubSampleName = PRIDEConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(
                 selectedRow - 1);
-        prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().set(
+        PRIDEConverter.getProperties().getSampleDescriptionUserSubSampleNames().set(
                 selectedRow - 1,
-                prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(selectedRow));
-        prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().set(selectedRow,
+                PRIDEConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(selectedRow));
+        PRIDEConverter.getProperties().getSampleDescriptionUserSubSampleNames().set(selectedRow,
                 tempSubSampleName);
 
-        Object[] sampleDetails = prideConverter.getProperties().getSampleDescriptionCVParams().toArray();
+        Object[] sampleDetails = PRIDEConverter.getProperties().getSampleDescriptionCVParams().toArray();
 
-        prideConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
+        PRIDEConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
 
         String temp = ((CvParamImpl) sampleDetails[sampleDetails.length - 1]).getValue();
 
@@ -1934,7 +1931,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                     new Long(i),
                     (String) subSampleNumbers.get(i));
 
-            prideConverter.getProperties().getSampleDescriptionCVParams().add(tempCvParamImpl);
+            PRIDEConverter.getProperties().getSampleDescriptionCVParams().add(tempCvParamImpl);
         }
 }//GEN-LAST:event_moveUpMultipleSamplesJMenuItemActionPerformed
 
@@ -1963,17 +1960,17 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         valuesChanged = true;
 
         //move in data structure as well
-        Object tempSubSampleName = prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(
+        Object tempSubSampleName = PRIDEConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(
                 selectedRow + 1);
-        prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().set(
+        PRIDEConverter.getProperties().getSampleDescriptionUserSubSampleNames().set(
                 selectedRow + 1,
-                prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(selectedRow));
-        prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().set(selectedRow,
+                PRIDEConverter.getProperties().getSampleDescriptionUserSubSampleNames().get(selectedRow));
+        PRIDEConverter.getProperties().getSampleDescriptionUserSubSampleNames().set(selectedRow,
                 tempSubSampleName);
 
-        Object[] sampleDetails = prideConverter.getProperties().getSampleDescriptionCVParams().toArray();
+        Object[] sampleDetails = PRIDEConverter.getProperties().getSampleDescriptionCVParams().toArray();
 
-        prideConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
+        PRIDEConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
 
         String temp = ((CvParamImpl) sampleDetails[sampleDetails.length - 1]).getValue();
 
@@ -2046,7 +2043,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                     new Long(i),
                     (String) subSampleNumbers.get(i));
 
-            prideConverter.getProperties().getSampleDescriptionCVParams().add(tempCvParamImpl);
+            PRIDEConverter.getProperties().getSampleDescriptionCVParams().add(tempCvParamImpl);
         }
 }//GEN-LAST:event_moveDownMultipleSamplesJMenuItemActionPerformed
 
@@ -2061,14 +2058,14 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
         if (selectedRow != -1) {
 
-            prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().remove(selectedRow);
+            PRIDEConverter.getProperties().getSampleDescriptionUserSubSampleNames().remove(selectedRow);
 
             ((DefaultTableModel) multipleSamplesDetailsJTable.getModel()).removeRow(selectedRow);
 
             //remove from datastructure as well
-            Object[] sampleDetails = prideConverter.getProperties().getSampleDescriptionCVParams().toArray();
+            Object[] sampleDetails = PRIDEConverter.getProperties().getSampleDescriptionCVParams().toArray();
 
-            prideConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
+            PRIDEConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
 
             String tempRow;
             Vector subSampleNumbers = new Vector();
@@ -2099,7 +2096,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                             new Long(counter),
                             (String) subSampleNumbers.get(counter++));
 
-                    prideConverter.getProperties().getSampleDescriptionCVParams().add(tempCvParamImpl);
+                    PRIDEConverter.getProperties().getSampleDescriptionCVParams().add(tempCvParamImpl);
                 }
             }
 
@@ -2128,7 +2125,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
             boolean deleted = new File(newName).delete();
 
-            prideConverter.getProperties().setSampleDescriptionCVParamsQuantification(new ArrayList());
+            PRIDEConverter.getProperties().setSampleDescriptionCVParamsQuantification(new ArrayList());
 
             if (!deleted) {
                 JOptionPane.showMessageDialog(this, "The file could not be deleted!");
@@ -2218,7 +2215,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
             for (int i = 0; i < names.size(); i++) {
 
-                prideConverter.getProperties().getSampleDescriptionCVParams().add(new CvParamImpl(
+                PRIDEConverter.getProperties().getSampleDescriptionCVParams().add(new CvParamImpl(
                         (String) accessions.get(i),
                         (String) ontologies.get(i),
                         (String) names.get(i),
@@ -2232,16 +2229,16 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                     new Object[]{new Integer(multipleSamplesDetailsJTable.getRowCount() + 1), temp});
 
             if (sampleName != null) {
-                prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().add(sampleName);
+                PRIDEConverter.getProperties().getSampleDescriptionUserSubSampleNames().add(sampleName);
             }
         } else {
 
             String temp = "";
 
-            Object[] cvParams = prideConverter.getProperties().getSampleDescriptionCVParams().toArray();
+            Object[] cvParams = PRIDEConverter.getProperties().getSampleDescriptionCVParams().toArray();
             CvParamImpl cvParam;
 
-            prideConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
+            PRIDEConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
 
             boolean valuesAdded = false;
 
@@ -2253,7 +2250,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 if (cvParam.getValue().equalsIgnoreCase("SUBSAMPLE_" + (modifiedRow + 1))) {
                     if (!valuesAdded) {
                         for (int j = 0; j < names.size(); j++) {
-                            prideConverter.getProperties().getSampleDescriptionCVParams().add(new CvParamImpl(
+                            PRIDEConverter.getProperties().getSampleDescriptionCVParams().add(new CvParamImpl(
                                     (String) accessions.get(j),
                                     (String) ontologies.get(j),
                                     (String) names.get(j),
@@ -2266,13 +2263,13 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                         valuesAdded = true;
                     }
                 } else {
-                    prideConverter.getProperties().getSampleDescriptionCVParams().add(cvParam);
+                    PRIDEConverter.getProperties().getSampleDescriptionCVParams().add(cvParam);
                 }
             }
 
             multipleSamplesDetailsJTable.setValueAt(temp, modifiedRow, 1);
 
-            prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().set(modifiedRow, sampleName);
+            PRIDEConverter.getProperties().getSampleDescriptionUserSubSampleNames().set(modifiedRow, sampleName);
         }
 
         mandatoryFieldsCheck();
@@ -2304,36 +2301,36 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     private boolean saveInsertedInformation() {
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        prideConverter.getUserProperties().setCurrentSampleSet((String) namesJComboBox.getSelectedItem());
-        prideConverter.getProperties().setSampleDescriptionCVParamsQuantification(new ArrayList());
-        prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+        PRIDEConverter.getUserProperties().setCurrentSampleSet((String) namesJComboBox.getSelectedItem());
+        PRIDEConverter.getProperties().setSampleDescriptionCVParamsQuantification(new ArrayList());
+        PRIDEConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
 
-        int counter = prideConverter.getProperties().getSampleDescriptionCVParams().size();
+        int counter = PRIDEConverter.getProperties().getSampleDescriptionCVParams().size();
 
         for (int i = 0; i < multipleSamplesDetailsJTable.getRowCount(); i++) {
 
             if (multipleSamplesDetailsJTable.getValueAt(i, 2) != null) {
 
                 if (((String) multipleSamplesDetailsJTable.getValueAt(i, 2)).equalsIgnoreCase("iTRAQ reagent 114")) {
-                    prideConverter.getProperties().getSampleDescriptionCVParamsQuantification().add(
+                    PRIDEConverter.getProperties().getSampleDescriptionCVParamsQuantification().add(
                             new CvParamImpl("PRIDE:0000114", "PRIDE", "iTRAQ reagent 114", counter++, "SUBSAMPLE_" +
                             (i + 1)));
                 } else if (((String) multipleSamplesDetailsJTable.getValueAt(i, 2)).equalsIgnoreCase("iTRAQ reagent 115")) {
-                    prideConverter.getProperties().getSampleDescriptionCVParamsQuantification().add(
+                    PRIDEConverter.getProperties().getSampleDescriptionCVParamsQuantification().add(
                             new CvParamImpl("PRIDE:0000115", "PRIDE", "iTRAQ reagent 115", counter++, "SUBSAMPLE_" +
                             (i + 1)));
                 } else if (((String) multipleSamplesDetailsJTable.getValueAt(i, 2)).equalsIgnoreCase("iTRAQ reagent 116")) {
-                    prideConverter.getProperties().getSampleDescriptionCVParamsQuantification().add(
+                    PRIDEConverter.getProperties().getSampleDescriptionCVParamsQuantification().add(
                             new CvParamImpl("PRIDE:0000116", "PRIDE", "iTRAQ reagent 116", counter++, "SUBSAMPLE_" +
                             (i + 1)));
                 } else if (((String) multipleSamplesDetailsJTable.getValueAt(i, 2)).equalsIgnoreCase("iTRAQ reagent 117")) {
-                    prideConverter.getProperties().getSampleDescriptionCVParamsQuantification().add(
+                    PRIDEConverter.getProperties().getSampleDescriptionCVParamsQuantification().add(
                             new CvParamImpl("PRIDE:0000117", "PRIDE", "iTRAQ reagent 117", counter++, "SUBSAMPLE_" +
                             (i + 1)));
                 }
             }
 
-            prideConverter.getProperties().getCurrentQuantificationSelection().add((String) multipleSamplesDetailsJTable.getValueAt(i, 2));
+            PRIDEConverter.getProperties().getCurrentQuantificationSelection().add((String) multipleSamplesDetailsJTable.getValueAt(i, 2));
         }
 
         boolean cancel = false;
@@ -2352,9 +2349,9 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 if (value == JOptionPane.YES_OPTION) {
 
                     String newName;
-                    newName = samplePath + prideConverter.getUserProperties().getCurrentSampleSet() + ".sam";
+                    newName = samplePath + PRIDEConverter.getUserProperties().getCurrentSampleSet() + ".sam";
 
-                    saveSample(newName, prideConverter.getUserProperties().getCurrentSampleSet());
+                    saveSample(newName, PRIDEConverter.getUserProperties().getCurrentSampleSet());
 
                 } else if (value == JOptionPane.CANCEL_OPTION) {
                     cancel = true;
@@ -2384,7 +2381,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
                         if (newSampleName != null) {
 
-                            prideConverter.getUserProperties().setCurrentSampleSet(newSampleName);
+                            PRIDEConverter.getUserProperties().setCurrentSampleSet(newSampleName);
 
                             saveSample(newName, newSampleName);
 
@@ -2402,7 +2399,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
         if (singleSampleDetailsJTable.getRowCount() > 0) {
 
-            prideConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
+            PRIDEConverter.getProperties().setSampleDescriptionCVParams(new ArrayList());
 
             for (int i = 0; i < tempSampleCvParameters.size(); i++) {
 
@@ -2414,7 +2411,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                     value = (String) singleSampleDetailsJTable.getValueAt(i, 2);
                 }
 
-                prideConverter.getProperties().getSampleDescriptionCVParams().add(
+                PRIDEConverter.getProperties().getSampleDescriptionCVParams().add(
                         new CvParamImpl(temp.getAccession(),
                         temp.getCVLookup(),
                         temp.getName(),
@@ -2426,7 +2423,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
         if (lowerRangeJTextField.isEnabled()) {
             try {
-                prideConverter.getUserProperties().setPeakIntegrationRangeLower(
+                PRIDEConverter.getUserProperties().setPeakIntegrationRangeLower(
                         new Double(lowerRangeJTextField.getText()).doubleValue());
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Peak Integreation Lower Range is not a number.", "Input Error", JOptionPane.ERROR_MESSAGE);
@@ -2435,7 +2432,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             }
 
             try {
-                prideConverter.getUserProperties().setPeakIntegrationRangeUpper(
+                PRIDEConverter.getUserProperties().setPeakIntegrationRangeUpper(
                         new Double(upperRangeJTextField.getText()).doubleValue());
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this,
@@ -2445,8 +2442,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 upperRangeJTextField.requestFocus();
             }
 
-            if (Math.abs(prideConverter.getUserProperties().getPeakIntegrationRangeLower()) +
-                    prideConverter.getUserProperties().getPeakIntegrationRangeUpper() > 1) {
+            if (Math.abs(PRIDEConverter.getUserProperties().getPeakIntegrationRangeLower()) +
+                    PRIDEConverter.getUserProperties().getPeakIntegrationRangeUpper() > 1) {
                 JOptionPane.showMessageDialog(this,
                         "The input peak integration range cross over between peaks (sum is > 1).",
                         "Input Error", JOptionPane.ERROR_MESSAGE);
@@ -2455,7 +2452,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             }
 
             try {
-                prideConverter.getUserProperties().setReporterIonIntensityThreshold(
+                PRIDEConverter.getUserProperties().setReporterIonIntensityThreshold(
                         new Double(intensityThresholdJTextField.getText()).doubleValue());
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this,
@@ -2484,7 +2481,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                     purityCorrectionsJTextField.requestFocus();
                 }
 
-                prideConverter.getUserProperties().setPurityCorrections(purrityCorrections);
+                PRIDEConverter.getUserProperties().setPurityCorrections(purrityCorrections);
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this,
                         "One of the Purity Correction values is not a number.",
@@ -2562,7 +2559,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
      */
     public void insertIntoComboBox(String text) {
 
-        prideConverter.getUserProperties().setCurrentSampleSet(text);
+        PRIDEConverter.getUserProperties().setCurrentSampleSet(text);
 
         String newName;
         newName = samplePath + text + ".sam";
@@ -2618,12 +2615,12 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             String ontologyLong, int modifiedRow, String mappedTerm) {
 
         if (mappedTerm != null) {
-            prideConverter.getUserProperties().getCVTermMappings().put(
+            PRIDEConverter.getUserProperties().getCVTermMappings().put(
                     mappedTerm, new CvParamImpl(accession, ontologyShort,
                     selectedValue, 0, null));
         }
 
-        prideConverter.getUserProperties().setLastSelectedSampleOntology(ontologyLong);
+        PRIDEConverter.getUserProperties().setLastSelectedSampleOntology(ontologyLong);
 
         addSampleDetails(selectedValue, accession, ontologyShort, modifiedRow);
     }

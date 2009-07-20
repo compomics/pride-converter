@@ -21,7 +21,6 @@ import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
  */
 public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
 
-    private PRIDEConverter prideConverter;
     private Instrument instrument;
     private int modifiedRow = -1;
     private AnalyzerImpl analyzer;
@@ -31,13 +30,10 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
      * 
      * @param instrument a reference to the Instrument frame
      * @param modal
-     * @param prideConverter
      */
-    public NewAnalyzer(Instrument instrument, boolean modal,
-            PRIDEConverter prideConverter) {
+    public NewAnalyzer(Instrument instrument, boolean modal) {
         super(instrument, modal);
 
-        this.prideConverter = prideConverter;
         this.instrument = instrument;
 
         initComponents();
@@ -61,15 +57,12 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
      * 
      * @param instrument a reference to the Instrument frame
      * @param modal
-     * @param prideConverter
      * @param modifiedRow the row to edit, -1 if adding new row
      * @param analyzer
      */
-    public NewAnalyzer(Instrument instrument, boolean modal,
-            PRIDEConverter prideConverter, int modifiedRow, AnalyzerImpl analyzer) {
+    public NewAnalyzer(Instrument instrument, boolean modal, int modifiedRow, AnalyzerImpl analyzer) {
         super(instrument, modal);
 
-        this.prideConverter = prideConverter;
         this.instrument = instrument;
         this.modifiedRow = modifiedRow;
         this.analyzer = analyzer;
@@ -348,7 +341,7 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
      */
     private void olsSearchJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_olsSearchJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new OLSDialog(this, this, true, "analyzers", prideConverter.getUserProperties().getLastSelectedOntology(), null);
+        new OLSDialog(this, this, true, "analyzers", PRIDEConverter.getUserProperties().getLastSelectedOntology(), null);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_olsSearchJButtonActionPerformed
 
@@ -419,7 +412,7 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
         searchTerm = searchTerm.replaceAll("\\[", " ");
         searchTerm = searchTerm.replaceAll("\\]", " ");
 
-        new OLSDialog(this, this, true, "analyzers", prideConverter.getUserProperties().getLastSelectedOntology(),
+        new OLSDialog(this, this, true, "analyzers", PRIDEConverter.getUserProperties().getLastSelectedOntology(),
                 selectedRow, searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_editJMenuItemActionPerformed
@@ -597,7 +590,7 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
     public void insertOLSResult(String field, String selectedValue, String accession,
             String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm) {
 
-        prideConverter.getUserProperties().setLastSelectedOntology(ontologyLong);
+        PRIDEConverter.getUserProperties().setLastSelectedOntology(ontologyLong);
         addAnalyzer(selectedValue, accession, ontologyShort, modifiedRow);
     }
 

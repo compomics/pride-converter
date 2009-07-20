@@ -21,7 +21,6 @@ import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
  */
 public class NewProtocolStep extends javax.swing.JDialog implements OLSInputable {
 
-    private PRIDEConverter prideConverter;
     private ProtocolDetails protocolDetails;
     private ProtocolStepImpl protocolStep;
     private int modifiedRow = -1;
@@ -31,13 +30,10 @@ public class NewProtocolStep extends javax.swing.JDialog implements OLSInputable
      * 
      * @param protocolDetails a reference to the ProtocolDetails frame
      * @param modal
-     * @param prideConverter
      */
-    public NewProtocolStep(ProtocolDetails protocolDetails, boolean modal,
-            PRIDEConverter prideConverter) {
+    public NewProtocolStep(ProtocolDetails protocolDetails, boolean modal) {
         super(protocolDetails, modal);
 
-        this.prideConverter = prideConverter;
         this.protocolDetails = protocolDetails;
 
         initComponents();
@@ -61,15 +57,13 @@ public class NewProtocolStep extends javax.swing.JDialog implements OLSInputable
      * 
      * @param protocolDetails a referenve to the ProtocolDetails frame
      * @param modal
-     * @param prideConverter
      * @param modifiedRow the row to edit, -1 if adding new row
      * @param protocolStepImpl
      */
     public NewProtocolStep(ProtocolDetails protocolDetails, boolean modal,
-            PRIDEConverter prideConverter, int modifiedRow, ProtocolStepImpl protocolStepImpl) {
+                           int modifiedRow, ProtocolStepImpl protocolStepImpl) {
         super(protocolDetails, modal);
 
-        this.prideConverter = prideConverter;
         this.protocolDetails = protocolDetails;
         this.protocolStep = protocolStepImpl;
         this.modifiedRow = modifiedRow;
@@ -347,7 +341,7 @@ public class NewProtocolStep extends javax.swing.JDialog implements OLSInputable
      */
     private void olsSearchJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_olsSearchJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new OLSDialog(this, this, true, "protocolSteps", prideConverter.getUserProperties().getLastSelectedOntology(), null);
+        new OLSDialog(this, this, true, "protocolSteps", PRIDEConverter.getUserProperties().getLastSelectedOntology(), null);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_olsSearchJButtonActionPerformed
 
@@ -417,7 +411,7 @@ public class NewProtocolStep extends javax.swing.JDialog implements OLSInputable
         searchTerm = searchTerm.replaceAll("\\[", " ");
         searchTerm = searchTerm.replaceAll("\\]", " ");
 
-        new OLSDialog(this, this, true, "protocolSteps", prideConverter.getUserProperties().getLastSelectedOntology(),
+        new OLSDialog(this, this, true, "protocolSteps", PRIDEConverter.getUserProperties().getLastSelectedOntology(),
                 selectedRow, searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_editJMenuItemActionPerformed
@@ -595,7 +589,7 @@ public class NewProtocolStep extends javax.swing.JDialog implements OLSInputable
     public void insertOLSResult(String field, String selectedValue, String accession,
             String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm) {
 
-        prideConverter.getUserProperties().setLastSelectedOntology(ontologyLong);
+        PRIDEConverter.getUserProperties().setLastSelectedOntology(ontologyLong);
         addProtocolSteps(selectedValue, accession, ontologyShort, modifiedRow);
     }
 

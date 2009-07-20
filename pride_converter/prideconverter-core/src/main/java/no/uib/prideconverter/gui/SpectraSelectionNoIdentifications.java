@@ -42,7 +42,6 @@ import uk.ac.ebi.pride.xml.MzDataXMLUnmarshaller;
  */
 public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
-    private PRIDEConverter prideConverter;
     private int numberOfSelectedSpectra;
     private boolean selectAll;
     private ProgressDialog progressDialog;
@@ -58,22 +57,19 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
     /** 
      * Opens a new SpectraSelection_SimpleDataFormats frame, and inserts stored information.
      * 
-     * @param prideConverter
      * @param location where to position the frame
      */
-    public SpectraSelectionNoIdentifications(PRIDEConverter prideConverter, Point location) {
-
-        this.prideConverter = prideConverter;
+    public SpectraSelectionNoIdentifications(Point location) {
 
         // sets the default wizard frame size
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
+        this.setPreferredSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setSize(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT);
+        this.setMaximumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setMinimumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
 
@@ -140,11 +136,11 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
         
 
-        if (prideConverter.getProperties().getSpectrumTableModel() != null) {
+        if (PRIDEConverter.getProperties().getSpectrumTableModel() != null) {
 
-            selectAllJCheckBox.setSelected(prideConverter.getProperties().selectAllSpectra());
+            selectAllJCheckBox.setSelected(PRIDEConverter.getProperties().selectAllSpectra());
 
-            spectraJXTable.setModel(prideConverter.getProperties().getSpectrumTableModel());
+            spectraJXTable.setModel(PRIDEConverter.getProperties().getSpectrumTableModel());
             loadSpectraJButton.setEnabled(false);
             selectedSpectraJLabel.setEnabled(true);
             numberOfSelectedSpectraJTextField.setEnabled(true);
@@ -162,14 +158,14 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                     numberOfSelectedSpectra + "/" +
                     spectraJXTable.getRowCount());
         } else{
-            prideConverter.getProperties().setSelectAllSpectra(true);
-            selectAllJCheckBox.setSelected(prideConverter.getProperties().selectAllSpectra());
+            PRIDEConverter.getProperties().setSelectAllSpectra(true);
+            selectAllJCheckBox.setSelected(PRIDEConverter.getProperties().selectAllSpectra());
         }
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
                 getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
 
-        setTitle(prideConverter.getWizardName() + " " + prideConverter.getPrideConverterVersionNumber() +
+        setTitle(PRIDEConverter.getWizardName() + " " + PRIDEConverter.getPrideConverterVersionNumber() +
                 " - " + getTitle());
 
         if (location != null) {
@@ -180,8 +176,8 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
         setVisible(true);
 
-        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData") ||
-                prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
+        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzData") ||
+                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
             loadSpectraJButton.setEnabled(false);
             loadSpectraJButton.setToolTipText("Manual spectra selection is currently not supported for mzData and TPP");
         }
@@ -482,7 +478,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
         this.setVisible(false);
         this.dispose();
-        prideConverter.cancelConvertion();
+        PRIDEConverter.cancelConvertion();
     }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**
@@ -492,7 +488,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
      */
     private void nextJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextJButtonActionPerformed
         saveInsertedInformation();
-        new ExperimentProperties(prideConverter, this.getLocation());
+        new ExperimentProperties(this.getLocation());
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_nextJButtonActionPerformed
@@ -537,10 +533,10 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
     private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backJButtonActionPerformed
         saveInsertedInformation();
 
-        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
-            new DataFileSelectionTPP(prideConverter, this.getLocation());
+        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
+            new DataFileSelectionTPP(this.getLocation());
         } else {
-            new DataFileSelection(prideConverter, this.getLocation());
+            new DataFileSelection(this.getLocation());
         }
 
         this.setVisible(false);
@@ -601,9 +597,9 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                 uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum currentSpectrum;
                 String[] values;
 
-                for (int j = 0; j < prideConverter.getProperties().getSelectedSourceFiles().size(); j++) {
+                for (int j = 0; j < PRIDEConverter.getProperties().getSelectedSourceFiles().size(); j++) {
 
-                    if (prideConverter.isConversionCanceled()) {
+                    if (PRIDEConverter.isConversionCanceled()) {
 
                         while (((DefaultTableModel) spectraJXTable.getModel()).getRowCount() > 0) {
                             ((DefaultTableModel) spectraJXTable.getModel()).removeRow(0);
@@ -616,12 +612,12 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                     }
 
                     try {
-                        file = new File(prideConverter.getProperties().getSelectedSourceFiles().get(j));
+                        file = new File(PRIDEConverter.getProperties().getSelectedSourceFiles().get(j));
 
                         progressDialog.setString(file.getName() + " (" + (j + 1) +
-                                "/" + prideConverter.getProperties().getSelectedSourceFiles().size() + ")");
+                                "/" + PRIDEConverter.getProperties().getSelectedSourceFiles().size() + ")");
 
-                        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File")) {
+                        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File")) {
 
                             f = new FileReader(file);
                             b = new BufferedReader(f);
@@ -647,7 +643,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                             b.close();
                             f.close();
 
-                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Micromass PKL File")) {
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Micromass PKL File")) {
 
                             f = new FileReader(file);
                             b = new BufferedReader(f);
@@ -685,7 +681,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                             b.close();
                             f.close();
 
-                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("VEMS")) {
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("VEMS")) {
 
                             f = new FileReader(file);
                             b = new BufferedReader(f);
@@ -723,7 +719,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                             b.close();
                             f.close();
 
-                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")) {
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")) {
 
                             msXMLParser = new MSXMLParser(file.getAbsolutePath());
 
@@ -782,11 +778,11 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                         "/" +
                                         numberOfSelectedSpectra);
                             }
-                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzML")) {
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzML")) {
 
                             unmarshallerMzMl = new MzMLUnmarshaller(file);
-                            prideConverter.getProperties().setMzMlFile(unmarshallerMzMl.unmarshall());
-                            spectraMzMl = prideConverter.getProperties().getMzMlFile().getRun().getSpectrumList().getSpectrum();
+                            PRIDEConverter.getProperties().setMzMlFile(unmarshallerMzMl.unmarshall());
+                            spectraMzMl = PRIDEConverter.getProperties().getMzMlFile().getRun().getSpectrumList().getSpectrum();
 
                             for (int i = 0; i < spectraMzMl.size(); i++) {
 
@@ -807,8 +803,8 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                         "/" + numberOfSelectedSpectra);
                             }
 
-                            prideConverter.getProperties().setDataFileHasBeenLoaded(true);
-                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
+                            PRIDEConverter.getProperties().setDataFileHasBeenLoaded(true);
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
 
                             reader = new FileReader(file);
 
@@ -837,7 +833,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                             reader.close();
 
-                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Generic File")) {
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Generic File")) {
 
                             f = new FileReader(file);
                             b = new BufferedReader(f);
@@ -894,7 +890,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                         // PEPMASS line found.
                                         String value = line.substring(equalSignIndex + 1);
 
-                                        //if (prideConverter.getProperties().isCommaTheDecimalSymbol()) {
+                                        //if (PRIDEConverter.getProperties().isCommaTheDecimalSymbol()) {
                                         value = value.replaceAll(",", ".");
                                         //}
 
@@ -911,7 +907,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                             b.close();
 
-                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("MS2")) {
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("MS2")) {
 
                             f = new FileReader(file);
                             b = new BufferedReader(f);
@@ -939,7 +935,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                 // S marks the start of a new spectrum
                                 if (line.startsWith("S")) {
 
-                                    if (prideConverter.getProperties().isCommaTheDecimalSymbol()) {
+                                    if (PRIDEConverter.getProperties().isCommaTheDecimalSymbol()) {
                                         line = line.replaceAll(",", ".");
                                     }
 
@@ -994,10 +990,10 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                         ex.printStackTrace();
                     } catch (Exception e) {
 
-                        Util.writeToErrorLog("Error parsing " + prideConverter.getProperties().getDataSource() + ": ");
+                        Util.writeToErrorLog("Error parsing " + PRIDEConverter.getProperties().getDataSource() + ": ");
                         e.printStackTrace();
 
-                        String fileType = prideConverter.getProperties().getDataSource();
+                        String fileType = PRIDEConverter.getProperties().getDataSource();
 
                         JOptionPane.showMessageDialog(null,
                                 "The following file could not parsed as a " +
@@ -1171,7 +1167,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
      * @param evt
      */
     private void viewSpectrumParametersJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSpectrumParametersJMenuItemActionPerformed
-        new SpectrumDetails(this, true, prideConverter,
+        new SpectrumDetails(this, true,
                 "" + spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 0) + "_" +
                 spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 1) + "_" +
                 spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 2) + "_" +
@@ -1233,15 +1229,15 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
     private void saveInsertedInformation() {
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        prideConverter.getProperties().setSelectedSpectraKeys(new ArrayList());
-        prideConverter.getProperties().setSelectAllSpectra(selectAllJCheckBox.isSelected());
+        PRIDEConverter.getProperties().setSelectedSpectraKeys(new ArrayList());
+        PRIDEConverter.getProperties().setSelectAllSpectra(selectAllJCheckBox.isSelected());
 
         if (spectraJXTable.getRowCount() > 0) {
 
             for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
                 if (((Boolean) spectraJXTable.getValueAt(i, 5)).booleanValue()) {
 
-                    prideConverter.getProperties().getSelectedSpectraKeys().add(
+                    PRIDEConverter.getProperties().getSelectedSpectraKeys().add(
                             new Object[]{
                                 spectraJXTable.getValueAt(i, 0),
                                 spectraJXTable.getValueAt(i, 1),
@@ -1252,9 +1248,9 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                 }
             }
 
-            prideConverter.getProperties().setSpectrumTableModel((DefaultTableModel) spectraJXTable.getModel());
+            PRIDEConverter.getProperties().setSpectrumTableModel((DefaultTableModel) spectraJXTable.getModel());
         } else {
-            prideConverter.getProperties().setSpectrumTableModel(null);
+            PRIDEConverter.getProperties().setSpectrumTableModel(null);
         }
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));

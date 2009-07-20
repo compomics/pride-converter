@@ -28,6 +28,7 @@ import uk.ac.ebi.jmzml.xml.io.MzMLUnmarshaller;
 import uk.ac.ebi.pride.model.implementation.core.ReferenceImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.ContactImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
+import uk.ac.ebi.pride.model.interfaces.core.Reference;
 import uk.ac.ebi.pride.xml.MzDataXMLUnmarshaller;
 
 /**
@@ -40,28 +41,25 @@ import uk.ac.ebi.pride.xml.MzDataXMLUnmarshaller;
  */
 public class ExperimentProperties extends javax.swing.JFrame implements ContactInputable {
 
-    private PRIDEConverter prideConverter;
     private Vector columnToolTips;
     private ProgressDialog progressDialog;
 
     /**
      * Opens a new ExperimentProperties frame, and inserts stored information.
      * 
-     * @param prideConverter
      * @param location where to position the frame
      */
-    public ExperimentProperties(PRIDEConverter prideConverter, Point location) {
-        this.prideConverter = prideConverter;
+    public ExperimentProperties(Point location) {
 
         // sets the default wizard frame size
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
+        this.setPreferredSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setSize(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT);
+        this.setMaximumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setMinimumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
 
@@ -100,8 +98,8 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
         contactsJTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         contactsJTable.getTableHeader().setReorderingAllowed(false);
 
-        setTitle(prideConverter.getWizardName() + " " +
-                prideConverter.getPrideConverterVersionNumber() + " - " + getTitle());
+        setTitle(PRIDEConverter.getWizardName() + " " +
+                PRIDEConverter.getPrideConverterVersionNumber() + " - " + getTitle());
 
         contactsJTable.getColumn(" ").setMinWidth(40);
         contactsJTable.getColumn(" ").setMaxWidth(40);
@@ -116,13 +114,13 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
 
         // if the selected file is an mzData file some experiment properties are 
         // extracted from the file
-        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData") &&
-                !prideConverter.getProperties().hasDataFileBeenLoaded()) {
+        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzData") &&
+                !PRIDEConverter.getProperties().hasDataFileBeenLoaded()) {
             loadMzDataFile();
         }
 
-//        else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzML") &&
-//                !prideConverter.getProperties().hasMzMlFileBeenLoaded()) {
+//        else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzML") &&
+//                !PRIDEConverter.getProperties().hasMzMlFileBeenLoaded()) {
 //            loadMzMlFile();
 //        }
     }
@@ -165,12 +163,12 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
                 try {
                     MzDataXMLUnmarshaller unmarshallerMzData = new MzDataXMLUnmarshaller();
 
-                    prideConverter.getProperties().setMzDataFile(unmarshallerMzData.unMarshall(
-                            new FileReader(prideConverter.getProperties().getSelectedSourceFiles().get(0))));
-                    prideConverter.getProperties().setDataFileHasBeenLoaded(true);
+                    PRIDEConverter.getProperties().setMzDataFile(unmarshallerMzData.unMarshall(
+                            new FileReader(PRIDEConverter.getProperties().getSelectedSourceFiles().get(0))));
+                    PRIDEConverter.getProperties().setDataFileHasBeenLoaded(true);
 
-                    prideConverter.getProperties().setContacts(
-                            prideConverter.getProperties().getMzDataFile().getContactCollection());
+                    PRIDEConverter.getProperties().setContacts(
+                            PRIDEConverter.getProperties().getMzDataFile().getContactCollection());
 
                     insertStoredInformation();
                     mandatoryFieldsCheck();
@@ -178,12 +176,12 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
                 } catch (FileNotFoundException e) {
 
                     Util.writeToErrorLog("An error occured while trying to parse: " +
-                            prideConverter.getProperties().getSelectedSourceFiles().get(0));
+                            PRIDEConverter.getProperties().getSelectedSourceFiles().get(0));
                     e.printStackTrace();
 
                     JOptionPane.showMessageDialog(null,
                             "An error occured while trying to parse: " +
-                            prideConverter.getProperties().getSelectedSourceFiles().get(0) + "\n\n" +
+                            PRIDEConverter.getProperties().getSelectedSourceFiles().get(0) + "\n\n" +
                             "See ../Properties/ErrorLog.txt for more details.\n" +
                             "The file can most likely not be converted to PRIDE XML.",
                             "Parsing Error",
@@ -191,12 +189,12 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
                 } catch (IOException e) {
 
                     Util.writeToErrorLog("An error occured while trying to parse: " +
-                            prideConverter.getProperties().getSelectedSourceFiles().get(0));
+                            PRIDEConverter.getProperties().getSelectedSourceFiles().get(0));
                     e.printStackTrace();
 
                     JOptionPane.showMessageDialog(null,
                             "An error occured while trying to parse: " +
-                            prideConverter.getProperties().getSelectedSourceFiles().get(0) + "\n\n" +
+                            PRIDEConverter.getProperties().getSelectedSourceFiles().get(0) + "\n\n" +
                             "See ../Properties/ErrorLog.txt for more details.\n" +
                             "The file can most likely not be converted to PRIDE XML.",
                             "Parsing Error",
@@ -253,17 +251,17 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
 
 //                try {
 
-                if (!prideConverter.getProperties().hasDataFileBeenLoaded()) {
+                if (!PRIDEConverter.getProperties().hasDataFileBeenLoaded()) {
                     MzMLUnmarshaller unmarshallerMzMl = new MzMLUnmarshaller(
-                            new File(prideConverter.getProperties().getSelectedSourceFiles().get(0)));
-                    prideConverter.getProperties().setMzMlFile(unmarshallerMzMl.unmarshall());
-                    prideConverter.getProperties().setDataFileHasBeenLoaded(true);
+                            new File(PRIDEConverter.getProperties().getSelectedSourceFiles().get(0)));
+                    PRIDEConverter.getProperties().setMzMlFile(unmarshallerMzMl.unmarshall());
+                    PRIDEConverter.getProperties().setDataFileHasBeenLoaded(true);
                 }
 
-//                    prideConverter.getProperties().getContacts()
+//                    PRIDEConverter.getProperties().getContacts()
 
-//                    prideConverter.getProperties().setContacts(
-//                            prideConverter.getProperties().getMzDataFile().getContactCollection());
+//                    PRIDEConverter.getProperties().setContacts(
+//                            PRIDEConverter.getProperties().getMzDataFile().getContactCollection());
                 insertStoredInformation();
                 mandatoryFieldsCheck();
 
@@ -272,12 +270,12 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
 ////                    progressDialog.setVisible(false);
 //
 //                    Util.writeToErrorLog("An error occured while trying to parse: " +
-//                            prideConverter.getProperties().getSelectedSourceFiles().get(0) + " " + e.toString());
+//                            PRIDEConverter.getProperties().getSelectedSourceFiles().get(0) + " " + e.toString());
 //                    e.printStackTrace();
 //
 //                    JOptionPane.showMessageDialog(null,
 //                            "An error occured while trying to parse: " +
-//                            prideConverter.getProperties().getSelectedSourceFiles().get(0) + "\n\n" +
+//                            PRIDEConverter.getProperties().getSelectedSourceFiles().get(0) + "\n\n" +
 //                            "See ../Properties/ErrorLog.txt for more details.\n" +
 //                            "The file can most likely not be converted to PRIDE XML.",
 //                            "Parsing Error",
@@ -287,12 +285,12 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
 ////                    progressDialog.setVisible(false);
 //
 //                    Util.writeToErrorLog("An error occured while trying to parse: " +
-//                            prideConverter.getProperties().getSelectedSourceFiles().get(0) + " " + e.toString());
+//                            PRIDEConverter.getProperties().getSelectedSourceFiles().get(0) + " " + e.toString());
 //                    e.printStackTrace();
 //
 //                    JOptionPane.showMessageDialog(null,
 //                            "An error occured while trying to parse: " +
-//                            prideConverter.getProperties().getSelectedSourceFiles().get(0) + "\n\n" +
+//                            PRIDEConverter.getProperties().getSelectedSourceFiles().get(0) + "\n\n" +
 //                            "See ../Properties/ErrorLog.txt for more details.\n" +
 //                            "The file can most likely not be converted to PRIDE XML.",
 //                            "Parsing Error",
@@ -316,12 +314,12 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
      * Retrieves and inserts the stored information.
      */
     private void insertStoredInformation() {
-        experimentTitleJTextArea.setText(prideConverter.getProperties().getExperimentTitle());
-        descriptionJTextArea.setText(prideConverter.getProperties().getExperimentDescription());
-        experimentLabelJTextField.setText(prideConverter.getProperties().getExperimentLabel());
-        projectJTextField.setText(prideConverter.getProperties().getExperimentProject());
+        experimentTitleJTextArea.setText(PRIDEConverter.getProperties().getExperimentTitle());
+        descriptionJTextArea.setText(PRIDEConverter.getProperties().getExperimentDescription());
+        experimentLabelJTextField.setText(PRIDEConverter.getProperties().getExperimentLabel());
+        projectJTextField.setText(PRIDEConverter.getProperties().getExperimentProject());
 
-        Iterator contacts = prideConverter.getProperties().getContacts().iterator();
+        Iterator contacts = PRIDEConverter.getProperties().getContacts().iterator();
 
         ContactImpl tempContact;
 
@@ -342,7 +340,7 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
         }
 
         Iterator ids;
-        Iterator refs = prideConverter.getProperties().getReferences().iterator();
+        Iterator refs = PRIDEConverter.getProperties().getReferences().iterator();
 
         while (referencesJTable.getRowCount() > 0) {
             ((DefaultTableModel) referencesJTable.getModel()).removeRow(0);
@@ -405,9 +403,9 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
      *
      * @return a reference the PRIDEConverter
      */
-    public PRIDEConverter getPRIDEConverterReference() {
-        return prideConverter;
-    }
+//    public PRIDEConverter getPRIDEConverterReference() {
+//        return prideConverter;
+//    }
 
     /**
      * Checks if all mandatory information is filled in and enables or disables 
@@ -528,7 +526,7 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
                         doi
                     });
 
-            prideConverter.getProperties().getReferences().add(new ReferenceImpl(
+            PRIDEConverter.getProperties().getReferences().add(new ReferenceImpl(
                     reference,
                     tempCollection,
                     null));
@@ -538,7 +536,8 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
             referencesJTable.setValueAt(pmid, selectedRow, 2);
             referencesJTable.setValueAt(doi, selectedRow, 3);
 
-            Object[] refs = prideConverter.getProperties().getReferences().toArray();
+            Collection<Reference> tmp = PRIDEConverter.getProperties().getReferences();
+            Reference[] refs = tmp.toArray(new Reference[tmp.size()]);
 
             ReferenceImpl tempRef = new ReferenceImpl(
                     reference,
@@ -547,10 +546,10 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
 
             refs[selectedRow] = tempRef;
 
-            prideConverter.getProperties().setReferences(new ArrayList(referencesJTable.getRowCount()));
+            PRIDEConverter.getProperties().setReferences(new ArrayList(referencesJTable.getRowCount()));
 
             for (int i = 0; i < refs.length; i++) {
-                prideConverter.getProperties().getReferences().add(refs[i]);
+                PRIDEConverter.getProperties().getReferences().add(refs[i]);
             }
         }
     }
@@ -1139,13 +1138,15 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
             referencesJTable.editingCanceled(null);
 
             //remove from datastructure as well
-            Object[] refs = prideConverter.getProperties().getReferences().toArray();
+//            Object[] refs = PRIDEConverter.getProperties().getReferences().toArray();
+            Collection<Reference> tmp = PRIDEConverter.getProperties().getReferences();
+            Reference[] refs = tmp.toArray(new Reference[tmp.size()]);
 
-            prideConverter.getProperties().setReferences(new ArrayList(refs.length));
+            PRIDEConverter.getProperties().setReferences(new ArrayList(refs.length));
 
             for (int i = 0; i < refs.length; i++) {
                 if (i != selectedRow) {
-                    prideConverter.getProperties().getReferences().add(refs[i]);
+                    PRIDEConverter.getProperties().getReferences().add(refs[i]);
                 }
             }
 
@@ -1177,16 +1178,18 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
         fixReferenceIndices();
 
         //move in data structure as well
-        Object[] refs = prideConverter.getProperties().getReferences().toArray();
+//        Object[] refs = PRIDEConverter.getProperties().getReferences().toArray();
+        Collection<Reference> tmp = PRIDEConverter.getProperties().getReferences();
+        Reference[] refs = tmp.toArray(new Reference[tmp.size()]);
 
-        Object tempRef = refs[selectedRow + 1];
+        Reference tempRef = refs[selectedRow + 1];
         refs[selectedRow + 1] = refs[selectedRow];
         refs[selectedRow] = tempRef;
 
-        prideConverter.getProperties().setReferences(new ArrayList(refs.length));
+        PRIDEConverter.getProperties().setReferences(new ArrayList(refs.length));
 
         for (int i = 0; i < refs.length; i++) {
-            prideConverter.getProperties().getReferences().add(refs[i]);
+            PRIDEConverter.getProperties().getReferences().add(refs[i]);
         }
     }//GEN-LAST:event_refMoveDownJMenuItemActionPerformed
 
@@ -1214,16 +1217,18 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
         fixReferenceIndices();
 
         //move in data structure as well
-        Object[] refs = prideConverter.getProperties().getReferences().toArray();
+//        Object[] refs = PRIDEConverter.getProperties().getReferences().toArray();
+        Collection<Reference> tmp = PRIDEConverter.getProperties().getReferences();
+        Reference[] refs = tmp.toArray(new Reference[tmp.size()]);
 
-        Object tempRef = refs[selectedRow - 1];
+        Reference tempRef = refs[selectedRow - 1];
         refs[selectedRow - 1] = refs[selectedRow];
         refs[selectedRow] = tempRef;
 
-        prideConverter.getProperties().setReferences(new ArrayList(refs.length));
+        PRIDEConverter.getProperties().setReferences(new ArrayList(refs.length));
 
         for (int i = 0; i < refs.length; i++) {
-            prideConverter.getProperties().getReferences().add(refs[i]);
+            PRIDEConverter.getProperties().getReferences().add(refs[i]);
         }
     }//GEN-LAST:event_refMoveUpJMenuItemActionPerformed
 
@@ -1235,7 +1240,7 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
      */
     private void refEditJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refEditJMenuItemActionPerformed
 
-        Object[] refs = prideConverter.getProperties().getReferences().toArray();
+        Object[] refs = PRIDEConverter.getProperties().getReferences().toArray();
 
         new NewReference(this, true,
                 referencesJTable.getSelectedRow(),
@@ -1368,7 +1373,7 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
      */
     private void nextJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextJButtonActionPerformed
         saveInsertedInformation();
-        new SampleDetails(prideConverter, this.getLocation());
+        new SampleDetails(this.getLocation());
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_nextJButtonActionPerformed
@@ -1381,7 +1386,7 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
         this.setVisible(false);
         this.dispose();
-        prideConverter.cancelConvertion();
+        PRIDEConverter.cancelConvertion();
     }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**
@@ -1394,26 +1399,26 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
 
         saveInsertedInformation();
 
-        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File") ||
-                prideConverter.getProperties().getDataSource().equalsIgnoreCase("Micromass PKL File") ||
-                prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") ||
-                prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzML") ||
-                prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData") ||
-                prideConverter.getProperties().getDataSource().equalsIgnoreCase("VEMS") ||
-                prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Generic File") ||
-                prideConverter.getProperties().getDataSource().equalsIgnoreCase("MS2")) {
-            new SpectraSelectionNoIdentifications(prideConverter, this.getLocation());
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem") ||
-                prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill") ||
-                prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File") ||
-                prideConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA") ||
-                prideConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims") ||
-                prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
-            new SpectraSelectionWithIdentifications(prideConverter, this.getLocation());
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")){
-            new DataFileSelectionTPP(prideConverter, this.getLocation());
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("DTASelect")){
-            new DataFileSelectionDTASelect(prideConverter, this.getLocation());
+        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File") ||
+                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Micromass PKL File") ||
+                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") ||
+                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzML") ||
+                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzData") ||
+                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("VEMS") ||
+                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Generic File") ||
+                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("MS2")) {
+            new SpectraSelectionNoIdentifications(this.getLocation());
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem") ||
+                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill") ||
+                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File") ||
+                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA") ||
+                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims") ||
+                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+            new SpectraSelectionWithIdentifications(this.getLocation());
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")){
+            new DataFileSelectionTPP(this.getLocation());
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("DTASelect")){
+            new DataFileSelectionDTASelect(this.getLocation());
         }
 
         this.setVisible(false);
@@ -1520,15 +1525,15 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        prideConverter.getProperties().setExperimentTitle(experimentTitleJTextArea.getText());
-        prideConverter.getProperties().setExperimentDescription(descriptionJTextArea.getText());
-        prideConverter.getProperties().setExperimentLabel(experimentLabelJTextField.getText());
-        prideConverter.getProperties().setExperimentProject(projectJTextField.getText());
+        PRIDEConverter.getProperties().setExperimentTitle(experimentTitleJTextArea.getText());
+        PRIDEConverter.getProperties().setExperimentDescription(descriptionJTextArea.getText());
+        PRIDEConverter.getProperties().setExperimentLabel(experimentLabelJTextField.getText());
+        PRIDEConverter.getProperties().setExperimentProject(projectJTextField.getText());
 
-        prideConverter.getProperties().setContacts(new ArrayList(contactsJTable.getRowCount()));
+        PRIDEConverter.getProperties().setContacts(new ArrayList(contactsJTable.getRowCount()));
 
         for (int i = 0; i < contactsJTable.getRowCount(); i++) {
-            prideConverter.getProperties().getContacts().add(new ContactImpl(
+            PRIDEConverter.getProperties().getContacts().add(new ContactImpl(
                     (String) contactsJTable.getValueAt(i, 3),
                     (String) contactsJTable.getValueAt(i, 1),
                     (String) contactsJTable.getValueAt(i, 2)));
