@@ -24,47 +24,43 @@ import uk.ac.ebi.pride.model.interfaces.mzdata.UserParam;
  */
 public class DataFileSelectionDTASelect extends javax.swing.JFrame {
 
-    private PRIDEConverter prideConverter;
 
     /** 
      * Opens a new DataFileSelectionDTASelect frame, and inserts stored information.
      * 
-     * @param prideConverter
      * @param location where to position the frame
      */
-    public DataFileSelectionDTASelect(PRIDEConverter prideConverter, Point location) {
-
-        this.prideConverter = prideConverter;
+    public DataFileSelectionDTASelect(Point location) {
 
         // sets the default wizard frame size
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
+        this.setPreferredSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setSize(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT);
+        this.setMaximumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setMinimumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
 
         // insert stored information
-        if (prideConverter.getProperties().getDtaSelectFileName() != null) {
-            dtaSelectFileJTextField.setText(prideConverter.getProperties().getDtaSelectFileName());
+        if (PRIDEConverter.getProperties().getDtaSelectFileName() != null) {
+            dtaSelectFileJTextField.setText(PRIDEConverter.getProperties().getDtaSelectFileName());
         }
 
-        if (prideConverter.getProperties().getSpectrumFilesFolderName() != null) {
-            spectrumFileFolderJTextField.setText(prideConverter.getProperties().getSpectrumFilesFolderName());
+        if (PRIDEConverter.getProperties().getSpectrumFilesFolderName() != null) {
+            spectrumFileFolderJTextField.setText(PRIDEConverter.getProperties().getSpectrumFilesFolderName());
         }
 
-        sequestParamFileJTextField.setText("" + prideConverter.getProperties().getSequestParamFile());
+        sequestParamFileJTextField.setText("" + PRIDEConverter.getProperties().getSequestParamFile());
 
         // sets the icon of the frame
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
                 getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
 
-        setTitle(prideConverter.getWizardName() + " " +
-                prideConverter.getPrideConverterVersionNumber() + " - " + getTitle());
+        setTitle(PRIDEConverter.getWizardName() + " " +
+                PRIDEConverter.getPrideConverterVersionNumber() + " - " + getTitle());
 
         if (location != null) {
             setLocation(location);
@@ -365,7 +361,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
         this.setVisible(false);
         this.dispose();
-        prideConverter.cancelConvertion();
+        PRIDEConverter.cancelConvertion();
     }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**
@@ -379,9 +375,9 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
 
         boolean saveOk = true;
 
-        prideConverter.getProperties().setSequestParamFile(sequestParamFileJTextField.getText());
+        PRIDEConverter.getProperties().setSequestParamFile(sequestParamFileJTextField.getText());
 
-        if (new File(prideConverter.getProperties().getSpectrumFilesFolderName()).list().length == 0) {
+        if (new File(PRIDEConverter.getProperties().getSpectrumFilesFolderName()).list().length == 0) {
             JOptionPane.showMessageDialog(this,
                     "The spectrum folder is empty! Please verify that you have selected the correct folder.",
                     "Spectrum Folder Empty", JOptionPane.ERROR_MESSAGE);
@@ -391,7 +387,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
         if (saveOk) {
             //new SpectraSelectionWithIdentifications(prideConverter, this.getLocation());
             //new SpectraSelectionNoIdentifications(prideConverter, this.getLocation());
-            new ExperimentProperties(prideConverter, this.getLocation());
+            new ExperimentProperties(this.getLocation());
 
             this.setVisible(false);
             this.dispose();
@@ -442,11 +438,11 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
 
         boolean saveOk = true;
 
-        prideConverter.getProperties().setSequestParamFile(sequestParamFileJTextField.getText());
+        PRIDEConverter.getProperties().setSequestParamFile(sequestParamFileJTextField.getText());
 
         if (saveOk) {
 
-            new DataSourceSelection(prideConverter, this.getLocation());
+            new DataSourceSelection(this.getLocation());
             this.setVisible(false);
             this.dispose();
         }
@@ -462,7 +458,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
     private void findDtaSelectFileJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findDtaSelectFileJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        JFileChooser chooser = new JFileChooser(prideConverter.getUserProperties().getCurrentSourceFileLocation());
+        JFileChooser chooser = new JFileChooser(PRIDEConverter.getUserProperties().getCurrentSourceFileLocation());
 
         if (dtaSelectFileJTextField.getText().length() > 0) {
             chooser.setSelectedFile(new File(dtaSelectFileJTextField.getText()));
@@ -478,19 +474,19 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             path = (chooser.getSelectedFile().getAbsoluteFile().getPath());
             dtaSelectFileJTextField.setText(path);
-            prideConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
-            prideConverter.getProperties().setDtaSelectFileName(path);
+            PRIDEConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
+            PRIDEConverter.getProperties().setDtaSelectFileName(path);
 
-            prideConverter.getProperties().setSpectrumTableModel(null);
-            prideConverter.getProperties().setInstrumentDetailsExtracted(false);
-            prideConverter.getProperties().setSelectedSourceFiles(new ArrayList());
-            prideConverter.getProperties().setSpectraSelectionCriteria(null);
-            prideConverter.getProperties().setDataFileHasBeenLoaded(false);
-            prideConverter.getProperties().setSampleDetailsExtracted(false);
-            prideConverter.getProperties().setContactInfoExtracted(false);
-            prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
-            prideConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
-            prideConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
+            PRIDEConverter.getProperties().setSpectrumTableModel(null);
+            PRIDEConverter.getProperties().setInstrumentDetailsExtracted(false);
+            PRIDEConverter.getProperties().setSelectedSourceFiles(new ArrayList());
+            PRIDEConverter.getProperties().setSpectraSelectionCriteria(null);
+            PRIDEConverter.getProperties().setDataFileHasBeenLoaded(false);
+            PRIDEConverter.getProperties().setSampleDetailsExtracted(false);
+            PRIDEConverter.getProperties().setContactInfoExtracted(false);
+            PRIDEConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+            PRIDEConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
+            PRIDEConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
         }
 
         mandatoryFieldsCheck();
@@ -507,7 +503,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
         JFileChooser chooser = new JFileChooser(
-                prideConverter.getUserProperties().getCurrentSourceFileLocation());
+                PRIDEConverter.getUserProperties().getCurrentSourceFileLocation());
 
         if (spectrumFileFolderJTextField.getText().length() > 0) {
             chooser.setSelectedFile(new File(spectrumFileFolderJTextField.getText()));
@@ -523,19 +519,19 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             path = (chooser.getSelectedFile().getAbsoluteFile().getPath());
             spectrumFileFolderJTextField.setText(path);
-            prideConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
-            prideConverter.getProperties().setSpectrumFilesFolderName(path);
+            PRIDEConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
+            PRIDEConverter.getProperties().setSpectrumFilesFolderName(path);
 
-            prideConverter.getProperties().setSpectrumTableModel(null);
-            prideConverter.getProperties().setInstrumentDetailsExtracted(false);
-            prideConverter.getProperties().setSelectedSourceFiles(new ArrayList());
-            prideConverter.getProperties().setSpectraSelectionCriteria(null);
-            prideConverter.getProperties().setDataFileHasBeenLoaded(false);
-            prideConverter.getProperties().setSampleDetailsExtracted(false);
-            prideConverter.getProperties().setContactInfoExtracted(false);
-            prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
-            prideConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
-            prideConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
+            PRIDEConverter.getProperties().setSpectrumTableModel(null);
+            PRIDEConverter.getProperties().setInstrumentDetailsExtracted(false);
+            PRIDEConverter.getProperties().setSelectedSourceFiles(new ArrayList());
+            PRIDEConverter.getProperties().setSpectraSelectionCriteria(null);
+            PRIDEConverter.getProperties().setDataFileHasBeenLoaded(false);
+            PRIDEConverter.getProperties().setSampleDetailsExtracted(false);
+            PRIDEConverter.getProperties().setContactInfoExtracted(false);
+            PRIDEConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+            PRIDEConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
+            PRIDEConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
         }
 
         mandatoryFieldsCheck();
@@ -560,7 +556,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
     private void sequestParamFileJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sequestParamFileJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        JFileChooser chooser = new JFileChooser(prideConverter.getUserProperties().getCurrentSourceFileLocation());
+        JFileChooser chooser = new JFileChooser(PRIDEConverter.getUserProperties().getCurrentSourceFileLocation());
 
         if (sequestParamFileJTextField.getText().length() > 0) {
             chooser.setSelectedFile(new File(sequestParamFileJTextField.getText()));
@@ -576,19 +572,19 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             path = (chooser.getSelectedFile().getAbsoluteFile().getPath());
             sequestParamFileJTextField.setText(path);
-            prideConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
-            prideConverter.getProperties().setSequestParamFile(path);
+            PRIDEConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
+            PRIDEConverter.getProperties().setSequestParamFile(path);
 
-            prideConverter.getProperties().setSpectrumTableModel(null);
-            prideConverter.getProperties().setInstrumentDetailsExtracted(false);
-            prideConverter.getProperties().setSelectedSourceFiles(new ArrayList());
-            prideConverter.getProperties().setSpectraSelectionCriteria(null);
-            prideConverter.getProperties().setDataFileHasBeenLoaded(false);
-            prideConverter.getProperties().setSampleDetailsExtracted(false);
-            prideConverter.getProperties().setContactInfoExtracted(false);
-            prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
-            prideConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
-            prideConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
+            PRIDEConverter.getProperties().setSpectrumTableModel(null);
+            PRIDEConverter.getProperties().setInstrumentDetailsExtracted(false);
+            PRIDEConverter.getProperties().setSelectedSourceFiles(new ArrayList());
+            PRIDEConverter.getProperties().setSpectraSelectionCriteria(null);
+            PRIDEConverter.getProperties().setDataFileHasBeenLoaded(false);
+            PRIDEConverter.getProperties().setSampleDetailsExtracted(false);
+            PRIDEConverter.getProperties().setContactInfoExtracted(false);
+            PRIDEConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+            PRIDEConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
+            PRIDEConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
         }
 
         mandatoryFieldsCheck();

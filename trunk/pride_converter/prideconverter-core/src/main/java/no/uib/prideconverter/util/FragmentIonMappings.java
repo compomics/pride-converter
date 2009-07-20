@@ -21,7 +21,6 @@ import no.uib.prideconverter.PRIDEConverter;
  */
 public class FragmentIonMappings {
 
-    private PRIDEConverter prideConverter;
     /**
      * Contains the fragment ion CV term mappings.
      * Key: name used in data format.
@@ -32,10 +31,8 @@ public class FragmentIonMappings {
     /**
      * Creates a new UserProperties object
      * 
-     * @param prideConverter
      */
-    public FragmentIonMappings(PRIDEConverter prideConverter) {
-        this.prideConverter = prideConverter;
+    public FragmentIonMappings() {
         cvTermMappings = new HashMap<String, FragmentIonMappedDetails>();
     }
 

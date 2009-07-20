@@ -1,5 +1,7 @@
 package no.uib.prideconverter.gui;
 
+import no.uib.prideconverter.PRIDEConverter;
+
 import java.awt.Frame;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
@@ -172,7 +174,7 @@ public class ProgressDialog extends javax.swing.JDialog {
         if (!doNothingOnClose) {
             
             if(parentFrame instanceof OutputDetails){
-                ((OutputDetails) parentFrame).getPRIDEConverterReference().setCancelConversion(true);
+                PRIDEConverter.setCancelConversion(true);
             }
             
             this.setVisible(true);

@@ -26,27 +26,23 @@ import uk.ac.ebi.pride.model.interfaces.mzdata.UserParam;
  */
 public class DataFileSelectionTPP extends javax.swing.JFrame {
 
-    private PRIDEConverter prideConverter;
 
     /** 
      * Opens a new DataFileSelectionTPP frame, and inserts stored information.
      * 
-     * @param prideConverter
      * @param location where to position the frame
      */
-    public DataFileSelectionTPP(PRIDEConverter prideConverter, Point location) {
-
-        this.prideConverter = prideConverter;
+    public DataFileSelectionTPP(Point location) {
 
         // sets the default wizard frame size
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH, 
-                prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
-                prideConverter.getProperties().FRAME_HEIGHT));
+        this.setPreferredSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setSize(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT);
+        this.setMaximumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setMinimumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
 
@@ -57,32 +53,32 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
         tf.setHorizontalAlignment(JFormattedTextField.CENTER);
 
         // insert stored information
-        if (prideConverter.getProperties().getPeptideProphetFileName() != null) {
-            peptideProphetFileJTextField.setText(prideConverter.getProperties().getPeptideProphetFileName());
+        if (PRIDEConverter.getProperties().getPeptideProphetFileName() != null) {
+            peptideProphetFileJTextField.setText(PRIDEConverter.getProperties().getPeptideProphetFileName());
         }
 
-        if (prideConverter.getProperties().getProteinProphetFileName() != null) {
-            proteinProphetFileJTextField.setText(prideConverter.getProperties().getProteinProphetFileName());
+        if (PRIDEConverter.getProperties().getProteinProphetFileName() != null) {
+            proteinProphetFileJTextField.setText(PRIDEConverter.getProperties().getProteinProphetFileName());
         }
 
-        if (prideConverter.getProperties().getSpectrumFilesFolderName() != null) {
-            spectrumFileFolderJTextField.setText(prideConverter.getProperties().getSpectrumFilesFolderName());
+        if (PRIDEConverter.getProperties().getSpectrumFilesFolderName() != null) {
+            spectrumFileFolderJTextField.setText(PRIDEConverter.getProperties().getSpectrumFilesFolderName());
         }
 
-        proteinIdFilterJTextField.setText("" + prideConverter.getProperties().getProteinIdentificationFilter());
+        proteinIdFilterJTextField.setText("" + PRIDEConverter.getProperties().getProteinIdentificationFilter());
 
         peptideProphetConfidenceLevelJSpinner.setValue(
-                new Double(prideConverter.getProperties().getPeptideProphetThreshold()));
+                new Double(PRIDEConverter.getProperties().getPeptideProphetThreshold()));
 
         proteinProphetConfidenceLevelJSpinner.setValue(
-                new Double(prideConverter.getProperties().getProteinProphetThreshold()));
+                new Double(PRIDEConverter.getProperties().getProteinProphetThreshold()));
         
         // sets the icon of the frame
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
                 getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
         
-        setTitle(prideConverter.getWizardName() + " " +
-                prideConverter.getPrideConverterVersionNumber() + " - " + getTitle());
+        setTitle(PRIDEConverter.getWizardName() + " " +
+                PRIDEConverter.getPrideConverterVersionNumber() + " - " + getTitle());
 
         if (location != null) {
             setLocation(location);
@@ -440,7 +436,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
         this.setVisible(false);
         this.dispose();
-        prideConverter.cancelConvertion();
+        PRIDEConverter.cancelConvertion();
     }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**
@@ -455,7 +451,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
         boolean saveOk = true;
 
         try {
-            prideConverter.getProperties().setPeptideProphetThreshold(
+            PRIDEConverter.getProperties().setPeptideProphetThreshold(
                     (Double) peptideProphetConfidenceLevelJSpinner.getValue());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "The PeptideProphet threshold is not a number!");
@@ -464,7 +460,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
         }
 
         try {
-            prideConverter.getProperties().setProteinProphetThreshold(
+            PRIDEConverter.getProperties().setProteinProphetThreshold(
                     (Double) proteinProphetConfidenceLevelJSpinner.getValue());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "The ProteinProphet threshold is not a number!");
@@ -472,12 +468,12 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
             saveOk = false;
         }
 
-        prideConverter.getProperties().setProteinIdentificationFilter(proteinIdFilterJTextField.getText());
+        PRIDEConverter.getProperties().setProteinIdentificationFilter(proteinIdFilterJTextField.getText());
 
         if (saveOk) {
             //new SpectraSelectionWithIdentifications(prideConverter, this.getLocation());
             //new SpectraSelectionNoIdentifications(prideConverter, this.getLocation());
-            new ExperimentProperties(prideConverter, this.getLocation());
+            new ExperimentProperties(this.getLocation());
 
             this.setVisible(false);
             this.dispose();
@@ -529,7 +525,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
         boolean saveOk = true;
 
         try {
-            prideConverter.getProperties().setPeptideProphetThreshold(
+            PRIDEConverter.getProperties().setPeptideProphetThreshold(
                     (Double) peptideProphetConfidenceLevelJSpinner.getValue());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "The PeptideProphet threshold is not a number!");
@@ -538,7 +534,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
         }
 
         try {
-            prideConverter.getProperties().setProteinProphetThreshold(
+            PRIDEConverter.getProperties().setProteinProphetThreshold(
                     (Double) proteinProphetConfidenceLevelJSpinner.getValue());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "The ProteinProphet threshold is not a number!");
@@ -546,11 +542,11 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
             saveOk = false;
         }
 
-        prideConverter.getProperties().setProteinIdentificationFilter(proteinIdFilterJTextField.getText());
+        PRIDEConverter.getProperties().setProteinIdentificationFilter(proteinIdFilterJTextField.getText());
 
         if (saveOk) {
 
-            new DataSourceSelection(prideConverter, this.getLocation());
+            new DataSourceSelection(this.getLocation());
             this.setVisible(false);
             this.dispose();
         }
@@ -566,7 +562,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
     private void proteinProphetFileJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_proteinProphetFileJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        JFileChooser chooser = new JFileChooser(prideConverter.getUserProperties().getCurrentSourceFileLocation());
+        JFileChooser chooser = new JFileChooser(PRIDEConverter.getUserProperties().getCurrentSourceFileLocation());
 
         if (proteinProphetFileJTextField.getText().length() > 0) {
             chooser.setSelectedFile(new File(proteinProphetFileJTextField.getText()));
@@ -582,19 +578,19 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             path = (chooser.getSelectedFile().getAbsoluteFile().getPath());
             proteinProphetFileJTextField.setText(path);
-            prideConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
-            prideConverter.getProperties().setProteinProphetFileName(path);
+            PRIDEConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
+            PRIDEConverter.getProperties().setProteinProphetFileName(path);
 
-            prideConverter.getProperties().setSpectrumTableModel(null);
-            prideConverter.getProperties().setInstrumentDetailsExtracted(false);
-            prideConverter.getProperties().setSelectedSourceFiles(new ArrayList());
-            prideConverter.getProperties().setSpectraSelectionCriteria(null);
-            prideConverter.getProperties().setDataFileHasBeenLoaded(false);
-            prideConverter.getProperties().setSampleDetailsExtracted(false);
-            prideConverter.getProperties().setContactInfoExtracted(false);
-            prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
-            prideConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
-            prideConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
+            PRIDEConverter.getProperties().setSpectrumTableModel(null);
+            PRIDEConverter.getProperties().setInstrumentDetailsExtracted(false);
+            PRIDEConverter.getProperties().setSelectedSourceFiles(new ArrayList<String>());
+            PRIDEConverter.getProperties().setSpectraSelectionCriteria(null);
+            PRIDEConverter.getProperties().setDataFileHasBeenLoaded(false);
+            PRIDEConverter.getProperties().setSampleDetailsExtracted(false);
+            PRIDEConverter.getProperties().setContactInfoExtracted(false);
+            PRIDEConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+            PRIDEConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
+            PRIDEConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
         }
 
         mandatoryFieldsCheck();
@@ -610,7 +606,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
     private void findPeptideProphetFileJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findPeptideProphetFileJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        JFileChooser chooser = new JFileChooser(prideConverter.getUserProperties().getCurrentSourceFileLocation());
+        JFileChooser chooser = new JFileChooser(PRIDEConverter.getUserProperties().getCurrentSourceFileLocation());
 
         if (peptideProphetFileJTextField.getText().length() > 0) {
             chooser.setSelectedFile(new File(peptideProphetFileJTextField.getText()));
@@ -626,19 +622,19 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             path = (chooser.getSelectedFile().getAbsoluteFile().getPath());
             peptideProphetFileJTextField.setText(path);
-            prideConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
-            prideConverter.getProperties().setPeptideProphetFileName(path);
+            PRIDEConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
+            PRIDEConverter.getProperties().setPeptideProphetFileName(path);
 
-            prideConverter.getProperties().setSpectrumTableModel(null);
-            prideConverter.getProperties().setInstrumentDetailsExtracted(false);
-            prideConverter.getProperties().setSelectedSourceFiles(new ArrayList());
-            prideConverter.getProperties().setSpectraSelectionCriteria(null);
-            prideConverter.getProperties().setDataFileHasBeenLoaded(false);
-            prideConverter.getProperties().setSampleDetailsExtracted(false);
-            prideConverter.getProperties().setContactInfoExtracted(false);
-            prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
-            prideConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
-            prideConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
+            PRIDEConverter.getProperties().setSpectrumTableModel(null);
+            PRIDEConverter.getProperties().setInstrumentDetailsExtracted(false);
+            PRIDEConverter.getProperties().setSelectedSourceFiles(new ArrayList());
+            PRIDEConverter.getProperties().setSpectraSelectionCriteria(null);
+            PRIDEConverter.getProperties().setDataFileHasBeenLoaded(false);
+            PRIDEConverter.getProperties().setSampleDetailsExtracted(false);
+            PRIDEConverter.getProperties().setContactInfoExtracted(false);
+            PRIDEConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+            PRIDEConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
+            PRIDEConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
         }
 
         mandatoryFieldsCheck();
@@ -655,7 +651,7 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
         JFileChooser chooser = new JFileChooser(
-                prideConverter.getUserProperties().getCurrentSourceFileLocation());
+                PRIDEConverter.getUserProperties().getCurrentSourceFileLocation());
 
         if (spectrumFileFolderJTextField.getText().length() > 0) {
             chooser.setSelectedFile(new File(spectrumFileFolderJTextField.getText()));
@@ -671,19 +667,19 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             path = (chooser.getSelectedFile().getAbsoluteFile().getPath());
             spectrumFileFolderJTextField.setText(path);
-            prideConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
-            prideConverter.getProperties().setSpectrumFilesFolderName(path);
+            PRIDEConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
+            PRIDEConverter.getProperties().setSpectrumFilesFolderName(path);
 
-            prideConverter.getProperties().setSpectrumTableModel(null);
-            prideConverter.getProperties().setInstrumentDetailsExtracted(false);
-            prideConverter.getProperties().setSelectedSourceFiles(new ArrayList());
-            prideConverter.getProperties().setSpectraSelectionCriteria(null);
-            prideConverter.getProperties().setDataFileHasBeenLoaded(false);
-            prideConverter.getProperties().setSampleDetailsExtracted(false);
-            prideConverter.getProperties().setContactInfoExtracted(false);
-            prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
-            prideConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
-            prideConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
+            PRIDEConverter.getProperties().setSpectrumTableModel(null);
+            PRIDEConverter.getProperties().setInstrumentDetailsExtracted(false);
+            PRIDEConverter.getProperties().setSelectedSourceFiles(new ArrayList());
+            PRIDEConverter.getProperties().setSpectraSelectionCriteria(null);
+            PRIDEConverter.getProperties().setDataFileHasBeenLoaded(false);
+            PRIDEConverter.getProperties().setSampleDetailsExtracted(false);
+            PRIDEConverter.getProperties().setContactInfoExtracted(false);
+            PRIDEConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+            PRIDEConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
+            PRIDEConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
         }
 
         mandatoryFieldsCheck();

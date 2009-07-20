@@ -43,7 +43,6 @@ import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
  */
 public class Instrument extends javax.swing.JFrame implements ComboBoxInputable, OLSInputable {
 
-    private PRIDEConverter prideConverter;
     private Vector tempProcessingMethods;
     private String instrumentPath;
     private boolean valuesChanged = false;
@@ -52,21 +51,19 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
     /** 
      * Opens a new Instrument frame and inserts the stored information.
      * 
-     * @param prideConverter
      * @param location where to position the frame
      */
-    public Instrument(PRIDEConverter prideConverter, Point location) {
-        this.prideConverter = prideConverter;
+    public Instrument(Point location) {
 
         // sets the default wizard frame size
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
+        this.setPreferredSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setSize(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT);
+        this.setMaximumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setMinimumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
 
@@ -80,8 +77,8 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         analyzerJTable.getTableHeader().setReorderingAllowed(false);
         analyzerJTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        setTitle(prideConverter.getWizardName() + " " +
-                prideConverter.getPrideConverterVersionNumber() + " - " + getTitle());
+        setTitle(PRIDEConverter.getWizardName() + " " +
+                PRIDEConverter.getPrideConverterVersionNumber() + " - " + getTitle());
 
         processingMethodsJTable.getColumn(" ").setMaxWidth(40);
         processingMethodsJTable.getColumn(" ").setMinWidth(40);
@@ -110,16 +107,16 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
 
         // for mzXML, mzData and TPP information about the instrument is extraced from the file
-        if ((prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")
-                || prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) &&
-                !prideConverter.getProperties().areInstrumentDetailsExtracted()) {
+        if ((PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")
+                || PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) &&
+                !PRIDEConverter.getProperties().areInstrumentDetailsExtracted()) {
             extractInstrumentDetailsFromFile();
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP") &&
-                !prideConverter.getProperties().areInstrumentDetailsExtracted()) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("TPP") &&
+                !PRIDEConverter.getProperties().areInstrumentDetailsExtracted()) {
 
             // see if the spectrum files folder contains any mzXML files
             File[] mzXmlFiles =
-                    new File(prideConverter.getProperties().getSpectrumFilesFolderName()).listFiles();
+                    new File(PRIDEConverter.getProperties().getSpectrumFilesFolderName()).listFiles();
 
             boolean mzXmlFileFound = false;
 
@@ -161,7 +158,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             ((DefaultTableModel) analyzerJTable.getModel()).removeRow(0);
         }
 
-        prideConverter.getProperties().setAnalyzerList(new ArrayList());
+        PRIDEConverter.getProperties().setAnalyzerList(new ArrayList());
 
         MSXMLParser msXMLParser = null;
         String instrumentName = null;
@@ -169,15 +166,15 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
         boolean mzXmlFileFound = false;
 
-        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") ||
-                prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
+        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") ||
+                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
 
-            if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")) {
-                fileName = prideConverter.getProperties().getSelectedSourceFiles().get(0);
+            if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")) {
+                fileName = PRIDEConverter.getProperties().getSelectedSourceFiles().get(0);
                 mzXmlFileFound = true;
             } else {
                 File[] mzXmlFiles =
-                        new File(prideConverter.getProperties().getSpectrumFilesFolderName()).listFiles();
+                        new File(PRIDEConverter.getProperties().getSpectrumFilesFolderName()).listFiles();
 
                 mzXmlFileFound = false;
                 fileName = null;
@@ -201,12 +198,12 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             }
 
         } else { //mzData
-            instrumentName = prideConverter.getProperties().getMzDataFile().getInstrumentName();
+            instrumentName = PRIDEConverter.getProperties().getMzDataFile().getInstrumentName();
         }
 
         instrumentName = instrumentName.replaceAll("/", "");
 
-        if (mzXmlFileFound || prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
+        if (mzXmlFileFound || PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
 
             String newName =
                     instrumentPath +
@@ -271,7 +268,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                 saveInstrument(instrumentName);
             }
 
-            prideConverter.getUserProperties().setCurrentSelectedInstrument(instrumentName);
+            PRIDEConverter.getUserProperties().setCurrentSelectedInstrument(instrumentName);
             readInstrumentsFromFile();
 
             if (!useExistingInstrument) {
@@ -286,8 +283,8 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     ((DefaultTableModel) analyzerJTable.getModel()).removeRow(0);
                 }
 
-                if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") ||
-                        prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
+                if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") ||
+                        PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
 
                     //add or updated the properties
                     if (msXMLParser.getHeaderInfo().getDataProcessing().getCentroided() ==
@@ -341,9 +338,9 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                 } else { // mzData
 
-                    if (prideConverter.getProperties().getMzDataFile().getProcessingMethodCvParams() != null) {
+                    if (PRIDEConverter.getProperties().getMzDataFile().getProcessingMethodCvParams() != null) {
                         Iterator<CvParam> iterator =
-                                prideConverter.getProperties().getMzDataFile().getProcessingMethodCvParams().iterator();
+                                PRIDEConverter.getProperties().getMzDataFile().getProcessingMethodCvParams().iterator();
 
                         while (iterator.hasNext()) {
 
@@ -357,21 +354,21 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     }
 
                     softwareNameJTextField.setText(
-                            prideConverter.getProperties().getMzDataFile().getSoftwareName());
+                            PRIDEConverter.getProperties().getMzDataFile().getSoftwareName());
                     softwareVersionJTextField.setText(
-                            prideConverter.getProperties().getMzDataFile().getSoftwareVersion());
+                            PRIDEConverter.getProperties().getMzDataFile().getSoftwareVersion());
                 }
 
                 CvParamImpl tempCVTerm;
 
-                if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") ||
-                        prideConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
+                if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") ||
+                        PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
                     //instrument source
-                    if (prideConverter.getUserProperties().getCVTermMappings().
+                    if (PRIDEConverter.getUserProperties().getCVTermMappings().
                             containsKey(
                             msXMLParser.getHeaderInfo().getInstrumentInfo().getIonization())) {
 
-                        tempCVTerm = (CvParamImpl) prideConverter.getUserProperties().
+                        tempCVTerm = (CvParamImpl) PRIDEConverter.getUserProperties().
                                 getCVTermMappings().get(
                                 msXMLParser.getHeaderInfo().getInstrumentInfo().getIonization());
 
@@ -390,10 +387,10 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     }
 
                     //instrument detector
-                    if (prideConverter.getUserProperties().getCVTermMappings().containsKey(
+                    if (PRIDEConverter.getUserProperties().getCVTermMappings().containsKey(
                             msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector())) {
 
-                        tempCVTerm = (CvParamImpl) prideConverter.getUserProperties().getCVTermMappings().get(
+                        tempCVTerm = (CvParamImpl) PRIDEConverter.getUserProperties().getCVTermMappings().get(
                                 msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector());
 
                         setInstrumentDetector(tempCVTerm.getName(),
@@ -411,12 +408,12 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     }
 
                     //analyzer
-                    if (prideConverter.getUserProperties().getCVTermMappings().containsKey(
+                    if (PRIDEConverter.getUserProperties().getCVTermMappings().containsKey(
                             msXMLParser.getHeaderInfo().getInstrumentInfo().getMassAnalyzer())) {
 
-                        prideConverter.getProperties().setAnalyzerList(new ArrayList());
+                        PRIDEConverter.getProperties().setAnalyzerList(new ArrayList());
 
-                        tempCVTerm = (CvParamImpl) prideConverter.getUserProperties().
+                        tempCVTerm = (CvParamImpl) PRIDEConverter.getUserProperties().
                                 getCVTermMappings().get(
                                 msXMLParser.getHeaderInfo().getInstrumentInfo().getMassAnalyzer());
 
@@ -432,7 +429,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         insertAnalyzer(names, accessions, ontologies, values, -1);
                     } else {
 
-                        prideConverter.getProperties().setAnalyzerList(new ArrayList());
+                        PRIDEConverter.getProperties().setAnalyzerList(new ArrayList());
 
                         JOptionPane.showMessageDialog(this, "Please use OLS to map the mass analyzer \'" +
                                 msXMLParser.getHeaderInfo().getInstrumentInfo().getMassAnalyzer() +
@@ -447,27 +444,27 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     }
                 } else { // mzData
                     //instrument source
-                    if (prideConverter.getProperties().getMzDataFile().getInstrumentSourceCvParams() != null) {
+                    if (PRIDEConverter.getProperties().getMzDataFile().getInstrumentSourceCvParams() != null) {
                         tempCVTerm =
-                                (CvParamImpl) prideConverter.getProperties().getMzDataFile().getInstrumentSourceCvParams().iterator().next();
+                                (CvParamImpl) PRIDEConverter.getProperties().getMzDataFile().getInstrumentSourceCvParams().iterator().next();
 
                         setInstrumentSource(tempCVTerm.getName(),
                                 tempCVTerm.getAccession(), tempCVTerm.getCVLookup());
                     }
 
                     //instrument detector
-                    if (prideConverter.getProperties().getMzDataFile().getInstrumentDetectorCvParams() != null) {
+                    if (PRIDEConverter.getProperties().getMzDataFile().getInstrumentDetectorCvParams() != null) {
                         tempCVTerm =
-                                (CvParamImpl) prideConverter.getProperties().getMzDataFile().getInstrumentDetectorCvParams().iterator().next();
+                                (CvParamImpl) PRIDEConverter.getProperties().getMzDataFile().getInstrumentDetectorCvParams().iterator().next();
 
                         setInstrumentDetector(tempCVTerm.getName(),
                                 tempCVTerm.getAccession(), tempCVTerm.getCVLookup());
                     }
 
                     //analyzer
-                    if (prideConverter.getProperties().getMzDataFile().getAnalyzerListCollection() != null) {
+                    if (PRIDEConverter.getProperties().getMzDataFile().getAnalyzerListCollection() != null) {
                         Iterator<Analyzer> iteratorAnalyzers =
-                                prideConverter.getProperties().getMzDataFile().getAnalyzerListCollection().iterator();
+                                PRIDEConverter.getProperties().getMzDataFile().getAnalyzerListCollection().iterator();
 
                         Vector terms = new Vector();
                         Vector accessions = new Vector();
@@ -507,12 +504,12 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                 }
 
                 saveInstrument(instrumentName);
-                prideConverter.getUserProperties().setCurrentSelectedInstrument(instrumentName);
+                PRIDEConverter.getUserProperties().setCurrentSelectedInstrument(instrumentName);
                 readInstrumentsFromFile();
             }
         }
 
-        prideConverter.getProperties().setInstrumentDetailsExtracted(true);
+        PRIDEConverter.getProperties().setInstrumentDetailsExtracted(true);
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }
@@ -570,8 +567,8 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
             instrumentNameJComboBox.setRenderer(new MyComboBoxRenderer(comboboxTooltips, SwingConstants.CENTER));
             instrumentNameJComboBox.setModel(new DefaultComboBoxModel(instrumentNames));
-            instrumentNameJComboBox.setSelectedItem(prideConverter.getUserProperties().getCurrentSelectedInstrument());
-            lastSelectedInstrumentName = prideConverter.getUserProperties().getCurrentSelectedInstrument();
+            instrumentNameJComboBox.setSelectedItem(PRIDEConverter.getUserProperties().getCurrentSelectedInstrument());
+            lastSelectedInstrumentName = PRIDEConverter.getUserProperties().getCurrentSelectedInstrument();
 
             instrumentNameJComboBoxActionPerformed(null);
         } catch (FileNotFoundException ex) {
@@ -1229,7 +1226,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        prideConverter.getUserProperties().setCurrentSelectedInstrument(
+        PRIDEConverter.getUserProperties().setCurrentSelectedInstrument(
                 (String) instrumentNameJComboBox.getSelectedItem());
 
         boolean cancel = false;
@@ -1246,7 +1243,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         "Overwrite?", JOptionPane.YES_NO_CANCEL_OPTION);
 
                 if (value == JOptionPane.YES_OPTION) {
-                    saveInstrument(prideConverter.getUserProperties().
+                    saveInstrument(PRIDEConverter.getUserProperties().
                             getCurrentSelectedInstrument());
                 } else if (value == JOptionPane.CANCEL_OPTION) {
                     cancel = true;
@@ -1273,7 +1270,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                         if (instrumentName != null) {
                             saveInstrument(instrumentName);
-                            prideConverter.getUserProperties().
+                            PRIDEConverter.getUserProperties().
                                     setCurrentSelectedInstrument(instrumentName);
                         } else {
                             cancel = true;
@@ -1288,9 +1285,9 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             }
         }
         if (!cancel) {
-            prideConverter.getProperties().setSoftwareName(softwareNameJTextField.getText());
-            prideConverter.getProperties().setSoftwareVersion(softwareVersionJTextField.getText());
-            prideConverter.getProperties().setProcessingMethod(
+            PRIDEConverter.getProperties().setSoftwareName(softwareNameJTextField.getText());
+            PRIDEConverter.getProperties().setSoftwareVersion(softwareVersionJTextField.getText());
+            PRIDEConverter.getProperties().setProcessingMethod(
                     new ArrayList(processingMethodsJTable.getRowCount()));
 
             CvParamImpl temp;
@@ -1305,7 +1302,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                 temp = (CvParamImpl) tempProcessingMethods.get(i);
 
-                prideConverter.getProperties().getProcessingMethod().add(new CvParamImpl(
+                PRIDEConverter.getProperties().getProcessingMethod().add(new CvParamImpl(
                         temp.getAccession(),
                         temp.getCVLookup(),
                         temp.getName(),
@@ -1313,7 +1310,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         value));
             }
 
-            new UserParameters(prideConverter, this.getLocation());
+            new UserParameters(this.getLocation());
 
             this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
@@ -1332,7 +1329,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
         this.setVisible(false);
         this.dispose();
-        prideConverter.cancelConvertion();
+        PRIDEConverter.cancelConvertion();
     }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**
@@ -1345,7 +1342,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        prideConverter.getUserProperties().setCurrentSelectedInstrument((String) instrumentNameJComboBox.getSelectedItem());
+        PRIDEConverter.getUserProperties().setCurrentSelectedInstrument((String) instrumentNameJComboBox.getSelectedItem());
 
         boolean cancel = false;
 
@@ -1361,7 +1358,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         "Overwrite?", JOptionPane.YES_NO_CANCEL_OPTION);
 
                 if (value == JOptionPane.YES_OPTION) {
-                    saveInstrument(prideConverter.getUserProperties().
+                    saveInstrument(PRIDEConverter.getUserProperties().
                             getCurrentSelectedInstrument());
                 } else if (value == JOptionPane.CANCEL_OPTION) {
                     cancel = true;
@@ -1388,7 +1385,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                         if (instrumentName != null) {
                             saveInstrument(instrumentName);
-                            prideConverter.getUserProperties().
+                            PRIDEConverter.getUserProperties().
                                     setCurrentSelectedInstrument(instrumentName);
                         } else {
                             cancel = true;
@@ -1404,9 +1401,9 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         }
         if (!cancel) {
 
-            prideConverter.getProperties().setSoftwareName(softwareNameJTextField.getText());
-            prideConverter.getProperties().setSoftwareVersion(softwareVersionJTextField.getText());
-            prideConverter.getProperties().setProcessingMethod(new ArrayList(processingMethodsJTable.getRowCount()));
+            PRIDEConverter.getProperties().setSoftwareName(softwareNameJTextField.getText());
+            PRIDEConverter.getProperties().setSoftwareVersion(softwareVersionJTextField.getText());
+            PRIDEConverter.getProperties().setProcessingMethod(new ArrayList(processingMethodsJTable.getRowCount()));
 
             CvParamImpl temp;
 
@@ -1421,7 +1418,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                 temp = (CvParamImpl) tempProcessingMethods.get(i);
 
-                prideConverter.getProperties().getProcessingMethod().add(new CvParamImpl(
+                PRIDEConverter.getProperties().getProcessingMethod().add(new CvParamImpl(
                         temp.getAccession(),
                         temp.getCVLookup(),
                         temp.getName(),
@@ -1429,7 +1426,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         value));
             }
 
-            new ProtocolDetails(prideConverter, this.getLocation());
+            new ProtocolDetails(this.getLocation());
 
             this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
@@ -1462,7 +1459,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             searchTerm = searchTerm.replaceAll("\\]", " ");
         }
 
-        new OLSDialog(this, this, true, "instrumentSource", prideConverter.getUserProperties().
+        new OLSDialog(this, this, true, "instrumentSource", PRIDEConverter.getUserProperties().
                 getLastSelectedOntology(), searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_instrumentSourceJButtonActionPerformed
@@ -1490,7 +1487,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             searchTerm = searchTerm.replaceAll("\\]", " ");
         }
 
-        new OLSDialog(this, this, true, "instrumentDetector", prideConverter.getUserProperties().
+        new OLSDialog(this, this, true, "instrumentDetector", PRIDEConverter.getUserProperties().
                 getLastSelectedOntology(), searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_instrumentDetectorJButtonActionPerformed
@@ -1502,7 +1499,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
      */
     private void analyzerJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzerJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new NewAnalyzer(this, true, prideConverter);
+        new NewAnalyzer(this, true);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_analyzerJButtonActionPerformed
 
@@ -1513,7 +1510,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
      */
     private void processingMethodsJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processingMethodsJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new OLSDialog(this, this, true, "processingMethods", prideConverter.getUserProperties().
+        new OLSDialog(this, this, true, "processingMethods", PRIDEConverter.getUserProperties().
                 getLastSelectedOntology(), null);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_processingMethodsJButtonActionPerformed
@@ -1541,7 +1538,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         searchTerm = searchTerm.replaceAll("\\[", " ");
         searchTerm = searchTerm.replaceAll("\\]", " ");
 
-        new OLSDialog(this, this, true, "processingMethods", prideConverter.getUserProperties().
+        new OLSDialog(this, this, true, "processingMethods", PRIDEConverter.getUserProperties().
                 getLastSelectedOntology(), selectedRow, searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_processingMethodsEditJMenuItemActionPerformed
@@ -1607,10 +1604,9 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
      * @param evt
      */
     private void analyzersEditJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzersEditJMenuItemActionPerformed
-        Object[] analyzers = prideConverter.getProperties().getAnalyzerList().toArray();
+        Object[] analyzers = PRIDEConverter.getProperties().getAnalyzerList().toArray();
 
-        new NewAnalyzer(this, true, prideConverter,
-                analyzerJTable.getSelectedRow(),
+        new NewAnalyzer(this, true, analyzerJTable.getSelectedRow(),
                 (AnalyzerImpl) analyzers[analyzerJTable.getSelectedRow()]);
 }//GEN-LAST:event_analyzersEditJMenuItemActionPerformed
 
@@ -1636,13 +1632,13 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         fixAnalyzersIndices();
 
         //move in data structure as well
-        Object[] analyzers = prideConverter.getProperties().getAnalyzerList().toArray();
+        Object[] analyzers = PRIDEConverter.getProperties().getAnalyzerList().toArray();
 
         Object tempAnalyzer = analyzers[selectedRow - 1];
         analyzers[selectedRow - 1] = analyzers[selectedRow];
         analyzers[selectedRow] = tempAnalyzer;
 
-        prideConverter.getProperties().setAnalyzerList(new ArrayList());
+        PRIDEConverter.getProperties().setAnalyzerList(new ArrayList());
 
         AnalyzerImpl tempAnalyzerImpl;
 
@@ -1652,7 +1648,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     new AnalyzerImpl(tempAnalyzerImpl.getAnalyzerCvParameterList(),
                     null, new Long(i));
 
-            prideConverter.getProperties().getAnalyzerList().add(tempAnalyzerImpl);
+            PRIDEConverter.getProperties().getAnalyzerList().add(tempAnalyzerImpl);
         }
     }
 //GEN-LAST:event_analyzersMoveUpJMenuItemActionPerformed
@@ -1678,13 +1674,13 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         fixAnalyzersIndices();
 
         //move in data structure as well
-        Object[] analyzers = prideConverter.getProperties().getAnalyzerList().toArray();
+        Object[] analyzers = PRIDEConverter.getProperties().getAnalyzerList().toArray();
 
         Object tempAnalyzer = analyzers[selectedRow + 1];
         analyzers[selectedRow + 1] = analyzers[selectedRow];
         analyzers[selectedRow] = tempAnalyzer;
 
-        prideConverter.getProperties().setAnalyzerList(new ArrayList());
+        PRIDEConverter.getProperties().setAnalyzerList(new ArrayList());
 
         AnalyzerImpl tempAnalyzerImpl;
 
@@ -1694,7 +1690,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     new AnalyzerImpl(tempAnalyzerImpl.getAnalyzerCvParameterList(),
                     null, new Long(i));
 
-            prideConverter.getProperties().getAnalyzerList().add(tempAnalyzerImpl);
+            PRIDEConverter.getProperties().getAnalyzerList().add(tempAnalyzerImpl);
         }
 //GEN-LAST:event_analyzersMoveDownJMenuItemActionPerformed
     }
@@ -1720,9 +1716,9 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             analyzerJTable.editingCanceled(null);
 
             //remove from datastructure as well
-            Object[] analyzers = prideConverter.getProperties().getAnalyzerList().toArray();
+            Object[] analyzers = PRIDEConverter.getProperties().getAnalyzerList().toArray();
 
-            prideConverter.getProperties().setAnalyzerList(new ArrayList());
+            PRIDEConverter.getProperties().setAnalyzerList(new ArrayList());
 
             AnalyzerImpl tempAnalyzerImpl;
 
@@ -1736,7 +1732,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                             new AnalyzerImpl(tempAnalyzerImpl.getAnalyzerCvParameterList(),
                             null, new Long(counter++));
 
-                    prideConverter.getProperties().getAnalyzerList().add(tempAnalyzerImpl);
+                    PRIDEConverter.getProperties().getAnalyzerList().add(tempAnalyzerImpl);
                 }
             }
 
@@ -1858,31 +1854,31 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                         bw.write("#instrument source\n");
                         bw.write("Accession: " +
-                                prideConverter.getProperties().
+                                PRIDEConverter.getProperties().
                                 getAccessionInstrumentSourceParameter() +
                                 "\n");
                         bw.write("cvLookup: " +
-                                prideConverter.getProperties().
+                                PRIDEConverter.getProperties().
                                 getCVLookupInstrumentSourceParameter() + "\n");
                         bw.write("Name: " +
-                                prideConverter.getProperties().getNameInstrumentSourceParameter() + "\n\n");
+                                PRIDEConverter.getProperties().getNameInstrumentSourceParameter() + "\n\n");
 
                         bw.write("#instrument detector\n");
                         bw.write("Accession: " +
-                                prideConverter.getProperties().getAccessionInstrumentDetectorParamater() + "\n");
+                                PRIDEConverter.getProperties().getAccessionInstrumentDetectorParamater() + "\n");
                         bw.write("cvLookup: " +
-                                prideConverter.getProperties().getCVLookupInstrumentDetectorParamater() + "\n");
+                                PRIDEConverter.getProperties().getCVLookupInstrumentDetectorParamater() + "\n");
                         bw.write("Name: " +
-                                prideConverter.getProperties().getNameInstrumentDetectorParamater() + "\n\n");
+                                PRIDEConverter.getProperties().getNameInstrumentDetectorParamater() + "\n\n");
 
                         bw.write("#analyzers\n");
-                        bw.write(prideConverter.getProperties().getAnalyzerList().size() + "\n");
+                        bw.write(PRIDEConverter.getProperties().getAnalyzerList().size() + "\n");
 
-                        if (prideConverter.getProperties().getAnalyzerList().size() == 0) {
+                        if (PRIDEConverter.getProperties().getAnalyzerList().size() == 0) {
                             bw.write("\n");
                         }
 
-                        Iterator analyzers = prideConverter.getProperties().getAnalyzerList().iterator();
+                        Iterator analyzers = PRIDEConverter.getProperties().getAnalyzerList().iterator();
                         Iterator cvTerms;
 
                         AnalyzerImpl tempAnalyzer;
@@ -1989,28 +1985,28 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                                 bw.write("#instrument source\n");
                                 bw.write("Accession: " +
-                                        prideConverter.getProperties().getAccessionInstrumentSourceParameter() + "\n");
+                                        PRIDEConverter.getProperties().getAccessionInstrumentSourceParameter() + "\n");
                                 bw.write("cvLookup: " +
-                                        prideConverter.getProperties().getCVLookupInstrumentSourceParameter() + "\n");
+                                        PRIDEConverter.getProperties().getCVLookupInstrumentSourceParameter() + "\n");
                                 bw.write("Name: " +
-                                        prideConverter.getProperties().getNameInstrumentSourceParameter() + "\n\n");
+                                        PRIDEConverter.getProperties().getNameInstrumentSourceParameter() + "\n\n");
 
                                 bw.write("#instrument detector\n");
                                 bw.write("Accession: " +
-                                        prideConverter.getProperties().getAccessionInstrumentDetectorParamater() + "\n");
+                                        PRIDEConverter.getProperties().getAccessionInstrumentDetectorParamater() + "\n");
                                 bw.write("cvLookup: " +
-                                        prideConverter.getProperties().getCVLookupInstrumentDetectorParamater() + "\n");
+                                        PRIDEConverter.getProperties().getCVLookupInstrumentDetectorParamater() + "\n");
                                 bw.write("Name: " +
-                                        prideConverter.getProperties().getNameInstrumentDetectorParamater() + "\n\n");
+                                        PRIDEConverter.getProperties().getNameInstrumentDetectorParamater() + "\n\n");
 
                                 bw.write("#analyzers\n");
-                                bw.write(prideConverter.getProperties().getAnalyzerList().size() + "\n");
+                                bw.write(PRIDEConverter.getProperties().getAnalyzerList().size() + "\n");
 
-                                if (prideConverter.getProperties().getAnalyzerList().size() == 0) {
+                                if (PRIDEConverter.getProperties().getAnalyzerList().size() == 0) {
                                     bw.write("\n");
                                 }
 
-                                Iterator analyzers = prideConverter.getProperties().getAnalyzerList().iterator();
+                                Iterator analyzers = PRIDEConverter.getProperties().getAnalyzerList().iterator();
                                 Iterator cvTerms;
 
                                 AnalyzerImpl tempAnalyzer;
@@ -2087,20 +2083,20 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         } else {
                             cancel = true;
                             instrumentNameJComboBox.setSelectedItem(lastSelectedInstrumentName);
-                            prideConverter.getUserProperties().
+                            PRIDEConverter.getUserProperties().
                                     setCurrentSelectedInstrument(lastSelectedInstrumentName);
                         }
                     } else {
                         cancel = true;
                         instrumentNameJComboBox.setSelectedItem(lastSelectedInstrumentName);
-                        prideConverter.getUserProperties().
+                        PRIDEConverter.getUserProperties().
                                 setCurrentSelectedInstrument(lastSelectedInstrumentName);
                     }
                 }
             } else if (value == JOptionPane.CANCEL_OPTION) {
                 cancel = true;
                 instrumentNameJComboBox.setSelectedItem(lastSelectedInstrumentName);
-                prideConverter.getUserProperties().setCurrentSelectedInstrument(lastSelectedInstrumentName);
+                PRIDEConverter.getUserProperties().setCurrentSelectedInstrument(lastSelectedInstrumentName);
             }
         }
 
@@ -2108,7 +2104,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             lastSelectedInstrumentName = (String) instrumentNameJComboBox.getSelectedItem();
             String selectedInstrumentName = (String) instrumentNameJComboBox.getSelectedItem();
 
-            prideConverter.getUserProperties().setCurrentSelectedInstrument(selectedInstrumentName);
+            PRIDEConverter.getUserProperties().setCurrentSelectedInstrument(selectedInstrumentName);
 
             //empty the two tables
             while (analyzerJTable.getRowCount() > 0) {
@@ -2127,7 +2123,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
             tempProcessingMethods = new Vector();
 
-            prideConverter.getProperties().setAnalyzerList(new ArrayList());
+            PRIDEConverter.getProperties().setAnalyzerList(new ArrayList());
 
             if (instrumentNameJComboBox.getSelectedIndex() == 0) {
                 valuesChanged = false;
@@ -2177,28 +2173,28 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     BufferedReader b = new BufferedReader(f);
                     b.readLine();//read #instrument name
                     temp = b.readLine();
-                    prideConverter.getProperties().setInstrumentName(temp.substring(temp.indexOf(": ") + 2));
+                    PRIDEConverter.getProperties().setInstrumentName(temp.substring(temp.indexOf(": ") + 2));
                     b.readLine();
                     b.readLine();//read #instrument source
                     temp = b.readLine();
-                    prideConverter.getProperties().setAccessionInstrumentSourceParameter(
+                    PRIDEConverter.getProperties().setAccessionInstrumentSourceParameter(
                             temp.substring(temp.indexOf(": ") + 2));
                     temp = b.readLine();
-                    prideConverter.getProperties().setCVLookupInstrumentSourceParameter(
+                    PRIDEConverter.getProperties().setCVLookupInstrumentSourceParameter(
                             temp.substring(temp.indexOf(": ") + 2));
                     temp = b.readLine();
-                    prideConverter.getProperties().setNameInstrumentSourceParameter(
+                    PRIDEConverter.getProperties().setNameInstrumentSourceParameter(
                             temp.substring(temp.indexOf(": ") + 2));
                     b.readLine();
                     b.readLine();//read #instrument detector
                     temp = b.readLine();
-                    prideConverter.getProperties().setAccessionInstrumentDetectorParamater(
+                    PRIDEConverter.getProperties().setAccessionInstrumentDetectorParamater(
                             temp.substring(temp.indexOf(": ") + 2));
                     temp = b.readLine();
-                    prideConverter.getProperties().setCVLookupInstrumentDetectorParamater(
+                    PRIDEConverter.getProperties().setCVLookupInstrumentDetectorParamater(
                             temp.substring(temp.indexOf(": ") + 2));
                     temp = b.readLine();
-                    prideConverter.getProperties().setNameInstrumentDetectorParamater(
+                    PRIDEConverter.getProperties().setNameInstrumentDetectorParamater(
                             temp.substring(temp.indexOf(": ") + 2));
                     b.readLine();
                     b.readLine();//read #analyzers
@@ -2252,7 +2248,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     temp = b.readLine();
                     int numberOfProcessinganalyzers = new Integer(temp).intValue();
                     String name, accession, cvLookup, value;
-                    prideConverter.getProperties().setProcessingMethod(new ArrayList());
+                    PRIDEConverter.getProperties().setProcessingMethod(new ArrayList());
                     for (int i = 0; i < numberOfProcessinganalyzers; i++) {
                         temp = b.readLine();
                         accession = temp.substring(temp.indexOf(": ") + 2);
@@ -2279,27 +2275,27 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     }
 
                     temp = b.readLine();
-                    prideConverter.getProperties().setSoftwareName(temp.substring(temp.indexOf(": ") + 2));
+                    PRIDEConverter.getProperties().setSoftwareName(temp.substring(temp.indexOf(": ") + 2));
                     temp = b.readLine();
-                    prideConverter.getProperties().setSoftwareVersion(temp.substring(temp.indexOf(": ") + 2));
+                    PRIDEConverter.getProperties().setSoftwareVersion(temp.substring(temp.indexOf(": ") + 2));
 
-                    softwareNameJTextField.setText(prideConverter.getProperties().getSoftwareName());
-                    softwareVersionJTextField.setText(prideConverter.getProperties().getSoftwareVersion());
-                    if (prideConverter.getProperties().getNameInstrumentSourceParameter().length() >
+                    softwareNameJTextField.setText(PRIDEConverter.getProperties().getSoftwareName());
+                    softwareVersionJTextField.setText(PRIDEConverter.getProperties().getSoftwareVersion());
+                    if (PRIDEConverter.getProperties().getNameInstrumentSourceParameter().length() >
                             0) {
                         this.instrumentSourceJTextField.setText(
-                                prideConverter.getProperties().getNameInstrumentSourceParameter() +
+                                PRIDEConverter.getProperties().getNameInstrumentSourceParameter() +
                                 " [" +
-                                prideConverter.getProperties().getAccessionInstrumentSourceParameter() +
+                                PRIDEConverter.getProperties().getAccessionInstrumentSourceParameter() +
                                 "]");
                         instrumentSourceJTextField.setCaretPosition(0);
                     }
 
-                    if (prideConverter.getProperties().getNameInstrumentDetectorParamater().length() > 0) {
-                        this.instrumentDetectorJTextField.setText(prideConverter.getProperties().
+                    if (PRIDEConverter.getProperties().getNameInstrumentDetectorParamater().length() > 0) {
+                        this.instrumentDetectorJTextField.setText(PRIDEConverter.getProperties().
                                 getNameInstrumentDetectorParamater() +
                                 " [" +
-                                prideConverter.getProperties().
+                                PRIDEConverter.getProperties().
                                 getAccessionInstrumentDetectorParamater() +
                                 "]");
                         instrumentDetectorJTextField.setCaretPosition(0);
@@ -2337,7 +2333,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
      * @param evt
      */
     private void instrumentNameJComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_instrumentNameJComboBoxItemStateChanged
-        prideConverter.getUserProperties().setCurrentSelectedInstrument((String) instrumentNameJComboBox.getSelectedItem());
+        PRIDEConverter.getUserProperties().setCurrentSelectedInstrument((String) instrumentNameJComboBox.getSelectedItem());
         mandatoryFieldsCheck();
     }//GEN-LAST:event_instrumentNameJComboBoxItemStateChanged
 
@@ -2454,9 +2450,9 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
         instrumentSourceJTextField.setText(name + " [" + accession + "]");
         instrumentSourceJTextField.setCaretPosition(0);
-        prideConverter.getProperties().setNameInstrumentSourceParameter(name);
-        prideConverter.getProperties().setAccessionInstrumentSourceParameter(accession);
-        prideConverter.getProperties().setCVLookupInstrumentSourceParameter(ontology);
+        PRIDEConverter.getProperties().setNameInstrumentSourceParameter(name);
+        PRIDEConverter.getProperties().setAccessionInstrumentSourceParameter(accession);
+        PRIDEConverter.getProperties().setCVLookupInstrumentSourceParameter(ontology);
 
         mandatoryFieldsCheck();
     }
@@ -2473,9 +2469,9 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
         instrumentDetectorJTextField.setText(name + " [" + accession + "]");
         instrumentDetectorJTextField.setCaretPosition(0);
-        prideConverter.getProperties().setNameInstrumentDetectorParamater(name);
-        prideConverter.getProperties().setAccessionInstrumentDetectorParamater(accession);
-        prideConverter.getProperties().setCVLookupInstrumentDetectorParamater(ontology);
+        PRIDEConverter.getProperties().setNameInstrumentDetectorParamater(name);
+        PRIDEConverter.getProperties().setAccessionInstrumentDetectorParamater(accession);
+        PRIDEConverter.getProperties().setCVLookupInstrumentDetectorParamater(ontology);
 
         mandatoryFieldsCheck();
     }
@@ -2585,7 +2581,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         }
 
         if (modifiedRow == -1) {
-            prideConverter.getProperties().getAnalyzerList().add(
+            PRIDEConverter.getProperties().getAnalyzerList().add(
                     new AnalyzerImpl(
                     analyzerCVParams,
                     null,
@@ -2599,13 +2595,13 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         } else {
             analyzerJTable.setValueAt(temp, modifiedRow, 1);
 
-            Object[] analyzers = prideConverter.getProperties().getAnalyzerList().toArray();
+            Analyzer[] analyzers = PRIDEConverter.getProperties().getAnalyzerList().toArray(new Analyzer[1]);
             analyzers[modifiedRow] = new AnalyzerImpl(analyzerCVParams, null, modifiedRow);
 
-            prideConverter.getProperties().setAnalyzerList(new ArrayList());
+            PRIDEConverter.getProperties().setAnalyzerList(new ArrayList<Analyzer>());
 
             for (int i = 0; i < analyzers.length; i++) {
-                prideConverter.getProperties().getAnalyzerList().add(analyzers[i]);
+                PRIDEConverter.getProperties().getAnalyzerList().add(analyzers[i]);
             }
         }
 
@@ -2685,7 +2681,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
      */
     public void insertIntoComboBox(String text) {
 
-        prideConverter.getUserProperties().setCurrentSelectedInstrument(text);
+        PRIDEConverter.getUserProperties().setCurrentSelectedInstrument(text);
 
         String newName;
         newName = instrumentPath + text + ".int";
@@ -2781,40 +2777,40 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
             bw.write("#instrument source\n");
             bw.write("Accession: " +
-                    prideConverter.getProperties().
+                    PRIDEConverter.getProperties().
                     getAccessionInstrumentSourceParameter() +
                     "\n");
             bw.write("cvLookup: " +
-                    prideConverter.getProperties().
+                    PRIDEConverter.getProperties().
                     getCVLookupInstrumentSourceParameter() +
                     "\n");
             bw.write("Name: " +
-                    prideConverter.getProperties().
+                    PRIDEConverter.getProperties().
                     getNameInstrumentSourceParameter() + "\n\n");
 
             bw.write("#instrument detector\n");
             bw.write("Accession: " +
-                    prideConverter.getProperties().
+                    PRIDEConverter.getProperties().
                     getAccessionInstrumentDetectorParamater() +
                     "\n");
             bw.write("cvLookup: " +
-                    prideConverter.getProperties().
+                    PRIDEConverter.getProperties().
                     getCVLookupInstrumentDetectorParamater() +
                     "\n");
             bw.write("Name: " +
-                    prideConverter.getProperties().
+                    PRIDEConverter.getProperties().
                     getNameInstrumentDetectorParamater() +
                     "\n\n");
 
             bw.write("#analyzers\n");
-            bw.write(prideConverter.getProperties().getAnalyzerList().size() +
+            bw.write(PRIDEConverter.getProperties().getAnalyzerList().size() +
                     "\n");
 
-            if (prideConverter.getProperties().getAnalyzerList().size() == 0) {
+            if (PRIDEConverter.getProperties().getAnalyzerList().size() == 0) {
                 bw.write("\n");
             }
 
-            Iterator analyzers = prideConverter.getProperties().getAnalyzerList().
+            Iterator analyzers = PRIDEConverter.getProperties().getAnalyzerList().
                     iterator();
             Iterator cvTerms;
 
@@ -2903,10 +2899,10 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             String ontologyShort, String ontologyLong, int modifiedRow,
             String mappedTerm) {
 
-        prideConverter.getUserProperties().setLastSelectedOntology(ontologyLong);
+        PRIDEConverter.getUserProperties().setLastSelectedOntology(ontologyLong);
 
         if (mappedTerm != null) {
-            prideConverter.getUserProperties().getCVTermMappings().put(
+            PRIDEConverter.getUserProperties().getCVTermMappings().put(
                     mappedTerm, new CvParamImpl(accession, ontologyShort,
                     selectedValue, 0, null));
         }

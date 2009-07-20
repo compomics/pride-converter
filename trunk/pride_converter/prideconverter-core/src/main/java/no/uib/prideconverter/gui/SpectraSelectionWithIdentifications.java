@@ -54,7 +54,6 @@ import org.w3c.dom.NodeList;
  */
 public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
-    private PRIDEConverter prideConverter;
     private int numberOfSelectedSpectra;
     private boolean selectAll;
     private File file;
@@ -71,28 +70,25 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
     /** 
      * Opens a new SpectraSelectionWithIdentifications frame, and inserts stored information.
      * 
-     * @param prideConverter
      * @param location where to position the frame
      */
-    public SpectraSelectionWithIdentifications(PRIDEConverter prideConverter, Point location) {
+    public SpectraSelectionWithIdentifications(Point location) {
 
-        this.prideConverter = prideConverter;
-
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
+        this.setPreferredSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setSize(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT);
+        this.setMaximumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setMinimumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
 
         JFormattedTextField tf = ((JSpinner.DefaultEditor) mascotConfidenceLevelJSpinner.getEditor()).getTextField();
         tf.setHorizontalAlignment(JFormattedTextField.CENTER);
 
-        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
 
             spectraJXTable.setModel(new javax.swing.table.DefaultTableModel(
                     new Object[][]{},
@@ -139,19 +135,19 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         spectraJXTable.setAutoCreateColumnsFromModel(false);
         spectraJXTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        selectAllSpectraJRadioButton.setSelected(prideConverter.getProperties().selectAllSpectra());
-        selectIdentifiedJRadioButton.setSelected(prideConverter.getProperties().selectAllIdentifiedSpectra());
+        selectAllSpectraJRadioButton.setSelected(PRIDEConverter.getProperties().selectAllSpectra());
+        selectIdentifiedJRadioButton.setSelected(PRIDEConverter.getProperties().selectAllIdentifiedSpectra());
 
-        peptideScoreJTextField.setText("" + prideConverter.getProperties().getPeptideScoreThreshold());
-        proteinIdFilterJTextField.setText("" + prideConverter.getProperties().getProteinIdentificationFilter());
+        peptideScoreJTextField.setText("" + PRIDEConverter.getProperties().getPeptideScoreThreshold());
+        proteinIdFilterJTextField.setText("" + PRIDEConverter.getProperties().getProteinIdentificationFilter());
 
-        if (prideConverter.getProperties().getSpectraSelectionCriteria() != null) {
-            advancedSelectionJTextArea.setText(prideConverter.getProperties().getSpectraSelectionCriteria());
+        if (PRIDEConverter.getProperties().getSpectraSelectionCriteria() != null) {
+            advancedSelectionJTextArea.setText(PRIDEConverter.getProperties().getSpectraSelectionCriteria());
             selectAllSpectraJRadioButton.setEnabled(false);
             selectIdentifiedJRadioButton.setEnabled(false);
         }
 
-        if (prideConverter.getProperties().isSelectionCriteriaFileName()) {
+        if (PRIDEConverter.getProperties().isSelectionCriteriaFileName()) {
             fileNamesSelectionJRadioButton.setSelected(true);
             identificationIdsSelectionJRadioButton.setSelected(false);
         } else {
@@ -159,16 +155,16 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
             identificationIdsSelectionJRadioButton.setSelected(true);
         }
 
-        mascotConfidenceLevelJSpinner.setValue(prideConverter.getProperties().getMascotConfidenceLevel());
+        mascotConfidenceLevelJSpinner.setValue(PRIDEConverter.getProperties().getMascotConfidenceLevel());
 
-        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
             mascotConfidenceLevelJLabel.setEnabled(true);
             mascotConfidenceLevelJSpinner.setEnabled(true);
         }
 
-        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
 
-            if (prideConverter.getProperties().getSelectedSourceFiles().get(0).toLowerCase().endsWith(".mzdata")) {
+            if (PRIDEConverter.getProperties().getSelectedSourceFiles().get(0).toLowerCase().endsWith(".mzdata")) {
                 selectIdentifiedJRadioButton.setEnabled(false);
                 selectionTypeJLabel.setEnabled(false);
                 fileNamesSelectionJRadioButton.setEnabled(false);
@@ -184,10 +180,10 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
         selectAllSpectraJRadioButton.requestFocus();
 
-        separatorJTextField.setText(prideConverter.getUserProperties().getCurrentFileNameSelectionCriteriaSeparator());
+        separatorJTextField.setText(PRIDEConverter.getUserProperties().getCurrentFileNameSelectionCriteriaSeparator());
 
-        if (prideConverter.getProperties().getSpectrumTableModel() != null) {
-            spectraJXTable.setModel(prideConverter.getProperties().getSpectrumTableModel());
+        if (PRIDEConverter.getProperties().getSpectrumTableModel() != null) {
+            spectraJXTable.setModel(PRIDEConverter.getProperties().getSpectrumTableModel());
             loadSpectraJButton.setEnabled(false);
             selectedSpectraJLabel.setEnabled(true);
             numberOfSelectedSpectraJTextField.setEnabled(true);
@@ -210,8 +206,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
                 getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
 
-        setTitle(prideConverter.getWizardName() + " " +
-                prideConverter.getPrideConverterVersionNumber() + " - " + getTitle());
+        setTitle(PRIDEConverter.getWizardName() + " " +
+                PRIDEConverter.getPrideConverterVersionNumber() + " - " + getTitle());
 
         if (location != null) {
             setLocation(location);
@@ -728,7 +724,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
         this.setVisible(false);
         this.dispose();
-        prideConverter.cancelConvertion();
+        PRIDEConverter.cancelConvertion();
     }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**
@@ -738,7 +734,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
      */
     private void nextJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextJButtonActionPerformed
         if (saveInsertedInformation()) {
-            new ExperimentProperties(prideConverter, this.getLocation());
+            new ExperimentProperties(this.getLocation());
             this.setVisible(false);
             this.dispose();
         }
@@ -784,15 +780,15 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
     private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backJButtonActionPerformed
 
         if (saveInsertedInformation()) {
-            if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File") ||
-                    prideConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
-                new DataFileSelection(prideConverter, this.getLocation());
-            } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill") ||
-                    prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File") ||
-                    prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
-                new DataFileSelectionTwoFileTypes(prideConverter, this.getLocation());
-            } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims")) {
-                new ProjectSelection(prideConverter, this.getLocation());
+            if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File") ||
+                    PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
+                new DataFileSelection(this.getLocation());
+            } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill") ||
+                    PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File") ||
+                    PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+                new DataFileSelectionTwoFileTypes(this.getLocation());
+            } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims")) {
+                new ProjectSelection(this.getLocation());
             }
 
             this.setVisible(false);
@@ -859,7 +855,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                 Iterator<MSSpectrum> iterator;
                 MSSpectrum tempSpectrum;
 
-                prideConverter.getProperties().setSelectedSpectraKeys(new ArrayList());
+                PRIDEConverter.getProperties().setSelectedSpectraKeys(new ArrayList());
 
                 MascotDatfileInf tempMascotDatfile;
                 QueryToPeptideMapInf queryToPeptideMap;
@@ -877,8 +873,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                 ArrayList<String> selectedFiles;
 
-                if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
-                    selectedFiles = prideConverter.getProperties().getSelectedIdentificationFiles();
+                if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+                    selectedFiles = PRIDEConverter.getProperties().getSelectedIdentificationFiles();
 
                     // parse X!Tandem files
                     for (int j = 0; j < selectedFiles.size(); j++) {
@@ -1016,7 +1012,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
 
                     // parse the spectrum files
-                    ArrayList<String> spectraFiles = prideConverter.getProperties().getSelectedSourceFiles();
+                    ArrayList<String> spectraFiles = PRIDEConverter.getProperties().getSelectedSourceFiles();
 
                     try {
 
@@ -1222,10 +1218,10 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                         ex.printStackTrace();
                     } catch (Exception e) {
 
-                        Util.writeToErrorLog("Error parsing " + prideConverter.getProperties().getDataSource() + ": ");
+                        Util.writeToErrorLog("Error parsing " + PRIDEConverter.getProperties().getDataSource() + ": ");
                         e.printStackTrace();
 
-                        String fileType = prideConverter.getProperties().getDataSource();
+                        String fileType = PRIDEConverter.getProperties().getDataSource();
 
                         JOptionPane.showMessageDialog(null,
                                 "The following file could not parsed as a " +
@@ -1236,7 +1232,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                 "Error Parsing File", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
-                    selectedFiles = prideConverter.getProperties().getSelectedSourceFiles();
+                    selectedFiles = PRIDEConverter.getProperties().getSelectedSourceFiles();
 
                     if (selectedFiles != null) {
 
@@ -1252,8 +1248,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                             precursorCharge = 0;
                             expect = 0.0;
 
-                            if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill") ||
-                                    prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                            if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill") ||
+                                    PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
 
                                 try {
                                     f = new FileReader(file);
@@ -1266,7 +1262,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                     precursorMass = new Double(tok.nextToken()).doubleValue();
                                     precursorIntensty = Double.NaN;
 
-                                    if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
+                                    if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
                                         precursorIntensty = new Double(tok.nextToken()).doubleValue();
                                     }
 
@@ -1275,15 +1271,15 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                     matchFound = false;
 
                                     for (int i = 0; i <
-                                            prideConverter.getProperties().getSelectedIdentificationFiles().size() &&
+                                            PRIDEConverter.getProperties().getSelectedIdentificationFiles().size() &&
                                             !matchFound; i++) {
 
-                                        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
-                                            matchFound = new File(prideConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName().equalsIgnoreCase(file.getName() +
+                                        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
+                                            matchFound = new File(PRIDEConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName().equalsIgnoreCase(file.getName() +
                                                     ".spo");
-                                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
 
-                                            matchFound = new File(prideConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName().equalsIgnoreCase(
+                                            matchFound = new File(PRIDEConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName().equalsIgnoreCase(
                                                     file.getName().substring(0, file.getName().length() -
                                                     4) + ".out");
                                         }
@@ -1324,7 +1320,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                                     String fileName = "Sequest DTA file";
 
-                                    if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
+                                    if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
                                         fileName = "Micromass PKL file";
                                     }
 
@@ -1351,7 +1347,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                     setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
                                     return;
                                 }
-                            } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
+                            } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
 
                                 try {
                                     selected = false;
@@ -1416,24 +1412,24 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                                     JOptionPane.showMessageDialog(null,
                                             "The following file could not parsed as an OMSSA file:\n " +
-                                            prideConverter.getProperties().getSelectedSourceFiles().get(j) +
+                                            PRIDEConverter.getProperties().getSelectedSourceFiles().get(j) +
                                             "\n\n" +
                                             "See ../Properties/ErrorLog.txt for more details.",
                                             "Error Parsing File", JOptionPane.ERROR_MESSAGE);
                                 }
-                            } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+                            } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
 
-                                prideConverter.getProperties().setMascotConfidenceLevel(
+                                PRIDEConverter.getProperties().setMascotConfidenceLevel(
                                         (Double) mascotConfidenceLevelJSpinner.getValue());
 
                                 double confidenceLevel = (100 -
-                                        prideConverter.getProperties().getMascotConfidenceLevel()) /
+                                        PRIDEConverter.getProperties().getMascotConfidenceLevel()) /
                                         100;
 
                                 double size = (double) file.length() /
-                                        prideConverter.getProperties().NUMBER_OF_BYTES_PER_MEGABYTE;
+                                        PRIDEConverter.getProperties().NUMBER_OF_BYTES_PER_MEGABYTE;
 
-                                if (size > prideConverter.getProperties().MAX_MASCOT_DAT_FILESIZE_BEFORE_INDEXING) {
+                                if (size > PRIDEConverter.getProperties().MAX_MASCOT_DAT_FILESIZE_BEFORE_INDEXING) {
 
                                     //if the file is large
                                     tempMascotDatfile = MascotDatfileFactory.create(
@@ -1503,7 +1499,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                 }
 
-                if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims")) {
+                if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims")) {
                     try {
                         boolean identified;
 
@@ -1517,10 +1513,10 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                         numberOfSelectedSpectra = 0;
 
-                        for (int j = 0; j < prideConverter.getProperties().getProjectIds().size(); j++) {
+                        for (int j = 0; j < PRIDEConverter.getProperties().getProjectIds().size(); j++) {
 
                             dbSpectra = Spectrumfile.getFilenameAndIdentifiedStatusForAllSpectraForProject(
-                                    prideConverter.getProperties().getProjectIds().get(j), prideConverter.getConn());
+                                    PRIDEConverter.getProperties().getProjectIds().get(j), PRIDEConverter.getConn());
 
                             identified = false;
                             selected = false;
@@ -1542,7 +1538,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                                 progressDialog.setValue(i);
 
-                                id = Identification.getIdentification(prideConverter.getConn(), (String) dbSpectra[i][1]);
+                                id = Identification.getIdentification(PRIDEConverter.getConn(), (String) dbSpectra[i][1]);
 
                                 if (id != null) {
                                     identificationId = new Long(id.getIdentificationid()).intValue();
@@ -1587,7 +1583,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                 }
 
                                 ((DefaultTableModel) spectraJXTable.getModel()).addRow(new Object[]{
-                                            prideConverter.getProperties().getProjectIds().get(j),
+                                            PRIDEConverter.getProperties().getProjectIds().get(j),
                                             (String) dbSpectra[i][1],
                                             identificationId,
                                             new Boolean(identified),
@@ -1892,7 +1888,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                         }
                     } else {
 
-                        if (!prideConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+                        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
                             if (((Integer) spectraJXTable.getValueAt(i, selectionColumn)).toString().equalsIgnoreCase(tempToken)) {
                                 spectraJXTable.setValueAt(new Boolean(true), i, 4);
                                 selected = true;
@@ -1931,7 +1927,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
      * @param evt
      */
     private void fileNamesSelectionJRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileNamesSelectionJRadioButtonActionPerformed
-        prideConverter.getProperties().setSelectionCriteriaIsFileName(true);
+        PRIDEConverter.getProperties().setSelectionCriteriaIsFileName(true);
     }//GEN-LAST:event_fileNamesSelectionJRadioButtonActionPerformed
 
     /**
@@ -1940,7 +1936,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
      * @param evt
      */
     private void identificationIdsSelectionJRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_identificationIdsSelectionJRadioButtonActionPerformed
-        prideConverter.getProperties().setSelectionCriteriaIsFileName(false);
+        PRIDEConverter.getProperties().setSelectionCriteriaIsFileName(false);
     }//GEN-LAST:event_identificationIdsSelectionJRadioButtonActionPerformed
 
     /**
@@ -2019,7 +2015,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         String spectrumKey = spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 1) + "_" +
                 spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 2);
         
-        new SpectrumDetails(this, true, prideConverter, spectrumKey);
+        new SpectrumDetails(this, true, spectrumKey);
 }//GEN-LAST:event_viewSpectrumParametersJMenuItemActionPerformed
 
     /**
@@ -2079,15 +2075,15 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
     private boolean saveInsertedInformation() {
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        prideConverter.getProperties().setSelectAllSpectra(selectAllSpectraJRadioButton.isSelected());
-        prideConverter.getProperties().setSelectAllIdentifiedSpectra(selectIdentifiedJRadioButton.isSelected());
-        prideConverter.getProperties().setMascotConfidenceLevel((Double) mascotConfidenceLevelJSpinner.getValue());
-        prideConverter.getProperties().setProteinIdentificationFilter(proteinIdFilterJTextField.getText());
+        PRIDEConverter.getProperties().setSelectAllSpectra(selectAllSpectraJRadioButton.isSelected());
+        PRIDEConverter.getProperties().setSelectAllIdentifiedSpectra(selectIdentifiedJRadioButton.isSelected());
+        PRIDEConverter.getProperties().setMascotConfidenceLevel((Double) mascotConfidenceLevelJSpinner.getValue());
+        PRIDEConverter.getProperties().setProteinIdentificationFilter(proteinIdFilterJTextField.getText());
 
         boolean saveOk = true;
 
         try {
-            prideConverter.getProperties().setPeptideScoreThreshold(new Double(this.peptideScoreJTextField.getText()).doubleValue());
+            PRIDEConverter.getProperties().setPeptideScoreThreshold(new Double(this.peptideScoreJTextField.getText()).doubleValue());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "The peptide score threshold is not a number!");
             peptideScoreJTextField.requestFocus();
@@ -2096,13 +2092,13 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
         if (saveOk) {
 
-            prideConverter.getProperties().setSelectedSpectraKeys(new ArrayList());
+            PRIDEConverter.getProperties().setSelectedSpectraKeys(new ArrayList());
 
             if (spectraJXTable.getRowCount() > 0) {
 
                 for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
                     if (((Boolean) spectraJXTable.getValueAt(i, 4)).booleanValue()) {
-                        prideConverter.getProperties().getSelectedSpectraKeys().add(
+                        PRIDEConverter.getProperties().getSelectedSpectraKeys().add(
                                 new Object[]{
                                     spectraJXTable.getValueAt(i, 1),
                                     "" + spectraJXTable.getValueAt(i, 2)
@@ -2110,21 +2106,21 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                     }
                 }
 
-                prideConverter.getProperties().setSelectAllSpectra(false);
-                prideConverter.getProperties().setSelectAllIdentifiedSpectra(false);
+                PRIDEConverter.getProperties().setSelectAllSpectra(false);
+                PRIDEConverter.getProperties().setSelectAllIdentifiedSpectra(false);
 
-                prideConverter.getProperties().setSpectrumTableModel((DefaultTableModel) spectraJXTable.getModel());
+                PRIDEConverter.getProperties().setSpectrumTableModel((DefaultTableModel) spectraJXTable.getModel());
             } else {
-                prideConverter.getProperties().setSpectrumTableModel(null);
+                PRIDEConverter.getProperties().setSpectrumTableModel(null);
             }
 
             if (advancedSelectionJTextArea.getText().length() > 0) {
-                prideConverter.getProperties().setSpectraSelectionCriteria(advancedSelectionJTextArea.getText());
+                PRIDEConverter.getProperties().setSpectraSelectionCriteria(advancedSelectionJTextArea.getText());
             } else {
-                prideConverter.getProperties().setSpectraSelectionCriteria(null);
+                PRIDEConverter.getProperties().setSpectraSelectionCriteria(null);
             }
 
-            prideConverter.getUserProperties().setCurrentFileNameSelectionCriteriaSeparator(separatorJTextField.getText());
+            PRIDEConverter.getUserProperties().setCurrentFileNameSelectionCriteriaSeparator(separatorJTextField.getText());
         }
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));

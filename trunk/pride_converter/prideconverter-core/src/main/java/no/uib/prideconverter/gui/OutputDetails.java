@@ -19,52 +19,49 @@ import no.uib.prideconverter.util.BareBonesBrowserLaunch;
  */
 public class OutputDetails extends javax.swing.JFrame {
 
-    private PRIDEConverter prideConverter;
 
     /**
      * Opens a new OutputDetails frame.
      * 
-     * @param prideConverter
      * @param location where to position the frame on the screen
      */
-    public OutputDetails(PRIDEConverter prideConverter, Point location) {
-        this.prideConverter = prideConverter;
+    public OutputDetails(Point location) {
 
         // set the default wizard frame size
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
+        this.setPreferredSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setSize(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT);
+        this.setMaximumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setMinimumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
 
         // insert stored properties
-        resubmissionJCheckBox.setSelected(prideConverter.getProperties().isResubmission());
+        resubmissionJCheckBox.setSelected(PRIDEConverter.getProperties().isResubmission());
 
-        if (prideConverter.getProperties().getPrideAccessionNumber() != null) {
-            accessionJTextField.setText(prideConverter.getProperties().getPrideAccessionNumber());
+        if (PRIDEConverter.getProperties().getPrideAccessionNumber() != null) {
+            accessionJTextField.setText(PRIDEConverter.getProperties().getPrideAccessionNumber());
         }
 
-        if (prideConverter.getProperties().isResubmission()) {
+        if (PRIDEConverter.getProperties().isResubmission()) {
             accessionJTextField.setEditable(true);
             accessionJTextField.setEnabled(true);
             accessionJTextFieldKeyReleased(null);
         }
 
         roundDownScoreAndThresholdJCheckBox.setSelected(
-                prideConverter.getProperties().roundMascotScoreAndThresholdDownToNearestInteger());
-        useCommaAsDecimalSymbolJCheckBox.setSelected(prideConverter.getProperties().isCommaTheDecimalSymbol());
+                PRIDEConverter.getProperties().roundMascotScoreAndThresholdDownToNearestInteger());
+        useCommaAsDecimalSymbolJCheckBox.setSelected(PRIDEConverter.getProperties().isCommaTheDecimalSymbol());
 
         // set the icon for the frame
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
                 getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
 
         // set the title of the frame, with version number
-        setTitle(prideConverter.getWizardName() + " " + prideConverter.getPrideConverterVersionNumber() +
+        setTitle(PRIDEConverter.getWizardName() + " " + PRIDEConverter.getPrideConverterVersionNumber() +
                 " - " + getTitle());
 
         setLocation(location);
@@ -81,11 +78,11 @@ public class OutputDetails extends javax.swing.JFrame {
      * Verifies if the selected output folder exists. If not uses the users home folder.
      */
     private void verifyOutputFolder() {
-        if (prideConverter.getUserProperties().getOutputPath().equalsIgnoreCase("user.home")) {
+        if (PRIDEConverter.getUserProperties().getOutputPath().equalsIgnoreCase("user.home")) {
             outPutPathJTextField.setText(System.getProperty("user.home"));
         } else {
-            if (new File(prideConverter.getUserProperties().getOutputPath()).exists()) {
-                outPutPathJTextField.setText(prideConverter.getUserProperties().getOutputPath());
+            if (new File(PRIDEConverter.getUserProperties().getOutputPath()).exists()) {
+                outPutPathJTextField.setText(PRIDEConverter.getUserProperties().getOutputPath());
             } else {
                 JOptionPane.showMessageDialog(this,
                         "Preferred output folder not found! Using your home folder instead.",
@@ -99,12 +96,12 @@ public class OutputDetails extends javax.swing.JFrame {
      * Verifies the choosen OMSSA folder.
      */
     private void verifyOmssaInstallationFolder() {
-        if (prideConverter.getUserProperties().getOmssaInstallDir() != null &&
-                !prideConverter.getUserProperties().getOmssaInstallDir().equalsIgnoreCase("")) {
+        if (PRIDEConverter.getUserProperties().getOmssaInstallDir() != null &&
+                !PRIDEConverter.getUserProperties().getOmssaInstallDir().equalsIgnoreCase("")) {
             omssaInstallationFolderJTextField.setText(
-                    prideConverter.getUserProperties().getOmssaInstallDir());
+                    PRIDEConverter.getUserProperties().getOmssaInstallDir());
         } else {
-            if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
+            if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
                 JOptionPane.showMessageDialog(this,
                         "Please provide the OMSSA installation folder.",
                         "OMSSA Installation Folder",
@@ -119,9 +116,9 @@ public class OutputDetails extends javax.swing.JFrame {
      * 
      * @return a reference to main class of the PRIDE Converter
      */
-    public PRIDEConverter getPRIDEConverterReference() {
-        return prideConverter;
-    }
+//    public PRIDEConverter getPRIDEConverterReference() {
+//        return prideConverter;
+//    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -614,9 +611,9 @@ public class OutputDetails extends javax.swing.JFrame {
     private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        prideConverter.getProperties().setRoundMascotScoreAndThresholdDownToNearestInteger(
+        PRIDEConverter.getProperties().setRoundMascotScoreAndThresholdDownToNearestInteger(
                 roundDownScoreAndThresholdJCheckBox.isSelected());
-        prideConverter.getProperties().useCommaAsDecimalSymbol(
+        PRIDEConverter.getProperties().useCommaAsDecimalSymbol(
                 useCommaAsDecimalSymbolJCheckBox.isSelected());
 
         String omssaInstallationFolder = omssaInstallationFolderJTextField.getText();
@@ -626,7 +623,7 @@ public class OutputDetails extends javax.swing.JFrame {
             omssaInstallationFolder += File.separator;
         }
 
-        prideConverter.getUserProperties().setOmssaInstallDir(
+        PRIDEConverter.getUserProperties().setOmssaInstallDir(
                 omssaInstallationFolder);
 
         String outputPath = outPutPathJTextField.getText();
@@ -635,17 +632,17 @@ public class OutputDetails extends javax.swing.JFrame {
             outputPath += File.separator;
         }
 
-        prideConverter.getUserProperties().setOutputPath(outputPath);
+        PRIDEConverter.getUserProperties().setOutputPath(outputPath);
 
         if (accessionJTextField.getText().length() > 0) {
-            prideConverter.getProperties().setPrideAccessionNumber(accessionJTextField.getText());
+            PRIDEConverter.getProperties().setPrideAccessionNumber(accessionJTextField.getText());
         } else {
-            prideConverter.getProperties().setPrideAccessionNumber(null);
+            PRIDEConverter.getProperties().setPrideAccessionNumber(null);
         }
 
-        prideConverter.getProperties().setResubmission(resubmissionJCheckBox.isSelected());
+        PRIDEConverter.getProperties().setResubmission(resubmissionJCheckBox.isSelected());
 
-        new UserParameters(prideConverter, this.getLocation());
+        new UserParameters(this.getLocation());
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
@@ -664,9 +661,9 @@ public class OutputDetails extends javax.swing.JFrame {
 
         convertJButton.setEnabled(false);
 
-        prideConverter.getProperties().setRoundMascotScoreAndThresholdDownToNearestInteger(
+        PRIDEConverter.getProperties().setRoundMascotScoreAndThresholdDownToNearestInteger(
                 roundDownScoreAndThresholdJCheckBox.isSelected());
-        prideConverter.getProperties().useCommaAsDecimalSymbol(
+        PRIDEConverter.getProperties().useCommaAsDecimalSymbol(
                 useCommaAsDecimalSymbolJCheckBox.isSelected());
 
         String omssaInstallationFolder = omssaInstallationFolderJTextField.getText();
@@ -676,7 +673,7 @@ public class OutputDetails extends javax.swing.JFrame {
             omssaInstallationFolder += File.separator;
         }
 
-        prideConverter.getUserProperties().setOmssaInstallDir(
+        PRIDEConverter.getUserProperties().setOmssaInstallDir(
                 omssaInstallationFolder);
 
         String outputPath = outPutPathJTextField.getText();
@@ -685,18 +682,18 @@ public class OutputDetails extends javax.swing.JFrame {
             outputPath += File.separator;
         }
 
-        prideConverter.getUserProperties().setOutputPath(outputPath);
+        PRIDEConverter.getUserProperties().setOutputPath(outputPath);
 
         if (resubmissionJCheckBox.isSelected()) {
-            prideConverter.getProperties().setPrideAccessionNumber(accessionJTextField.getText());
+            PRIDEConverter.getProperties().setPrideAccessionNumber(accessionJTextField.getText());
         } else {
-            prideConverter.getProperties().setPrideAccessionNumber(null);
+            PRIDEConverter.getProperties().setPrideAccessionNumber(null);
         }
 
         boolean error = false;
 
-        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
-            if (!new File(prideConverter.getUserProperties().getOmssaInstallDir() +
+        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
+            if (!new File(PRIDEConverter.getUserProperties().getOmssaInstallDir() +
                     "mods.xml").exists()) {
                 int option = JOptionPane.showConfirmDialog(this,
                         "The selected OMSSA installation folder does not contain the mods.xml\n" +
@@ -712,7 +709,9 @@ public class OutputDetails extends javax.swing.JFrame {
         if (!error) {
             this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
             //prideConverter.userProperties.setOutputPath(outPutPathJTextField.getText());
-            prideConverter.convert(this);
+            // ToDo: create appropriate prideconverter instance
+//            prideConverter.convert(this);
+            new PRIDEConverter().convert(this); // ToDo: check this
         }
     }//GEN-LAST:event_convertJButtonActionPerformed
 
@@ -742,7 +741,7 @@ public class OutputDetails extends javax.swing.JFrame {
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
         this.setVisible(false);
 
-        prideConverter.getProperties().setRoundMascotScoreAndThresholdDownToNearestInteger(
+        PRIDEConverter.getProperties().setRoundMascotScoreAndThresholdDownToNearestInteger(
                 roundDownScoreAndThresholdJCheckBox.isSelected());
 
         String omssaInstallationFolder = omssaInstallationFolderJTextField.getText();
@@ -752,7 +751,7 @@ public class OutputDetails extends javax.swing.JFrame {
             omssaInstallationFolder += File.separator;
         }
 
-        prideConverter.getUserProperties().setOmssaInstallDir(
+        PRIDEConverter.getUserProperties().setOmssaInstallDir(
                 omssaInstallationFolder);
 
         String outputPath = outPutPathJTextField.getText();
@@ -761,10 +760,10 @@ public class OutputDetails extends javax.swing.JFrame {
             outputPath += File.separator;
         }
 
-        prideConverter.getUserProperties().setOutputPath(outputPath);
+        PRIDEConverter.getUserProperties().setOutputPath(outputPath);
 
         this.dispose();
-        prideConverter.cancelConvertion();
+        PRIDEConverter.cancelConvertion();
     }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**

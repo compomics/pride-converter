@@ -12,10 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -25,6 +22,7 @@ import no.uib.prideconverter.util.MyComboBoxRenderer;
 import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.implementation.core.ProtocolStepImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
+import uk.ac.ebi.pride.model.interfaces.core.ProtocolStep;
 
 /**
  * A frame where information about the protocol used can be inserted.
@@ -35,7 +33,6 @@ import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
  */
 public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInputable {
 
-    private PRIDEConverter prideConverter;
     private boolean valuesChanged = false;
     private String lastSelectedProtocolName;
     private String protocolPath;
@@ -43,20 +40,18 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
     /**
      * Opens a new ProtocolDetails frame.
      * 
-     * @param prideConverter
-     * @param location where to locate the frame on the screen 
+     * @param location where to locate the frame on the screen
      */
-    public ProtocolDetails(PRIDEConverter prideConverter, Point location) {
-        this.prideConverter = prideConverter;
+    public ProtocolDetails(Point location) {
 
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
+        this.setPreferredSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setSize(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT);
+        this.setMaximumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setMinimumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
 
@@ -66,8 +61,8 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         protocolStepsJTable.getTableHeader().setReorderingAllowed(false);
         protocolStepsJTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        setTitle(prideConverter.getWizardName() + " " +
-                prideConverter.getPrideConverterVersionNumber() + " - " + getTitle());
+        setTitle(PRIDEConverter.getWizardName() + " " +
+                PRIDEConverter.getPrideConverterVersionNumber() + " - " + getTitle());
 
         protocolStepsJTable.getColumn(" ").setMinWidth(40);
         protocolStepsJTable.getColumn(" ").setMaxWidth(40);
@@ -79,7 +74,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         protocolPath = protocolPath.replace("%20", " ");
 
         // set the identification type (2D gel or gel free)
-        if (prideConverter.getProperties().isGelFree()) {
+        if (PRIDEConverter.getProperties().isGelFree()) {
             gelFreeJRadioButton.setSelected(true);
             twoDimmensionalGelJRadioButton.setSelected(false);
         } else {
@@ -147,9 +142,9 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
             namesJComboBox.setRenderer(new MyComboBoxRenderer(comboboxTooltips, SwingConstants.CENTER));
             namesJComboBox.setModel(new DefaultComboBoxModel(protocolNames));
-            namesJComboBox.setSelectedItem(prideConverter.getUserProperties().getCurrentProtocol());
+            namesJComboBox.setSelectedItem(PRIDEConverter.getUserProperties().getCurrentProtocol());
 
-            lastSelectedProtocolName = prideConverter.getUserProperties().getCurrentProtocol();
+            lastSelectedProtocolName = PRIDEConverter.getUserProperties().getCurrentProtocol();
 
             namesJComboBoxActionPerformed(null);
 
@@ -229,7 +224,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
         if (modifiedRow == -1) {
 
-            prideConverter.getProperties().getExperimentProtocolSteps().add(
+            PRIDEConverter.getProperties().getExperimentProtocolSteps().add(
                     new ProtocolStepImpl(protocolStepsJTable.getRowCount(),
                     protocolStepsCVParams, null));
 
@@ -242,16 +237,17 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
             protocolStepsJTable.setValueAt(temp, modifiedRow, 1);
 
-            Object[] protocolSteps = prideConverter.getProperties().getExperimentProtocolSteps().toArray();
+            Collection<ProtocolStep> tmp = PRIDEConverter.getProperties().getExperimentProtocolSteps();
+            ProtocolStep[] protocolSteps = tmp.toArray(new ProtocolStep[tmp.size()]);
 
             protocolSteps[modifiedRow] = new ProtocolStepImpl(protocolStepsJTable.getRowCount(),
                     protocolStepsCVParams, null);
 
-            prideConverter.getProperties().setExperimentProtocolSteps(
+            PRIDEConverter.getProperties().setExperimentProtocolSteps(
                     new ArrayList(protocolStepsJTable.getRowCount()));
 
-            for (int i = 0; i < protocolSteps.length; i++) {
-                prideConverter.getProperties().getExperimentProtocolSteps().add(protocolSteps[i]);
+            for (ProtocolStep protocolStep : protocolSteps) {
+                PRIDEConverter.getProperties().getExperimentProtocolSteps().add(protocolStep);
             }
         }
 
@@ -622,9 +618,9 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
             protocolStepsJTable.editingCanceled(null);
 
             //remove from datastructure as well
-            Object[] protocolSteps = prideConverter.getProperties().getExperimentProtocolSteps().toArray();
+            Object[] protocolSteps = PRIDEConverter.getProperties().getExperimentProtocolSteps().toArray();
 
-            prideConverter.getProperties().setExperimentProtocolSteps(new ArrayList());
+            PRIDEConverter.getProperties().setExperimentProtocolSteps(new ArrayList());
 
             ProtocolStepImpl tempProtocolStepImpl;
 
@@ -635,7 +631,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                     tempProtocolStepImpl = new ProtocolStepImpl(i,
                             tempProtocolStepImpl.getProtocolStepCvParameterList(), null);
 
-                    prideConverter.getProperties().getExperimentProtocolSteps().add(tempProtocolStepImpl);
+                    PRIDEConverter.getProperties().getExperimentProtocolSteps().add(tempProtocolStepImpl);
                 }
             }
 
@@ -670,13 +666,13 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         valuesChanged = true;
 
         //move in data structure as well
-        Object[] protocolSteps = prideConverter.getProperties().getExperimentProtocolSteps().toArray();
+        Object[] protocolSteps = PRIDEConverter.getProperties().getExperimentProtocolSteps().toArray();
 
         Object tempProtocolStep = protocolSteps[selectedRow + 1];
         protocolSteps[selectedRow + 1] = protocolSteps[selectedRow];
         protocolSteps[selectedRow] = tempProtocolStep;
 
-        prideConverter.getProperties().setExperimentProtocolSteps(new ArrayList(protocolSteps.length));
+        PRIDEConverter.getProperties().setExperimentProtocolSteps(new ArrayList(protocolSteps.length));
 
         ProtocolStepImpl tempProtocolStepImpl;
 
@@ -686,7 +682,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
             tempProtocolStepImpl = new ProtocolStepImpl(i,
                     tempProtocolStepImpl.getProtocolStepCvParameterList(), null);
 
-            prideConverter.getProperties().getExperimentProtocolSteps().add(tempProtocolStepImpl);
+            PRIDEConverter.getProperties().getExperimentProtocolSteps().add(tempProtocolStepImpl);
         }
     }//GEN-LAST:event_moveDownJMenuItemActionPerformed
 
@@ -713,13 +709,13 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         valuesChanged = true;
 
         //move in data structure as well
-        Object[] protocolSteps = prideConverter.getProperties().getExperimentProtocolSteps().toArray();
+        Object[] protocolSteps = PRIDEConverter.getProperties().getExperimentProtocolSteps().toArray();
 
         Object tempProtocolStep = protocolSteps[selectedRow - 1];
         protocolSteps[selectedRow - 1] = protocolSteps[selectedRow];
         protocolSteps[selectedRow] = tempProtocolStep;
 
-        prideConverter.getProperties().setExperimentProtocolSteps(new ArrayList(protocolSteps.length));
+        PRIDEConverter.getProperties().setExperimentProtocolSteps(new ArrayList(protocolSteps.length));
 
         ProtocolStepImpl tempProtocolStepImpl;
 
@@ -729,7 +725,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
             tempProtocolStepImpl = new ProtocolStepImpl(i,
                     tempProtocolStepImpl.getProtocolStepCvParameterList(), null);
 
-            prideConverter.getProperties().getExperimentProtocolSteps().add(tempProtocolStepImpl);
+            PRIDEConverter.getProperties().getExperimentProtocolSteps().add(tempProtocolStepImpl);
         }
     }//GEN-LAST:event_moveUpJMenuItemActionPerformed
 
@@ -739,10 +735,9 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
      * @param evt
      */
     private void editJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editJMenuItemActionPerformed
-        Object[] protocolSteps = prideConverter.getProperties().getExperimentProtocolSteps().toArray();
+        Object[] protocolSteps = PRIDEConverter.getProperties().getExperimentProtocolSteps().toArray();
 
-        new NewProtocolStep(this, true, prideConverter,
-                protocolStepsJTable.getSelectedRow(),
+        new NewProtocolStep(this, true, protocolStepsJTable.getSelectedRow(),
                 (ProtocolStepImpl) protocolSteps[protocolStepsJTable.getSelectedRow()]);
     }//GEN-LAST:event_editJMenuItemActionPerformed
 
@@ -753,7 +748,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
      */
     private void addJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new NewProtocolStep(this, true, prideConverter);
+        new NewProtocolStep(this, true);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_addJButtonActionPerformed
 
@@ -797,7 +792,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
      */
     private void nextJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextJButtonActionPerformed
         if (saveInsertedInformation()) {
-            new Instrument(prideConverter, this.getLocation());
+            new Instrument(this.getLocation());
             this.setVisible(false);
             this.dispose();
         }
@@ -810,7 +805,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
      */
     private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backJButtonActionPerformed
         if (saveInsertedInformation()) {
-            new SampleDetails(prideConverter, this.getLocation());
+            new SampleDetails(this.getLocation());
             this.setVisible(false);
             this.dispose();
         }
@@ -824,7 +819,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
         this.setVisible(false);
         this.dispose();
-        prideConverter.cancelConvertion();
+        PRIDEConverter.cancelConvertion();
     }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**
@@ -869,7 +864,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
      * @param evt
      */
     private void namesJComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_namesJComboBoxItemStateChanged
-        prideConverter.getUserProperties().setCurrentProtocol((String) namesJComboBox.getSelectedItem());
+        PRIDEConverter.getUserProperties().setCurrentProtocol((String) namesJComboBox.getSelectedItem());
         mandatoryFieldsCheck();
     }//GEN-LAST:event_namesJComboBoxItemStateChanged
 
@@ -910,10 +905,10 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                         BufferedWriter bw = new BufferedWriter(r);
 
                         bw.write("Name: " + lastSelectedProtocolName + "\n");
-                        bw.write(prideConverter.getProperties().getExperimentProtocolSteps().size() +
+                        bw.write(PRIDEConverter.getProperties().getExperimentProtocolSteps().size() +
                                 "\n");
 
-                        Iterator steps = prideConverter.getProperties().getExperimentProtocolSteps().iterator();
+                        Iterator steps = PRIDEConverter.getProperties().getExperimentProtocolSteps().iterator();
                         Iterator cvTerms;
 
                         ProtocolStepImpl tempStep;
@@ -997,10 +992,10 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                                 bw.write("Name: " +
                                         protocolName +
                                         "\n");
-                                bw.write(prideConverter.getProperties().getExperimentProtocolSteps().size() +
+                                bw.write(PRIDEConverter.getProperties().getExperimentProtocolSteps().size() +
                                         "\n");
 
-                                Iterator steps = prideConverter.getProperties().getExperimentProtocolSteps().iterator();
+                                Iterator steps = PRIDEConverter.getProperties().getExperimentProtocolSteps().iterator();
                                 Iterator cvTerms;
 
                                 ProtocolStepImpl tempStep;
@@ -1055,18 +1050,18 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                         } else {
                             cancel = true;
                             namesJComboBox.setSelectedItem(lastSelectedProtocolName);
-                            prideConverter.getUserProperties().setCurrentProtocol(lastSelectedProtocolName);
+                            PRIDEConverter.getUserProperties().setCurrentProtocol(lastSelectedProtocolName);
                         }
                     } else {
                         cancel = true;
                         namesJComboBox.setSelectedItem(lastSelectedProtocolName);
-                        prideConverter.getUserProperties().setCurrentProtocol(lastSelectedProtocolName);
+                        PRIDEConverter.getUserProperties().setCurrentProtocol(lastSelectedProtocolName);
                     }
                 }
             } else if (value == JOptionPane.CANCEL_OPTION) {
                 cancel = true;
                 namesJComboBox.setSelectedItem(lastSelectedProtocolName);
-                prideConverter.getUserProperties().setCurrentProtocol(lastSelectedProtocolName);
+                PRIDEConverter.getUserProperties().setCurrentProtocol(lastSelectedProtocolName);
             }
         }
 
@@ -1074,14 +1069,14 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
             lastSelectedProtocolName = (String) namesJComboBox.getSelectedItem();
             String selectedProtocolName = (String) namesJComboBox.getSelectedItem();
 
-            prideConverter.getUserProperties().setCurrentProtocol(selectedProtocolName);
+            PRIDEConverter.getUserProperties().setCurrentProtocol(selectedProtocolName);
 
             //empty the table
             while (protocolStepsJTable.getRowCount() > 0) {
                 ((DefaultTableModel) protocolStepsJTable.getModel()).removeRow(0);
             }
 
-            prideConverter.getProperties().setExperimentProtocolSteps(new ArrayList());
+            PRIDEConverter.getProperties().setExperimentProtocolSteps(new ArrayList());
 
             if (namesJComboBox.getSelectedIndex() == 0) {
                 valuesChanged = false;
@@ -1255,9 +1250,9 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
     private boolean saveInsertedInformation() {
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        prideConverter.getUserProperties().setCurrentProtocol((String) namesJComboBox.getSelectedItem());
+        PRIDEConverter.getUserProperties().setCurrentProtocol((String) namesJComboBox.getSelectedItem());
 
-        prideConverter.getProperties().setGelFree(gelFreeJRadioButton.isSelected());
+        PRIDEConverter.getProperties().setGelFree(gelFreeJRadioButton.isSelected());
 
         boolean cancel = false;
 
@@ -1276,7 +1271,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
                     String newName;
                     newName = protocolPath +
-                            prideConverter.getUserProperties().getCurrentProtocol() + ".pro";
+                            PRIDEConverter.getUserProperties().getCurrentProtocol() + ".pro";
 
                     try {
 
@@ -1284,10 +1279,10 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                         BufferedWriter bw = new BufferedWriter(r);
 
                         bw.write("Name: " +
-                                prideConverter.getUserProperties().getCurrentProtocol() + "\n");
-                        bw.write(prideConverter.getProperties().getExperimentProtocolSteps().size() + "\n");
+                                PRIDEConverter.getUserProperties().getCurrentProtocol() + "\n");
+                        bw.write(PRIDEConverter.getProperties().getExperimentProtocolSteps().size() + "\n");
 
-                        Iterator steps = prideConverter.getProperties().getExperimentProtocolSteps().iterator();
+                        Iterator steps = PRIDEConverter.getProperties().getExperimentProtocolSteps().iterator();
                         Iterator cvTerms;
 
                         ProtocolStepImpl tempStep;
@@ -1363,9 +1358,9 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                                 BufferedWriter bw = new BufferedWriter(r);
 
                                 bw.write("Name: " + protocolName + "\n");
-                                bw.write(prideConverter.getProperties().getExperimentProtocolSteps().size() + "\n");
+                                bw.write(PRIDEConverter.getProperties().getExperimentProtocolSteps().size() + "\n");
 
-                                Iterator steps = prideConverter.getProperties().getExperimentProtocolSteps().iterator();
+                                Iterator steps = PRIDEConverter.getProperties().getExperimentProtocolSteps().iterator();
                                 Iterator cvTerms;
 
                                 ProtocolStepImpl tempStep;
@@ -1401,7 +1396,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                                 bw.close();
                                 r.close();
 
-                                prideConverter.getUserProperties().setCurrentProtocol(protocolName);
+                                PRIDEConverter.getUserProperties().setCurrentProtocol(protocolName);
 
                             } catch (FileNotFoundException ex) {
                                 JOptionPane.showMessageDialog(
@@ -1469,7 +1464,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
      */
     public void insertIntoComboBox(String text) {
 
-        prideConverter.getUserProperties().setCurrentProtocol(text);
+        PRIDEConverter.getUserProperties().setCurrentProtocol(text);
 
         String newName;
         newName = protocolPath + text + ".pro";

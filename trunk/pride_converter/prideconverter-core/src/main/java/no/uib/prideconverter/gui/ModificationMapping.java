@@ -25,7 +25,6 @@ import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 public class ModificationMapping extends javax.swing.JDialog implements OLSInputable {
 
     private ProgressDialog progressDialog;
-    private PRIDEConverter prideConverter;
     private OutputDetails outputDetails;
     private CvParamImpl selectedCvTerm;
     private Modification modification;
@@ -47,7 +46,6 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
 
         outputDetails = (OutputDetails) parent;
         this.progressDialog = progressDialog;
-        this.prideConverter = outputDetails.getPRIDEConverterReference();
         this.selectedCvTerm = cvParam;
         this.fixedModification = fixedModification;
 
@@ -92,7 +90,6 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
 
         outputDetails = (OutputDetails) parent;
         this.progressDialog = progressDialog;
-        this.prideConverter = outputDetails.getPRIDEConverterReference();
         this.selectedCvTerm = cvParam;
         this.fixedModification = fixedModification;
 
@@ -397,7 +394,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
      * @param evt
      */
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
-        prideConverter.setCancelConversion(true);
+        PRIDEConverter.setCancelConversion(true);
         progressDialog.setVisible(false);
         progressDialog.dispose();
         this.setVisible(false);
@@ -463,7 +460,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
 
             if (!massJTextField.getText().equalsIgnoreCase("-")) {
 
-                if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File") &&
+                if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File") &&
                         fixedModification) {
 
                     // sequest fixed modifications has to be handled separatly as they  
@@ -525,7 +522,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
 
         if (!error) {
             this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-            prideConverter.addModification(nameJTextField.getText(), selectedCvTerm, modificationMass);
+            PRIDEConverter.addModification(nameJTextField.getText(), selectedCvTerm, modificationMass);
             this.setVisible(false);
             this.dispose();
         }

@@ -33,27 +33,23 @@ import uk.ac.ebi.pride.model.interfaces.mzdata.UserParam;
  */
 public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
 
-    private PRIDEConverter prideConverter;
 
     /** 
      * Opens a new DataFileSelectionTwoFileTypes frame, and inserts stored information.
      * 
-     * @param prideConverter
      * @param location where to position the frame
      */
-    public DataFileSelectionTwoFileTypes(PRIDEConverter prideConverter, Point location) {
-
-        this.prideConverter = prideConverter;
+    public DataFileSelectionTwoFileTypes(Point location) {
 
         // sets the default wizard frame size
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH,
-                prideConverter.getProperties().FRAME_HEIGHT));
+        this.setPreferredSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setSize(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT);
+        this.setMaximumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setMinimumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
 
@@ -66,28 +62,28 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
         selectedIdentificationFilesJTable.getColumn(" ").setMaxWidth(40);
 
         // insert stored information
-        if (prideConverter.getProperties().getSelectedSourceFiles() != null) {
+        if (PRIDEConverter.getProperties().getSelectedSourceFiles() != null) {
 
-            for (int i = 0; i < prideConverter.getProperties().getSelectedSourceFiles().size(); i++) {
+            for (int i = 0; i < PRIDEConverter.getProperties().getSelectedSourceFiles().size(); i++) {
 
                 ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).addRow(
                         new Object[]{
                             new Integer(selectedSpectraFilesJTable.getRowCount() + 1),
-                            new File(prideConverter.getProperties().getSelectedSourceFiles().get(i)).getName()
+                            new File(PRIDEConverter.getProperties().getSelectedSourceFiles().get(i)).getName()
                         });
             }
         } else {
-            prideConverter.getProperties().setSelectedSourceFiles(new ArrayList());
+            PRIDEConverter.getProperties().setSelectedSourceFiles(new ArrayList());
         }
 
-        if (prideConverter.getProperties().getSelectedIdentificationFiles() != null) {
+        if (PRIDEConverter.getProperties().getSelectedIdentificationFiles() != null) {
 
-            for (int i = 0; i < prideConverter.getProperties().getSelectedIdentificationFiles().size(); i++) {
+            for (int i = 0; i < PRIDEConverter.getProperties().getSelectedIdentificationFiles().size(); i++) {
                 ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).addRow(
                         new Object[]{
                             new Integer(selectedIdentificationFilesJTable.getRowCount() +
                             1),
-                            new File(prideConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName()
+                            new File(PRIDEConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName()
                         });
             }
 
@@ -96,14 +92,14 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                 nextJButton.setEnabled(true);
             }
         } else {
-            prideConverter.getProperties().setSelectedIdentificationFiles(new ArrayList());
+            PRIDEConverter.getProperties().setSelectedIdentificationFiles(new ArrayList());
         }
 
         // sets the icon of the frame
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
                 getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
 
-        setTitle(prideConverter.getWizardName() + " " + prideConverter.getPrideConverterVersionNumber() +
+        setTitle(PRIDEConverter.getWizardName() + " " + PRIDEConverter.getPrideConverterVersionNumber() +
                 " - " + getTitle());
 
         if (location != null) {
@@ -425,7 +421,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
         this.setVisible(false);
         this.dispose();
-        prideConverter.cancelConvertion();
+        PRIDEConverter.cancelConvertion();
     }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**
@@ -436,7 +432,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
     private void nextJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextJButtonActionPerformed
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new SpectraSelectionWithIdentifications(prideConverter, this.getLocation());
+        new SpectraSelectionWithIdentifications(this.getLocation());
         this.setVisible(false);
         this.dispose();
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -480,7 +476,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
      * @param evt
      */
     private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backJButtonActionPerformed
-        new DataSourceSelection(prideConverter, this.getLocation());
+        new DataSourceSelection(this.getLocation());
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_backJButtonActionPerformed
@@ -493,12 +489,12 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
     private void deleteSpectraJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSpectraJMenuItemActionPerformed
         if (selectedSpectraFilesJTable.getSelectedRow() != -1) {
 
-            prideConverter.getProperties().setSpectrumTableModel(null);
+            PRIDEConverter.getProperties().setSpectrumTableModel(null);
 
             int[] selectedRows = selectedSpectraFilesJTable.getSelectedRows();
 
             for (int i = selectedRows.length - 1; i >= 0; i--) {
-                prideConverter.getProperties().getSelectedSourceFiles().remove(selectedRows[i]);
+                PRIDEConverter.getProperties().getSelectedSourceFiles().remove(selectedRows[i]);
                 ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).removeRow(selectedRows[i]);
             }
 
@@ -544,47 +540,47 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
     private void selectSpectrumFileOrFolderJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectSpectrumFileOrFolderJButtonActionPerformed
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        JFileChooser chooser = new JFileChooser(prideConverter.getUserProperties().getCurrentSourceFileLocation());
+        JFileChooser chooser = new JFileChooser(PRIDEConverter.getUserProperties().getCurrentSourceFileLocation());
         chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         chooser.setMultiSelectionEnabled(true);
-        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
+        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
             chooser.setFileFilter(new PklFileFilter());
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
             chooser.setFileFilter(new DtaFileFilter());
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
 
             // make sure that the last used file filter is selected
             // the next time the file user is opened
-            if (prideConverter.getProperties().getLastUsedFileFilter() != null) {
-                if (prideConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
+            if (PRIDEConverter.getProperties().getLastUsedFileFilter() != null) {
+                if (PRIDEConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
                         new MgfFileFilter().getDescription())) {
                     chooser.addChoosableFileFilter(new DtaFileFilter());
                     chooser.addChoosableFileFilter(new PklFileFilter());
                     chooser.addChoosableFileFilter(new MzDataFileFilter());
                     chooser.addChoosableFileFilter(new MzXmlFileFilter());
                     chooser.addChoosableFileFilter(new MgfFileFilter());
-                } else if (prideConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
+                } else if (PRIDEConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
                         new MzDataFileFilter().getDescription())) {
                     chooser.addChoosableFileFilter(new DtaFileFilter());
                     chooser.addChoosableFileFilter(new PklFileFilter());
                     chooser.addChoosableFileFilter(new MgfFileFilter());
                     chooser.addChoosableFileFilter(new MzXmlFileFilter());
                     chooser.addChoosableFileFilter(new MzDataFileFilter());
-                } else if (prideConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
+                } else if (PRIDEConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
                         new MzXmlFileFilter().getDescription())) {
                     chooser.addChoosableFileFilter(new DtaFileFilter());
                     chooser.addChoosableFileFilter(new PklFileFilter());
                     chooser.addChoosableFileFilter(new MgfFileFilter());
                     chooser.addChoosableFileFilter(new MzDataFileFilter());
                     chooser.addChoosableFileFilter(new MzXmlFileFilter());
-                } else if (prideConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
+                } else if (PRIDEConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
                         new DtaFileFilter().getDescription())) {
                     chooser.addChoosableFileFilter(new MgfFileFilter());
                     chooser.addChoosableFileFilter(new MzDataFileFilter());
                     chooser.addChoosableFileFilter(new MzXmlFileFilter());
                     chooser.addChoosableFileFilter(new PklFileFilter());
                     chooser.addChoosableFileFilter(new DtaFileFilter());
-                } else if (prideConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
+                } else if (PRIDEConverter.getProperties().getLastUsedFileFilter().getDescription().equalsIgnoreCase(
                         new PklFileFilter().getDescription())) {
                     chooser.addChoosableFileFilter(new DtaFileFilter());
                     chooser.addChoosableFileFilter(new MgfFileFilter());
@@ -606,23 +602,23 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             String path;
 
-            prideConverter.getProperties().setSpectrumTableModel(null);
-            prideConverter.getProperties().setInstrumentDetailsExtracted(false);
-            prideConverter.getProperties().setSelectedSourceFiles(new ArrayList());
-            prideConverter.getProperties().setSpectraSelectionCriteria(null);
-            prideConverter.getProperties().setDataFileHasBeenLoaded(false);
-            prideConverter.getProperties().setSampleDetailsExtracted(false);
-            prideConverter.getProperties().setContactInfoExtracted(false);
-            prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
-            prideConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
-            prideConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
+            PRIDEConverter.getProperties().setSpectrumTableModel(null);
+            PRIDEConverter.getProperties().setInstrumentDetailsExtracted(false);
+            PRIDEConverter.getProperties().setSelectedSourceFiles(new ArrayList());
+            PRIDEConverter.getProperties().setSpectraSelectionCriteria(null);
+            PRIDEConverter.getProperties().setDataFileHasBeenLoaded(false);
+            PRIDEConverter.getProperties().setSampleDetailsExtracted(false);
+            PRIDEConverter.getProperties().setContactInfoExtracted(false);
+            PRIDEConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+            PRIDEConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
+            PRIDEConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
 
             while (selectedSpectraFilesJTable.getRowCount() > 0) {
                 ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).removeRow(0);
             }
 
-            prideConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
-            prideConverter.getProperties().setLastUsedFileFilter(chooser.getFileFilter());
+            PRIDEConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
+            PRIDEConverter.getProperties().setLastUsedFileFilter(chooser.getFileFilter());
 
             File[] allFiles = chooser.getSelectedFiles();
 
@@ -638,10 +634,10 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                     for (int i = 0; i < files.length; i++) {
                         tempFile = files[i];
 
-                        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
+                        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
                             if (tempFile.getAbsolutePath().endsWith(".pkl") ||
                                     tempFile.getAbsolutePath().endsWith(".PKL")) {
-                                if (!prideConverter.getProperties().getSelectedSourceFiles().contains(tempFile)) {
+                                if (!PRIDEConverter.getProperties().getSelectedSourceFiles().contains(tempFile)) {
                                     ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).addRow(
                                             new Object[]{
                                                 new Integer(selectedSpectraFilesJTable.getRowCount() + 1),
@@ -649,17 +645,17 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                                                 new Boolean(true)
                                             });
 
-                                    prideConverter.getProperties().getSelectedSourceFiles().add(tempFile.getPath());
+                                    PRIDEConverter.getProperties().getSelectedSourceFiles().add(tempFile.getPath());
                                 } else {
                                     JOptionPane.showMessageDialog(this, "A file with the name " + tempFile.getPath() +
                                             " is already selected.\nThe same file can not be added twice.",
                                             "File Already Selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
-                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
                             if (tempFile.getAbsolutePath().endsWith(".dta") ||
                                     tempFile.getAbsolutePath().endsWith(".DTA")) {
-                                if (!prideConverter.getProperties().getSelectedSourceFiles().contains(tempFile)) {
+                                if (!PRIDEConverter.getProperties().getSelectedSourceFiles().contains(tempFile)) {
                                     ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).addRow(
                                             new Object[]{
                                                 new Integer(selectedSpectraFilesJTable.getRowCount() + 1),
@@ -667,16 +663,16 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                                                 new Boolean(true)
                                             });
 
-                                    prideConverter.getProperties().getSelectedSourceFiles().add(tempFile.getPath());
+                                    PRIDEConverter.getProperties().getSelectedSourceFiles().add(tempFile.getPath());
                                 } else {
                                     JOptionPane.showMessageDialog(this, "A file with the name " + tempFile.getPath() +
                                             " is already selected.\nThe same file can not be added twice.",
                                             "File Already Selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
-                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
                             if (chooser.getFileFilter().accept(tempFile)) {
-                                if (!prideConverter.getProperties().getSelectedSourceFiles().contains(tempFile)) {
+                                if (!PRIDEConverter.getProperties().getSelectedSourceFiles().contains(tempFile)) {
                                     ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).addRow(
                                             new Object[]{
                                                 new Integer(selectedSpectraFilesJTable.getRowCount() + 1),
@@ -684,7 +680,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                                                 new Boolean(true)
                                             });
 
-                                    prideConverter.getProperties().getSelectedSourceFiles().add(tempFile.getPath());
+                                    PRIDEConverter.getProperties().getSelectedSourceFiles().add(tempFile.getPath());
                                 } else {
                                     JOptionPane.showMessageDialog(this, "A file with the name " + tempFile.getPath() +
                                             " is already selected.\nThe same file can not be added twice.",
@@ -694,7 +690,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                         }
                     }
                 } else {
-                    if (!prideConverter.getProperties().getSelectedSourceFiles().contains(currentFile.getPath())) {
+                    if (!PRIDEConverter.getProperties().getSelectedSourceFiles().contains(currentFile.getPath())) {
                         ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).addRow(
                                 new Object[]{
                                     new Integer(selectedSpectraFilesJTable.getRowCount() +
@@ -703,7 +699,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                                     new Boolean(true)
                                 });
 
-                        prideConverter.getProperties().getSelectedSourceFiles().add(currentFile.getPath());
+                        PRIDEConverter.getProperties().getSelectedSourceFiles().add(currentFile.getPath());
                     } else {
                         JOptionPane.showMessageDialog(this, "A file with the name " +
                                 currentFile.getPath() +
@@ -758,14 +754,14 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
     private void selectIdentificationsFileOrFolderJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectIdentificationsFileOrFolderJButtonActionPerformed
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        JFileChooser chooser = new JFileChooser(prideConverter.getUserProperties().getCurrentSourceFileLocation());
+        JFileChooser chooser = new JFileChooser(PRIDEConverter.getUserProperties().getCurrentSourceFileLocation());
         chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         chooser.setMultiSelectionEnabled(true);
-        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
+        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
             chooser.setFileFilter(new PklSpoFileFilter());
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
             chooser.setFileFilter(new OutFileFilter());
-        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
             chooser.setFileFilter(new XmlFileFilter());
         }
 
@@ -774,22 +770,22 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             String path;
 
-            prideConverter.getProperties().setSpectrumTableModel(null);
-            prideConverter.getProperties().setInstrumentDetailsExtracted(false);
-            prideConverter.getProperties().setSelectedIdentificationFiles(new ArrayList());
-            prideConverter.getProperties().setSpectraSelectionCriteria(null);
-            prideConverter.getProperties().setDataFileHasBeenLoaded(false);
-            prideConverter.getProperties().setSampleDetailsExtracted(false);
-            prideConverter.getProperties().setContactInfoExtracted(false);
-            prideConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
-            prideConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
-            prideConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
+            PRIDEConverter.getProperties().setSpectrumTableModel(null);
+            PRIDEConverter.getProperties().setInstrumentDetailsExtracted(false);
+            PRIDEConverter.getProperties().setSelectedIdentificationFiles(new ArrayList());
+            PRIDEConverter.getProperties().setSpectraSelectionCriteria(null);
+            PRIDEConverter.getProperties().setDataFileHasBeenLoaded(false);
+            PRIDEConverter.getProperties().setSampleDetailsExtracted(false);
+            PRIDEConverter.getProperties().setContactInfoExtracted(false);
+            PRIDEConverter.getProperties().setCurrentQuantificationSelection(new ArrayList());
+            PRIDEConverter.getProperties().setSpectrumCvParams(new HashMap<String, ArrayList<CvParam>>());
+            PRIDEConverter.getProperties().setSpectrumUserParams(new HashMap<String, ArrayList<UserParam>>());
 
             while (selectedIdentificationFilesJTable.getRowCount() > 0) {
                 ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).removeRow(0);
             }
 
-            prideConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
+            PRIDEConverter.getUserProperties().setSourceFileLocation(chooser.getSelectedFile().getPath());
 
             File[] allFiles = chooser.getSelectedFiles();
 
@@ -805,10 +801,10 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                     for (int i = 0; i < files.length; i++) {
                         tempFile = files[i];
 
-                        if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
+                        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
                             if (tempFile.getAbsolutePath().endsWith(".spo") ||
                                     tempFile.getAbsolutePath().endsWith(".SPO")) {
-                                if (!prideConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile)) {
+                                if (!PRIDEConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile)) {
                                     ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).addRow(
                                             new Object[]{
                                                 new Integer(selectedIdentificationFilesJTable.getRowCount() + 1),
@@ -816,7 +812,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                                                 new Boolean(true)
                                             });
 
-                                    prideConverter.getProperties().getSelectedIdentificationFiles().add(tempFile.getPath());
+                                    PRIDEConverter.getProperties().getSelectedIdentificationFiles().add(tempFile.getPath());
                                 } else {
                                     JOptionPane.showMessageDialog(this,
                                             "A file with the name " + tempFile.getPath() +
@@ -824,10 +820,10 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                                             "File Already Selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
-                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
                             if (tempFile.getAbsolutePath().endsWith(".out") ||
                                     tempFile.getAbsolutePath().endsWith(".OUT")) {
-                                if (!prideConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile)) {
+                                if (!PRIDEConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile)) {
                                     ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).addRow(
                                             new Object[]{
                                                 new Integer(selectedIdentificationFilesJTable.getRowCount() + 1),
@@ -835,7 +831,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                                                 new Boolean(true)
                                             });
 
-                                    prideConverter.getProperties().getSelectedIdentificationFiles().add(tempFile.getPath());
+                                    PRIDEConverter.getProperties().getSelectedIdentificationFiles().add(tempFile.getPath());
                                 } else {
                                     JOptionPane.showMessageDialog(this,
                                             "A file with the name " + tempFile.getPath() +
@@ -843,9 +839,9 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                                             "File Already Selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
-                        } else if (prideConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
                             if (chooser.getFileFilter().accept(tempFile)) {
-                                if (!prideConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile)) {
+                                if (!PRIDEConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile)) {
                                     ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).addRow(
                                             new Object[]{
                                                 new Integer(selectedIdentificationFilesJTable.getRowCount() + 1),
@@ -853,7 +849,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                                                 new Boolean(true)
                                             });
 
-                                    prideConverter.getProperties().getSelectedIdentificationFiles().add(tempFile.getPath());
+                                    PRIDEConverter.getProperties().getSelectedIdentificationFiles().add(tempFile.getPath());
                                 } else {
                                     JOptionPane.showMessageDialog(this,
                                             "A file with the name " + tempFile.getPath() +
@@ -865,7 +861,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                     }
                 } else {
 
-                    if (!prideConverter.getProperties().getSelectedIdentificationFiles().contains(currentFile.getPath())) {
+                    if (!PRIDEConverter.getProperties().getSelectedIdentificationFiles().contains(currentFile.getPath())) {
                         ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).addRow(
                                 new Object[]{
                                     new Integer(selectedIdentificationFilesJTable.getRowCount() + 1),
@@ -873,7 +869,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                                     new Boolean(true)
                                 });
 
-                        prideConverter.getProperties().getSelectedIdentificationFiles().add(currentFile.getPath());
+                        PRIDEConverter.getProperties().getSelectedIdentificationFiles().add(currentFile.getPath());
                     } else {
                         JOptionPane.showMessageDialog(this,
                                 "A file with the name " + currentFile.getPath() +
@@ -900,12 +896,12 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
     private void deleteIdentificationsJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteIdentificationsJMenuItemActionPerformed
         if (selectedIdentificationFilesJTable.getSelectedRow() != -1) {
 
-            prideConverter.getProperties().setSpectrumTableModel(null);
+            PRIDEConverter.getProperties().setSpectrumTableModel(null);
 
             int[] selectedRows = selectedIdentificationFilesJTable.getSelectedRows();
 
             for (int i = selectedRows.length - 1; i >= 0; i--) {
-                prideConverter.getProperties().getSelectedIdentificationFiles().remove(selectedRows[i]);
+                PRIDEConverter.getProperties().getSelectedIdentificationFiles().remove(selectedRows[i]);
                 ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).removeRow(selectedRows[i]);
             }
 

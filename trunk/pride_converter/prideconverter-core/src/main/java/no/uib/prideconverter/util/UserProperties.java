@@ -14,6 +14,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import no.uib.prideconverter.PRIDEConverter;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
+import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
 
 /**
  * Takes care of saving and retrieving the user properites.
@@ -41,8 +42,7 @@ public class UserProperties {
     private double peakIntegrationRangeUpper = 0.05;
     private double reporterIonIntensityThreshold = 0.0;
     private double[] purityCorrections = {0, 1, 5.90, 2, 0, 2, 5.6, 0.1, 0, 3, 4.5, 0.1, 0.1, 4, 3.5, 0.1};
-    private PRIDEConverter prideConverter;
-    private HashMap cvTermMappings;
+    private HashMap<String, CvParam> cvTermMappings;
     private String omssaInstallDir = null;
 
     /**
@@ -70,11 +70,9 @@ public class UserProperties {
     /**
      * Creates a new UserProperties object
      * 
-     * @param prideConverter
      */
-    public UserProperties(PRIDEConverter prideConverter) {
-        this.prideConverter = prideConverter;
-        cvTermMappings = new HashMap();
+    public UserProperties() {
+        cvTermMappings = new HashMap<String, CvParam>();
     }
 
     /**
@@ -175,11 +173,11 @@ public class UserProperties {
 
                 // read the iTRAQ settings values
                 s = b.readLine();
-                peakIntegrationRangeLower = new Double(s.substring(s.indexOf(": ") + 2)).doubleValue();
+                peakIntegrationRangeLower = Double.parseDouble(s.substring(s.indexOf(": ") + 2));
                 s = b.readLine();
-                peakIntegrationRangeUpper = new Double(s.substring(s.indexOf(": ") + 2)).doubleValue();
+                peakIntegrationRangeUpper = Double.parseDouble(s.substring(s.indexOf(": ") + 2));
                 s = b.readLine();
-                reporterIonIntensityThreshold = new Double(s.substring(s.indexOf(": ") + 2)).doubleValue();
+                reporterIonIntensityThreshold = Double.parseDouble(s.substring(s.indexOf(": ") + 2));
 
                 s = b.readLine();
                 StringTokenizer tok = new StringTokenizer(s.substring(s.indexOf(": ") + 2), ",");
@@ -187,7 +185,7 @@ public class UserProperties {
                 int purityCorrectionsCounter = 0;
 
                 while (tok.hasMoreTokens()) {
-                    purityCorrections[purityCorrectionsCounter] = new Double(tok.nextToken()).doubleValue();
+                    purityCorrections[purityCorrectionsCounter] = Double.parseDouble(tok.nextToken());
                     purityCorrectionsCounter++;
                 }
             }
@@ -372,33 +370,33 @@ public class UserProperties {
 
                             File[] files = contactsFolder.listFiles();
 
-                            for (int i = 0; i < files.length; i++) {
-                                if (files[i].getName().endsWith(".con")) {
-                                    copyFile(files[i], new File(path + "/Properties/Contacts/" + files[i].getName()));
+                            for (File file1 : files) {
+                                if (file1.getName().endsWith(".con")) {
+                                    copyFile(file1, new File(path + "/Properties/Contacts/" + file1.getName()));
                                 }
                             }
 
                             files = instrumentsFolder.listFiles();
 
-                            for (int i = 0; i < files.length; i++) {
-                                if (files[i].getName().endsWith(".int")) {
-                                    copyFile(files[i], new File(path + "/Properties/Instruments/" + files[i].getName()));
+                            for (File file1 : files) {
+                                if (file1.getName().endsWith(".int")) {
+                                    copyFile(file1, new File(path + "/Properties/Instruments/" + file1.getName()));
                                 }
                             }
 
                             files = protocolsFolder.listFiles();
 
-                            for (int i = 0; i < files.length; i++) {
-                                if (files[i].getName().endsWith(".pro")) {
-                                    copyFile(files[i], new File(path + "/Properties/Protocols/" + files[i].getName()));
+                            for (File file1 : files) {
+                                if (file1.getName().endsWith(".pro")) {
+                                    copyFile(file1, new File(path + "/Properties/Protocols/" + file1.getName()));
                                 }
                             }
 
                             files = samplesFolder.listFiles();
 
-                            for (int i = 0; i < files.length; i++) {
-                                if (files[i].getName().endsWith(".sam")) {
-                                    copyFile(files[i], new File(path + "/Properties/Samples/" + files[i].getName()));
+                            for (File file1 : files) {
+                                if (file1.getName().endsWith(".sam")) {
+                                    copyFile(file1, new File(path + "/Properties/Samples/" + file1.getName()));
                                 }
                             }
 
@@ -485,7 +483,7 @@ public class UserProperties {
             FileWriter f = new FileWriter(file);
 
             f.write("PRIDEConverter\n");
-            f.write(prideConverter.getPrideConverterVersionNumber() + "\n");
+            f.write(PRIDEConverter.getPrideConverterVersionNumber() + "\n");
             f.write("OutputPath: " + outputPath + "\n");
             f.write("UserName: " + userName + "\n");
             f.write("ServerHost: " + serverHost + "\n");
@@ -514,17 +512,13 @@ public class UserProperties {
             f.write("OmssaInstallDir: " + omssaInstallDir + "\n");
             f.write("CVTermMappings:");
 
-            Iterator iter = cvTermMappings.keySet().iterator();
+            for (String s : cvTermMappings.keySet()) {
 
-            while (iter.hasNext()) {
-
-                String key = (String) iter.next();
-
-                f.write("\n" + key + "|");
-                f.write(((CvParamImpl) cvTermMappings.get(key)).getAccession() + "|");
-                f.write(((CvParamImpl) cvTermMappings.get(key)).getCVLookup() + "|");
-                f.write(((CvParamImpl) cvTermMappings.get(key)).getName() + "|");
-                f.write(((CvParamImpl) cvTermMappings.get(key)).getValue() + "|");
+                f.write("\n" + s + "|");
+                f.write(cvTermMappings.get(s).getAccession() + "|");
+                f.write(cvTermMappings.get(s).getCVLookup() + "|");
+                f.write(cvTermMappings.get(s).getName() + "|");
+                f.write(cvTermMappings.get(s).getValue() + "|");
             }
 
             f.close();
@@ -559,7 +553,7 @@ public class UserProperties {
      * 
      * @param cvTermMappings
      */
-    public void setCVTermMappings(HashMap cvTermMappings) {
+    public void setCVTermMappings(HashMap<String, CvParam> cvTermMappings) {
         this.cvTermMappings = cvTermMappings;
     }
 
@@ -568,7 +562,7 @@ public class UserProperties {
      * 
      * @return the cv term mappings
      */
-    public HashMap getCVTermMappings() {
+    public HashMap<String, CvParam> getCVTermMappings() {
         return cvTermMappings;
     }
 

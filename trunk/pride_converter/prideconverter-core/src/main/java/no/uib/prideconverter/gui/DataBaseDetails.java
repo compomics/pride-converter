@@ -15,27 +15,23 @@ import java.awt.event.KeyEvent;
  */
 public class DataBaseDetails extends javax.swing.JFrame {
 
-    private PRIDEConverter prideConverter;
 
     /** 
      * Opens a new DataBaseDetails frame, and inserts stored information.
      * 
-     * @param prideConverter a reference to the PrideConverter class
      * @param location where to position the frame
      */
-    public DataBaseDetails(PRIDEConverter prideConverter, Point location) {
-
-        this.prideConverter = prideConverter;
+    public DataBaseDetails(Point location) {
 
         // sets the default wizard frame size
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH, 
-                prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
-                prideConverter.getProperties().FRAME_HEIGHT));
+        this.setPreferredSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setSize(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT);
+        this.setMaximumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setMinimumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
 
@@ -43,14 +39,14 @@ public class DataBaseDetails extends javax.swing.JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
                 getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
 
-        setTitle(prideConverter.getWizardName() + " " + prideConverter.getPrideConverterVersionNumber() +
+        setTitle(PRIDEConverter.getWizardName() + " " + PRIDEConverter.getPrideConverterVersionNumber() +
                 " - " + getTitle());
 
         // insert stored information
-        userNameJTextField.setText(prideConverter.getUserProperties().getUserName());
-        passordJPasswordField.setText(prideConverter.getProperties().getPassWord());
-        serverHostJTextField.setText(prideConverter.getUserProperties().getServerHost());
-        schemaJTextField.setText(prideConverter.getUserProperties().getSchema());
+        userNameJTextField.setText(PRIDEConverter.getUserProperties().getUserName());
+        passordJPasswordField.setText(PRIDEConverter.getProperties().getPassWord());
+        serverHostJTextField.setText(PRIDEConverter.getUserProperties().getServerHost());
+        schemaJTextField.setText(PRIDEConverter.getUserProperties().getSchema());
 
         // see if the next button should be enabled
         mandatoryFieldsCheck();
@@ -308,7 +304,7 @@ public class DataBaseDetails extends javax.swing.JFrame {
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
         this.setVisible(false);
         this.dispose();
-        prideConverter.cancelConvertion();
+        PRIDEConverter.cancelConvertion();
     }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**
@@ -322,18 +318,18 @@ public class DataBaseDetails extends javax.swing.JFrame {
 
         saveInsertedInformation();
 
-        prideConverter.closeDataBaseConnection();
-        boolean connectionError = !prideConverter.connectToDataBase(this);
+        PRIDEConverter.closeDataBaseConnection();
+        boolean connectionError = !PRIDEConverter.connectToDataBase(this);
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         if (!connectionError) {
-            prideConverter.getUserProperties().setUserName(prideConverter.getUserProperties().getUserName());
-            prideConverter.getUserProperties().setServerHost(prideConverter.getUserProperties().getServerHost());
-            prideConverter.getUserProperties().setSchema(prideConverter.getUserProperties().getSchema());
-            prideConverter.getUserProperties().saveUserPropertiesToFile();
+            PRIDEConverter.getUserProperties().setUserName(PRIDEConverter.getUserProperties().getUserName());
+            PRIDEConverter.getUserProperties().setServerHost(PRIDEConverter.getUserProperties().getServerHost());
+            PRIDEConverter.getUserProperties().setSchema(PRIDEConverter.getUserProperties().getSchema());
+            PRIDEConverter.getUserProperties().saveUserPropertiesToFile();
 
-            new ProjectSelection(prideConverter, this.getLocation());
+            new ProjectSelection(this.getLocation());
 
             this.setVisible(false);
             this.dispose();
@@ -443,7 +439,7 @@ public class DataBaseDetails extends javax.swing.JFrame {
      */
     private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backJButtonActionPerformed
         saveInsertedInformation();
-        new DataSourceSelection(prideConverter, this.getLocation());
+        new DataSourceSelection(this.getLocation());
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_backJButtonActionPerformed
@@ -467,10 +463,10 @@ public class DataBaseDetails extends javax.swing.JFrame {
      * Saves the inserted information to the Properties object.
      */
     private void saveInsertedInformation(){
-        prideConverter.getUserProperties().setUserName(userNameJTextField.getText());
-        prideConverter.getProperties().setPassWord(new String(passordJPasswordField.getPassword()));
-        prideConverter.getUserProperties().setServerHost(serverHostJTextField.getText());
-        prideConverter.getUserProperties().setSchema(schemaJTextField.getText());
+        PRIDEConverter.getUserProperties().setUserName(userNameJTextField.getText());
+        PRIDEConverter.getProperties().setPassWord(new String(passordJPasswordField.getPassword()));
+        PRIDEConverter.getUserProperties().setServerHost(serverHostJTextField.getText());
+        PRIDEConverter.getUserProperties().setSchema(schemaJTextField.getText());
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutJButton;

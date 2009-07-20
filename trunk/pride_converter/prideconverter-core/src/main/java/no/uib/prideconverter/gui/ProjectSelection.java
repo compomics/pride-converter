@@ -28,7 +28,6 @@ import org.jdesktop.swingx.JXTableHeader;
 public class ProjectSelection extends javax.swing.JFrame {
 
     private static JXTable projectJXTable;
-    private PRIDEConverter prideConverter;
     private JXTableHeader projectJXTableHeader;
     private DefaultTableModel projectModel = null;
     private Project[] projects;
@@ -38,22 +37,19 @@ public class ProjectSelection extends javax.swing.JFrame {
     /**
      * Opens a new ProjectSelection frame.
      * 
-     * @param prideConverter
-     * @param location where to locate the frame on the screen 
+     * @param location where to locate the frame on the screen
      */
-    public ProjectSelection(PRIDEConverter prideConverter, Point location) {
-
-        this.prideConverter = prideConverter;
+    public ProjectSelection(Point location) {
 
         // sets the default wizard frame size
-        this.setPreferredSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setSize(prideConverter.getProperties().FRAME_WIDTH, 
-                prideConverter.getProperties().FRAME_HEIGHT);
-        this.setMaximumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
-                prideConverter.getProperties().FRAME_HEIGHT));
-        this.setMinimumSize(new Dimension(prideConverter.getProperties().FRAME_WIDTH, 
-                prideConverter.getProperties().FRAME_HEIGHT));
+        this.setPreferredSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setSize(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT);
+        this.setMaximumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
+        this.setMinimumSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
+                PRIDEConverter.getProperties().FRAME_HEIGHT));
 
         initComponents();
 
@@ -62,8 +58,8 @@ public class ProjectSelection extends javax.swing.JFrame {
 
         projectDescriptionJTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
 
-        setTitle(prideConverter.getWizardName() + " " +
-                prideConverter.getPrideConverterVersionNumber() + " - " + getTitle());
+        setTitle(PRIDEConverter.getWizardName() + " " +
+                PRIDEConverter.getPrideConverterVersionNumber() + " - " + getTitle());
 
         columnToolTips = new Vector();
         columnToolTips.add("Project ID");
@@ -291,7 +287,7 @@ public class ProjectSelection extends javax.swing.JFrame {
             public void run() {
 
                 try {
-                    projects = Project.getAllProjects(prideConverter.getConn());
+                    projects = Project.getAllProjects(PRIDEConverter.getConn());
 
                     //sort projects on project id
                     int min;
@@ -315,7 +311,7 @@ public class ProjectSelection extends javax.swing.JFrame {
 
                     for (int i = 0; i < projects.length; i++) {
 
-                        if (prideConverter.getProperties().getProjectIds().contains(
+                        if (PRIDEConverter.getProperties().getProjectIds().contains(
                                 new Long(projects[i].getProjectid()))) {
                             projectsSelected = true;
                         }
@@ -325,7 +321,7 @@ public class ProjectSelection extends javax.swing.JFrame {
                             projects[i].getTitle(),
                             projects[i].getCreationdate(),
                             new Boolean(
-                            prideConverter.getProperties().getProjectIds().contains(
+                            PRIDEConverter.getProperties().getProjectIds().contains(
                                     new Long(projects[i].getProjectid())))
                         });
                     }
@@ -548,7 +544,7 @@ public class ProjectSelection extends javax.swing.JFrame {
      */
     private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backJButtonActionPerformed
         saveInsertedInformation();
-        new DataBaseDetails(prideConverter, this.getLocation());
+        new DataBaseDetails(this.getLocation());
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_backJButtonActionPerformed
@@ -561,7 +557,7 @@ public class ProjectSelection extends javax.swing.JFrame {
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
         this.setVisible(false);
         this.dispose();
-        prideConverter.cancelConvertion();
+        PRIDEConverter.cancelConvertion();
     }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**
@@ -571,7 +567,7 @@ public class ProjectSelection extends javax.swing.JFrame {
      */
     private void nextJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextJButtonActionPerformed
         saveInsertedInformation();
-        new SpectraSelectionWithIdentifications(prideConverter, this.getLocation());
+        new SpectraSelectionWithIdentifications(this.getLocation());
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_nextJButtonActionPerformed
@@ -613,38 +609,38 @@ public class ProjectSelection extends javax.swing.JFrame {
     private void saveInsertedInformation(){
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-        ArrayList oldProjectIds = prideConverter.getProperties().getProjectIds();
+        ArrayList oldProjectIds = PRIDEConverter.getProperties().getProjectIds();
 
-        prideConverter.getProperties().setProjectIds(new ArrayList());
+        PRIDEConverter.getProperties().setProjectIds(new ArrayList());
 
         for (int i = 0; i < projectJXTable.getRowCount(); i++) {
             if (((Boolean) projectJXTable.getValueAt(i, 3)).booleanValue()) {
-                prideConverter.getProperties().getProjectIds().add((Long) projectJXTable.getValueAt(i, 0));
+                PRIDEConverter.getProperties().getProjectIds().add((Long) projectJXTable.getValueAt(i, 0));
             }
         }
 
         boolean projectSelectionHasChanged = false;
 
-        if (prideConverter.getProperties().getProjectIds().size() != oldProjectIds.size()) {
+        if (PRIDEConverter.getProperties().getProjectIds().size() != oldProjectIds.size()) {
             projectSelectionHasChanged = true;
         }
 
-        for (int i = 0; i < prideConverter.getProperties().getProjectIds().size() &&
+        for (int i = 0; i < PRIDEConverter.getProperties().getProjectIds().size() &&
                 !projectSelectionHasChanged; i++) {
-            if (!oldProjectIds.contains(prideConverter.getProperties().getProjectIds().get(i))) {
+            if (!oldProjectIds.contains(PRIDEConverter.getProperties().getProjectIds().get(i))) {
                 projectSelectionHasChanged = true;
             }
         }
 
         for (int i = 0; i < oldProjectIds.size() && !projectSelectionHasChanged; i++) {
-            if (!prideConverter.getProperties().getProjectIds().contains(oldProjectIds.get(i))) {
+            if (!PRIDEConverter.getProperties().getProjectIds().contains(oldProjectIds.get(i))) {
                 projectSelectionHasChanged = true;
             }
         }
 
         if (projectSelectionHasChanged) {
-            prideConverter.getProperties().setSpectrumTableModel(null);
-            prideConverter.getProperties().setSpectraSelectionCriteria(null);
+            PRIDEConverter.getProperties().setSpectrumTableModel(null);
+            PRIDEConverter.getProperties().setSpectraSelectionCriteria(null);
         }
         
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));

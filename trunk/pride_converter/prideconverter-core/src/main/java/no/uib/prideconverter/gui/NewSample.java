@@ -18,7 +18,6 @@ import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
  */
 public class NewSample extends javax.swing.JDialog implements OLSInputable {
 
-    private PRIDEConverter prideConverter;
     private SampleDetails sampleDetails;
     private int modifiedRow = -1;
 
@@ -27,13 +26,10 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
      * 
      * @param sampleDetails a reference to the SampleDetails frame
      * @param modal
-     * @param prideConverter
      */
-    public NewSample(SampleDetails sampleDetails, boolean modal,
-            PRIDEConverter prideConverter) {
+    public NewSample(SampleDetails sampleDetails, boolean modal) {
         super(sampleDetails, modal);
 
-        this.prideConverter = prideConverter;
         this.sampleDetails = sampleDetails;
 
         initComponents();
@@ -57,14 +53,11 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
      * 
      * @param sampleDetails a referenve to the SampleDetails frame
      * @param modal
-     * @param prideConverter
      * @param modifiedRow the row to edit, -1 if adding new row
      */
-    public NewSample(SampleDetails sampleDetails, boolean modal,
-            PRIDEConverter prideConverter, int modifiedRow) {
+    public NewSample(SampleDetails sampleDetails, boolean modal, int modifiedRow) {
         super(sampleDetails, modal);
 
-        this.prideConverter = prideConverter;
         this.sampleDetails = sampleDetails;
         this.modifiedRow = modifiedRow;
 
@@ -78,7 +71,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
 
         if (modifiedRow != -1) {
 
-            Object[] cvParams = prideConverter.getProperties().getSampleDescriptionCVParams().toArray();
+            Object[] cvParams = PRIDEConverter.getProperties().getSampleDescriptionCVParams().toArray();
             CvParamImpl cvParam;
 
             int rowCounter = 1;
@@ -99,7 +92,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
             }
 
             Object[] tempUserParams = 
-                    prideConverter.getProperties().getSampleDescriptionUserSubSampleNames().toArray();
+                    PRIDEConverter.getProperties().getSampleDescriptionUserSubSampleNames().toArray();
 
             sampleNameJTextField.setText("" + tempUserParams[modifiedRow]);
         }
@@ -370,7 +363,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
      */
     private void olsSearchJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_olsSearchJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new OLSDialog(this, this, true, "sample", prideConverter.getUserProperties().getLastSelectedSampleOntology(), null);
+        new OLSDialog(this, this, true, "sample", PRIDEConverter.getUserProperties().getLastSelectedSampleOntology(), null);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_olsSearchJButtonActionPerformed
 
@@ -437,7 +430,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
         searchTerm = searchTerm.replaceAll("\\[", " ");
         searchTerm = searchTerm.replaceAll("\\]", " ");
 
-        new OLSDialog(this, this, true, "sample", prideConverter.getUserProperties().getLastSelectedSampleOntology(),
+        new OLSDialog(this, this, true, "sample", PRIDEConverter.getUserProperties().getLastSelectedSampleOntology(),
                 selectedRow, searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_editJMenuItemActionPerformed
@@ -624,7 +617,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
     public void insertOLSResult(String field, String selectedValue, String accession,
             String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm) {
 
-        prideConverter.getUserProperties().setLastSelectedSampleOntology(ontologyLong);
+        PRIDEConverter.getUserProperties().setLastSelectedSampleOntology(ontologyLong);
         addSample(selectedValue, accession, ontologyShort, modifiedRow);
     }
 

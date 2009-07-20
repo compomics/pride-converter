@@ -7,10 +7,9 @@ import java.util.HashMap;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import uk.ac.ebi.jmzml.model.mzml.MzML;
-import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
-import uk.ac.ebi.pride.model.interfaces.mzdata.MzData;
-import uk.ac.ebi.pride.model.interfaces.mzdata.SourceFile;
-import uk.ac.ebi.pride.model.interfaces.mzdata.UserParam;
+import uk.ac.ebi.pride.model.interfaces.mzdata.*;
+import uk.ac.ebi.pride.model.interfaces.core.Reference;
+import uk.ac.ebi.pride.model.interfaces.core.ProtocolStep;
 
 /**
  * This class contains many of the properties that are used during the 
@@ -65,7 +64,7 @@ public class Properties {
     private boolean contactInfoExtracted = false;
     private boolean sampleDetailsExtracted = false;
     private boolean dataFileHasBeenLoaded = false;
-    private ArrayList alreadyChoosenModifications;
+    private ArrayList<String> alreadyChoosenModifications;
     private ArrayList<Long> projectIds;
     private String passwordDatabase;
     private DefaultTableModel spectrumTableModel = null;
@@ -80,7 +79,7 @@ public class Properties {
     private String sequestParamFile = "";
     
     // contact information
-    private Collection contacts;
+    private Collection<Contact> contacts;
     
     // instrument source CV parameters
     private String accessionInstrumentSourceParameter = "";
@@ -96,45 +95,45 @@ public class Properties {
     
     // analyzer collection
     private Collection analyzerParams;
-    private Collection analyzerList;
+    private Collection<Analyzer> analyzerList;
     
     // processing methods
-    private Collection processingMethod;
+    private Collection<CvParam> processingMethod;
     
     // sample stuff
-    private Collection sampleDescriptionCVParams;
-    private ArrayList sampleDescriptionCVParamsQuantification;
+    private Collection<CvParam> sampleDescriptionCVParams;
+    private ArrayList<CvParam> sampleDescriptionCVParamsQuantification;
     private ArrayList currentQuantificationSelection = null;
     private ArrayList sampleDescriptionUserSubSampleNames;
     
     // mzData
     private String softwareCompletionTime = null;
     private String instrumentName = "";
-    private Collection processingMethodUserParams = null;
+    private Collection<UserParam> processingMethodUserParams = null;
     private SourceFile sourceFile = null;
-    private Collection instrumentAdditionalCvParams = null;
-    private Collection instrumentAdditionalUserParams = null;
-    private Collection instrumentDetectorUserParams = null;
+    private Collection<CvParam> instrumentAdditionalCvParams = null;
+    private Collection<UserParam> instrumentAdditionalUserParams = null;
+    private Collection<UserParam> instrumentDetectorUserParams = null;
     private String sampleDescriptionComment = null;
     private String softwareComments = null;
-    private Collection instrumentSourceUserParams = null;
+    private Collection<UserParam> instrumentSourceUserParams = null;
     private String softwareVersion = "";
     private String softwareName = "";
     
     // references
-    private Collection references;
+    private Collection<Reference> references;
     
     // experiment proper
     private String experimentTitle = "";
     private String experimentDescription = "";
     private String experimentLabel = "";
     private String experimentProject = "";
-    private Collection experimentProtocolSteps = null;
+    private Collection<ProtocolStep> experimentProtocolSteps = null;
     private Collection protocolStepsCVParams = null;
     private Collection protocolStepsUserParams = null;
     
     // user parameters
-    private Collection experimentUserParameters;
+    private Collection<UserParam> experimentUserParameters;
     private String mzDataVersion = "1.05";
     private String mzDataAccessionNumber = "0";
     
@@ -150,18 +149,18 @@ public class Properties {
      * Creates a new (mostly empty) Properties object.
      */
     public Properties() {
-        projectIds = new ArrayList();
+        projectIds = new ArrayList<Long>();
         selectedSpectraKeys = new ArrayList();
-        processingMethod = new ArrayList();
-        sampleDescriptionCVParams = new ArrayList();
-        sampleDescriptionCVParamsQuantification = new ArrayList();
+        processingMethod = new ArrayList<CvParam>();
+        sampleDescriptionCVParams = new ArrayList<CvParam>();
+        sampleDescriptionCVParamsQuantification = new ArrayList<CvParam>();
         sampleDescriptionUserSubSampleNames = new ArrayList();
-        experimentUserParameters = new ArrayList();
-        experimentProtocolSteps = new ArrayList();
-        contacts = new ArrayList();
-        analyzerList = new ArrayList();
-        references = new ArrayList();
-        selectedSourceFiles = new ArrayList();
+        experimentUserParameters = new ArrayList<UserParam>();
+        experimentProtocolSteps = new ArrayList<ProtocolStep>();
+        contacts = new ArrayList<Contact>();
+        analyzerList = new ArrayList<Analyzer>();
+        references = new ArrayList<Reference>();
+        selectedSourceFiles = new ArrayList<String>();
         spectrumCvParams = new HashMap<String, ArrayList<CvParam>>();
         spectrumUserParams = new HashMap<String, ArrayList<UserParam>>();
     }
@@ -584,7 +583,7 @@ public class Properties {
      * 
      * @return the list of already mapped modifications
      */
-    public ArrayList getAlreadyChoosenModifications() {
+    public ArrayList<String> getAlreadyChoosenModifications() {
         return alreadyChoosenModifications;
     }
 
@@ -592,9 +591,9 @@ public class Properties {
      * Sets the list of already mapped modifications. The ArrayList contains the 
      * modification names.
      * 
-     * @param aAlreadyChoosenModifications
+     * @param aAlreadyChoosenModifications the list of modifications already chosen
      */
-    public void setAlreadyChoosenModifications(ArrayList aAlreadyChoosenModifications) {
+    public void setAlreadyChoosenModifications(ArrayList<String> aAlreadyChoosenModifications) {
         alreadyChoosenModifications = aAlreadyChoosenModifications;
     }
 
@@ -657,7 +656,7 @@ public class Properties {
      * 
      * @return the experiment user parameters
      */
-    public Collection getExperimentUserParameters() {
+    public Collection<UserParam> getExperimentUserParameters() {
         return experimentUserParameters;
     }
 
@@ -729,7 +728,7 @@ public class Properties {
      * 
      * @return the instrument additional CV parameters
      */
-    public Collection getInstrumentAdditionalCvParams() {
+    public Collection<CvParam> getInstrumentAdditionalCvParams() {
         return instrumentAdditionalCvParams;
     }
 
@@ -738,7 +737,7 @@ public class Properties {
      * 
      * @param instrumentAdditionalCvParams
      */
-    public void setInstrumentAdditionalCvParams(Collection instrumentAdditionalCvParams) {
+    public void setInstrumentAdditionalCvParams(Collection<CvParam> instrumentAdditionalCvParams) {
         this.instrumentAdditionalCvParams = instrumentAdditionalCvParams;
     }
 
@@ -747,7 +746,7 @@ public class Properties {
      * 
      * @return the instrument additional user parameters
      */
-    public Collection getInstrumentAdditionalUserParams() {
+    public Collection<UserParam> getInstrumentAdditionalUserParams() {
         return instrumentAdditionalUserParams;
     }
 
@@ -756,7 +755,7 @@ public class Properties {
      * 
      * @param instrumentAdditionalUserParams
      */
-    public void setInstrumentAdditionalUserParams(Collection instrumentAdditionalUserParams) {
+    public void setInstrumentAdditionalUserParams(Collection<UserParam> instrumentAdditionalUserParams) {
         this.instrumentAdditionalUserParams = instrumentAdditionalUserParams;
     }
 
@@ -765,7 +764,7 @@ public class Properties {
      * 
      * @return the instrument detector user parameters
      */
-    public Collection getInstrumentDetectorUserParams() {
+    public Collection<UserParam> getInstrumentDetectorUserParams() {
         return instrumentDetectorUserParams;
     }
 
@@ -774,7 +773,7 @@ public class Properties {
      * 
      * @param instrumentDetectorUserParams
      */
-    public void setInstrumentDetectorUserParams(Collection instrumentDetectorUserParams) {
+    public void setInstrumentDetectorUserParams(Collection<UserParam> instrumentDetectorUserParams) {
         this.instrumentDetectorUserParams = instrumentDetectorUserParams;
     }
 
@@ -819,7 +818,7 @@ public class Properties {
      * 
      * @return the instrument source user parameters
      */
-    public Collection getInstrumentSourceUserParams() {
+    public Collection<UserParam> getInstrumentSourceUserParams() {
         return instrumentSourceUserParams;
     }
 
@@ -828,7 +827,7 @@ public class Properties {
      * 
      * @param instrumentSourceUserParams
      */
-    public void setInstrumentSourceUserParams(Collection instrumentSourceUserParams) {
+    public void setInstrumentSourceUserParams(Collection<UserParam> instrumentSourceUserParams) {
         this.instrumentSourceUserParams = instrumentSourceUserParams;
     }
 
@@ -873,7 +872,7 @@ public class Properties {
      * 
      * @return the references
      */
-    public Collection getReferences() {
+    public Collection<Reference> getReferences() {
         return references;
     }
 
@@ -963,7 +962,7 @@ public class Properties {
      * 
      * @return the experiment protocol steps
      */
-    public Collection getExperimentProtocolSteps() {
+    public Collection<ProtocolStep> getExperimentProtocolSteps() {
         return experimentProtocolSteps;
     }
 
@@ -1107,7 +1106,7 @@ public class Properties {
      * 
      * @return the list of analyzers
      */
-    public Collection getAnalyzerList() {
+    public Collection<Analyzer> getAnalyzerList() {
         return analyzerList;
     }
 
@@ -1116,7 +1115,7 @@ public class Properties {
      * 
      * @param analyzerList
      */
-    public void setAnalyzerList(Collection analyzerList) {
+    public void setAnalyzerList(Collection<Analyzer> analyzerList) {
         this.analyzerList = analyzerList;
     }
 
@@ -1125,7 +1124,7 @@ public class Properties {
      * 
      * @return the list of processing methods
      */
-    public Collection getProcessingMethod() {
+    public Collection<CvParam> getProcessingMethod() {
         return processingMethod;
     }
 
@@ -1134,7 +1133,7 @@ public class Properties {
      *
      * @param processingMethod
      */
-    public void setProcessingMethod(Collection processingMethod) {
+    public void setProcessingMethod(Collection<CvParam> processingMethod) {
         this.processingMethod = processingMethod;
     }
 
@@ -1143,7 +1142,7 @@ public class Properties {
      * 
      * @return the sample description CV parameters
      */
-    public Collection getSampleDescriptionCVParams() {
+    public Collection<CvParam> getSampleDescriptionCVParams() {
         return sampleDescriptionCVParams;
     }
 
@@ -1152,7 +1151,7 @@ public class Properties {
      * 
      * @param sampleDescriptionCVParams
      */
-    public void setSampleDescriptionCVParams(Collection sampleDescriptionCVParams) {
+    public void setSampleDescriptionCVParams(Collection<CvParam> sampleDescriptionCVParams) {
         this.sampleDescriptionCVParams = sampleDescriptionCVParams;
     }
 
@@ -1161,7 +1160,7 @@ public class Properties {
      * 
      * @return the sample description CV parameters for the quantification
      */
-    public ArrayList getSampleDescriptionCVParamsQuantification() {
+    public ArrayList<CvParam> getSampleDescriptionCVParamsQuantification() {
         return sampleDescriptionCVParamsQuantification;
     }
 
@@ -1170,7 +1169,7 @@ public class Properties {
      * 
      * @param sampleDescriptionCVParamsQuantification
      */
-    public void setSampleDescriptionCVParamsQuantification(ArrayList sampleDescriptionCVParamsQuantification) {
+    public void setSampleDescriptionCVParamsQuantification(ArrayList<CvParam> sampleDescriptionCVParamsQuantification) {
         this.sampleDescriptionCVParamsQuantification = sampleDescriptionCVParamsQuantification;
     }
 
@@ -1251,7 +1250,7 @@ public class Properties {
      * 
      * @return the processing methods user parameters
      */
-    public Collection getProcessingMethodUserParams() {
+    public Collection<UserParam> getProcessingMethodUserParams() {
         return processingMethodUserParams;
     }
 
@@ -1260,7 +1259,7 @@ public class Properties {
      * 
      * @param processingMethodUserParams
      */
-    public void setProcessingMethodUserParams(Collection processingMethodUserParams) {
+    public void setProcessingMethodUserParams(Collection<UserParam> processingMethodUserParams) {
         this.processingMethodUserParams = processingMethodUserParams;
     }
 
@@ -1278,7 +1277,7 @@ public class Properties {
      * 
      * @return the list of contacts
      */
-    public Collection getContacts() {
+    public Collection<Contact> getContacts() {
         return contacts;
     }
 
@@ -1287,7 +1286,7 @@ public class Properties {
      * 
      * @param contacts
      */
-    public void setContacts(Collection contacts) {
+    public void setContacts(Collection<Contact> contacts) {
         this.contacts = contacts;
     }
 

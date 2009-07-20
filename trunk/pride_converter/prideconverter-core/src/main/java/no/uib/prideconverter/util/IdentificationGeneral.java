@@ -2,9 +2,9 @@ package no.uib.prideconverter.util;
 
 import java.util.ArrayList;
 import uk.ac.ebi.pride.model.implementation.core.ModificationImpl;
-import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
-import uk.ac.ebi.pride.model.implementation.mzData.UserParamImpl;
 import uk.ac.ebi.pride.model.interfaces.core.FragmentIon;
+import uk.ac.ebi.pride.model.interfaces.mzdata.UserParam;
+import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
 
 /**
  * This class contains information about an identification.
@@ -27,9 +27,9 @@ public class IdentificationGeneral {
     private String[] iTraqNorm;
     private String[] iTraqUT;
     private String[][] iTraqRatio;
-    private ArrayList<CvParamImpl> cvParams;
+    private ArrayList<CvParam> cvParams;
     private ArrayList<ModificationImpl> modifications;
-    private ArrayList<UserParamImpl> userParams;
+    private ArrayList<UserParam> userParams;
     private ArrayList<FragmentIon> fragmentIons;
 
     /**
@@ -58,8 +58,8 @@ public class IdentificationGeneral {
             String sequence, Integer start,
             Double score, Double threshold,
             String[] iTraqNorm, String[] iTraqUT, String[][] iTraqRatio,
-            ArrayList<CvParamImpl> cvParams,
-            ArrayList<UserParamImpl> userParameters,
+            ArrayList<CvParam> cvParams,
+            ArrayList<UserParam> userParameters,
             ArrayList<ModificationImpl> modifications,
             ArrayList<FragmentIon> fragmentIons) {
 
@@ -302,7 +302,7 @@ public class IdentificationGeneral {
      * 
      * @return the associated CV parameters
      */
-    public ArrayList<CvParamImpl> getCvParams() {
+    public ArrayList<CvParam> getCvParams() {
         return cvParams;
     }
 
@@ -311,7 +311,7 @@ public class IdentificationGeneral {
      * 
      * @param cvParams
      */
-    public void setCvParams(ArrayList<CvParamImpl> cvParams) {
+    public void setCvParams(ArrayList<CvParam> cvParams) {
         this.cvParams = cvParams;
     }
     
@@ -320,7 +320,7 @@ public class IdentificationGeneral {
      * 
      * @return the associated user parameters
      */
-    public ArrayList<UserParamImpl> getUserParams() {
+    public ArrayList<UserParam> getUserParams() {
         return userParams;
     }
 
@@ -329,7 +329,7 @@ public class IdentificationGeneral {
      * 
      * @param userParams
      */
-    public void setUserParams(ArrayList<UserParamImpl> userParams) {
+    public void setUserParams(ArrayList<UserParam> userParams) {
         this.userParams = userParams;
     }
 
