@@ -10,11 +10,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+
 import no.uib.prideconverter.PRIDEConverter;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
+import com.jgoodies.looks.plastic.PlasticLookAndFeel;
+import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
+import com.jgoodies.looks.plastic.theme.SkyKrupp;
 
 /**
  * Takes care of saving and retrieving the user properites.
@@ -73,6 +76,16 @@ public class UserProperties {
      */
     public UserProperties() {
         cvTermMappings = new HashMap<String, CvParam>();
+
+        // set the Look and Feel for the GUI
+        try {
+            PlasticLookAndFeel.setPlasticTheme(new SkyKrupp());
+            UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
+        } catch (UnsupportedLookAndFeelException e) {
+            Util.writeToErrorLog("Setting Look And Feel: Error while attempting to set the Look And Feel");
+            e.printStackTrace();
+        }
+
     }
 
     /**

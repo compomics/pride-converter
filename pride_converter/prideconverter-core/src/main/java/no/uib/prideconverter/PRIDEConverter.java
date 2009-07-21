@@ -243,13 +243,13 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
             public void run() {
 
-                try {
-                    PlasticLookAndFeel.setPlasticTheme(new SkyKrupp());
-                    UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
-                } catch (UnsupportedLookAndFeelException e) {
-                    Util.writeToErrorLog("Setting Look And Feel: Error while attempting to set the Look And Feel");
-                    e.printStackTrace();
-                }
+//                try {
+//                    PlasticLookAndFeel.setPlasticTheme(new SkyKrupp());
+//                    UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
+//                } catch (UnsupportedLookAndFeelException e) {
+//                    Util.writeToErrorLog("Setting Look And Feel: Error while attempting to set the Look And Feel");
+//                    e.printStackTrace();
+//                }
 
                 // check if a newer version of PRIDE Converter is available
                 try {
@@ -442,6 +442,10 @@ public class PRIDEConverter extends AbstractPrideConverter {
                     } catch (NullPointerException e) {
                         Util.writeToErrorLog("Progress bar: NullPointerException!!!\n" + e.toString());
                     }
+
+
+                    // ToDo: start writing the PRIDE XML (up to/including the SpectrumList header)
+
 
                     // Transform all selected spectra into mzData spectra and retrieve the identifications.
                     ArrayList<Spectrum> mzDataSpectra = new ArrayList<Spectrum>();
@@ -890,6 +894,14 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
                     // marshall out the whole experiment in one go
                     // needs a lot of memory!
+                    // ToDo: replace by multi-step marshalling:
+                    // ToDo:    1. marshal XML up to (including) SpectrumList tag using a placeholder for the spectrum counter
+                    // ToDo:    2. marshal each spectrum as we transform it from the original input
+                    // ToDo:    3. marshal the rest of the XML (including identifications)
+                    // ToDo: step 1 has to be done before all the transformation/processing of the input files/spectra info
+                    // ToDo: step 2 can be marshalled into the file started in 1 or in a separate file for later merging
+                    // ToDo: step 3 includes all identifications (we have to investigate if we could marshal them out
+                    // ToDo:    individually as well or if they are needed in memory until all spectra have been processed
                     XMLMarshaller xmlOut = new XMLMarshaller(true);
                     xmlOut.marshallExperiments(experiments, bw);
 
