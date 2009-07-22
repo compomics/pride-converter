@@ -54,10 +54,10 @@ public class XTandemConverter {
         Collection<Precursor> precursors;
         Collection<CvParam> ionSelection;
 
-        int charge;
+        int charge; // ToDo: check usage, compare with precursorCharge and charges
         File file;
 
-        Integer precursorCharge = 0; // ToDo: check usage
+        Integer precursorCharge = 0; // ToDo: check usage, compare with charge and charges
 
         NodeList idNodes, proteinNodes, peptideNodes;
         DocumentBuilderFactory dbf;
@@ -105,7 +105,7 @@ public class XTandemConverter {
         PRIDEConverter.getProgressDialog().setIntermidiate(true);
 
         Vector<Double> masses, intensities;
-        Vector<Integer> charges; // ToDo: never used!?
+        Vector<Integer> charges; // ToDo: never used, compare with precursorCharge and charge
         ArrayList<String> identifiedSpectraIds = new ArrayList<String>();
         String spectrumTag = "";
 
@@ -715,7 +715,8 @@ public class XTandemConverter {
                             }
                         }
                     }
-                    // toDo: precursorCharge has not been reset! the value might be carried on
+                    // ToDo: precursorCharge has not been reset! the value might be carried on
+                    // ToDo: check for cases of variables being "carried on" !?
                 } else if (file.getName().toLowerCase().endsWith(".pkl")) {
 // .pkl files
                     String currentLine = br.readLine();

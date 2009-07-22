@@ -211,7 +211,6 @@ public class MascotGenericConverter {
                                     null, null);
 
                             // Store (spectrumfileid, spectrumid) mapping.
-                            // ToDo: was <Long, Long> ! changed to <String, Long> to be more consistent
                             mapping.put(Integer.toString(spectraCounter), (long) spectraCounter);
                             spectraCounter++;
 

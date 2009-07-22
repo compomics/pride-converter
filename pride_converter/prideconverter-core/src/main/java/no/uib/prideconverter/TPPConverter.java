@@ -69,7 +69,6 @@ public class TPPConverter {
         // Start reading the files!
         XmlPullParserFactory factory = null;
         XmlPullParser xpp = null;
-        String currentFile = null;  // ToDo: never used !?
 
         PRIDEConverter.setPeptideIdCount(0);
 
@@ -82,7 +81,7 @@ public class TPPConverter {
             BufferedReader br = new BufferedReader(new FileReader(properties.getPeptideProphetFileName()));
             xpp.setInput(br);
             XmlPullParserPlus xppp = new XmlPullParserPlus(xpp);
-            currentFile = properties.getPeptideProphetFileName(); // ToDo: never used !?
+            // currentFile = properties.getPeptideProphetFileName(); // currently not used
             PeptideProphetXMLParser ppxp = new PeptideProphetXMLParser(
                     new File(properties.getSpectrumFilesFolderName()), true);
 
@@ -97,7 +96,7 @@ public class TPPConverter {
             // Now build all proteins from ProteinProphet, associating them to the peptides.
             br = new BufferedReader(new FileReader(properties.getProteinProphetFileName()));
             xpp.setInput(br);
-            currentFile = properties.getProteinProphetFileName();  // ToDo: never used !?
+            // currentFile = properties.getProteinProphetFileName();  // currently not used
             ProteinProphetXMLParser ppp = new ProteinProphetXMLParser();
 
             Collection proteins = ppp.readProteinProphet(xppp, properties.getProteinProphetThreshold());
@@ -108,15 +107,6 @@ public class TPPConverter {
             progressDialog.setTitle("Creating Protein Map. Please Wait...");
             progressDialog.setIntermidiate(true);
             progressDialog.setString(null);
-
-            // Create a HashMap of proteins for quick retrieval.
-              // ToDo: never used !?
-            HashMap<String, ProteinProphetProteinID> forProteinSequences = new HashMap<String, ProteinProphetProteinID>();
-
-            for (Iterator lIterator = proteins.iterator(); lIterator.hasNext() && !PRIDEConverter.isConversionCanceled();) {
-                ProteinProphetProteinID protein = (ProteinProphetProteinID) lIterator.next();
-                forProteinSequences.put(protein.getAccession(), protein);
-            }
 
             // Key all queries by the peptide found in them as well
             // (again, charge + ' ' + modified sequence)
@@ -646,16 +636,7 @@ public class TPPConverter {
                         properties.getSoftwareName()));
             }
         } catch (Exception e) {
-            // Not good. Print line and dump stacktrace.
-            if (factory == null) {
-                //logger.error(" *** Unable to create XmlPullParserFactory!");
-            } else if (xpp == null) {
-                //logger.error(" *** Unable to create XmlPullParser!");
-            } else {
-                //logger.error(" *** Error parsing line " + xpp.getLineNumber() + " in file '" + currentFile + "'!");
-            }
 
-            //logger.error(e.getMessage(), e);
             JOptionPane.showMessageDialog(
                     null, "An error occured when parsing a Peptide-/ProteinProphet project.\n" +
                     "See ../Properties/ErrorLog.txt for more details.",
