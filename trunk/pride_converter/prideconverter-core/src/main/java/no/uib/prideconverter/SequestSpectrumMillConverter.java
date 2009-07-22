@@ -57,7 +57,7 @@ public class SequestSpectrumMillConverter {
         PRIDEConverter.setIds(new ArrayList<IdentificationGeneral>());
         StringTokenizer tok;
         String accession, database, sequence = null;
-        String prospectorVersion = null; // ToDo: never used !?
+        String prospectorVersion = null; // currently not used
         String coverage_map = null;
         Integer start = null;
         Double score = null;
@@ -68,10 +68,9 @@ public class SequestSpectrumMillConverter {
         String ions = null;
         String upstreamFlankingSequence = null;
         String downstreamFlankingSequence = null;
-        String fragmentIonMap = null; // ToDo: never used!
+        String fragmentIonMap = null;
         int spectraCounter = 1;
         String currentLine;
-        Vector columnHeaders; // ToDo: never used!
 
         String modificationLine;
         Vector<String> allLines;
@@ -80,7 +79,6 @@ public class SequestSpectrumMillConverter {
         Pattern pattern;
         Matcher matcher;
         String modificationName, currentModification;
-        HashMap<String, Double> modifications = new HashMap<String, Double>(); // ToDo: never used!
 
         Integer modificationLocation;
         String modificationNameShort;
@@ -102,7 +100,6 @@ public class SequestSpectrumMillConverter {
         Collection<SpectrumDescComment> spectrumDescriptionComments;
         String identified;
         boolean matchFound;
-        boolean modificationsDetected; // ToDo: never used !?
         int numberOfHits, index, currentIndex;
         HashMap<String, Integer> spectrumMillColumnHeaders;
         Vector<String> spectrumMillValues;
@@ -408,7 +405,7 @@ public class SequestSpectrumMillConverter {
                                                     spectrumMillColumnHeaders.get("next_aa").intValue());
 
                                             fragmentIonMap = spectrumMillValues.get(
-                                                    spectrumMillColumnHeaders.get("fragmentIonMap")); // ToDo: mever used !?
+                                                    spectrumMillColumnHeaders.get("fragmentIonMap"));
 
                                             fragmentIons = new ArrayList<FragmentIon>();
 
@@ -719,7 +716,6 @@ public class SequestSpectrumMillConverter {
                                 allLines.add(currentLine);
 
                                 String tempString;
-                                columnHeaders = new Vector(); // ToDo: never used !?
 
                                 hitFound = false;
                                 boolean outFileIsEmpty = false;
@@ -772,7 +768,6 @@ public class SequestSpectrumMillConverter {
                                                         (CvParamImpl) userProperties.getCVTermMappings().get(modificationName),
                                                         false);
 
-                                                modifications.put(modificationName, modificationMass);
                                                 properties.getAlreadyChoosenModifications().add(modificationName);
                                             } else {
                                                 //do nothing, mapping already choosen
@@ -799,8 +794,6 @@ public class SequestSpectrumMillConverter {
                                                         modificationMass,
                                                         (CvParamImpl) userProperties.getCVTermMappings().get(modificationName),
                                                         true);
-
-                                                modifications.put(modificationName, modificationMass);
 
                                                 properties.getAlreadyChoosenModifications().add(modificationName);
                                             } else {
@@ -884,7 +877,6 @@ public class SequestSpectrumMillConverter {
                                             sequence = sequence.substring(2, sequence.length() - 2);
                                             sequenceArray = new String[sequence.length()];
 
-                                            modificationsDetected = false;
                                             index = 0;
 
                                             for (int i = 0; i < sequence.length() && !PRIDEConverter.isConversionCanceled(); i++) {

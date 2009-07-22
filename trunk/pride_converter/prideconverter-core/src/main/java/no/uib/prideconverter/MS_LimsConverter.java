@@ -214,7 +214,7 @@ public class MS_LimsConverter {
                                     userProperties.getPurityCorrections());
                             iTRAQValues.calculateiTRAQValues();
 
-                            cVParams = PRIDEConverter.addItraqCVTerms(cVParams, iTRAQValues);
+                            PRIDEConverter.addItraqCVTerms(cVParams, iTRAQValues);
                             userParams = PRIDEConverter.addItraqUserTerms(iTRAQValues);
                         } else {
                             userParams = null;

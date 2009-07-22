@@ -668,13 +668,11 @@ public class OutputDetails extends javax.swing.JFrame {
 
         String omssaInstallationFolder = omssaInstallationFolderJTextField.getText();
 
-        if (!omssaInstallationFolder.endsWith(File.separator) &&
-                omssaInstallationFolder.length() > 0) {
+        if (!omssaInstallationFolder.endsWith(File.separator) && omssaInstallationFolder.length() > 0) {
             omssaInstallationFolder += File.separator;
         }
 
-        PRIDEConverter.getUserProperties().setOmssaInstallDir(
-                omssaInstallationFolder);
+        PRIDEConverter.getUserProperties().setOmssaInstallDir(omssaInstallationFolder);
 
         String outputPath = outPutPathJTextField.getText();
 
@@ -693,9 +691,8 @@ public class OutputDetails extends javax.swing.JFrame {
         boolean error = false;
 
         if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
-            if (!new File(PRIDEConverter.getUserProperties().getOmssaInstallDir() +
-                    "mods.xml").exists()) {
-                int option = JOptionPane.showConfirmDialog(this,
+            if (!new File(PRIDEConverter.getUserProperties().getOmssaInstallDir() + "mods.xml").exists()) {
+                JOptionPane.showConfirmDialog(this,
                         "The selected OMSSA installation folder does not contain the mods.xml\n" +
                         "file used by OMSSA. The conversion can not be done without this file.\n" +
                         "Please select the correct OMSSA installation folder.",
@@ -708,10 +705,8 @@ public class OutputDetails extends javax.swing.JFrame {
 
         if (!error) {
             this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-            //prideConverter.userProperties.setOutputPath(outPutPathJTextField.getText());
             // ToDo: create appropriate prideconverter instance
-//            prideConverter.convert(this);
-            new PRIDEConverter().convert(this); // ToDo: check this
+            new PRIDEConverter().convert(this);
         }
     }//GEN-LAST:event_convertJButtonActionPerformed
 

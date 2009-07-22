@@ -53,7 +53,6 @@ public class PKLandPKXConverter {
         ArrayList<CvParam> cVParams;
         ArrayList<SupDesc> supDescArrays;
 
-        boolean errorDetected; // ToDo: never used !?
         FileReader f;
         BufferedReader b;
         double precursorMz, precursorIntensty, precursorRetentionTime;
@@ -78,7 +77,6 @@ public class PKLandPKXConverter {
             progressDialog.setString(PRIDEConverter.getCurrentFileName() + " (" + (j + 1) + "/" +
                     properties.getSelectedSourceFiles().size() + ")");
 
-            errorDetected = false; // ToDo: never used !?
             matchFound = false;
 
             precursorMz = -1.0;
@@ -451,7 +449,6 @@ public class PKLandPKXConverter {
 
             } catch (Exception e) {
 
-                errorDetected = true; // ToDo: never used !?
                 String fileType = "";
 
                 if (properties.getDataSource().equalsIgnoreCase("Micromass PKL File")) {

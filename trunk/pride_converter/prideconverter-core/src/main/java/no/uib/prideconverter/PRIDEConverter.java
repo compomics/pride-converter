@@ -341,8 +341,8 @@ public class PRIDEConverter extends AbstractPrideConverter {
                     }
                 }
 
-                // ToDo: need to create a converter? maybe only start with the DataSourceSelection ! 
-//                new PRIDEConverter();
+                // ToDo: move code from main method into DataSourceSelection ?
+                // ToDo: move the look and feel into DataSourceSelection ?
                 new DataSourceSelection(null);
             }
         });
@@ -440,7 +440,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                     }
 
 
-                    // ToDo: start writing the PRIDE XML (up to/including the SpectrumList header)
+                    // ToDo: big files: start writing the PRIDE XML (up to/including the SpectrumList header)
 
 
                     // Transform all selected spectra into mzData spectra and retrieve the identifications.
@@ -450,9 +450,9 @@ public class PRIDEConverter extends AbstractPrideConverter {
                     // and the spectrum id (to be used in the PRIDE XML file as the element.
                     HashMap filenameToSpectrumID = new HashMap();
 
-                    // ToDo: here we populate the spectra list!! (mzDataSpectra)
-                    // ToDo: check if we have all the information we need to write the PRIDE XML up to 
-                    // ToDo:   the SpectrumList start tag and write it before dealing with the spectra
+                    // ToDo: big files: here we populate the spectra list!! (mzDataSpectra)
+                    // ToDo: big files: check if we have all the information we need to write the PRIDE XML up to
+                    // ToDo: big files: the SpectrumList start tag and write it before dealing with the spectra
                     // detect the data source used, and use the corresponding transformSpectra method
                     if (properties.getDataSource().equalsIgnoreCase("ms_lims")) {
                         filenameToSpectrumID = MS_LimsConverter.transformSpectraFrom_ms_lims(mzDataSpectra);
@@ -514,7 +514,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
                         // for mzData the, we just have to add/update the additional details
                         // and combine the files into one mzData file
-                        mzData = combineMzDataFiles(new HashMap<String, Long>(), mzDataSpectra); // ToDo: what is the HashMap good for?
+                        mzData = combineMzDataFiles(new HashMap<String, Long>(), mzDataSpectra); // Note that the map is not used here
 
                     } else if (properties.getDataSource().equalsIgnoreCase("X!Tandem")) {
                         if (properties.getSelectedSourceFiles().get(0).toLowerCase().endsWith(".mzdata")) {
@@ -1707,6 +1707,8 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
         aId++; // Note that the counter is used AND incremented here.
 
+        precursors.add(new PrecursorImpl(null, null, ionSelection, null, 2, aId, 0));
+
         // Create new mzData spectrum for the fragmentation spectrum.
         // Notice that certain collections and annotations are 'null' here.
         Spectrum fragmentation = new SpectrumImpl(
@@ -2651,137 +2653,6 @@ public class PRIDEConverter extends AbstractPrideConverter {
     }
 
     /**
-     * Updates the annotation (contacts, instrument details etc) with the
-     * values chosen by the user and returns the updated mzData object.
-     *
-     * @param mzData the mzData object to be updated
-     * @return the updated mzData object
-     */
-    private MzData updateMzData(MzData mzData) {
-        // ToDo: method never used !?
-
-        // The CV lookup stuff. (NB: currently hardcoded to PSI only)
-        Collection<CVLookup> cvLookups = new ArrayList<CVLookup>(1);
-        cvLookups.add(new CVLookupImpl(properties.getCvVersion(),
-                properties.getCvFullName(),
-                properties.getCvLabel(),
-                properties.getCvAddress()));
-
-        // Instrument source CV parameters.
-        Collection<CvParam> instrumentSourceCVParameters = new ArrayList<CvParam>(1);
-        instrumentSourceCVParameters.add(new CvParamImpl(
-                properties.getAccessionInstrumentSourceParameter(),
-                properties.getCVLookupInstrumentSourceParameter(),
-                properties.getNameInstrumentSourceParameter(),
-                0,
-                properties.getValueInstrumentSourceParameter()));
-
-        // Instrument detector parameters.
-        Collection<CvParam> instrumentDetectorParamaters = new ArrayList<CvParam>(1);
-        instrumentDetectorParamaters.add(new CvParamImpl(
-                properties.getAccessionInstrumentDetectorParamater(),
-                properties.getCVLookupInstrumentDetectorParamater(),
-                properties.getNameInstrumentDetectorParamater(),
-                0,
-                properties.getValueInstrumentDetectorParamater()));
-
-        ArrayList<UserParam> sampleDescriptionUserParams = new ArrayList<UserParam>(
-                properties.getSampleDescriptionUserSubSampleNames().size());
-
-        for (int i = 0; i < properties.getSampleDescriptionUserSubSampleNames().size(); i++) {
-            sampleDescriptionUserParams.add(new UserParamImpl(
-                    "SUBSAMPLE_" + (i + 1), i,
-                    (String) properties.getSampleDescriptionUserSubSampleNames().get(i)));
-        }
-
-        for (int i = 0; i < properties.getSampleDescriptionCVParamsQuantification().size(); i++) {
-            properties.getSampleDescriptionCVParams().add(
-                    properties.getSampleDescriptionCVParamsQuantification().get(i));
-        }
-
-        // Create the mzData object.
-        mzData = new MzDataImpl(
-                mzData.getSpectrumCollection(),
-                properties.getSoftwareCompletionTime(),
-                properties.getContacts(),
-                properties.getInstrumentName(),
-                properties.getProcessingMethod(),
-                properties.getProcessingMethodUserParams(),
-                properties.getSourceFile(),
-                userProperties.getCurrentSampleSet(),
-                properties.getInstrumentAdditionalCvParams(),
-                properties.getInstrumentAdditionalUserParams(),
-                cvLookups,
-                properties.getMzDataVersion(),
-                instrumentDetectorParamaters,
-                properties.getInstrumentDetectorUserParams(),
-                properties.getSampleDescriptionComment(),
-                properties.getMzDataAccessionNumber(),
-                properties.getAnalyzerList(),
-                properties.getSoftwareComments(),
-                instrumentSourceCVParameters,
-                properties.getInstrumentSourceUserParams(),
-                properties.getSoftwareVersion(),
-                properties.getSampleDescriptionCVParams(),
-                sampleDescriptionUserParams,
-                properties.getSoftwareName());
-
-        totalNumberOfSpectra = mzData.getSpectrumCollection().size();
-
-        return mzData;
-    }
-
-    /**
-     * Combines two spectrum CV param arrays into one CV param array.
-     * The first array is assumed to be ordered (the order indices are in
-     * increasing order).
-     *
-     * @param existingCvParams the cv param list to be extended
-     * @param cvParamsToAdd the values to add
-     * @return the updated cv param list
-     */
-    private static ArrayList combineCVTermsArrays(ArrayList<CvParam> existingCvParams,
-            ArrayList<CvParam> cvParamsToAdd) {
-        // ToDo: method never used !?
-
-        for (CvParam tempCvParam : cvParamsToAdd) {
-
-            existingCvParams.add(new CvParamImpl(
-                    tempCvParam.getAccession(),
-                    tempCvParam.getCVLookup(),
-                    tempCvParam.getName(),
-                    existingCvParams.size(),
-                    tempCvParam.getValue()));
-        }
-
-        return existingCvParams;
-    }
-
-    /**
-     * Combines two spectrum user param arrays into one user param array.
-     * The first array is assumed to be ordered (the order indices are in
-     * increasing order).
-     *
-     * @param existingUserParams the user param list to be extended
-     * @param userParamsToAdd the values to add
-     * @return the updated user param list
-     */
-    private static ArrayList combineUserParamArrays(ArrayList<UserParam> existingUserParams,
-            ArrayList<UserParam> userParamsToAdd) {
-        // ToDo: method never used !?
-
-        for (UserParam tempUserParam : userParamsToAdd) {
-
-            existingUserParams.add(new UserParamImpl(
-                    tempUserParam.getName(),
-                    existingUserParams.size(),
-                    tempUserParam.getValue()));
-        }
-
-        return existingUserParams;
-    }
-
-    /**
      * Adds the correct iTRAQ CV terms to a CV param list.
      *
      * @param cvParams the CV param list to be extended
@@ -2802,8 +2673,8 @@ public class PRIDEConverter extends AbstractPrideConverter {
      * @param iTRAQValues the values to add
      * @return the updated CV param list
      */
-    protected static ArrayList<CvParam> addItraqCVTerms(ArrayList<CvParam> cvParams, iTRAQ iTRAQValues) {
-        // ToDo: type list, get rid of either parameter or return value -> redundant!
+    protected static void addItraqCVTerms(ArrayList<CvParam> cvParams, iTRAQ iTRAQValues) {
+     
         cvParams.add(new CvParamImpl(
                 "PRIDE:000018", "PRIDE", "iTRAQ intensity 114", cvParams.size(),
                 ((String[]) iTRAQValues.getAllNorms().get(0))[0]));
@@ -2816,8 +2687,6 @@ public class PRIDEConverter extends AbstractPrideConverter {
         cvParams.add(new CvParamImpl(
                 "PRIDE:000021", "PRIDE", "iTRAQ intensity 117", cvParams.size(),
                 ((String[]) iTRAQValues.getAllNorms().get(0))[3]));
-
-        return cvParams;
     }
 
     /**
@@ -3008,7 +2877,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                     "PRIDE:0000191",
                     "PRIDE",
                     "product ion retention time error",
-                    orderIndex++, // ToDo: update not used index only used once!
+                    orderIndex,
                     retentionTimeError.toString()));
         }
 
