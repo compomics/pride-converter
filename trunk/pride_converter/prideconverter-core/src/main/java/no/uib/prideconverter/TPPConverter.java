@@ -52,8 +52,6 @@ public class TPPConverter {
      */
     protected static HashMap<String, Long> transformSpectraFromTPPProjects(ArrayList<Spectrum> aTransformedSpectra) {
 
-//        long timerStart = System.currentTimeMillis();
-
         // temporary variables
         ProgressDialog progressDialog = PRIDEConverter.getProgressDialog();
         no.uib.prideconverter.util.Properties properties = PRIDEConverter.getProperties();
@@ -623,7 +621,7 @@ public class TPPConverter {
                 properties.setMzDataFile(
                         new MzDataImpl(
                         mzDataSpectra,
-                        null, // software compeletion time
+                        null, // software completion time
                         properties.getContacts(),
                         properties.getInstrumentName(),
                         properties.getProcessingMethod(),
@@ -666,10 +664,6 @@ public class TPPConverter {
             e.printStackTrace();
         }
 
-//        long end = System.currentTimeMillis();
-//        System.out.println("Transformation Done: " + (end - timerStart) + "\n");
         return mapping;
     }
-
-
 }

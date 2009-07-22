@@ -13,7 +13,6 @@ import java.io.*;
 
 import uk.ac.ebi.pride.model.interfaces.core.FragmentIon;
 import uk.ac.ebi.pride.model.interfaces.core.MassDelta;
-import uk.ac.ebi.pride.model.interfaces.core.Modification;
 import uk.ac.ebi.pride.model.interfaces.mzdata.*;
 import uk.ac.ebi.pride.model.implementation.mzData.*;
 import uk.ac.ebi.pride.model.implementation.core.MonoMassDeltaImpl;
@@ -45,7 +44,6 @@ public class SequestSpectrumMillConverter {
         ProgressDialog progressDialog = PRIDEConverter.getProgressDialog();
         no.uib.prideconverter.util.Properties properties = PRIDEConverter.getProperties();
         no.uib.prideconverter.util.UserProperties userProperties = PRIDEConverter.getUserProperties();
-
 
         HashMap<String, Long> mapping = new HashMap<String, Long>();
 
@@ -1265,15 +1263,10 @@ public class SequestSpectrumMillConverter {
                     }
                 }
             }
-
-//            long end = System.currentTimeMillis();
-//            System.out.println((j + 1) + " Parse: " + (end - startTimer));// + "\n");
         }
 
         PRIDEConverter.setTotalNumberOfSpectra(spectraCounter - 1);
 
         return mapping;
     }
-
-
 }

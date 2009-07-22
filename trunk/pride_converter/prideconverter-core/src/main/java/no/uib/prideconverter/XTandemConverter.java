@@ -984,7 +984,7 @@ public class XTandemConverter {
                         }
                     }
                 } else if (file.getName().toLowerCase().endsWith(".mzdata")) {
-// .zmldata file
+// .mzdata file
                     PRIDEConverter.setMzData( PRIDEConverter.combineMzDataFiles(mapping, aTransformedSpectra) );
 
                 } else if (file.getName().toLowerCase().endsWith(".mzxml")) {
@@ -1158,7 +1158,7 @@ public class XTandemConverter {
             upstreamFlankingSequence = null;
             downstreamFlankingSequence = null;
 
-            //  @TODO: should be replaced by better and simpler xml parsing
+            // @TODO: should be replaced by better and simpler xml parsing
             try {
                 //get the factory
                 dbf = DocumentBuilderFactory.newInstance();
@@ -1522,8 +1522,4 @@ public class XTandemConverter {
 
         return mapping;
     }
-
-
-
-
 }

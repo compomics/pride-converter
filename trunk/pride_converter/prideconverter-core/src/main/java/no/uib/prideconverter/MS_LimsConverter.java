@@ -48,8 +48,6 @@ public class MS_LimsConverter {
         no.uib.prideconverter.util.Properties properties = PRIDEConverter.getProperties();
         no.uib.prideconverter.util.UserProperties userProperties = PRIDEConverter.getUserProperties();
 
-
-
         HashMap<String, Long> mapping = new HashMap<String, Long>();
 
         //Get the selected spectra
@@ -498,7 +496,4 @@ public class MS_LimsConverter {
 
         return result;
     }
-
-
-
 }

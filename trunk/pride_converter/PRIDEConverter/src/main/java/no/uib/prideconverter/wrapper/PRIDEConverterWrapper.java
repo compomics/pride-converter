@@ -32,12 +32,13 @@ public class PRIDEConverterWrapper {
         String versionEnding = getVersion() + ".jar";
         jarFileName = "PRIDEConverter-" + versionEnding;
         prideConverterSourceJarFileName = "prideconverter-core-" + versionEnding;
-//        try {
-//            PlasticLookAndFeel.setPlasticTheme(new SkyKrupp());
-//            UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
-//        } catch (UnsupportedLookAndFeelException e) {
-//            // ignore exception
-//        }
+
+        try {
+            PlasticLookAndFeel.setPlasticTheme(new SkyKrupp());
+            UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
+        } catch (UnsupportedLookAndFeelException e) {
+            // ignore exception, i.e. use default look and feel
+        }
 
         try {
             launch();
