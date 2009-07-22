@@ -3,9 +3,6 @@ package no.uib.prideconverter;
 import be.proteomics.lims.db.accessors.Identification;
 import be.proteomics.lims.db.accessors.Protocol;
 import be.proteomics.lims.db.accessors.Spectrumfile;
-import com.jgoodies.looks.plastic.PlasticLookAndFeel;
-import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
-import com.jgoodies.looks.plastic.theme.SkyKrupp;
 import no.uib.prideconverter.gui.*;
 import no.uib.prideconverter.util.*;
 import no.uib.prideconverter.util.Properties;
@@ -421,7 +418,6 @@ public class PRIDEConverter extends AbstractPrideConverter {
             @Override
             public void run() {
 
-//                long start = System.currentTimeMillis();
                 boolean xmlValidated = false;
 
                 try {
@@ -1110,9 +1106,6 @@ public class PRIDEConverter extends AbstractPrideConverter {
                 }
 
                 outputFrame.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-//                long end = System.currentTimeMillis();
-//                System.out.println("Done: " + (end - start) + "\n");
             }
         }.start();
 
@@ -2063,7 +2056,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
         public uk.ac.ebi.pride.model.interfaces.core.Identification getGelFreeIdentification() {
 
             Collection<UserParam> userParams = null;
-            Collection<CvParam> cvParams; // ToDo: never used! should be used?
+            Collection<CvParam> cvParams = null;
 
             if (properties.getDataSource().equalsIgnoreCase("Mascot Dat File")) {
 
@@ -2075,11 +2068,12 @@ public class PRIDEConverter extends AbstractPrideConverter {
             } else if (properties.getDataSource().equalsIgnoreCase("DTASelect")) {
 
                 cvParams = new ArrayList<CvParam>(3);
+
                 // Add here the information that is common for each protein:
                 if (iDescription != null) {
-                    cvParams.add(new CvParamImpl("PRIDE:0000063", "pride", "Protein description line", 1, iDescription));
-                    cvParams.add(new CvParamImpl("PRIDE:0000172", "pride", "Search database protein sequence length", 2, iProteinLength.toString()));
-                    cvParams.add(new CvParamImpl("PRIDE:0000057", "pride", "Molecular Weight", 3, iMolecularWeight.toString()));
+                    cvParams.add(new CvParamImpl("PRIDE:0000063", "PRIDE", "Protein description line", 1, iDescription));
+                    cvParams.add(new CvParamImpl("PRIDE:0000172", "PRIDE", "Search database protein sequence length", 2, iProteinLength.toString()));
+                    cvParams.add(new CvParamImpl("PRIDE:0000057", "PRIDE", "Molecular Weight", 3, iMolecularWeight.toString()));
                 }
 
                 userParams = new ArrayList<UserParam>(4);
@@ -2114,14 +2108,13 @@ public class PRIDEConverter extends AbstractPrideConverter {
             uk.ac.ebi.pride.model.interfaces.core.Identification PRIDE_protein;
 
             if (properties.isGelFree()) {
-
                 PRIDE_protein = new GelFreeIdentificationImpl(
                         iAccession, //protein accession
                         iAccessionVersion, // accession version
                         null, // spliceforms
                         iDatabase, // database
                         iPeptides, // the peptides
-                        null, // cv params // ToDo: why not use the CvParams?
+                        cvParams, // cv params
                         userParams, // user params
                         iSearchEngine, // search engine
                         iDBVersion, // database version
@@ -2129,7 +2122,6 @@ public class PRIDEConverter extends AbstractPrideConverter {
                         score, // score
                         threshold, // threshold
                         null); // spectrum reference
-
             } else {
                 PRIDE_protein = new TwoDimensionalIdentificationImpl(
                         iAccession, //protein accession
@@ -2138,7 +2130,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                         iDatabase, // database
                         iDBVersion, // database version
                         iPeptides, // the peptides
-                        null, // cv params  // ToDo: why not use the CvParams?
+                        cvParams, // cv params
                         userParams, // user params
                         null, // PI
                         null, // MW
@@ -2164,9 +2156,10 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
         private Integer scanNumber = null;
         private String sequence = null;
-        private Integer start = null; // ToDo: never used!
+        private Integer start = null;
         private Collection cvParams = null;
         private Collection userParams = null;
+        private Collection modifications = null;
 
         /**
          * Construct an InnerPeptide object.
@@ -2180,10 +2173,10 @@ public class PRIDEConverter extends AbstractPrideConverter {
          */
         public InnerPeptide(Integer scanNumber, String sequence, Integer aStart, Collection aModifications,
                 Collection aCvParams, Collection aUserParams) {
-            // ToDo: parameter aModifications never used !?
             this.scanNumber = scanNumber;
             this.sequence = sequence;
             this.start = aStart;
+            this.modifications = aModifications;
             this.cvParams = aCvParams;
             this.userParams = aUserParams;
         }
@@ -2258,6 +2251,42 @@ public class PRIDEConverter extends AbstractPrideConverter {
          */
         public void setSequence(String sequence) {
             this.sequence = sequence;
+        }
+
+        /**
+         * Returns the peptide start index
+         *
+         * @return the peptide start index
+         */
+        public Integer getStartIndex() {
+            return start;
+        }
+
+        /**
+         * Sets the peptide start index
+         *
+         * @param scanNumber peptide start index
+         */
+        public void setStartIndex(Integer start) {
+            this.start = start;
+        }
+
+        /**
+         * Returns the modifications
+         *
+         * @return the modifications
+         */
+        public Collection getModifications() {
+            return modifications;
+        }
+
+        /**
+         * Sets the modifications
+         *
+         * @param modifications the modifications to set
+         */
+        public void setModifications(Collection modifications) {
+            this.modifications = modifications;
         }
     }
 
@@ -2552,7 +2581,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
      */
     private static MzData createMzData(ArrayList<Spectrum> mzDataSpectra) {
 
-        // The CV lookup stuff. (NB: currently hardcoded to PSI only)
+        // The CV lookup stuff. (NB: currently hardcoded to PSI only) // TODO: add more ontologies
         Collection<CVLookup> cvLookups = new ArrayList<CVLookup>(1);
         cvLookups.add(new CVLookupImpl(properties.getCvVersion(),
                 properties.getCvFullName(),

@@ -66,8 +66,6 @@ public class MascotGenericConverter {
 
         for (int j = 0; j < PRIDEConverter.getProperties().getSelectedSourceFiles().size() && !PRIDEConverter.isConversionCanceled(); j++) {
 
-            //long start = System.currentTimeMillis();
-
             filePath = PRIDEConverter.getProperties().getSelectedSourceFiles().get(j);
 
             PRIDEConverter.setCurrentFileName(filePath.substring(filePath.lastIndexOf(File.separator) + 1));
@@ -290,15 +288,10 @@ public class MascotGenericConverter {
             }
 
             br.close();
-
-//            long end = System.currentTimeMillis();
-//            System.out.println((j + 1) + " Parse: " + (end - start));// + "\n");
         }
 
         PRIDEConverter.setTotalNumberOfSpectra(spectraCounter - 1);
 
         return mapping;
     }
-
-
 }

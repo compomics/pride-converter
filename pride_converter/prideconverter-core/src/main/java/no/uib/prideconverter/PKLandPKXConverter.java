@@ -38,8 +38,6 @@ public class PKLandPKXConverter {
         ProgressDialog progressDialog = PRIDEConverter.getProgressDialog();
         no.uib.prideconverter.util.Properties properties = PRIDEConverter.getProperties();
 
-
-
         HashMap<String, Long> mapping = new HashMap<String, Long>();
 
         double[][] arrays = null;
@@ -482,6 +480,4 @@ public class PKLandPKXConverter {
 
         return mapping;
     }
-
-
 }

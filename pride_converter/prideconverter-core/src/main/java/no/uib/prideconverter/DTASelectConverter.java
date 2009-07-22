@@ -41,15 +41,11 @@ public class DTASelectConverter {
      */
     protected static HashMap<String, Long> transformSpectraFromDTASelectProjects(ArrayList<Spectrum> aTransformedSpectra) {
 
-//        long timerStart = System.currentTimeMillis();
-
         // temporary variables
         ProgressDialog progressDialog = PRIDEConverter.getProgressDialog();
         no.uib.prideconverter.util.Properties properties = PRIDEConverter.getProperties();
         no.uib.prideconverter.util.UserProperties userProperties = PRIDEConverter.getUserProperties();
         boolean debug = PRIDEConverter.isDebug();
-
-
 
         final String SEPARATOR = "\t";
         final Pattern START_WITH_A_LETTER = Pattern.compile("^[a-zA-Z].*");
@@ -1000,10 +996,6 @@ public class DTASelectConverter {
             progressDialog.dispose();
         }
 
-//        long end = System.currentTimeMillis();
-//        System.out.println("Transformation Done: " + (end - timerStart) + "\n");
         return filenameToMzDataIDMapping;
     }
-
-
 }

@@ -210,6 +210,4 @@ public class MzMLConverter {
 //
 //        return mapping;
     }
-
-
 }

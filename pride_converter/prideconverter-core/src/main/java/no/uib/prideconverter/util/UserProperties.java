@@ -8,7 +8,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.StringTokenizer;
 import javax.swing.*;
 
@@ -72,9 +71,9 @@ public class UserProperties {
 
     /**
      * Creates a new UserProperties object
-     * 
      */
     public UserProperties() {
+
         cvTermMappings = new HashMap<String, CvParam>();
 
         // set the Look and Feel for the GUI
@@ -85,7 +84,6 @@ public class UserProperties {
             Util.writeToErrorLog("Setting Look And Feel: Error while attempting to set the Look And Feel");
             e.printStackTrace();
         }
-
     }
 
     /**
