@@ -2,13 +2,6 @@
 
 ----
 
- * NEW FEATURE: Fragment Ion Annotations are now included for: ms_lims, Mascot Data Files and OMSSA.
- * NEW FEATURE: PRIDE XML files are now gzipped after conversion to reduce the upload time to the PRIDE data repository.
- * NEW FEATURE: A dialog telling you to request access to the PRIDE FTP server now appears if the (unzipped) PRIDE XML files size is larger than 15 MB.
- * FEATURE IMPROVEMENT: The contents of comboboxes are now centrally aligned.
- * BUG FIX: Fixed two minor GUI bugs in the DataBase Details frame.
- * LIBRARY UPDATE: Updated utilities to version 2.9.2.
- * LIBRARY UPDATE: Updated pride-core to version 2.7.0.
-
+ 
 
  
