@@ -346,7 +346,20 @@ public class MascotDatConverter {
 
                                 // Store (spectrumfileid, spectrumid) mapping.
                                 //mapping.put(new Long(idCounter), new Long(idCounter++));
-                                mapping.put(currentQuery.getFilename(), (long) idCounter);
+                                // ToDo: filename might not be unique!
+//                                Long xTmp = mapping.put(currentQuery.getFilename(), (long) idCounter);
+                                // possible alternative: use absolute file name plus query number
+                                int qnum = currentQuery.getQueryNumber();
+                                String uFileName = tempFile.getAbsolutePath();
+                                Long xTmp = mapping.put(uFileName + "_" + qnum, (long)idCounter);
+                                if (xTmp != null) {
+                                    // we already stored a result for this ID!!!
+                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                            "the error log file for details.", "Mapping ERROR", JOptionPane.ERROR_MESSAGE);
+                                    Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + idCounter
+                                            + "' and spectrum file '" + currentQuery.getFilename() + "'." );
+
+                                }
                                 idCounter++;
 
                                 // Store the transformed spectrum.
@@ -583,7 +596,8 @@ public class MascotDatConverter {
 
 
                                     PRIDEConverter.getIds().add(new IdentificationGeneral(
-                                            currentQuery.getFilename(), // spectrumFileName
+                                            tempFile.getAbsolutePath() + "_" + currentQuery.getQueryNumber(),
+//                                            currentQuery.getFilename(), // spectrumFileName
                                             PRIDEConverter.getProperties().getTempProteinHit().getAccession(), // accession
                                             "Mascot", // search engine
                                             tempMascotDatfile.getParametersSection().getDatabase(), // database
