@@ -349,7 +349,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
     }
 
     /**
-     * Cancels the convertion process by System.exit(0). 
+     * Cancels the convertion process by System.exit(0).
      * First saves the user properties.
      */
     public static void cancelConvertion() {
@@ -369,7 +369,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
      *
      * This is where the actual conversion occurs. All the information
      * inserted in the different frames are used in this method.
-     * 
+     *
      * @param outputDetails a reference to the OutputDetails frame.
      */
     public void convert(OutputDetails outputDetails) {
@@ -404,7 +404,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
         // Wait until progress dialog is visible.
         //
         // The following is not needed in Java 1.6, but seemed to be needed in 1.5.
-        // 
+        //
         // Not including the lines _used to_ result in a crash on Windows, but not anymore.
         // Including the lines results in a crash on Linux and Mac.
         if (System.getProperty("os.name").toLowerCase().lastIndexOf("windows") != -1) {
@@ -608,7 +608,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                     }
 
 
-                    // Cycle all unique identifications, group them by 
+                    // Cycle all unique identifications, group them by
                     // accession and retain only relevant data.
                     Iterator iter = omitDuplicates.values().iterator();
 
@@ -1114,7 +1114,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
     /**
      * Returns a UsertProperties object with all the user settings.
-     * 
+     *
      * @return the user settings
      */
     public static UserProperties getUserProperties() {
@@ -1123,7 +1123,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
     /**
      * Returns a Properties object with all the settings.
-     * 
+     *
      * @return the user settings
      */
     public static Properties getProperties() {
@@ -1132,7 +1132,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
     /**
      * Returns the ms_lims database connection.
-     * 
+     *
      * @return the ms_lims database connection
      */
     public static Connection getConn() {
@@ -1141,7 +1141,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
     /**
      * Adds a modification code (a.k.a. name) cvParam mapping.
-     * 
+     *
      * @param modificationCode code
      * @param cvParam CV parameter
      * @param modificationMonoMass mass
@@ -2267,7 +2267,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
         /**
          * Sets the peptide start index
          *
-         * @param scanNumber peptide start index
+         * @param start peptide start index
          */
         public void setStartIndex(Integer start) {
             this.start = start;
@@ -2660,6 +2660,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
      */
     protected static void addItraqCVTerms(ArrayList<CvParam> cvParams, String[] iTraqNorms) {
         // ToDo: assumes input array size = 4  (never checks)
+        // ToDo: add check!
         cvParams.add(new CvParamImpl("PRIDE:000018", "PRIDE", "iTRAQ intensity 114", cvParams.size(), iTraqNorms[0]));
         cvParams.add(new CvParamImpl("PRIDE:000019", "PRIDE", "iTRAQ intensity 115", cvParams.size(), iTraqNorms[1]));
         cvParams.add(new CvParamImpl("PRIDE:000020", "PRIDE", "iTRAQ intensity 116", cvParams.size(), iTraqNorms[2]));
@@ -2674,7 +2675,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
      * @return the updated CV param list
      */
     protected static void addItraqCVTerms(ArrayList<CvParam> cvParams, iTRAQ iTRAQValues) {
-     
+
         cvParams.add(new CvParamImpl(
                 "PRIDE:000018", "PRIDE", "iTRAQ intensity 114", cvParams.size(),
                 ((String[]) iTRAQValues.getAllNorms().get(0))[0]));

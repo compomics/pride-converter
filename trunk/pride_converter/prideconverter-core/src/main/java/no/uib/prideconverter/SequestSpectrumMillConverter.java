@@ -340,6 +340,7 @@ public class SequestSpectrumMillConverter {
 
                                 currentLine = b.readLine();
 
+                                String massTolerance; // to be used for the fragment ion annotation to calculate the ions
                                 while (currentLine != null) {
 
                                     // first we try to extract some of the information from the header part of the file
@@ -351,6 +352,10 @@ public class SequestSpectrumMillConverter {
                                         tok = new StringTokenizer(currentLine);
                                         tok.nextToken();
                                         prospectorVersion = tok.nextToken(); // ToDo: never used !?
+                                    } else if (currentLine.startsWith("fragment_mass_tolerance")) {
+                                        tok = new StringTokenizer(currentLine);
+                                        tok.nextToken();
+                                        massTolerance = tok.nextToken();
                                     } else if (currentLine.startsWith("num_hits_to_report")) {
 
                                         // parse the identifications
@@ -383,6 +388,9 @@ public class SequestSpectrumMillConverter {
 
                                             modificationCVParams = new ArrayList<CvParam>();
 
+
+                                            // ToDo: where does it read the next lines if numberOfHits > 1 ??
+                                            // ToDo: we only take the fist on into account? If so, this should be documented!
                                             currentLine = b.readLine();
                                             tok = new StringTokenizer(currentLine, "\t");
 
@@ -409,14 +417,62 @@ public class SequestSpectrumMillConverter {
 
                                             fragmentIons = new ArrayList<FragmentIon>();
 
-
+                                            // BEGIN Fragment Ion extraction
                                             // @TODO: Extract fragmention ion annotations (Spectrum Mill).
 
                                             // 1 - use the fragmentIonMap to get the fragment ions
+                                            //     - generate the ions from the fragementIonMap,
+                                            //     - calculate the masses and charges
+                                            //       - use arrays variable for peak masses and intensities
+                                            //       - parse 'fragment_mass_tolerance' term from input file for mass delta
+                                            //       - parse 'it a b b_nh3 b_h2o b_plus_h2o y y_nh3 y_h2o' term from input file for ion type definition
                                             // 2 - add them to the fragmentIons list (see Mascot Dat File for how to do this)
                                             // 3 - add new mappings to the FragmentIonsMapping.prop file
                                             // 4 - that's it, the rest is taken care of :)
 
+                                            /* fragment ion annotation stuff (needs to be finished)
+                                            if (fragmentIonMap.length() != sequence.length()-1) {
+                                                throw new IllegalStateException("Extracted fragment ion map does not have the required length for peptide: " + sequence);
+                                            }
+
+                                            String peptide = sequence.toUpperCase();
+                                            String fragmentMap = fragmentIonMap.toUpperCase();
+                                            System.out.println("peptide: " + peptide);
+                                            System.out.println("mapping: " + fragmentMap);
+
+                                            ArrayList<String> yIons = new ArrayList<String>();
+                                            ArrayList<String> bIons = new ArrayList<String>();
+                                            int fillPepetideSequenceLength = peptide.length();
+                                            // N terminus  -> C terminus
+                                            // 0 - no matched ions at the position
+                                            // S - (pink vertical bar) both N and C terminal type ions
+                                            // N - (blue forward slash) only N-terminal type ions
+                                            // C - (red back slash) only C-terminal type ions
+                                            for (int i = 0; i < fragmentMap.length(); i++) {
+                                                char c = fragmentMap.charAt(i);
+                                                if (c == 'C') {
+                                                    // only C-terminal type ions
+                                                    yIons.add( peptide.substring(i+1, peptide.length()) );
+                                                } else if (c == 'S') {
+                                                    // both N and C terminal type ions
+                                                    yIons.add( peptide.substring(i+1, peptide.length()) );
+                                                    bIons.add( peptide.substring(0, i+1) );
+                                                } else if (c == 'N') {
+                                                    // only N-terminal type ions
+                                                    bIons.add( peptide.substring(0, i+1) );
+                                                } else if (c == '0') {
+                                                    // nothing to do, no ions at this position
+                                                } else {
+                                                    throw new IllegalStateException("Not supported fragment ion map code: " + c);
+                                                }
+
+                                            }
+                                            */
+                                            // we need the ion masses to find the correxponding peak in the spectrum 
+                                            // before we can calculate the correct masses for the ions,
+                                            // we need to have the modifications...
+                                            // this is done further down in this method.
+                                            // END Fragemnt Ion extraction
 
 
                                             coverage_map = spectrumMillValues.get(
@@ -455,8 +511,8 @@ public class SequestSpectrumMillConverter {
                                                             currentIndex = sequence.indexOf(
                                                                     modificationNameShort, currentIndex) + 1;
 
-                                                            if (!properties.getAlreadyChoosenModifications().
-                                                                    contains(modificationName)) {
+                                                            if ( !properties.getAlreadyChoosenModifications().contains(modificationName) ) {
+                                                                // ToDo: why create a new ModificationMapping??
                                                                 new ModificationMapping(PRIDEConverter.getOutputFrame(),
                                                                         true, progressDialog,
                                                                         modificationName,
@@ -465,10 +521,9 @@ public class SequestSpectrumMillConverter {
                                                                         (CvParamImpl) userProperties.getCVTermMappings().
                                                                         get(modificationName), false);
 
-                                                                properties.getAlreadyChoosenModifications().
-                                                                        add(modificationName);
+                                                                properties.getAlreadyChoosenModifications().add(modificationName);
                                                             } else {
-                                                                //do nothing, mapping already choosen
+                                                                // do nothing, mapping already choosen
                                                             }
 
                                                             CvParamImpl tempCvParam =
@@ -1261,4 +1316,42 @@ public class SequestSpectrumMillConverter {
 
         return mapping;
     }
+
+
+    private double calculateMonoIsotopicPeptideMass(String peptide) {
+        double mass = 0D;
+        for (char c : peptide.toCharArray()) {
+            mass += aaMasses.get(c);
+        }
+        // use map of single AA masses to sum up the mass of the peptide
+        // only theoretical masses of unmodified peptides are used at this stage
+        return mass;
+    }
+
+    private static final HashMap<Character, Double> aaMasses = new HashMap<Character, Double>();
+    static {
+        aaMasses.put('A', 71.037114D);
+        aaMasses.put('R', 156.101111D);
+        aaMasses.put('N', 114.042927D);
+        aaMasses.put('D', 115.026943D);
+        aaMasses.put('C', 103.009185D);
+        aaMasses.put('E', 129.042593D);
+        aaMasses.put('Q', 128.058578D);
+        aaMasses.put('G', 57.021464D);
+        aaMasses.put('H', 137.058912D);
+        aaMasses.put('I', 113.084064D);
+        aaMasses.put('L', 113.084064D);
+        aaMasses.put('K', 128.094963D);
+        aaMasses.put('M', 131.040485D);
+        aaMasses.put('F', 147.068414D);
+        aaMasses.put('P', 97.052764D);
+        aaMasses.put('S', 87.032028D);
+        aaMasses.put('T', 101.047679D);
+        aaMasses.put('U', 150.95363D);
+        aaMasses.put('W', 186.079313D);
+        aaMasses.put('Y', 163.06332D);
+        aaMasses.put('V', 99.068414D);
+    }
+
+
 }

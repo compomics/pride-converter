@@ -66,6 +66,9 @@ public class TPPConverter {
 
         HashMap<String, Long> mapping = new HashMap<String, Long>(); // is not used
 
+        // ToDo: insert a try catch clause to intercept any problems related to ill-formated XML
+        // ToDo: insert Juan's code to deal with ill-formated XML
+
         // Start reading the files!
         XmlPullParserFactory factory = null;
         XmlPullParser xpp = null;

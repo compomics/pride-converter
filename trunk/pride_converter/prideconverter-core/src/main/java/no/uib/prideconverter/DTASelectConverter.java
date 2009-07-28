@@ -379,7 +379,7 @@ public class DTASelectConverter {
             String proteinDescription = null;
 
             // For the peptides:
-            String unique = null; // ToDo: never used !?
+            String unique = null; // ToDo: never used !?  // Future potential reference, not used now
 
             // Information taken from the file name:
             String fileName = null;
