@@ -1,14 +1,14 @@
 package no.uib.prideconverter.gui;
 
 import no.uib.prideconverter.PRIDEConverter;
-import no.uib.prideconverter.util.OLSInputable;
 import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.util.Iterator;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
+import no.uib.olsdialog.OLSDialog;
+import no.uib.olsdialog.OLSInputable;
 import uk.ac.ebi.pride.model.implementation.mzData.AnalyzerImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 

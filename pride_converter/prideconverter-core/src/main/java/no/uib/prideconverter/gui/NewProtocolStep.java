@@ -7,8 +7,8 @@ import java.util.Iterator;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
-import no.uib.prideconverter.util.OLSInputable;
+import no.uib.olsdialog.OLSDialog;
+import no.uib.olsdialog.OLSInputable;
 import uk.ac.ebi.pride.model.implementation.core.ProtocolStepImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 
