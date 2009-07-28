@@ -266,9 +266,9 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <version>5.1.5</version>
         </dependency>
         <dependency>
-            <groupId>ols</groupId>
-            <artifactId>ols-client</artifactId>
-            <version>1.14</version>
+            <groupId>no.uib</groupId>
+            <artifactId>ols-dialog</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.pride</groupId>

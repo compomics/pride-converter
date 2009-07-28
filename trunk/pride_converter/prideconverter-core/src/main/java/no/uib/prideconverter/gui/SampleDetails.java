@@ -32,9 +32,10 @@ import java.util.StringTokenizer;
 import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import no.uib.olsdialog.OLSDialog;
+import no.uib.olsdialog.OLSInputable;
 import no.uib.prideconverter.util.ComboBoxInputable;
 import no.uib.prideconverter.util.MyComboBoxRenderer;
-import no.uib.prideconverter.util.OLSInputable;
 import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
 
