@@ -69,7 +69,7 @@ public class SequestSpectrumMillConverter {
         String upstreamFlankingSequence = null;
         String downstreamFlankingSequence = null;
         String fragmentIonMap = null;
-        int spectraCounter = 1;
+        int totalSpectraCounter = 0;
         String currentLine;
 
         String modificationLine;
@@ -708,8 +708,7 @@ public class SequestSpectrumMillConverter {
                                 if (score >= properties.getPeptideScoreThreshold()) {
 
                                     PRIDEConverter.getIds().add(new IdentificationGeneral(
-                                            new File(properties.getSelectedSourceFiles().
-                                            get(j)).getName(),//spectrumFileID
+                                            PRIDEConverter.getCurrentFileName(),//spectrumFileID
                                             accession, //accession
                                             "Spectrum Mill",//search engine
                                             database, //database
@@ -729,7 +728,8 @@ public class SequestSpectrumMillConverter {
 
                             identificationFile = new File("");
 
-                            for (int i = 0; i < properties.getSelectedIdentificationFiles().size() && !matchFound && !PRIDEConverter.isConversionCanceled(); i++) {
+                            for (int i = 0; i < properties.getSelectedIdentificationFiles().size() && !matchFound
+                                    && !PRIDEConverter.isConversionCanceled(); i++) {
 
                                 tempFileName = properties.getSelectedIdentificationFiles().get(i);
 
@@ -1135,7 +1135,7 @@ public class SequestSpectrumMillConverter {
                                     if (score >= properties.getPeptideScoreThreshold()) {
 
                                         PRIDEConverter.getIds().add(new IdentificationGeneral(
-                                                new File(properties.getSelectedSourceFiles().get(j)).getName(), // spectrumFileID
+                                                PRIDEConverter.getCurrentFileName(), // spectrumFileID
                                                 accession, // accession
                                                 "Sequest", // search engine
                                                 database, // database
@@ -1217,7 +1217,7 @@ public class SequestSpectrumMillConverter {
                                     msLevel, null,
                                     mzRangeStop,
                                     null,
-                                    spectraCounter, precursors,
+                                    ++totalSpectraCounter, precursors,
                                     spectrumDescriptionComments,
                                     null, null,
                                     null, null);
@@ -1227,18 +1227,30 @@ public class SequestSpectrumMillConverter {
 
                                 if (properties.selectAllSpectra()) {
                                     // Store (spectrumfileid, spectrumid) mapping.
-                                    mapping.put(new File(properties.getSelectedSourceFiles().get(j)).getName(),
-                                            (long) spectraCounter);
-                                    spectraCounter++;
+                                    Long xTmp = mapping.put(PRIDEConverter.getCurrentFileName(), (long) totalSpectraCounter);
+
+                                    if (xTmp != null) {
+                                        // we already stored a result for this ID!!!
+                                        JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                                "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                                        Util.writeToErrorLog("Ambiguous spectrum mapping for spectrum file '"
+                                                + PRIDEConverter.getCurrentFileName() + "'." );
+                                    }
 
                                     // Store the transformed spectrum.
                                     aTransformedSpectra.add(fragmentation);
                                 } else if (properties.selectAllIdentifiedSpectra() &&
                                         identified.equalsIgnoreCase("Identified")) {
                                     // Store (spectrumfileid, spectrumid) mapping.
-                                    mapping.put(new File(properties.getSelectedSourceFiles().get(j)).getName(),
-                                            (long) spectraCounter);
-                                    spectraCounter++;
+                                    Long xTmp = mapping.put(PRIDEConverter.getCurrentFileName(), (long) totalSpectraCounter);
+
+                                    if (xTmp != null) {
+                                        // we already stored a result for this ID!!!
+                                        JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                                "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                                        Util.writeToErrorLog("Ambiguous spectrum mapping for spectrum file '"
+                                                + PRIDEConverter.getCurrentFileName() + "'." );
+                                    }
 
                                     // Store the transformed spectrum.
                                     aTransformedSpectra.add(fragmentation);
@@ -1259,9 +1271,15 @@ public class SequestSpectrumMillConverter {
                                     if (spectraSelected) {
 
                                         // Store (spectrumfileid, spectrumid) mapping.
-                                        mapping.put(new File(properties.getSelectedSourceFiles().get(j)).getName(),
-                                                (long) spectraCounter);
-                                        spectraCounter++;
+                                        Long xTmp = mapping.put(PRIDEConverter.getCurrentFileName(), (long) totalSpectraCounter);
+
+                                        if (xTmp != null) {
+                                            // we already stored a result for this ID!!!
+                                            JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                                    "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                                            Util.writeToErrorLog("Ambiguous spectrum mapping for spectrum file '"
+                                                    + PRIDEConverter.getCurrentFileName() + "'." );
+                                        }
 
                                         // Store the transformed spectrum.
                                         aTransformedSpectra.add(fragmentation);
@@ -1269,9 +1287,15 @@ public class SequestSpectrumMillConverter {
                                 }
                             } else {
                                 // Store (spectrumfileid, spectrumid) mapping.
-                                mapping.put(new File(properties.getSelectedSourceFiles().get(j)).getName(),
-                                        (long) spectraCounter);
-                                spectraCounter++;
+                                Long xTmp = mapping.put(PRIDEConverter.getCurrentFileName(), (long) totalSpectraCounter);
+
+                                if (xTmp != null) {
+                                    // we already stored a result for this ID!!!
+                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                            "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                                    Util.writeToErrorLog("Ambiguous spectrum mapping for spectrum file '"
+                                            + PRIDEConverter.getCurrentFileName() + "'." );
+                                }
 
                                 // Store the transformed spectrum.
                                 aTransformedSpectra.add(fragmentation);
@@ -1312,7 +1336,7 @@ public class SequestSpectrumMillConverter {
             }
         }
 
-        PRIDEConverter.setTotalNumberOfSpectra(spectraCounter - 1);
+        PRIDEConverter.setTotalNumberOfSpectra(totalSpectraCounter);
 
         return mapping;
     }

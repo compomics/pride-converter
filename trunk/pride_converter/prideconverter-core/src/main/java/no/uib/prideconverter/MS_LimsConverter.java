@@ -153,7 +153,14 @@ public class MS_LimsConverter {
                         null, null);
 
                 // Store (spectrumfileid, spectrumid) mapping.
-                mapping.put("" + dbSpectrum.getSpectrumfileid(), (long) idCounter);
+                Long xTmp = mapping.put("" + dbSpectrum.getSpectrumfileid(), (long) idCounter);
+
+                if (xTmp != null) {
+                    // we already stored a result for this ID!!!
+                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                            "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + dbSpectrum.getSpectrumfileid() + "'.");
+                }
 
                 // Store the transformed spectrum.
                 aTransformedSpectra.add(fragmentation);
@@ -255,7 +262,7 @@ public class MS_LimsConverter {
                             if (fragmentIonMappedDetails == null) {
                                 JOptionPane.showMessageDialog(PRIDEConverter.getOutputFrame(),
                                         "Unknown fragment ion \'" + currentFragmentIon.getIonname() + "\'. Ion not included in annotation.\n" +
-                                                "Please contact the PRIDE support team at pride-support@ebi.ac.uk.",
+                                        "Please contact the PRIDE support team at pride-support@ebi.ac.uk.",
                                         "Unknown Fragment Ion",
                                         JOptionPane.INFORMATION_MESSAGE);
                             } else {
@@ -268,13 +275,13 @@ public class MS_LimsConverter {
                                     // create the list of CV Params for the fragment ion
                                     ArrayList<CvParam> currentCvTerms =
                                             PRIDEConverter.createFragmentIonCvParams(
-                                                    fragmentIonMappedDetails,
-                                                    currentFragmentIon.getMz().doubleValue() + currentFragmentIon.getMassdelta().doubleValue(),
-                                                    fragmentIonMappedDetails.getCharge(),
-                                                    new Long(currentFragmentIon.getFragmentionnumber()).intValue(),
-                                                    new Long(currentFragmentIon.getIntensity()).doubleValue(),
-                                                    currentFragmentIon.getMassdelta().doubleValue(), // @TODO: use absolute value?
-                                                    null);
+                                            fragmentIonMappedDetails,
+                                            currentFragmentIon.getMz().doubleValue() + currentFragmentIon.getMassdelta().doubleValue(),
+                                            fragmentIonMappedDetails.getCharge(),
+                                            new Long(currentFragmentIon.getFragmentionnumber()).intValue(),
+                                            new Long(currentFragmentIon.getIntensity()).doubleValue(),
+                                            currentFragmentIon.getMassdelta().doubleValue(), // @TODO: use absolute value?
+                                            null);
 
                                     // add the created fragment ion to the list of all fragment ions
                                     fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
@@ -450,7 +457,6 @@ public class MS_LimsConverter {
 
         return mapping;
     }
-
 
     /**
      * This method takes a HashMap comprising a peaklist (mapping: (m/z, intensity))

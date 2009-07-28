@@ -15,7 +15,9 @@ import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+import javax.swing.JOptionPane;
 import no.uib.prideconverter.gui.ProgressDialog;
+import no.uib.prideconverter.util.Util;
 
 /**
  * @author Florian Reisinger
@@ -49,7 +51,8 @@ public class Ms2Converter {
         Collection<Precursor> precursors;
         Collection<CvParam> ionSelection;
 
-        int spectraCounter = 1;
+        int totalSpectraCounter = 0; // the total spectra count
+        int currentSpectraCounter = 0; // the spectra count for each file
         String filePath;
 
         Collection<SpectrumDescComment> spectrumDescriptionComments;
@@ -71,8 +74,6 @@ public class Ms2Converter {
 
         for (int j = 0; j < properties.getSelectedSourceFiles().size() && !PRIDEConverter.isConversionCanceled(); j++) {
 
-            //long start = System.currentTimeMillis();
-
             filePath = properties.getSelectedSourceFiles().get(j);
 
             PRIDEConverter.setCurrentFileName(filePath.substring(filePath.lastIndexOf(File.separator) + 1));
@@ -88,6 +89,9 @@ public class Ms2Converter {
             masses = new Vector<Double>();
             intensities = new Vector<Double>();
             boolean multipleCharges = false;
+
+            // reset the local spectra counter
+            currentSpectraCounter = 0;
 
             while ((line = br.readLine()) != null && !PRIDEConverter.isConversionCanceled()) {
                 // Advance line count.
@@ -218,14 +222,22 @@ public class Ms2Converter {
                                         msLevel, null,
                                         mzRangeStop,
                                         null,
-                                        spectraCounter, precursors,
+                                        ++totalSpectraCounter, precursors,
                                         spectrumDescriptionComments,
                                         null, null,
                                         null, null);
 
                                 // Store (spectrumfileid, spectrumid) mapping.
-                                mapping.put(Integer.toString(spectraCounter), (long) spectraCounter);
-                                spectraCounter++;
+                                Long xTmp = mapping.put(PRIDEConverter.getCurrentFileName() + "_"
+                                        + Integer.toString(++currentSpectraCounter), (long) totalSpectraCounter);
+
+                                if (xTmp != null) {
+                                    // we already stored a result for this ID!!!
+                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                            "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                                    Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
+                                            + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
+                                }
 
                                 // Store the transformed spectrum.
                                 aTransformedSpectra.add(fragmentation);
@@ -383,15 +395,23 @@ public class Ms2Converter {
                                     2, null,
                                     mzRangeStop,
                                     null,
-                                    spectraCounter, precursors,
+                                    ++totalSpectraCounter, precursors,
                                     spectrumDescriptionComments,
                                     null, null,
                                     null, null);
 
                             // Store (spectrumfileid, spectrumid) mapping.
-                            mapping.put(Integer.toString(spectraCounter), (long) spectraCounter);
-                            spectraCounter++;
+                            Long xTmp = mapping.put(PRIDEConverter.getCurrentFileName() + "_"
+                                    + Integer.toString(++currentSpectraCounter), (long) totalSpectraCounter);
 
+                            if (xTmp != null) {
+                                // we already stored a result for this ID!!!
+                                JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                        "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                                Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
+                                        + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
+                            }
+                            
                             // Store the transformed spectrum.
                             aTransformedSpectra.add(fragmentation);
                         }
@@ -400,10 +420,8 @@ public class Ms2Converter {
             }
         }
 
-        PRIDEConverter.setTotalNumberOfSpectra(spectraCounter - 1);
+        PRIDEConverter.setTotalNumberOfSpectra(totalSpectraCounter);
 
         return mapping;
     }
-
-
 }

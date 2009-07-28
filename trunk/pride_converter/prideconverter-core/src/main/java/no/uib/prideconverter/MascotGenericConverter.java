@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+import javax.swing.JOptionPane;
 import no.uib.prideconverter.util.Util;
 
 /**
@@ -47,7 +48,8 @@ public class MascotGenericConverter {
         Collection<CvParam> ionSelection;
         Collection<SpectrumDescComment> spectrumDescriptionComments;
 
-        int spectraCounter = 1;
+        int totalSpectraCounter = 0; // the total spectra count
+        int currentSpectraCounter = 0; // the spectra count for each mgf file
         String filePath;
 
         Spectrum fragmentation;
@@ -83,6 +85,9 @@ public class MascotGenericConverter {
             charges = new Vector<Integer>();
             boolean inSpectrum = false;
             Integer msLevel = 2; // defaults to MS/MS
+
+            // reset the local spectra counter
+            currentSpectraCounter = 0;
 
             while ((line = br.readLine()) != null && !PRIDEConverter.isConversionCanceled()) {
                 // Advance line count.
@@ -205,14 +210,22 @@ public class MascotGenericConverter {
                                     msLevel, null,
                                     mzRangeStop,
                                     null,
-                                    spectraCounter, precursors,
+                                    ++totalSpectraCounter, precursors,
                                     spectrumDescriptionComments,
                                     null, null,
                                     null, null);
 
                             // Store (spectrumfileid, spectrumid) mapping.
-                            mapping.put(Integer.toString(spectraCounter), (long) spectraCounter);
-                            spectraCounter++;
+                            Long xTmp = mapping.put(PRIDEConverter.getCurrentFileName() + "_" +
+                                    Integer.toString(++currentSpectraCounter), (long) totalSpectraCounter);
+
+                            if (xTmp != null) {
+                                // we already stored a result for this ID!!!
+                                JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                        "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                                Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
+                                        + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
+                            }
 
                             // Store the transformed spectrum.
                             aTransformedSpectra.add(fragmentation);
@@ -289,7 +302,7 @@ public class MascotGenericConverter {
             br.close();
         }
 
-        PRIDEConverter.setTotalNumberOfSpectra(spectraCounter - 1);
+        PRIDEConverter.setTotalNumberOfSpectra(totalSpectraCounter);
 
         return mapping;
     }

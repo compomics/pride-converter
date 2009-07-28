@@ -55,12 +55,12 @@ public class OmssaConverter {
         HashMap<String, Long> mapping = new HashMap<String, Long>();
 
         PRIDEConverter.setEmptySpectraCounter(0);
-        int idCounter = 1;
+        int totalSpectraCounter = 0;
 
         double[][] arrays;
         Collection<Precursor> precursors;
         Collection<CvParam> ionSelection;
-        String chargeString, fileName;
+        String chargeString, spectrumFileName;
 
         boolean matchFound = false;
         StringTokenizer tok;
@@ -360,23 +360,23 @@ public class OmssaConverter {
 
                 tempSpectrum = iterator.next();
 
-                // @TODO: OMSSA question: possible with more than one file name per spectrum??
-                //
-                // spectrum name is not mandatory, use spectrum number if no name is given
-                if (tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.size() == 0) {
-                    fileName = "" + tempSpectrum.MSSpectrum_number;
-                } else {
-                    fileName = tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.get(0);
+                spectrumFileName = "";
+
+                // TODO: check: possible with more than one spectrum file name..?
+                // note that spectrum file name is not mandatory
+                if (tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.size() > 0) {
+                    spectrumFileName = tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.get(0);
                 }
 
                 matchFound = false;
 
-                PRIDEConverter.setSpectrumKey(fileName + "_" + tempSpectrum.MSSpectrum_number);
+                PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + tempSpectrum.MSSpectrum_number);
 
                 if (properties.getSelectedSpectraKeys().size() > 0) {
                     for (int i = 0; i < properties.getSelectedSpectraKeys().size() && !matchFound; i++) {
-                        matchFound = ((String) ((Object[]) properties.getSelectedSpectraKeys().get(i))[0]).equalsIgnoreCase(
-                                fileName);
+                        matchFound = ((String) ((Object[]) properties.getSelectedSpectraKeys().get(i))[0] + "_"
+                                + (String) ((Object[]) properties.getSelectedSpectraKeys().get(i))[1]).equalsIgnoreCase(
+                                spectrumFileName + "_" + tempSpectrum.MSSpectrum_number);
                     }
                 } else {
                     if (properties.getSpectraSelectionCriteria() != null) {
@@ -395,7 +395,7 @@ public class OmssaConverter {
                             tempToken = tempToken.trim();
 
                             if (properties.isSelectionCriteriaFileName()) {
-                                if (fileName.lastIndexOf(tempToken) != -1) {
+                                if (spectrumFileName.lastIndexOf(tempToken) != -1) {
                                     matchFound = true;
                                 }
                             } else {
@@ -759,7 +759,7 @@ public class OmssaConverter {
                             }
 
                             PRIDEConverter.getIds().add(new IdentificationGeneral(
-                                    fileName, // spectrum file name
+                                    PRIDEConverter.getSpectrumKey(), // spectrum key
                                     accession, // spectrum accession
                                     "OMSSA", // search engine
                                     database, // database
@@ -799,15 +799,20 @@ public class OmssaConverter {
                                 null,
                                 mzRangeStop,
                                 null,
-                                idCounter, precursors, spectrumDescriptionComments,
+                                ++totalSpectraCounter, precursors, spectrumDescriptionComments,
                                 null, null,
                                 null, null);
 
                         // Store (spectrumfileid, spectrumid) mapping.
-                        //mapping.put(new Long(idCounter), new Long(idCounter++));
+                        Long xTmp = mapping.put(PRIDEConverter.getSpectrumKey(), (long) totalSpectraCounter);
 
-                        mapping.put(fileName, (long) idCounter);
-                        idCounter++;
+                        if (xTmp != null) {
+                            // we already stored a result for this ID!!!
+                            JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                    "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                            Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + tempSpectrum.MSSpectrum_number
+                                    + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
+                        }
 
                         // Store the transformed spectrum.
                         aTransformedSpectra.add(fragmentation);
@@ -816,9 +821,7 @@ public class OmssaConverter {
             }
         }
 
-        PRIDEConverter.setTotalNumberOfSpectra(idCounter - 1);
+        PRIDEConverter.setTotalNumberOfSpectra(totalSpectraCounter);
         return mapping;
     }
-
-
 }

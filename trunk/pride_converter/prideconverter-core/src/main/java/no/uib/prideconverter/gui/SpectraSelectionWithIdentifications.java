@@ -103,10 +103,12 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                     false, false, false, false, true
                 };
 
+                @Override
                 public Class getColumnClass(int columnIndex) {
                     return types[columnIndex];
                 }
 
+                @Override
                 public boolean isCellEditable(int rowIndex, int columnIndex) {
                     return canEdit[columnIndex];
                 }
@@ -2098,6 +2100,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                 for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
                     if (((Boolean) spectraJXTable.getValueAt(i, 4)).booleanValue()) {
+
+                        // TODO: check that spectrum key is unique!
                         PRIDEConverter.getProperties().getSelectedSpectraKeys().add(
                                 new Object[]{
                                     spectraJXTable.getValueAt(i, 1),
