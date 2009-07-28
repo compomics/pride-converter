@@ -2,6 +2,10 @@
 #labels Featured
 
 ----
+*Changes in PRIDE Converter v2.01 - (July. 28. 2009):*
+ * BUG FIX: identical "title" annotations in mascot .dat files could mess up the spectrum mapping.
+
+----
 *Changes in PRIDE Converter v2.0 - (July. 22. 2009):*
  * NEW FEATURE: Fragment Ion Annotations are now included for: ms_lims, Mascot Data Files and OMSSA.
  * NEW FEATURE: PRIDE XML files are now gzipped after conversion to reduce the upload time to the PRIDE data repository.
@@ -10,6 +14,8 @@
  * BUG FIX: Fixed two minor GUI bugs in the DataBase Details frame.
  * LIBRARY UPDATE: Updated utilities to version 2.9.2.
  * LIBRARY UPDATE: Updated pride-core to version 2.7.0.
+
+Download Count: 18
 
 ----
 
