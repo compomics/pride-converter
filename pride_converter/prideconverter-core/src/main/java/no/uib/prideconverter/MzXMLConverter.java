@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.io.IOException;
 import java.io.File;
 
+import javax.swing.JOptionPane;
+import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum;
 import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
 import uk.ac.ebi.pride.model.interfaces.mzdata.Precursor;
@@ -43,7 +45,8 @@ public class MzXMLConverter {
 
         int precursorCharge;
         float precursorMz;
-        int spectraCounter = 1;
+        int totalSpectraCounter = 0; // the total spectra count
+        int currentSpectraCounter = 0; // the spectra count for each file
         String fileName;
 
         boolean matchFound = false;
@@ -62,6 +65,9 @@ public class MzXMLConverter {
         PRIDEConverter.getProgressDialog().setValue(0);
 
         for (int j = 0; j < properties.getSelectedSourceFiles().size() && !PRIDEConverter.isConversionCanceled(); j++) {
+
+            // reset the local spectra counter
+            currentSpectraCounter = 0;
 
             fileName = new File(properties.getSelectedSourceFiles().get(j)).getName();
 
@@ -151,14 +157,13 @@ public class MzXMLConverter {
                                     new BinaryArrayImpl(arraysFloat[properties.MZ_ARRAY],
                                     BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
                                     1, null,
-                                    (double) arraysFloat[properties.MZ_ARRAY][arraysFloat[properties.MZ_ARRAY].length -
-                                            1], //null,
+                                    (double) arraysFloat[properties.MZ_ARRAY][arraysFloat[properties.MZ_ARRAY].length -1],
                                     null,
-                                    spectraCounter, null,
+                                    ++totalSpectraCounter, null,
                                     spectrumDescriptionComments,
                                     null, null,
                                     null, null);
-                        } else {//msLevel == 2){
+                        } else { //msLevel == 2){
                             spectrum = new SpectrumImpl(
                                     new BinaryArrayImpl(arraysFloat[properties.INTENSITIES_ARRAY],
                                     BinaryArrayImpl.LITTLE_ENDIAN_LABEL),
@@ -168,7 +173,7 @@ public class MzXMLConverter {
                                     2, null,
                                     mzRangeStop,
                                     null,
-                                    spectraCounter, precursors,
+                                    ++totalSpectraCounter, precursors,
                                     spectrumDescriptionComments,
                                     null, null,
                                     null, null);
@@ -176,8 +181,16 @@ public class MzXMLConverter {
 
                         // Create new mzData spectrum for the fragmentation spectrum.
                         // Store (spectrumfileid, spectrumid) mapping.
-                        mapping.put(Integer.toString(spectraCounter), (long) spectraCounter);
-                        spectraCounter++;
+                        Long xTmp = mapping.put(PRIDEConverter.getCurrentFileName() + "_"
+                                + Integer.toString(++currentSpectraCounter), (long) totalSpectraCounter);
+
+                        if (xTmp != null) {
+                            // we already stored a result for this ID!!!
+                            JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                    "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                            Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
+                                    + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
+                        }
 
                         // Store the transformed spectrum.
                         aTransformedSpectra.add(spectrum);
@@ -186,10 +199,8 @@ public class MzXMLConverter {
             }
         }
 
-        PRIDEConverter.setTotalNumberOfSpectra(spectraCounter - 1);
+        PRIDEConverter.setTotalNumberOfSpectra(totalSpectraCounter);
 
         return mapping;
     }
-
-
 }

@@ -60,7 +60,9 @@ public class PKLandPKXConverter {
         Vector<Double> masses, intensities, fragmentIonChargeStates;
 
         Spectrum fragmentation;
-        int spectraCounter = 1;
+        int totalSpectraCounter = 0; // the total spectra count
+        int currentSpectraCounter = 0; // the spectra count for each file
+
         boolean matchFound;
         Integer msLevel = 2;
 
@@ -69,6 +71,9 @@ public class PKLandPKXConverter {
         progressDialog.setMax(properties.getSelectedSourceFiles().size());
 
         for (int j = 0; j < properties.getSelectedSourceFiles().size() && !PRIDEConverter.isConversionCanceled(); j++) {
+
+            // reset the local spectra counter
+            currentSpectraCounter = 0;
 
             fileName = new File(properties.getSelectedSourceFiles().get(j)).getName();
             PRIDEConverter.setCurrentFileName(fileName);
@@ -264,15 +269,23 @@ public class PKLandPKXConverter {
                                         supDataArrays,
                                         mzRangeStop,
                                         null,
-                                        spectraCounter, precursors,
+                                        ++totalSpectraCounter, precursors,
                                         spectrumDescriptionComments,
                                         null, null,
                                         null,
                                         supDescArrays);
 
-                                mapping.put((new File(properties.getSelectedSourceFiles().get(j)).getName() +
-                                        "_" + precursorMz), (long) spectraCounter);
-                                spectraCounter++;
+                                // store the spectrum file, spectrum counter mapping
+                                Long xTmp = mapping.put(PRIDEConverter.getCurrentFileName() + "_"
+                                        + Integer.toString(++currentSpectraCounter), (long) totalSpectraCounter);
+
+                                if (xTmp != null) {
+                                    // we already stored a result for this ID!!!
+                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                            "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                                    Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
+                                            + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
+                                }
 
                                 // Store the transformed spectrum.
                                 aTransformedSpectra.add(fragmentation);
@@ -428,16 +441,22 @@ public class PKLandPKXConverter {
                                 supDataArrays,
                                 mzRangeStop,
                                 null,
-                                spectraCounter, precursors,
+                                ++totalSpectraCounter, precursors,
                                 spectrumDescriptionComments,
                                 null, null,
                                 null, supDescArrays);
 
-                        mapping.put((new File(properties.getSelectedSourceFiles().
-                                get(j)).getName() +
-                                "_" + precursorMz),
-                                (long) spectraCounter);
-                        spectraCounter++;
+                        // store the spectrum file, spectrum counter mapping
+                        Long xTmp = mapping.put(PRIDEConverter.getCurrentFileName() + "_"
+                                + Integer.toString(++currentSpectraCounter), (long) totalSpectraCounter);
+
+                        if (xTmp != null) {
+                            // we already stored a result for this ID!!!
+                            JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                    "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                            Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
+                                    + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
+                        }
 
                         // Store the transformed spectrum.
                         aTransformedSpectra.add(fragmentation);
@@ -472,7 +491,7 @@ public class PKLandPKXConverter {
                 }
             }
 
-            PRIDEConverter.setTotalNumberOfSpectra(spectraCounter - 1);
+            PRIDEConverter.setTotalNumberOfSpectra(totalSpectraCounter);
         }
 
         return mapping;

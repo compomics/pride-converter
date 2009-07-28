@@ -1472,7 +1472,15 @@ public class PRIDEConverter extends AbstractPrideConverter {
                                 }
 
                                 // We are going to use the file name and the scanNumber to build the HashMap
-                                aMappings.put(usedFileName + "_" + scanNumber, (long) idCount);
+                                Long xTmp = aMappings.put(usedFileName + "_" + scanNumber, (long) idCount);
+
+                                if (xTmp != null) {
+                                    // we already stored a result for this ID!!!
+                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                            "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                                    Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + scanNumber
+                                            + "' and spectrum file '" + usedFileName + "'." );
+                                }
 
                                 // If you'll look at the above method, you'll see that it consumes two ID's -
                                 // one for the spectrum and one for the precursor. So advance it by 2 here.
@@ -1530,7 +1538,15 @@ public class PRIDEConverter extends AbstractPrideConverter {
                 aSpectra.add(mzdataSpectrum);
 
                 // Note that the actual ID for the spectrum is the ID we passed in +1 - see the transforming method for details.
-                aMappings.put(usedFileName + "_" + scanNumber, (long) idCount);
+                Long xTmp = aMappings.put(usedFileName + "_" + scanNumber, (long) idCount);
+
+                if (xTmp != null) {
+                    // we already stored a result for this ID!!!
+                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                            "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                    Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + scanNumber
+                            + "' and spectrum file '" + usedFileName + "'." );
+                }
 
                 // If you'll look at the above method, you'll see that it consumes two ID's -
                 // one for the spectrum and one for the precursor. So advance it by 2 here.
@@ -2516,7 +2532,17 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
                     aTransformedSpectra.add(updatedSpectrum);
                     String spectrum_key = new File(filePath).getName() + "_" + spectrum.getSpectrumId();
-                    mapping.put(spectrum_key, (long) totalNumberOfSpectra);
+                    
+                    // Store (spectrumKey, spectrumid) mapping.
+                    Long xTmp = mapping.put(spectrum_key, (long) totalNumberOfSpectra);
+
+                    if (xTmp != null) {
+                        // we already stored a result for this ID!!!
+                        JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + spectrum.getSpectrumId()
+                                + "' and spectrum file '" + new File(filePath).getName() + "'." );
+                    }
                 }
             } catch (FileNotFoundException e) {
 

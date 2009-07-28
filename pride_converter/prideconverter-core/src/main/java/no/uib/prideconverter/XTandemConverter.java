@@ -65,7 +65,9 @@ public class XTandemConverter {
         Document dom;
         Element docEle;
 
-        int totalSpectraCounter = 0; // ToDo: check usage
+        int totalSpectraCounter = 0; // the total spectra count
+        int currentSpectraCounter = 0; // the spectra count for each file
+
         String fileName;
         boolean matchFound = false;
         NodeList nodes, parameterNodes;
@@ -108,8 +110,6 @@ public class XTandemConverter {
         Vector<Integer> charges; // ToDo: never used, compare with precursorCharge and charge
         ArrayList<String> identifiedSpectraIds = new ArrayList<String>();
         String spectrumTag = "";
-
-        int spectraCounter = 0;
 
         if (PRIDEConverter.getProperties().selectAllIdentifiedSpectra()) {
 
@@ -245,7 +245,7 @@ public class XTandemConverter {
                     charges = new Vector<Integer>();
                     boolean inSpectrum = false;
                     msLevel = 2; // defaults to MS/MS
-                    spectraCounter = 0;
+                    currentSpectraCounter = 0;
 
                     while ((line = br.readLine()) != null && !PRIDEConverter.isConversionCanceled()) {
                         // Advance line count.
@@ -267,12 +267,14 @@ public class XTandemConverter {
                         // BEGIN IONS marks the start of the real file.
                         if (line.equals("BEGIN IONS")) {
                             inSpectrum = true;
-                            spectraCounter++;
+                            currentSpectraCounter++;
                         } // END IONS marks the end.
                         else if (line.equals("END IONS")) {
                             inSpectrum = false;
 
                             matchFound = false;
+
+                            PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + currentSpectraCounter);
 
                             if (PRIDEConverter.getProperties().getSelectedSpectraKeys().size() > 0) {
                                 for (int k = 0; k < PRIDEConverter.getProperties().getSelectedSpectraKeys().size() &&
@@ -281,21 +283,18 @@ public class XTandemConverter {
                                     Object[] temp = (Object[]) PRIDEConverter.getProperties().getSelectedSpectraKeys().get(k);
 
                                     if (((String) temp[0]).equalsIgnoreCase(PRIDEConverter.getCurrentFileName())) {
-                                        if (((String) temp[1]).equalsIgnoreCase("" + spectraCounter)) {
+                                        if (((String) temp[1]).equalsIgnoreCase("" + currentSpectraCounter)) {
                                             matchFound = true;
-                                            PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + spectraCounter);
                                         }
                                     }
                                 }
                             } else {
                                 if (PRIDEConverter.getProperties().selectAllIdentifiedSpectra()) {
-                                    if (identifiedSpectraIds.contains((PRIDEConverter.getCurrentFileName() + "_" + spectraCounter))) {
-                                        matchFound = true;
-                                        PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + spectraCounter);
+                                    if (identifiedSpectraIds.contains((PRIDEConverter.getCurrentFileName() + "_" + currentSpectraCounter))) {
+                                        matchFound = true;   
                                     }
                                 } else {
                                     matchFound = true;
-                                    PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + spectraCounter);
                                 }
                             }
 
@@ -348,8 +347,6 @@ public class XTandemConverter {
 
                                 if (arrays[PRIDEConverter.getProperties().MZ_ARRAY].length > 0) {
 
-                                    totalSpectraCounter++;
-
                                     spectrumDescriptionComments = PRIDEConverter.addUserSpectrumComments(spectrumDescriptionComments,
                                             PRIDEConverter.getProperties().getSpectrumCvParams().get(PRIDEConverter.getSpectrumKey()),
                                             PRIDEConverter.getProperties().getSpectrumUserParams().get(PRIDEConverter.getSpectrumKey()));
@@ -367,13 +364,21 @@ public class XTandemConverter {
                                             msLevel, null,
                                             mzRangeStop,
                                             null,
-                                            totalSpectraCounter, precursors,
+                                            ++totalSpectraCounter, precursors,
                                             spectrumDescriptionComments,
                                             null, null,
                                             null, null);
 
                                     // Store (spectrumKey, spectrumid) mapping.
-                                    mapping.put(PRIDEConverter.getSpectrumKey(), (long) totalSpectraCounter);
+                                    Long xTmp = mapping.put(PRIDEConverter.getSpectrumKey(), (long) totalSpectraCounter);
+
+                                    if (xTmp != null) {
+                                        // we already stored a result for this ID!!!
+                                        JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                                "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                                        Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
+                                                + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
+                                    }
 
                                     // Store the transformed spectrum.
                                     aTransformedSpectra.add(fragmentation);
@@ -453,7 +458,7 @@ public class XTandemConverter {
                     intensities = new Vector<Double>();
                     StringTokenizer tok;
                     msLevel = 2;
-                    spectraCounter = 0;
+                    currentSpectraCounter = 0;
                     double precursorMh = 0;
 
                     boolean firstSpectraFound = false;
@@ -488,7 +493,9 @@ public class XTandemConverter {
 
                             // empty spectra are ignored by X!Tandem
                             if (masses.size() > 0) {
-                                spectraCounter++;
+                                currentSpectraCounter++;
+
+                                PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + currentSpectraCounter);
 
                                 // check if the spectra is selected or not
                                 matchFound = false;
@@ -500,21 +507,18 @@ public class XTandemConverter {
                                         Object[] temp = (Object[]) PRIDEConverter.getProperties().getSelectedSpectraKeys().get(k);
 
                                         if (((String) temp[0]).equalsIgnoreCase(PRIDEConverter.getCurrentFileName())) {
-                                            if (((String) temp[1]).equalsIgnoreCase("" + spectraCounter)) {
+                                            if (((String) temp[1]).equalsIgnoreCase("" + currentSpectraCounter)) {
                                                 matchFound = true;
-                                                PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + spectraCounter);
                                             }
                                         }
                                     }
                                 } else {
                                     if (PRIDEConverter.getProperties().selectAllIdentifiedSpectra()) {
-                                        if (identifiedSpectraIds.contains((PRIDEConverter.getCurrentFileName() + "_" + spectraCounter))) {
+                                        if (identifiedSpectraIds.contains((PRIDEConverter.getCurrentFileName() + "_" + currentSpectraCounter))) {
                                             matchFound = true;
-                                            PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + spectraCounter);
                                         }
                                     } else {
                                         matchFound = true;
-                                        PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + spectraCounter);
                                     }
                                 }
 
@@ -559,8 +563,6 @@ public class XTandemConverter {
 
                                     if (arrays[PRIDEConverter.getProperties().MZ_ARRAY].length > 0) {
 
-                                        totalSpectraCounter++;
-
                                         mzRangeStart = arrays[PRIDEConverter.getProperties().MZ_ARRAY][0];
                                         mzRangeStop = arrays[PRIDEConverter.getProperties().MZ_ARRAY][arrays[PRIDEConverter.getProperties().MZ_ARRAY].length - 1];
 
@@ -579,12 +581,21 @@ public class XTandemConverter {
                                                 null,
                                                 mzRangeStop,
                                                 null,
-                                                totalSpectraCounter, precursors,
+                                                ++totalSpectraCounter, precursors,
                                                 spectrumDescriptionComments,
                                                 null, null,
                                                 null, null);
 
-                                        mapping.put(PRIDEConverter.getSpectrumKey(), (long) totalSpectraCounter);
+                                        // Store (spectrumKey, spectrumid) mapping.
+                                        Long xTmp = mapping.put(PRIDEConverter.getSpectrumKey(), (long) totalSpectraCounter);
+
+                                        if (xTmp != null) {
+                                            // we already stored a result for this ID!!!
+                                            JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                                    "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                                            Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
+                                                    + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
+                                        }
 
                                         // Store the transformed spectrum.
                                         aTransformedSpectra.add(fragmentation);
@@ -615,7 +626,9 @@ public class XTandemConverter {
 
                     // empty spectra are ignored by X!Tandem
                     if (masses.size() > 0) {
-                        spectraCounter++;
+                        currentSpectraCounter++;
+
+                        PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + currentSpectraCounter);
 
                         // add the last spectra
                         // check if the spectra is selected or not
@@ -628,21 +641,18 @@ public class XTandemConverter {
                                 Object[] temp = (Object[]) PRIDEConverter.getProperties().getSelectedSpectraKeys().get(k);
 
                                 if (((String) temp[0]).equalsIgnoreCase(PRIDEConverter.getCurrentFileName())) {
-                                    if (((String) temp[1]).equalsIgnoreCase("" + spectraCounter)) {
+                                    if (((String) temp[1]).equalsIgnoreCase("" + currentSpectraCounter)) {
                                         matchFound = true;
-                                        PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + spectraCounter);
                                     }
                                 }
                             }
                         } else {
                             if (PRIDEConverter.getProperties().selectAllIdentifiedSpectra()) {
-                                if (identifiedSpectraIds.contains((PRIDEConverter.getCurrentFileName() + "_" + spectraCounter))) {
+                                if (identifiedSpectraIds.contains((PRIDEConverter.getCurrentFileName() + "_" + currentSpectraCounter))) {
                                     matchFound = true;
-                                    PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + spectraCounter);
                                 }
                             } else {
                                 matchFound = true;
-                                PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + spectraCounter);
                             }
                         }
 
@@ -683,8 +693,6 @@ public class XTandemConverter {
 
                             if (arrays[PRIDEConverter.getProperties().MZ_ARRAY].length > 0) {
 
-                                totalSpectraCounter++;
-
                                 mzRangeStart = arrays[PRIDEConverter.getProperties().MZ_ARRAY][0];
                                 mzRangeStop = arrays[PRIDEConverter.getProperties().MZ_ARRAY][arrays[PRIDEConverter.getProperties().MZ_ARRAY].length - 1];
 
@@ -703,12 +711,21 @@ public class XTandemConverter {
                                         null,
                                         mzRangeStop,
                                         null,
-                                        totalSpectraCounter, precursors,
+                                        ++totalSpectraCounter, precursors,
                                         spectrumDescriptionComments,
                                         null, null,
                                         null, null);
 
-                                mapping.put(PRIDEConverter.getSpectrumKey(), (long) totalSpectraCounter);
+                                // Store (spectrumKey, spectrumid) mapping.
+                                Long xTmp = mapping.put(PRIDEConverter.getSpectrumKey(), (long) totalSpectraCounter);
+
+                                if (xTmp != null) {
+                                    // we already stored a result for this ID!!!
+                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                            "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                                    Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
+                                            + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
+                                }
 
                                 // Store the transformed spectrum.
                                 aTransformedSpectra.add(fragmentation);
@@ -724,7 +741,7 @@ public class XTandemConverter {
                     intensities = new Vector<Double>();
                     StringTokenizer tok;
                     msLevel = 2;
-                    spectraCounter = 0;
+                    currentSpectraCounter = 0;
 
                     boolean firstSpectraFound = false;
 
@@ -762,8 +779,10 @@ public class XTandemConverter {
 
                             // empty spectra are ignored by X!Tandem
                             if (masses.size() > 0) {
-                                spectraCounter++;
+                                currentSpectraCounter++;
                             }
+
+                            PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + currentSpectraCounter);
 
                             // check if the spectra is selected or not
                             matchFound = false;
@@ -775,21 +794,18 @@ public class XTandemConverter {
                                     Object[] temp = (Object[]) PRIDEConverter.getProperties().getSelectedSpectraKeys().get(k);
 
                                     if (((String) temp[0]).equalsIgnoreCase(PRIDEConverter.getCurrentFileName())) {
-                                        if (((String) temp[1]).equalsIgnoreCase("" + spectraCounter)) {
+                                        if (((String) temp[1]).equalsIgnoreCase("" + currentSpectraCounter)) {
                                             matchFound = true;
-                                            PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + spectraCounter);
                                         }
                                     }
                                 }
                             } else {
                                 if (PRIDEConverter.getProperties().selectAllIdentifiedSpectra()) {
-                                    if (identifiedSpectraIds.contains((PRIDEConverter.getCurrentFileName() + "_" + spectraCounter))) {
+                                    if (identifiedSpectraIds.contains((PRIDEConverter.getCurrentFileName() + "_" + currentSpectraCounter))) {
                                         matchFound = true;
-                                        PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + spectraCounter);
                                     }
                                 } else {
                                     matchFound = true;
-                                    PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + spectraCounter);
                                 }
                             }
 
@@ -832,8 +848,6 @@ public class XTandemConverter {
 
                                 if (arrays[PRIDEConverter.getProperties().MZ_ARRAY].length > 0) {
 
-                                    totalSpectraCounter++;
-
                                     mzRangeStart = arrays[PRIDEConverter.getProperties().MZ_ARRAY][0];
                                     mzRangeStop = arrays[PRIDEConverter.getProperties().MZ_ARRAY][arrays[PRIDEConverter.getProperties().MZ_ARRAY].length - 1];
 
@@ -852,12 +866,21 @@ public class XTandemConverter {
                                             null,
                                             mzRangeStop,
                                             null,
-                                            totalSpectraCounter, precursors,
+                                            ++totalSpectraCounter, precursors,
                                             spectrumDescriptionComments,
                                             null, null,
                                             null, null);
 
-                                    mapping.put(PRIDEConverter.getSpectrumKey(), (long) totalSpectraCounter);
+                                    // Store (spectrumKey, spectrumid) mapping.
+                                    Long xTmp = mapping.put(PRIDEConverter.getSpectrumKey(), (long) totalSpectraCounter);
+
+                                    if (xTmp != null) {
+                                        // we already stored a result for this ID!!!
+                                        JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                                "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                                        Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
+                                                + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
+                                    }
 
                                     // Store the transformed spectrum.
                                     aTransformedSpectra.add(fragmentation);
@@ -884,8 +907,10 @@ public class XTandemConverter {
 
                     // empty spectra are ignored by X!Tandem (and PRIDE)
                     if (masses.size() > 0) {
-                        spectraCounter++;
+                        currentSpectraCounter++;
                     }
+
+                    PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + currentSpectraCounter);
 
                     // add the last spectra
                     // check if the spectra is selected or not
@@ -898,21 +923,18 @@ public class XTandemConverter {
                             Object[] temp = (Object[]) PRIDEConverter.getProperties().getSelectedSpectraKeys().get(k);
 
                             if (((String) temp[0]).equalsIgnoreCase(PRIDEConverter.getCurrentFileName())) {
-                                if (((String) temp[1]).equalsIgnoreCase("" + spectraCounter)) {
+                                if (((String) temp[1]).equalsIgnoreCase("" + currentSpectraCounter)) {
                                     matchFound = true;
-                                    PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + spectraCounter);
                                 }
                             }
                         }
                     } else {
                         if (PRIDEConverter.getProperties().selectAllIdentifiedSpectra()) {
-                            if (identifiedSpectraIds.contains((PRIDEConverter.getCurrentFileName() + "_" + spectraCounter))) {
+                            if (identifiedSpectraIds.contains((PRIDEConverter.getCurrentFileName() + "_" + currentSpectraCounter))) {
                                 matchFound = true;
-                                PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + spectraCounter);
                             }
                         } else {
                             matchFound = true;
-                            PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + spectraCounter);
                         }
                     }
 
@@ -953,8 +975,6 @@ public class XTandemConverter {
 
                         if (arrays[PRIDEConverter.getProperties().MZ_ARRAY].length > 0) {
 
-                            totalSpectraCounter++;
-
                             mzRangeStart = arrays[PRIDEConverter.getProperties().MZ_ARRAY][0];
                             mzRangeStop = arrays[PRIDEConverter.getProperties().MZ_ARRAY][arrays[PRIDEConverter.getProperties().MZ_ARRAY].length - 1];
 
@@ -973,12 +993,21 @@ public class XTandemConverter {
                                     null,
                                     mzRangeStop,
                                     null,
-                                    totalSpectraCounter, precursors,
+                                    ++totalSpectraCounter, precursors,
                                     spectrumDescriptionComments,
                                     null, null,
                                     null, null);
 
-                            mapping.put(PRIDEConverter.getSpectrumKey(), (long) totalSpectraCounter);
+                            // Store (spectrumKey, spectrumid) mapping.
+                            Long xTmp = mapping.put(PRIDEConverter.getSpectrumKey(), (long) totalSpectraCounter);
+
+                            if (xTmp != null) {
+                                // we already stored a result for this ID!!!
+                                JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                        "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                                Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
+                                        + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
+                            }
 
                             // Store the transformed spectrum.
                             aTransformedSpectra.add(fragmentation);
@@ -1104,7 +1133,15 @@ public class XTandemConverter {
 
                                 // Create new mzData spectrum for the fragmentation spectrum.
                                 // Store (spectrumfileid, spectrumid) mapping.
-                                mapping.put(PRIDEConverter.getSpectrumKey(), (long) totalSpectraCounter);
+                                Long xTmp = mapping.put(PRIDEConverter.getSpectrumKey(), (long) totalSpectraCounter);
+
+                                if (xTmp != null) {
+                                    // we already stored a result for this ID!!!
+                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                            "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                                    Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
+                                            + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
+                                }
 
                                 // Store the transformed spectrum.
                                 aTransformedSpectra.add(spectrum);
