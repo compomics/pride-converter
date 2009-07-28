@@ -2,7 +2,7 @@
 #labels Featured
 
 ----
-*Changes in PRIDE Converter v2.01 - (July. 28. 2009):*
+*Changes in PRIDE Converter v2.0.1 - (July. 28. 2009):*
  * BUG FIX: identical "title" annotations in mascot .dat files could mess up the spectrum mapping.
 
 ----
