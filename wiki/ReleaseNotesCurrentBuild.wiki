@@ -2,6 +2,7 @@
 
 ----
 
- * no changes to version 2.0.1 yet.
+ * FEATURE IMPROVEMENT: The OLS Dialog has been redesigned.
+ * LIBRARY UPDATE: ols-client-1.14 has been replaced by ols-dialog-1.0.
 
  
