@@ -54,8 +54,7 @@ public class MascotDatConverter {
 
         HashMap<String, Long> mapping = new HashMap<String, Long>();
 
-        PRIDEConverter.setEmptySpectraCounter(0);
-        int idCounter = 1, progressCounter = 0;
+        int totalSpectraCounter = 0, progressCounter = 0;
 
         QueryToPeptideMapInf queryToPeptideMap;
         QueryEnumerator queries;
@@ -339,7 +338,7 @@ public class MascotDatConverter {
                                         null,
                                         mzStopRange,
                                         null,
-                                        idCounter, precursors,
+                                        ++totalSpectraCounter, precursors,
                                         spectrumDescriptionComments,
                                         null, null,
                                         null, null);
@@ -348,17 +347,15 @@ public class MascotDatConverter {
                                 int qnum = currentQuery.getQueryNumber();
                                 String uFileName = tempFile.getAbsolutePath(); // TODO: Isn't filename enough? Is absolute file name needed?
 
-                                Long xTmp = mapping.put(uFileName + "_" + qnum, (long) idCounter);
+                                Long xTmp = mapping.put(uFileName + "_" + qnum, (long) totalSpectraCounter);
 
                                 if (xTmp != null) {
                                     // we already stored a result for this ID!!!
                                     JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
                                             "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
-                                    Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + idCounter
+                                    Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + totalSpectraCounter
                                             + "' and spectrum file '" + currentQuery.getFilename() + "'." );
                                 }
-
-                                idCounter++;
 
                                 // Store the transformed spectrum.
                                 aTransformedSpectra.add(fragmentation);
@@ -616,18 +613,15 @@ public class MascotDatConverter {
                     } catch (NullPointerException e) {
 //                        Util.writeToErrorLog("Query without peak list: Exception caught..." +
 //                                e.toString());
-                        PRIDEConverter.setEmptySpectraCounter( PRIDEConverter.getEmptySpectraCounter() + 1);
-                        e.printStackTrace();
+                        // simply ignore
+//                        PRIDEConverter.setEmptySpectraCounter( PRIDEConverter.getEmptySpectraCounter() + 1);
+//                        e.printStackTrace();
                     }
                 }
             }
-
         }
 
-        PRIDEConverter.setTotalNumberOfSpectra(idCounter - 1);
+        PRIDEConverter.setTotalNumberOfSpectra(totalSpectraCounter);
         return mapping;
     }
-
-
-
 }

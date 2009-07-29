@@ -46,8 +46,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
     private static ArrayList<IdentificationGeneral> ids;
     private static Collection<uk.ac.ebi.pride.model.interfaces.core.Identification> identifications;
     private static int totalNumberOfSpectra = 0;
-    private static int emptySpectraCounter = 0;
-    private static int peptideIdCount = 0;
+    private static int totalPeptideCount = 0;
     private static String currentFileName = "";
     private static String spectrumKey = "";
     private static OutputDetails outputFrame;
@@ -125,18 +124,11 @@ public class PRIDEConverter extends AbstractPrideConverter {
         PRIDEConverter.totalNumberOfSpectra = totalNumberOfSpectra;
     }
 
-    public static int getEmptySpectraCounter() {
-        return emptySpectraCounter;
+    public static int getTotalPeptideCount() {
+        return totalPeptideCount;
     }
-    public static void setEmptySpectraCounter(int emptySpectraCounter) {
-        PRIDEConverter.emptySpectraCounter = emptySpectraCounter;
-    }
-
-    public static int getPeptideIdCount() {
-        return peptideIdCount;
-    }
-    public static void setPeptideIdCount(int peptideIdCount) {
-        PRIDEConverter.peptideIdCount = peptideIdCount;
+    public static void setTotalPeptideCount(int totalPeptideCount) {
+        PRIDEConverter.totalPeptideCount = totalPeptideCount;
     }
 
     public static Collection<uk.ac.ebi.pride.model.interfaces.core.Identification> getIdentifications() {
@@ -591,18 +583,18 @@ public class PRIDEConverter extends AbstractPrideConverter {
                         }
                     }
 
+                    totalPeptideCount = omitDuplicates.size();
+
                     if (debug) {
                         System.out.println("\nTransformed " + (ids.size() -
-                                unidentifedSpectraCounter) +
-                                " original identifications into " +
-                                omitDuplicates.size() +
-                                " unique identifications.\n");
+                                unidentifedSpectraCounter) + " original identifications into " +
+                                totalPeptideCount + " unique identifications.\n");
                     }
 
                     try {
                         progressDialog.setTitle("Grouping Identifications. Please Wait...");
                         progressDialog.setIntermidiate(false);
-                        progressDialog.setMax(omitDuplicates.size());
+                        progressDialog.setMax(totalPeptideCount);
                     } catch (NullPointerException e) {
                         Util.writeToErrorLog("Progress bar: NullPointerException!!!\n" + e.toString());
                     }
@@ -988,6 +980,10 @@ public class PRIDEConverter extends AbstractPrideConverter {
                         double sizeOfZippedFile = Util.roundDouble(((double) new File(completeFileName + ".gz").length() /
                                 properties.NUMBER_OF_BYTES_PER_MEGABYTE), 2);
 
+                        // makes sure that a file size if 0.0 MB is never shown, use 0.1 instead
+                        if(sizeOfZippedFile == 0.0){
+                            sizeOfZippedFile = 0.1;
+                        }
 
                         progressDialog.setVisible(false);
                         progressDialog.dispose();
@@ -1002,51 +998,24 @@ public class PRIDEConverter extends AbstractPrideConverter {
                                     JOptionPane.INFORMATION_MESSAGE);
                         }
 
-                        int spectraCount = -1;
-                        int peptideIdentificationsCount = -1;
-
-                        if (properties.getDataSource().equalsIgnoreCase("Mascot Generic File") ||
-                                properties.getDataSource().equalsIgnoreCase("Mascot Dat File") ||
-                                properties.getDataSource().equalsIgnoreCase("Sequest DTA File") ||
-                                properties.getDataSource().equalsIgnoreCase("X!Tandem") ||
-                                properties.getDataSource().equalsIgnoreCase("Micromass PKL File") ||
-                                properties.getDataSource().equalsIgnoreCase("Spectrum Mill") ||
-                                properties.getDataSource().equalsIgnoreCase("Sequest Result File") ||
-                                properties.getDataSource().equalsIgnoreCase("mzXML") ||
-                                properties.getDataSource().equalsIgnoreCase("OMSSA") ||
-                                properties.getDataSource().equalsIgnoreCase("VEMS") ||
-                                properties.getDataSource().equalsIgnoreCase("MS2") ||
-                                properties.getDataSource().equalsIgnoreCase("mzData")) {
-                            spectraCount = totalNumberOfSpectra - emptySpectraCounter;
-                            peptideIdentificationsCount = omitDuplicates.size();
-                        } else if (properties.getDataSource().equalsIgnoreCase("ms_lims")) {
-                            spectraCount = mzDataSpectra.size();
-                            peptideIdentificationsCount = omitDuplicates.size();
-                        } else if (properties.getDataSource().equalsIgnoreCase("TPP")) {
-                            spectraCount = totalNumberOfSpectra - emptySpectraCounter;
-                            peptideIdentificationsCount = peptideIdCount;
-                        } else if (properties.getDataSource().equalsIgnoreCase("DTASelect")) {
-                            spectraCount = mzData.getSpectrumCollection().size();
-                            peptideIdentificationsCount = peptideIdCount;
-                        }
+                        int spectraCount = mzData.getSpectrumCollection().size();
 
                         // present a dialog with information about the created file
-                        JOptionPane.showMessageDialog(outputFrame, "PRIDE XML File Created Successfully:\n" +
+                        JOptionPane.showMessageDialog(outputFrame,
+                                "PRIDE XML File Created Successfully:\n" +
                                 completeFileName + ".gz" +
                                 "\n\nThe File Includes:\n" +
                                 "Spectra: " + spectraCount + "\n" +
-                                "Peptide Identifications: " + peptideIdentificationsCount + "\n" +
+                                "Peptide Identifications: " + totalPeptideCount + "\n" +
                                 "Protein Identifications: " + identifications.size() + "\n\n" +
-                                "PRIDE XML File Size: " + sizeOfZippedFile +
-                                " MB",
+                                "PRIDE XML File Size: " + sizeOfZippedFile + " MB",
                                 "PRIDE XML File Created",
                                 JOptionPane.INFORMATION_MESSAGE);
 
                         // insert the information into the OutputDetails frame
                         outputFrame.insertConvertedFileDetails(spectraCount,
-                                peptideIdentificationsCount, identifications.size(),
-                                sizeOfZippedFile,
-                                completeFileName + ".gz");
+                                totalPeptideCount, identifications.size(),
+                                sizeOfZippedFile, completeFileName + ".gz");
 
 
                         // check the size of the unzipped file and compare it to the

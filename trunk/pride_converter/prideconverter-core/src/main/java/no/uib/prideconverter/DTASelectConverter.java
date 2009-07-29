@@ -56,7 +56,7 @@ public class DTASelectConverter {
         progressDialog.setString(null);
 
         HashMap<String, Long> filenameToMzDataIDMapping = new HashMap<String, Long>();
-        PRIDEConverter.setPeptideIdCount(0);
+        PRIDEConverter.setTotalPeptideCount(0);
 
         // get the list of spectrum files
         File[] spectrumFiles = new File(properties.getSpectrumFilesFolderName()).listFiles();
@@ -705,7 +705,7 @@ public class DTASelectConverter {
                                         totalIntensity, sequestRSp, sequestSp, ionProportion, redundancy, peptideSequence,
                                         preDigSiteAA, postDigSiteAA, peptideModifications, null, null);
 
-                                PRIDEConverter.setPeptideIdCount(PRIDEConverter.getPeptideIdCount()+1); // increase the peptide counter
+                                PRIDEConverter.setTotalPeptideCount(PRIDEConverter.getTotalPeptideCount() + 1); // increase the peptide counter
                             }
                         // If the first token is empty, the split method will not take it into account
                         } else if (peptidesTokens.length == 11) {
@@ -819,7 +819,7 @@ public class DTASelectConverter {
                                         totalIntensity, sequestRSp, sequestSp, ionProportion, redundancy, peptideSequence,
                                         preDigSiteAA, postDigSiteAA, peptideModifications, null, null);
 
-                                PRIDEConverter.setPeptideIdCount(PRIDEConverter.getPeptideIdCount()+1); // increase the peptide counter
+                                PRIDEConverter.setTotalPeptideCount(PRIDEConverter.getTotalPeptideCount() + 1); // increase the peptide counter
                             }
                         } else {
 

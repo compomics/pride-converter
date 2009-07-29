@@ -54,7 +54,6 @@ public class OmssaConverter {
 
         HashMap<String, Long> mapping = new HashMap<String, Long>();
 
-        PRIDEConverter.setEmptySpectraCounter(0);
         int totalSpectraCounter = 0;
 
         double[][] arrays;
