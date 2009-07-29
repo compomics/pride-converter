@@ -73,7 +73,7 @@ public class TPPConverter {
         XmlPullParserFactory factory = null;
         XmlPullParser xpp = null;
 
-        PRIDEConverter.setPeptideIdCount(0);
+        PRIDEConverter.setTotalPeptideCount(0);
 
         try {
             factory = XmlPullParserFactory.newInstance(System.getProperty(XmlPullParserFactory.PROPERTY_NAME), null);
@@ -445,7 +445,7 @@ public class TPPConverter {
                                 }
                             }
 
-                            PRIDEConverter.setPeptideIdCount(PRIDEConverter.getPeptideIdCount() + 1);
+                            PRIDEConverter.setTotalPeptideCount(PRIDEConverter.getTotalPeptideCount() + 1);
 
                             // Create the peptide.
                             PRIDE_peptides.add(new PeptideImpl(specRef, pepSequence, pepStart, PRIDE_modifications, additionalParams, null));
