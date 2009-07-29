@@ -353,8 +353,8 @@ public class MascotDatConverter {
                                     // we already stored a result for this ID!!!
                                     JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
                                             "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
-                                    Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + totalSpectraCounter
-                                            + "' and spectrum file '" + currentQuery.getFilename() + "'." );
+                                    Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + totalSpectraCounter + "' and spectrum file '" + currentQuery.getFilename() + "'.");
+                                    PRIDEConverter.setCancelConversion(true);
                                 }
 
                                 // Store the transformed spectrum.
@@ -364,63 +364,28 @@ public class MascotDatConverter {
                                 arrays = null;
                                 peakList = null;
 
-                                // extract the peptide identifications
-                                if (peptideIsIdentified) {
-                                    PRIDEConverter.getProperties().setTempProteinHit((ProteinHit) tempPeptideHit.getProteinHits().get(0));
+                                if (!PRIDEConverter.isConversionCanceled()) {
 
-                                    if (tempPeptideHit.getProteinHits().size() > 1) {
+                                    // extract the peptide identifications
+                                    if (peptideIsIdentified) {
+                                        PRIDEConverter.getProperties().setTempProteinHit((ProteinHit) tempPeptideHit.getProteinHits().get(0));
 
-                                        if (!PRIDEConverter.getProperties().isIsoFormsSelectionTypeSelected()) {
-                                            new ProteinIsoforms(PRIDEConverter.getOutputFrame(), true, PRIDEConverter.getProgressDialog());
-                                            PRIDEConverter.getProperties().setIsoFormsSelectionTypeSelected(true);
-                                        }
+                                        if (tempPeptideHit.getProteinHits().size() > 1) {
 
-                                        if (PRIDEConverter.getProperties().getProteinIsoformSelectionType() ==
-                                                PRIDEConverter.getProperties().PROTEIN_ISOFORMS_ALWAYS_SELECT_FIRST) {
-
-                                            PRIDEConverter.getProperties().setTempProteinHit(
-                                                    (ProteinHit) tempPeptideHit.getProteinHits().get(0));
-
-                                        } else if (PRIDEConverter.getProperties().getProteinIsoformSelectionType() ==
-                                                PRIDEConverter.getProperties().PROTEIN_ISOFORMS_MAUNAL_SELECTION) {
-
-                                            alreadySelected = false;
-
-                                            for (int w = 0; w < tempPeptideHit.getProteinHits().size() && !alreadySelected; w++) {
-                                                if (PRIDEConverter.getProperties().getSelectedProteinHits().contains(
-                                                        ((ProteinHit) tempPeptideHit.getProteinHits().get(w)).getAccession())) {
-                                                    alreadySelected = true;
-                                                }
+                                            if (!PRIDEConverter.getProperties().isIsoFormsSelectionTypeSelected()) {
+                                                new ProteinIsoforms(PRIDEConverter.getOutputFrame(), true, PRIDEConverter.getProgressDialog());
+                                                PRIDEConverter.getProperties().setIsoFormsSelectionTypeSelected(true);
                                             }
 
-                                            if (!alreadySelected) {
+                                            if (PRIDEConverter.getProperties().getProteinIsoformSelectionType() ==
+                                                    PRIDEConverter.getProperties().PROTEIN_ISOFORMS_ALWAYS_SELECT_FIRST) {
 
-                                                if (PRIDEConverter.isConversionCanceled()) {
-                                                    PRIDEConverter.getOutputFrame().setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-                                                    PRIDEConverter.getOutputFrame().setConvertButtonEnabled(true);
-                                                    return null;
-                                                }
+                                                PRIDEConverter.getProperties().setTempProteinHit(
+                                                        (ProteinHit) tempPeptideHit.getProteinHits().get(0));
 
-                                                new ProteinIsoFormSelection(PRIDEConverter.getOutputFrame(), true,
-                                                        tempPeptideHit, PRIDEConverter.getProgressDialog());
-                                            }
-                                        } else {//list provided
+                                            } else if (PRIDEConverter.getProperties().getProteinIsoformSelectionType() ==
+                                                    PRIDEConverter.getProperties().PROTEIN_ISOFORMS_MAUNAL_SELECTION) {
 
-                                            if (PRIDEConverter.getProperties().getSelectedIsoformPeptideSequences().
-                                                    contains(tempPeptideHit.getSequence())) {
-
-                                                int index = PRIDEConverter.getProperties().getSelectedIsoformPeptideSequences().indexOf(
-                                                        tempPeptideHit.getSequence());
-
-                                                for (int h = 0; h < tempPeptideHit.getProteinHits().size(); h++) {
-
-                                                    if (((ProteinHit) tempPeptideHit.getProteinHits().
-                                                            get(h)).getAccession().equalsIgnoreCase(
-                                                            (String) PRIDEConverter.getProperties().getSelectedIsoformAccessions().get(index))) {
-                                                        PRIDEConverter.getProperties().setTempProteinHit((ProteinHit) tempPeptideHit.getProteinHits().get(h));
-                                                    }
-                                                }
-                                            } else {//not found. do manual selection
                                                 alreadySelected = false;
 
                                                 for (int w = 0; w < tempPeptideHit.getProteinHits().size() && !alreadySelected; w++) {
@@ -441,67 +406,104 @@ public class MascotDatConverter {
                                                     new ProteinIsoFormSelection(PRIDEConverter.getOutputFrame(), true,
                                                             tempPeptideHit, PRIDEConverter.getProgressDialog());
                                                 }
-                                            }
-                                        }
-                                    }
+                                            } else {//list provided
 
-                                    cVParams = new ArrayList<CvParam>();
-                                    cVParams.add(new CvParamImpl("PRIDE:0000069", "PRIDE",
-                                            "Mascot Score", 0, "" + tempPeptideHit.getIonsScore()));
+                                                if (PRIDEConverter.getProperties().getSelectedIsoformPeptideSequences().
+                                                        contains(tempPeptideHit.getSequence())) {
 
-                                    String[] iTraqNorm = null;
-                                    String[] iTraqUT = null;
-                                    String[][] iTraqRatio = null;
-                                    userParams = null;
+                                                    int index = PRIDEConverter.getProperties().getSelectedIsoformPeptideSequences().indexOf(
+                                                            tempPeptideHit.getSequence());
 
-                                    if (calculateITraq) {
-                                        iTraqNorm = (String[]) iTRAQValues.getAllNorms().get(
-                                                currentQuery.getQueryNumber());
-                                        iTraqUT = (String[]) iTRAQValues.getAllUTs().get(
-                                                currentQuery.getQueryNumber());
-                                        iTraqRatio = (String[][]) iTRAQValues.getAllRatios().get(
-                                                currentQuery.getQueryNumber());
+                                                    for (int h = 0; h < tempPeptideHit.getProteinHits().size(); h++) {
 
-                                        PRIDEConverter.addItraqCVTerms(cVParams, iTraqNorm);
-                                        userParams = PRIDEConverter.addItraqUserTerms(iTraqRatio);
-                                    }
+                                                        if (((ProteinHit) tempPeptideHit.getProteinHits().
+                                                                get(h)).getAccession().equalsIgnoreCase(
+                                                                (String) PRIDEConverter.getProperties().getSelectedIsoformAccessions().get(index))) {
+                                                            PRIDEConverter.getProperties().setTempProteinHit((ProteinHit) tempPeptideHit.getProteinHits().get(h));
+                                                        }
+                                                    }
+                                                } else {//not found. do manual selection
+                                                    alreadySelected = false;
 
-                                    peptideModifications = null;
-
-                                    int location;
-
-                                    if (tempPeptideHit.getModifications() != null) {
-
-                                        peptideModifications = new ArrayList<ModificationImpl>();
-
-                                        for (int m = 0; m < tempPeptideHit.getModifications().length; m++) {
-
-                                            if (tempPeptideHit.getModifications()[m] != null) {
-                                                if (PRIDEConverter.getUserProperties().getCVTermMappings().get(
-                                                        (tempPeptideHit.getModifications()[m]).getType()) != null) {
-
-                                                    CvParamImpl tempCvParam =
-                                                            (CvParamImpl) PRIDEConverter.getUserProperties().getCVTermMappings().get(
-                                                            (tempPeptideHit.getModifications()[m]).getType());
-
-                                                    modificationCVParams = new ArrayList<CvParam>();
-                                                    modificationCVParams.add(tempCvParam);
-
-                                                    monoMasses = new ArrayList<MassDelta>();
-
-                                                    // get the modification mass (DiffMono) retrieved from PSI-MOD
-                                                    if (tempCvParam.getValue() != null) {
-                                                        monoMasses.add(new MonoMassDeltaImpl(
-                                                                Double.parseDouble(tempCvParam.getValue())));
-                                                    } else {
-                                                        // if the DiffMono is not found for the PSI-MOD the mass
-                                                        // from the file is used
-                                                        monoMasses.add(new MonoMassDeltaImpl(
-                                                                tempPeptideHit.getModifications()[m].getMass()));
-                                                    //monoMasses = null;
+                                                    for (int w = 0; w < tempPeptideHit.getProteinHits().size() && !alreadySelected; w++) {
+                                                        if (PRIDEConverter.getProperties().getSelectedProteinHits().contains(
+                                                                ((ProteinHit) tempPeptideHit.getProteinHits().get(w)).getAccession())) {
+                                                            alreadySelected = true;
+                                                        }
                                                     }
 
-                                                    location = m;
+                                                    if (!alreadySelected) {
+
+                                                        if (PRIDEConverter.isConversionCanceled()) {
+                                                            PRIDEConverter.getOutputFrame().setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+                                                            PRIDEConverter.getOutputFrame().setConvertButtonEnabled(true);
+                                                            return null;
+                                                        }
+
+                                                        new ProteinIsoFormSelection(PRIDEConverter.getOutputFrame(), true,
+                                                                tempPeptideHit, PRIDEConverter.getProgressDialog());
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        cVParams = new ArrayList<CvParam>();
+                                        cVParams.add(new CvParamImpl("PRIDE:0000069", "PRIDE",
+                                                "Mascot Score", 0, "" + tempPeptideHit.getIonsScore()));
+
+                                        String[] iTraqNorm = null;
+                                        String[] iTraqUT = null;
+                                        String[][] iTraqRatio = null;
+                                        userParams = null;
+
+                                        if (calculateITraq) {
+                                            iTraqNorm = (String[]) iTRAQValues.getAllNorms().get(
+                                                    currentQuery.getQueryNumber());
+                                            iTraqUT = (String[]) iTRAQValues.getAllUTs().get(
+                                                    currentQuery.getQueryNumber());
+                                            iTraqRatio = (String[][]) iTRAQValues.getAllRatios().get(
+                                                    currentQuery.getQueryNumber());
+
+                                            PRIDEConverter.addItraqCVTerms(cVParams, iTraqNorm);
+                                            userParams = PRIDEConverter.addItraqUserTerms(iTraqRatio);
+                                        }
+
+                                        peptideModifications = null;
+
+                                        int location;
+
+                                        if (tempPeptideHit.getModifications() != null) {
+
+                                            peptideModifications = new ArrayList<ModificationImpl>();
+
+                                            for (int m = 0; m < tempPeptideHit.getModifications().length; m++) {
+
+                                                if (tempPeptideHit.getModifications()[m] != null) {
+                                                    if (PRIDEConverter.getUserProperties().getCVTermMappings().get(
+                                                            (tempPeptideHit.getModifications()[m]).getType()) != null) {
+
+                                                        CvParamImpl tempCvParam =
+                                                                (CvParamImpl) PRIDEConverter.getUserProperties().getCVTermMappings().get(
+                                                                (tempPeptideHit.getModifications()[m]).getType());
+
+                                                        modificationCVParams = new ArrayList<CvParam>();
+                                                        modificationCVParams.add(tempCvParam);
+
+                                                        monoMasses = new ArrayList<MassDelta>();
+
+                                                        // get the modification mass (DiffMono) retrieved from PSI-MOD
+                                                        if (tempCvParam.getValue() != null) {
+                                                            monoMasses.add(new MonoMassDeltaImpl(
+                                                                    Double.parseDouble(tempCvParam.getValue())));
+                                                        } else {
+                                                            // if the DiffMono is not found for the PSI-MOD the mass
+                                                            // from the file is used
+                                                            monoMasses.add(new MonoMassDeltaImpl(
+                                                                    tempPeptideHit.getModifications()[m].getMass()));
+                                                        //monoMasses = null;
+                                                        }
+
+                                                        location = m;
 
 //                                            //n-terminal modification
 //                                            if (location ==
@@ -515,98 +517,99 @@ public class MascotDatConverter {
 //                                                location -= 1;
 //                                            }
 
-                                                    peptideModifications.add(new ModificationImpl(
-                                                            tempCvParam.getAccession(),
-                                                            location,
-                                                            tempCvParam.getCVLookup(),
-                                                            null,
-                                                            monoMasses,
-                                                            null,
-                                                            modificationCVParams,
-                                                            null));
-                                                } else {
-                                                    Util.writeToErrorLog("Unknown modifications! - Should not happen!!! Modification: " +
-                                                            (tempPeptideHit.getModifications()[m]).getType());
+                                                        peptideModifications.add(new ModificationImpl(
+                                                                tempCvParam.getAccession(),
+                                                                location,
+                                                                tempCvParam.getCVLookup(),
+                                                                null,
+                                                                monoMasses,
+                                                                null,
+                                                                modificationCVParams,
+                                                                null));
+                                                    } else {
+                                                        Util.writeToErrorLog("Unknown modifications! - Should not happen!!! Modification: " +
+                                                                (tempPeptideHit.getModifications()[m]).getType());
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
 
 
-                                    // add fragment ion annotation
-                                    fragmentIons = new ArrayList<FragmentIon>();
+                                        // add fragment ion annotation
+                                        fragmentIons = new ArrayList<FragmentIon>();
 
-                                    // get the peptide annotations from the file
-                                    PeptideHitAnnotation peptideHitAnnotations =
-                                            tempPeptideHit.getPeptideHitAnnotation(
-                                            tempMascotDatfile.getMasses(), tempMascotDatfile.getParametersSection());
+                                        // get the peptide annotations from the file
+                                        PeptideHitAnnotation peptideHitAnnotations =
+                                                tempPeptideHit.getPeptideHitAnnotation(
+                                                tempMascotDatfile.getMasses(), tempMascotDatfile.getParametersSection());
 
-                                    // get the fragment ions
-                                    Vector currentFragmentIons = peptideHitAnnotations.getFusedMatchedIons(
-                                            currentQuery.getPeakList(), tempPeptideHit.getPeaksUsedFromIons1(),  currentQuery.getMaxIntensity(), 0.05D);
+                                        // get the fragment ions
+                                        Vector currentFragmentIons = peptideHitAnnotations.getFusedMatchedIons(
+                                                currentQuery.getPeakList(), tempPeptideHit.getPeaksUsedFromIons1(), currentQuery.getMaxIntensity(), 0.05D);
 
-                                    // iterate the fragment ions, detect the type and create CV params for each of them
-                                    for (Object currentFragmentIon1 : currentFragmentIons) {
+                                        // iterate the fragment ions, detect the type and create CV params for each of them
+                                        for (Object currentFragmentIon1 : currentFragmentIons) {
 
-                                        // Note: 'FragmentIon' is included in several projetcs so the complete path is required
-                                        be.proteomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl currentFragmentIon =
-                                                (be.proteomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl) currentFragmentIon1;
+                                            // Note: 'FragmentIon' is included in several projetcs so the complete path is required
+                                            be.proteomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl currentFragmentIon =
+                                                    (be.proteomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl) currentFragmentIon1;
 
-                                        // map the reported fragment ion to its corresponding CV term by using the
-                                        // mappings given in the FragmentIonsMapping.prop file
-                                        FragmentIonMappedDetails fragmentIonMappedDetails =
-                                                PRIDEConverter.getFragmentIonMappings().getCVTermMappings().get(
-                                                        PRIDEConverter.getProperties().getDataSource() + "_" + currentFragmentIon.getType());
+                                            // map the reported fragment ion to its corresponding CV term by using the
+                                            // mappings given in the FragmentIonsMapping.prop file
+                                            FragmentIonMappedDetails fragmentIonMappedDetails =
+                                                    PRIDEConverter.getFragmentIonMappings().getCVTermMappings().get(
+                                                    PRIDEConverter.getProperties().getDataSource() + "_" + currentFragmentIon.getType());
 
-                                        // check if a mapping was found or not
-                                        if (fragmentIonMappedDetails == null) {
-                                            JOptionPane.showMessageDialog(PRIDEConverter.getOutputFrame(),
-                                                    "Unknown fragment ion \'" + currentFragmentIon.getType() + "\'. Ion not included in annotation.\n" +
-                                                            "Please contact the PRIDE support team at pride-support@ebi.ac.uk.",
-                                                    "Unknown Fragment Ion",
-                                                    JOptionPane.INFORMATION_MESSAGE);
-                                        } else {
+                                            // check if a mapping was found or not
+                                            if (fragmentIonMappedDetails == null) {
+                                                JOptionPane.showMessageDialog(PRIDEConverter.getOutputFrame(),
+                                                        "Unknown fragment ion \'" + currentFragmentIon.getType() + "\'. Ion not included in annotation.\n" +
+                                                        "Please contact the PRIDE support team at pride-support@ebi.ac.uk.",
+                                                        "Unknown Fragment Ion",
+                                                        JOptionPane.INFORMATION_MESSAGE);
+                                            } else {
 
-                                            // -1 means that a mapping was found but that that this particular fragment
-                                            // ion type is currently not being used. Update FragmentIonsMapping.prop if
-                                            // you want to add a mapping for this fragment ion type.
-                                            if (!fragmentIonMappedDetails.getCvParamAccession().equalsIgnoreCase("-1")) {
+                                                // -1 means that a mapping was found but that that this particular fragment
+                                                // ion type is currently not being used. Update FragmentIonsMapping.prop if
+                                                // you want to add a mapping for this fragment ion type.
+                                                if (!fragmentIonMappedDetails.getCvParamAccession().equalsIgnoreCase("-1")) {
 
-                                                // create the list of CV Params for the fragment ion
-                                                ArrayList<CvParam> currentCvTerms =
-                                                        PRIDEConverter.createFragmentIonCvParams(
-                                                                fragmentIonMappedDetails,
-                                                                currentFragmentIon.getMZ() + currentFragmentIon.getTheoreticalExperimantalMassError(),
-                                                                fragmentIonMappedDetails.getCharge(),
-                                                                currentFragmentIon.getNumber(),
-                                                                currentFragmentIon.getIntensity(),
-                                                                currentFragmentIon.getTheoreticalExperimantalMassError(), // @TODO: use absolute value?
-                                                                null);
+                                                    // create the list of CV Params for the fragment ion
+                                                    ArrayList<CvParam> currentCvTerms =
+                                                            PRIDEConverter.createFragmentIonCvParams(
+                                                            fragmentIonMappedDetails,
+                                                            currentFragmentIon.getMZ() + currentFragmentIon.getTheoreticalExperimantalMassError(),
+                                                            fragmentIonMappedDetails.getCharge(),
+                                                            currentFragmentIon.getNumber(),
+                                                            currentFragmentIon.getIntensity(),
+                                                            currentFragmentIon.getTheoreticalExperimantalMassError(), // @TODO: use absolute value?
+                                                            null);
 
-                                                // add the created fragment ion to the list of all fragment ions
-                                                fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
+                                                    // add the created fragment ion to the list of all fragment ions
+                                                    fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
+                                                }
                                             }
                                         }
+
+
+                                        PRIDEConverter.getIds().add(new IdentificationGeneral(
+                                                tempFile.getAbsolutePath() + "_" + currentQuery.getQueryNumber(), // spectrum key
+                                                PRIDEConverter.getProperties().getTempProteinHit().getAccession(), // accession
+                                                "Mascot", // search engine
+                                                tempMascotDatfile.getParametersSection().getDatabase(), // database
+                                                tempMascotDatfile.getHeaderSection().getVersion(),// database version
+                                                tempPeptideHit.getSequence(), // sequence
+                                                PRIDEConverter.getProperties().getTempProteinHit().getStart(), // start
+                                                tempPeptideHit.getIonsScore(), // score
+                                                tempPeptideHit.calculateIdentityThreshold((100 -
+                                                PRIDEConverter.getProperties().getMascotConfidenceLevel()) /
+                                                100), // threshold
+                                                iTraqNorm, iTraqUT, iTraqRatio, // iTRAQ values
+                                                cVParams, // cv params
+                                                userParams, // user params
+                                                peptideModifications, // list of modifications
+                                                fragmentIons)); // list of fragment ions
                                     }
-
-
-                                    PRIDEConverter.getIds().add(new IdentificationGeneral(
-                                            tempFile.getAbsolutePath() + "_" + currentQuery.getQueryNumber(), // spectrum key
-                                            PRIDEConverter.getProperties().getTempProteinHit().getAccession(), // accession
-                                            "Mascot", // search engine
-                                            tempMascotDatfile.getParametersSection().getDatabase(), // database
-                                            tempMascotDatfile.getHeaderSection().getVersion(),// database version
-                                            tempPeptideHit.getSequence(), // sequence
-                                            PRIDEConverter.getProperties().getTempProteinHit().getStart(), // start
-                                            tempPeptideHit.getIonsScore(), // score
-                                            tempPeptideHit.calculateIdentityThreshold((100 -
-                                            PRIDEConverter.getProperties().getMascotConfidenceLevel()) /
-                                            100), // threshold
-                                            iTraqNorm, iTraqUT, iTraqRatio, // iTRAQ values
-                                            cVParams, // cv params
-                                            userParams, // user params
-                                            peptideModifications, // list of modifications
-                                            fragmentIons)); // list of fragment ions
                                 }
                             }
                         }

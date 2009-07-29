@@ -160,6 +160,7 @@ public class MS_LimsConverter {
                     JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
                             "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                     Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + dbSpectrum.getSpectrumfileid() + "'.");
+                    PRIDEConverter.setCancelConversion(true);
                 }
 
                 // Store the transformed spectrum.
