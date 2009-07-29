@@ -12,8 +12,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
+import javax.swing.JOptionPane;
 import no.uib.prideconverter.gui.ProgressDialog;
 import no.uib.prideconverter.util.MascotGenericFile_MultipleSpectra;
+import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.implementation.mzData.BinaryArrayImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.PrecursorImpl;
@@ -312,7 +314,15 @@ public class PeptideProphetXMLParser {
                         String fileName = mgfParser.getFilename();
                         fileName = fileName.substring(0, fileName.lastIndexOf("."));
 
-                        aFileAndScanToID.put(fileName + ".tandem " + mgfParser.getTitle(i), new Integer(spectraCounter++));
+                        Object xTmp = aFileAndScanToID.put(fileName + ".tandem " + mgfParser.getTitle(i), new Integer(spectraCounter++));
+
+                        if(xTmp != null){
+                            // we already stored a result for this ID!!!
+                            JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                    "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                            Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + i
+                                        + "' and spectrum file '" + fileName + "'." );
+                        }
                     }
                 }
             }

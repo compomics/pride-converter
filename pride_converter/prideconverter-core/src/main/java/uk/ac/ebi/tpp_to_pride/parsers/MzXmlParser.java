@@ -21,7 +21,9 @@ import java.util.*;
  * $Revision: 1.1.1.1 $
  * $Date: 2007/01/12 17:17:10 $
  */
+import javax.swing.JOptionPane;
 import no.uib.prideconverter.gui.ProgressDialog;
+import no.uib.prideconverter.util.Util;
 
 /**
  * This class uses the JRAP library to parse mzXML into mzData files.
@@ -206,6 +208,11 @@ public class MzXmlParser {
 
             if (temp != null) {
                 logger.error("Duplicate lookup for scan '" + key + "'!");
+
+                // we already stored a result for this ID!!!
+                JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                        "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + key + "'." );
             }
         }
         return id;
@@ -230,6 +237,11 @@ public class MzXmlParser {
 
             if (temp != null) {
                 logger.error("Duplicate lookup for scan '" + key + "'!");
+
+                // we already stored a result for this ID!!!
+                JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                        "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
+                Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + key + "'." );
             }
         }
         return id;
