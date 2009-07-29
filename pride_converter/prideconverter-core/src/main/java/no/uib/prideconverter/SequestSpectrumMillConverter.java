@@ -1235,6 +1235,7 @@ public class SequestSpectrumMillConverter {
                                                 "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                         Util.writeToErrorLog("Ambiguous spectrum mapping for spectrum file '"
                                                 + PRIDEConverter.getCurrentFileName() + "'." );
+                                        PRIDEConverter.setCancelConversion(true);
                                     }
 
                                     // Store the transformed spectrum.
@@ -1250,6 +1251,7 @@ public class SequestSpectrumMillConverter {
                                                 "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                         Util.writeToErrorLog("Ambiguous spectrum mapping for spectrum file '"
                                                 + PRIDEConverter.getCurrentFileName() + "'." );
+                                        PRIDEConverter.setCancelConversion(true);
                                     }
 
                                     // Store the transformed spectrum.
@@ -1279,6 +1281,7 @@ public class SequestSpectrumMillConverter {
                                                     "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                             Util.writeToErrorLog("Ambiguous spectrum mapping for spectrum file '"
                                                     + PRIDEConverter.getCurrentFileName() + "'." );
+                                            PRIDEConverter.setCancelConversion(true);
                                         }
 
                                         // Store the transformed spectrum.
@@ -1295,6 +1298,7 @@ public class SequestSpectrumMillConverter {
                                             "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                     Util.writeToErrorLog("Ambiguous spectrum mapping for spectrum file '"
                                             + PRIDEConverter.getCurrentFileName() + "'." );
+                                    PRIDEConverter.setCancelConversion(true);
                                 }
 
                                 // Store the transformed spectrum.

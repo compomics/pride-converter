@@ -1381,10 +1381,10 @@ public class PRIDEConverter extends AbstractPrideConverter {
         // This counter is used to generate the ID numbers for the mzData spectra.
         int idCount = 0;
 
-        for (File lFile : aFiles) {
+        for (int i=0; i< aFiles.length && !PRIDEConverter.isConversionCanceled(); i++) {
 
             // Setting up the variables we'll collect.
-            String filename = lFile.getName();
+            String filename = aFiles[i].getName();
 
             // Ignore non .ms2 files from the input folder
             if (filename.toLowerCase().endsWith(".ms2")) {
@@ -1398,7 +1398,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                 double[] mzArray = null;
                 double[] intensityArray = null;
 
-                BufferedReader br = new BufferedReader(new FileReader(lFile));
+                BufferedReader br = new BufferedReader(new FileReader(aFiles[i]));
                 String currentLine = null;
                 int lineCount = 0;
 
@@ -1407,7 +1407,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                 ArrayList<String> mz = new ArrayList<String>();
                 ArrayList<String> intensities = new ArrayList<String>();
 
-                while ((currentLine = br.readLine()) != null) {
+                while ((currentLine = br.readLine()) != null && !PRIDEConverter.isConversionCanceled()) {
 
                     lineCount++;
 
@@ -1449,6 +1449,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                                             "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                     Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + scanNumber
                                             + "' and spectrum file '" + usedFileName + "'." );
+                                    PRIDEConverter.setCancelConversion(true);
                                 }
 
                                 // If you'll look at the above method, you'll see that it consumes two ID's -
@@ -1515,6 +1516,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                             "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                     Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + scanNumber
                             + "' and spectrum file '" + usedFileName + "'." );
+                    PRIDEConverter.setCancelConversion(true);
                 }
 
                 // If you'll look at the above method, you'll see that it consumes two ID's -
@@ -1529,6 +1531,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                     System.out.println("The file " + filename + " was not included among the processed files\n");
                 }
 
+                // @TODO: implement for dta files as well?
                 // The part below has not been tested as we have no examples of DTASelect projects
                 // using dta files as spectrum files. But most of the code below should work.
 
@@ -2511,6 +2514,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                                 "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                         Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + spectrum.getSpectrumId()
                                 + "' and spectrum file '" + new File(filePath).getName() + "'." );
+                        PRIDEConverter.setCancelConversion(true);
                     }
                 }
             } catch (FileNotFoundException e) {

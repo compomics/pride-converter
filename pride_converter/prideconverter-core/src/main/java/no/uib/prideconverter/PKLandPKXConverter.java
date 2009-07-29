@@ -285,6 +285,7 @@ public class PKLandPKXConverter {
                                             "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                     Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
                                             + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
+                                    PRIDEConverter.setCancelConversion(true);
                                 }
 
                                 // Store the transformed spectrum.
@@ -456,6 +457,7 @@ public class PKLandPKXConverter {
                                     "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                             Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
                                     + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
+                            PRIDEConverter.setCancelConversion(true);
                         }
 
                         // Store the transformed spectrum.
