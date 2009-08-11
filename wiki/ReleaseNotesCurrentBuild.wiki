@@ -1,8 +1,9 @@
-#summary Short summary of changes for the current build of the PRIDE Converter. (Note that this may not be the same as the released version.)
+#summary Short summary of changes for the current build of the PRIDE Converter. (Note that this is not the same as the released version.)
 
 ----
 
  * FEATURE IMPROVEMENT: The OLS Dialog has been redesigned.
  * LIBRARY UPDATE: ols-client-1.14 has been replaced by ols-dialog-1.0.
+ * LIBRARY UPDATE: Updated the utilities library to version 2.9.7.
 
  
