@@ -452,9 +452,9 @@ public class PRIDEConverter extends AbstractPrideConverter {
                         filenameToSpectrumID = MascotDatConverter.transformSpectraFromMascotDatFile(mzDataSpectra);
                     } else if (properties.getDataSource().equalsIgnoreCase("Mascot Generic File")) {
                         filenameToSpectrumID = MascotGenericConverter.transformSpectraFromMascotGenericFile(mzDataSpectra);
-                    } else if (properties.getDataSource().equalsIgnoreCase("Sequest DTA File") ||
+                    } else if (properties.getDataSource().equalsIgnoreCase("SEQUEST DTA File") ||
                             properties.getDataSource().equalsIgnoreCase("Spectrum Mill") ||
-                            properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                            properties.getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
                         filenameToSpectrumID = SequestSpectrumMillConverter.transformSpectraFromSequestAndSpectrumMill(mzDataSpectra);
                     } else if (properties.getDataSource().equalsIgnoreCase("Micromass PKL File") ||
                             properties.getDataSource().equalsIgnoreCase("VEMS")) {
@@ -528,7 +528,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                     HashMap<String, InnerID> groupedIds = new HashMap<String, InnerID>();
 
                     if (properties.getDataSource().equalsIgnoreCase("Mascot Generic File") ||
-                            properties.getDataSource().equalsIgnoreCase("Sequest DTA File") ||
+                            properties.getDataSource().equalsIgnoreCase("SEQUEST DTA File") ||
                             properties.getDataSource().equalsIgnoreCase("Micromass PKL File") ||
                             properties.getDataSource().equalsIgnoreCase("mzXML") ||
                             properties.getDataSource().equalsIgnoreCase("VEMS") ||
@@ -641,7 +641,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                         // parsing of the accession number if it includs more than one '|'
                         // if it does the part after the second '|' is removed
                         if (accession.lastIndexOf("|") != -1) {
-                            //if (properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                            //if (properties.getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
                             if (accession.indexOf("|", accession.indexOf("|") + 1) != -1) {
                                 accession = accession.substring(0, accession.indexOf("|",
                                         accession.indexOf("|") + 1));
@@ -829,7 +829,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                             dataSourceShort = "mascotDatFile";
                         } else if (properties.getDataSource().equalsIgnoreCase("Mascot Generic File")) {
                             dataSourceShort = "mascotGenericFile";
-                        } else if (properties.getDataSource().equalsIgnoreCase("Sequest DTA File")) {
+                        } else if (properties.getDataSource().equalsIgnoreCase("SEQUEST DTA File")) {
                             dataSourceShort = "dta_files";
                         } else if (properties.getDataSource().equalsIgnoreCase("X!Tandem")) {
                             dataSourceShort = "x!Tandem";
@@ -837,7 +837,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                             dataSourceShort = "pkl_files";
                         } else if (properties.getDataSource().equalsIgnoreCase("Spectrum Mill")) {
                             dataSourceShort = "spectrum_mill";
-                        } else if (properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                        } else if (properties.getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
                             dataSourceShort = "sequest";
                         } else if (properties.getDataSource().equalsIgnoreCase("mzXML")) {
                             dataSourceShort = "mzXML";
@@ -1641,12 +1641,12 @@ public class PRIDEConverter extends AbstractPrideConverter {
 //
 //                    if (!isConversionCanceled()) {
 //
-//                        Util.writeToErrorLog("Error parsing Sequest DTA file: ");
+//                        Util.writeToErrorLog("Error parsing SEQUEST DTA file: ");
 //                        e.printStackTrace();
 //
 //                        JOptionPane.showMessageDialog(null,
 //                                "The following file could not parsed as a " +
-//                                "Sequest DTA file:\n " +
+//                                "SEQUEST DTA file:\n " +
 //                                filename +
 //                                "\n\n" +
 //                                "See ../Properties/ErrorLog.txt for more details.",
@@ -2077,7 +2077,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
             if (properties.getDataSource().equalsIgnoreCase("X!Tandem") ||
                     properties.getDataSource().equalsIgnoreCase("Spectrum Mill") ||
-                    properties.getDataSource().equalsIgnoreCase("Sequest Result File") ||
+                    properties.getDataSource().equalsIgnoreCase("SEQUEST Result File") ||
                     properties.getDataSource().equalsIgnoreCase("OMSSA") ||
                     properties.getDataSource().equalsIgnoreCase("DTASelect")) {
                 threshold = null;
@@ -2087,7 +2087,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
             Double score;
 
-            if (properties.getDataSource().equalsIgnoreCase("Sequest Result File") ||
+            if (properties.getDataSource().equalsIgnoreCase("SEQUEST Result File") ||
                     properties.getDataSource().equalsIgnoreCase("OMSSA") ||
                     properties.getDataSource().equalsIgnoreCase("DTASelect")) {
                 score = null;

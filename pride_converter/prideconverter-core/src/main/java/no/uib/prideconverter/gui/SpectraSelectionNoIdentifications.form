@@ -35,12 +35,12 @@
         <Property name="useNullLayout" type="boolean" value="true"/>
       </Layout>
       <SubComponents>
-        <MenuItem class="javax.swing.JMenuItem" name="viewSpectrumParametersJMenuItem">
+        <MenuItem class="javax.swing.JMenuItem" name="viewSpectrumAnnotationsJMenuItem">
           <Properties>
-            <Property name="text" type="java.lang.String" value="View/Change Spectrum Parameters"/>
+            <Property name="text" type="java.lang.String" value="View/Change Spectrum Annotations"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewSpectrumParametersJMenuItemActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewSpectrumAnnotationsJMenuItemActionPerformed"/>
           </Events>
         </MenuItem>
       </SubComponents>

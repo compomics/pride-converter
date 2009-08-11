@@ -324,7 +324,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Sequest Params File:"/>
+            <Property name="text" type="java.lang.String" value="SEQUEST Params File:"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[138, 14]"/>
             </Property>

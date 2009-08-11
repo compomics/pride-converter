@@ -195,7 +195,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         selectAllJMenuItem = new javax.swing.JMenuItem();
         invertSelectionJMenuItem = new javax.swing.JMenuItem();
         spectrumDetailsJPopupMenu = new javax.swing.JPopupMenu();
-        viewSpectrumParametersJMenuItem = new javax.swing.JMenuItem();
+        viewSpectrumAnnotationsJMenuItem = new javax.swing.JMenuItem();
         nextJButton = new javax.swing.JButton();
         backJButton = new javax.swing.JButton();
         cancelJButton = new javax.swing.JButton();
@@ -243,13 +243,13 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         });
         selectAllJPopupMenu.add(invertSelectionJMenuItem);
 
-        viewSpectrumParametersJMenuItem.setText("View/Change Spectrum Parameters");
-        viewSpectrumParametersJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        viewSpectrumAnnotationsJMenuItem.setText("View/Change Spectrum Annotations");
+        viewSpectrumAnnotationsJMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                viewSpectrumParametersJMenuItemActionPerformed(evt);
+                viewSpectrumAnnotationsJMenuItemActionPerformed(evt);
             }
         });
-        spectrumDetailsJPopupMenu.add(viewSpectrumParametersJMenuItem);
+        spectrumDetailsJPopupMenu.add(viewSpectrumAnnotationsJMenuItem);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Spectra Selection - Step 2 of 8");
@@ -617,7 +617,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                         progressDialog.setString(file.getName() + " (" + (j + 1) +
                                 "/" + PRIDEConverter.getProperties().getSelectedSourceFiles().size() + ")");
 
-                        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File")) {
+                        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST DTA File")) {
 
                             f = new FileReader(file);
                             b = new BufferedReader(f);
@@ -1166,14 +1166,14 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
      *
      * @param evt
      */
-    private void viewSpectrumParametersJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSpectrumParametersJMenuItemActionPerformed
+    private void viewSpectrumAnnotationsJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSpectrumAnnotationsJMenuItemActionPerformed
         new SpectrumDetails(this, true,
                 "" + spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 0) + "_" +
                 spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 1) + "_" +
                 spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 2) + "_" +
                 spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 3) + "_" +
                 spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 4));
-    }//GEN-LAST:event_viewSpectrumParametersJMenuItemActionPerformed
+}//GEN-LAST:event_viewSpectrumAnnotationsJMenuItemActionPerformed
 
     /**
      * Makes sure that the number of selected spectra is updated when the 
@@ -1277,6 +1277,6 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
     private org.jdesktop.swingx.JXTable spectraJXTable;
     private javax.swing.JLabel spectrumAnnotationJLabel;
     private javax.swing.JPopupMenu spectrumDetailsJPopupMenu;
-    private javax.swing.JMenuItem viewSpectrumParametersJMenuItem;
+    private javax.swing.JMenuItem viewSpectrumAnnotationsJMenuItem;
     // End of variables declaration//GEN-END:variables
 }

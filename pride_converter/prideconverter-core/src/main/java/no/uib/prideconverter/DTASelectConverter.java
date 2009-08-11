@@ -94,7 +94,7 @@ public class DTASelectConverter {
 
                 // extract variable modifications
                 // NB: assumes that a given amino acid appears only once.
-                //     which seems to be in accordance with Sequest
+                //     which seems to be in accordance with SEQUEST
                 if (line.startsWith("diff_search_options = ")) {
 
                     String temp = line.substring(line.indexOf("= ") + 2);
@@ -575,7 +575,7 @@ public class DTASelectConverter {
 
                             //We create a new protein instance:
                             protein = new PRIDEConverter.InnerID(accessionNumber, sequenceCount, spectrumCount, coverage, proteinLength,
-                                    molecularWeight, pI, validationStatus, proteinDescription, "Sequest + DTASelect", databaseName);
+                                    molecularWeight, pI, validationStatus, proteinDescription, "SEQUEST + DTASelect", databaseName);
                         }
 
                     // Now, the information for the PEPTIDES included in each protein identification (if(line.startsWith(" "))

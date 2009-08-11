@@ -28,7 +28,7 @@ import javax.swing.*;
 public class SequestSpectrumMillConverter {
 
     /**
-     * This method transforms spectra from Spectrum Mill and Sequest files,
+     * This method transforms spectra from Spectrum Mill and SEQUEST files,
      * returning a HashMap that maps the filenames to their mzData spectrumID.
      *
      * @param    aTransformedSpectra   ArrayList that will contain the transformed
@@ -143,7 +143,7 @@ public class SequestSpectrumMillConverter {
                         isSelected = true;
                         PRIDEConverter.setSpectrumKey( PRIDEConverter.generateSpectrumKey(temp) );
 
-                        if (properties.getDataSource().equalsIgnoreCase("Sequest DTA File")) {
+                        if (properties.getDataSource().equalsIgnoreCase("SEQUEST DTA File")) {
                             // ms level
                             if (temp[4] != null) {
                                 msLevel = (Integer) temp[4];
@@ -175,7 +175,7 @@ public class SequestSpectrumMillConverter {
                                 isSelected = true;
                             }
                         } else {
-                            isSelected = false; // Sequest don't have identification ids
+                            isSelected = false; // SEQUEST don't have identification ids
                             break;
                         }
                     }
@@ -207,8 +207,8 @@ public class SequestSpectrumMillConverter {
                         precursorMz = Double.parseDouble(tok.nextToken());
                     }
 
-                    if (properties.getDataSource().equalsIgnoreCase("Sequest DTA File") ||
-                            properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                    if (properties.getDataSource().equalsIgnoreCase("SEQUEST DTA File") ||
+                            properties.getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
                         precursorMh = Double.parseDouble(tok.nextToken());
                     }
 
@@ -261,9 +261,9 @@ public class SequestSpectrumMillConverter {
                     errorDetected = true;
                     String fileType = "";
 
-                    if (properties.getDataSource().equalsIgnoreCase("Sequest Result File") ||
-                            properties.getDataSource().equalsIgnoreCase("Sequest DTA File")) {
-                        fileType = "Sequest DTA file";
+                    if (properties.getDataSource().equalsIgnoreCase("SEQUEST Result File") ||
+                            properties.getDataSource().equalsIgnoreCase("SEQUEST DTA File")) {
+                        fileType = "SEQUEST DTA file";
                     } else if (properties.getDataSource().equalsIgnoreCase("Spectrum Mill")) {
                         fileType = "Micromass PKL file";
                     }
@@ -724,7 +724,7 @@ public class SequestSpectrumMillConverter {
                                             fragmentIons)); // list of fragment ions
                                 }
                             }
-                        } else if (properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                        } else if (properties.getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
 
                             identificationFile = new File("");
 
@@ -1082,7 +1082,7 @@ public class SequestSpectrumMillConverter {
 
                                     cVParams = new ArrayList<CvParam>();
                                     cVParams.add(new CvParamImpl("PRIDE:0000053",
-                                            "PRIDE", "Sequest Score", cVParams.size(), "" + score));
+                                            "PRIDE", "SEQUEST Score", cVParams.size(), "" + score));
 
                                     if (deltaCn != null) {
                                         cVParams.add(new CvParamImpl("PRIDE:0000012",
@@ -1137,7 +1137,7 @@ public class SequestSpectrumMillConverter {
                                         PRIDEConverter.getIds().add(new IdentificationGeneral(
                                                 PRIDEConverter.getCurrentFileName(), // spectrumFileID
                                                 accession, // accession
-                                                "Sequest", // search engine
+                                                "SEQUEST", // search engine
                                                 database, // database
                                                 null, // databaseversion
                                                 sequence.toUpperCase(), // sequence
@@ -1169,15 +1169,15 @@ public class SequestSpectrumMillConverter {
                                     Integer.toString(charge)));
                         }
 
-                        //intensity not given in Sequest DTA File
+                        //intensity not given in SEQUEST DTA File
                         if (precursorIntensty != -1) {
                             ionSelection.add(new CvParamImpl("PSI:1000042",
                                     "PSI", "Intensity", ionSelection.size(),
                                     Double.toString(precursorIntensty)));
                         }
 
-                        if (properties.getDataSource().equalsIgnoreCase("Sequest DTA File") ||
-                                properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                        if (properties.getDataSource().equalsIgnoreCase("SEQUEST DTA File") ||
+                                properties.getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
 
                             // calculated precursor m/z
                             ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
@@ -1223,7 +1223,7 @@ public class SequestSpectrumMillConverter {
                                     null, null);
 
                             if (properties.getDataSource().equalsIgnoreCase("Spectrum Mill") ||
-                                    properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                                    properties.getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
 
                                 if (properties.selectAllSpectra()) {
                                     // Store (spectrumfileid, spectrumid) mapping.
@@ -1315,8 +1315,8 @@ public class SequestSpectrumMillConverter {
                     } catch (Exception e) {
                         String fileType = "";
 
-                        if (properties.getDataSource().equalsIgnoreCase("Sequest Result File")) {
-                            fileType = "Sequest *.out file";
+                        if (properties.getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
+                            fileType = "SEQUEST *.out file";
                         } else if (properties.getDataSource().equalsIgnoreCase("Spectrum Mill")) {
                             fileType = "Spectrum Mill *.pkl.spo file";
                         }

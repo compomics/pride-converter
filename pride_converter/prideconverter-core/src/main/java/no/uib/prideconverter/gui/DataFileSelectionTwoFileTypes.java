@@ -25,7 +25,7 @@ import uk.ac.ebi.pride.model.interfaces.mzdata.UserParam;
 
 /**
  * This frame handles the selection of the data files to be converted for 
- * dataformats with two files, e.g., Spectrum Mill or Sequest.
+ * dataformats with two files, e.g., Spectrum Mill or SEQUEST.
  * 
  * @author Harald Barsnes
  * 
@@ -545,7 +545,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
         chooser.setMultiSelectionEnabled(true);
         if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
             chooser.setFileFilter(new PklFileFilter());
-        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
             chooser.setFileFilter(new DtaFileFilter());
         } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
 
@@ -652,7 +652,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                                             "File Already Selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
-                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
                             if (tempFile.getAbsolutePath().endsWith(".dta") ||
                                     tempFile.getAbsolutePath().endsWith(".DTA")) {
                                 if (!PRIDEConverter.getProperties().getSelectedSourceFiles().contains(tempFile)) {
@@ -759,7 +759,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
         chooser.setMultiSelectionEnabled(true);
         if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
             chooser.setFileFilter(new PklSpoFileFilter());
-        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
             chooser.setFileFilter(new OutFileFilter());
         } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
             chooser.setFileFilter(new XmlFileFilter());
@@ -820,7 +820,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                                             "File Already Selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
-                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
                             if (tempFile.getAbsolutePath().endsWith(".out") ||
                                     tempFile.getAbsolutePath().endsWith(".OUT")) {
                                 if (!PRIDEConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile)) {
