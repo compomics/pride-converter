@@ -1399,7 +1399,7 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
 
         saveInsertedInformation();
 
-        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File") ||
+        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST DTA File") ||
                 PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Micromass PKL File") ||
                 PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") ||
                 PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzML") ||
@@ -1410,7 +1410,7 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
             new SpectraSelectionNoIdentifications(this.getLocation());
         } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem") ||
                 PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill") ||
-                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File") ||
+                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File") ||
                 PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA") ||
                 PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims") ||
                 PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {

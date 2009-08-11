@@ -46,7 +46,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * This frame handles the spectra selection for all the dataformats with identifications
- * (e.g., X!Tandem, OMSSA, Spectrum Mill and Sequest Result Files).
+ * (e.g., X!Tandem, OMSSA, Spectrum Mill and SEQUEST Result Files).
  * 
  * @author Harald Barsnes
  * 
@@ -235,7 +235,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         simpleSelectionButtonGroup = new javax.swing.ButtonGroup();
         advancedSelectionButtonGroup = new javax.swing.ButtonGroup();
         spectrumDetailsJPopupMenu = new javax.swing.JPopupMenu();
-        viewSpectrumParametersJMenuItem = new javax.swing.JMenuItem();
+        viewSpectrumAnnotationsJMenuItem = new javax.swing.JMenuItem();
         nextJButton = new javax.swing.JButton();
         backJButton = new javax.swing.JButton();
         cancelJButton = new javax.swing.JButton();
@@ -310,13 +310,13 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         });
         selectAllJPopupMenu.add(invertSelectionJMenuItem);
 
-        viewSpectrumParametersJMenuItem.setText("View/Change Spectrum Parameters");
-        viewSpectrumParametersJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        viewSpectrumAnnotationsJMenuItem.setText("View/Change Spectrum Parameters");
+        viewSpectrumAnnotationsJMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                viewSpectrumParametersJMenuItemActionPerformed(evt);
+                viewSpectrumAnnotationsJMenuItemActionPerformed(evt);
             }
         });
-        spectrumDetailsJPopupMenu.add(viewSpectrumParametersJMenuItem);
+        spectrumDetailsJPopupMenu.add(viewSpectrumAnnotationsJMenuItem);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Spectra Selection - Step 2 of 8");
@@ -786,7 +786,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                     PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
                 new DataFileSelection(this.getLocation());
             } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill") ||
-                    PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File") ||
+                    PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File") ||
                     PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
                 new DataFileSelectionTwoFileTypes(this.getLocation());
             } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims")) {
@@ -1251,7 +1251,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                             expect = 0.0;
 
                             if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill") ||
-                                    PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                                    PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
 
                                 try {
                                     f = new FileReader(file);
@@ -1279,7 +1279,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                         if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
                                             matchFound = new File(PRIDEConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName().equalsIgnoreCase(file.getName() +
                                                     ".spo");
-                                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+                                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
 
                                             matchFound = new File(PRIDEConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName().equalsIgnoreCase(
                                                     file.getName().substring(0, file.getName().length() -
@@ -1320,7 +1320,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                     ex.printStackTrace();
                                 } catch (Exception e) {
 
-                                    String fileName = "Sequest DTA file";
+                                    String fileName = "SEQUEST DTA file";
 
                                     if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
                                         fileName = "Micromass PKL file";
@@ -2012,13 +2012,13 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
      *
      * @param evt
      */
-    private void viewSpectrumParametersJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSpectrumParametersJMenuItemActionPerformed
+    private void viewSpectrumAnnotationsJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSpectrumAnnotationsJMenuItemActionPerformed
 
         String spectrumKey = spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 1) + "_" +
                 spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 2);
         
         new SpectrumDetails(this, true, spectrumKey);
-}//GEN-LAST:event_viewSpectrumParametersJMenuItemActionPerformed
+}//GEN-LAST:event_viewSpectrumAnnotationsJMenuItemActionPerformed
 
     /**
      * Makes sure that the number of selected spectra is updated when the 
@@ -2175,6 +2175,6 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
     private org.jdesktop.swingx.JXTable spectraJXTable;
     private javax.swing.JLabel spectrumAnnotationJLabel;
     private javax.swing.JPopupMenu spectrumDetailsJPopupMenu;
-    private javax.swing.JMenuItem viewSpectrumParametersJMenuItem;
+    private javax.swing.JMenuItem viewSpectrumAnnotationsJMenuItem;
     // End of variables declaration//GEN-END:variables
 }

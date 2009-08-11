@@ -206,7 +206,7 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
         popupUserParamsJMenu.add(deleteSelectedRowUserParamJMenuItem);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Spectrum Details");
+        setTitle("Spectrum Annotations");
         setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CV Parameters", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N

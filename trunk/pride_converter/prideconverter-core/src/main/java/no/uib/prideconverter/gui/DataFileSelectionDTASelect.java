@@ -255,7 +255,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Parameters", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
-        jLabel1.setText("Sequest Params File:");
+        jLabel1.setText("SEQUEST Params File:");
         jLabel1.setPreferredSize(new java.awt.Dimension(138, 14));
 
         sequestParamFileJTextField.setEditable(false);

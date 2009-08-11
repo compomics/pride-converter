@@ -461,7 +461,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
 
             if (!massJTextField.getText().equalsIgnoreCase("-")) {
 
-                if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File") &&
+                if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File") &&
                         fixedModification) {
 
                     // sequest fixed modifications has to be handled separatly as they  

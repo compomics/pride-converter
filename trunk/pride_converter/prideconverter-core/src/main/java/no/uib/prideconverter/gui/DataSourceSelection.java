@@ -62,7 +62,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
             mgfJRadioButton.setSelected(true);
             mgfJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST DTA File")) {
             sequestDTAFilesJRadioButton.setSelected(true);
             sequestDTAFilesJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
@@ -78,7 +78,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
             spectrumMillJRadioButton.setSelected(true);
             spectrumMillJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
             sequestResultsJRadioButton.setSelected(true);
             sequestResultsJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
@@ -250,7 +250,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(sequestResultsJRadioButton);
-        sequestResultsJRadioButton.setText("Sequest Result Files");
+        sequestResultsJRadioButton.setText("SEQUEST Result Files");
         sequestResultsJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         sequestResultsJRadioButton.setIconTextGap(20);
         sequestResultsJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -272,7 +272,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(sequestDTAFilesJRadioButton);
-        sequestDTAFilesJRadioButton.setText("Sequest DTA Files");
+        sequestDTAFilesJRadioButton.setText("SEQUEST DTA Files");
         sequestDTAFilesJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         sequestDTAFilesJRadioButton.setIconTextGap(20);
         sequestDTAFilesJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -616,7 +616,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
             PRIDEConverter.getProperties().setDataSource("Mascot Generic File");
             new DataFileSelection(this.getLocation());
         } else if (sequestDTAFilesJRadioButton.isSelected()) {
-            PRIDEConverter.getProperties().setDataSource("Sequest DTA File");
+            PRIDEConverter.getProperties().setDataSource("SEQUEST DTA File");
             new DataFileSelection(this.getLocation());
         } else if (xTandemJRadioButton.isSelected()) {
             PRIDEConverter.getProperties().setDataSource("X!Tandem");
@@ -628,7 +628,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
             PRIDEConverter.getProperties().setDataSource("Spectrum Mill");
             new DataFileSelectionTwoFileTypes(this.getLocation());
         } else if (sequestResultsJRadioButton.isSelected()) {
-            PRIDEConverter.getProperties().setDataSource("Sequest Result File");
+            PRIDEConverter.getProperties().setDataSource("SEQUEST Result File");
             new DataFileSelectionTwoFileTypes(this.getLocation());
         } else if (mzXMLJRadioButton.isSelected()) {
             PRIDEConverter.getProperties().setDataSource("mzXML");
@@ -806,15 +806,15 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         this.nextJButton.setEnabled(true);
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
-                "<b>Sequest Result File</b><br><br>" + "Sequest Result File " +
-                "are result files from a Sequest search.<br> " +
+                "<b>SEQUEST Result File</b><br><br>" + "SEQUEST Result File " +
+                "are result files from a SEQUEST search.<br> " +
                 "Includes two sets of files: *.dta (the spectrum files) and *.out " +
                 "(the identification files).<br><br>" +
                 "File Extensions: .dta and .out<br><br>" +
                 "Homepage: <a href=\"http://fields.scripps.edu/?q=content/software\">http://fields.scripps.edu/?q=content/software</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest Result File")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_sequestResultsJRadioButtonActionPerformed
@@ -878,8 +878,8 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         this.nextJButton.setEnabled(true);
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
-                "<b>Sequest DTA Files</b><br><br>" +
-                "Sequest DTA File is a simple MS/MS data format without identifications." +
+                "<b>SEQUEST DTA Files</b><br><br>" +
+                "SEQUEST DTA File is a simple MS/MS data format without identifications." +
                 "<br>The first line contains the singly protonated peptide mass (MH+) and the peptide charge " +
                 "state. <br>Subsequent lines contain space separated pairs of fragment ion m/z and intensity values. " +
                 "<br><br>NB: Each file contains a single MS/MS data set.<br><br>" +
@@ -888,7 +888,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "www.matrixscience.com/help/data_file_help.html#DTA</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST DTA File")) {
             resetDataSourceProperties();
         }
 }//GEN-LAST:event_sequestDTAFilesJRadioButtonActionPerformed
@@ -1120,7 +1120,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         this.nextJButton.setEnabled(true);
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
                 "<b>DTASelect</b><br><br>" +
-                "DTASelect reassembles Sequest peptide information into protein information.<br><br>" +
+                "DTASelect reassembles SEQUEST peptide information into protein information.<br><br>" +
                 "File Extensions: .txt for the identifications (the DTASelect file) and .ms2 for the spectra<br><br>" +
                 "More Information: <a href=\"http://fields.scripps.edu/DTASelect\">" +
                 "http://fields.scripps.edu/DTASelect</a><br><br><br>" +

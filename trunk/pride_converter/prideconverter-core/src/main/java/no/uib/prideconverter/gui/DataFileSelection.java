@@ -340,7 +340,7 @@ public class DataFileSelection extends javax.swing.JFrame {
 
             this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
-            if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File") ||
+            if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST DTA File") ||
                     PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Micromass PKL File") ||
                     PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML") ||
                     PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzML") ||
@@ -474,7 +474,7 @@ public class DataFileSelection extends javax.swing.JFrame {
             chooser.setFileFilter(new MgfFileFilter());
         } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
             chooser.setFileFilter(new DatFileFilter());
-        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST DTA File")) {
             chooser.setFileFilter(new DtaFileFilter());
         } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
             chooser.setFileFilter(new XmlFileFilter());
@@ -570,7 +570,7 @@ public class DataFileSelection extends javax.swing.JFrame {
                                             " is already selected.\nThe same file can not be added twice.", "File already selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
-                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Sequest DTA File")) {
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST DTA File")) {
                             if (tempFile.getAbsolutePath().endsWith(".dta") ||
                                     tempFile.getAbsolutePath().endsWith(".DTA")) {
                                 if (!PRIDEConverter.getProperties().getSelectedSourceFiles().contains(
