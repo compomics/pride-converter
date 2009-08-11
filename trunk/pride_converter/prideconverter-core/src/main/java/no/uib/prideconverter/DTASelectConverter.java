@@ -384,7 +384,7 @@ public class DTASelectConverter {
             // Information taken from the file name:
             String fileName = null;
             String spectrumFile = null;
-            Long scanNumber = null;
+            String scanNumber = null;
             Integer charge = null;
 
             Double sequestXcorr = null;
@@ -609,7 +609,7 @@ public class DTASelectConverter {
                                 spectrumFile = fileInfo[0].trim();
                             }
 
-                            scanNumber = new Long(fileInfo[1].trim());
+                            scanNumber = fileInfo[1].trim();
 
                             // tokens 2 and 3 will be the same, we do not need this
                             charge = new Integer(fileInfo[3].trim());
@@ -726,7 +726,7 @@ public class DTASelectConverter {
                                 spectrumFile = fileInfo[0].trim();
                             }
 
-                            scanNumber = new Long(fileInfo[1].trim());
+                            scanNumber = fileInfo[1].trim();
 
                             // tokens 2 and 3 will be the same, we do not need this
                             charge = new Integer(fileInfo[3].trim());
