@@ -462,7 +462,7 @@ public class DataFileSelection extends javax.swing.JFrame {
      */
     private void selectFileOrFolderJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectFileOrFolderJButtonActionPerformed
 
-        // Lots of code is repeated. Should be rewritten/simplified.
+        // ToDo: Lots of code is repeated. Should be rewritten/simplified.
 
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
