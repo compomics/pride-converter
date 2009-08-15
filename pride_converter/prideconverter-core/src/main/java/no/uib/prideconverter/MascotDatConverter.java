@@ -550,7 +550,7 @@ public class MascotDatConverter {
                                         // iterate the fragment ions, detect the type and create CV params for each of them
                                         for (Object currentFragmentIon1 : currentFragmentIons) {
 
-                                            // Note: 'FragmentIon' is included in several projetcs so the complete path is required
+                                            // Note: 'FragmentIon' is included in several projects so the complete path is required
                                             be.proteomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl currentFragmentIon =
                                                     (be.proteomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl) currentFragmentIon1;
 

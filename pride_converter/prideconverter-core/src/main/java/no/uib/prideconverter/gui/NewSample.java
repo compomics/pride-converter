@@ -391,6 +391,8 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
                 ontologies.add(cvTermsJTable.getValueAt(i, 3));
             }
 
+            // ToDo: check that sample name is unique!!
+
             sampleDetails.addSampleDetails(
                     sampleNameJTextField.getText(), terms, accessions, ontologies, modifiedRow);
 
