@@ -5,5 +5,5 @@
  * FEATURE IMPROVEMENT: The OLS Dialog has been redesigned.
  * LIBRARY UPDATE: ols-client-1.14 has been replaced by ols-dialog-1.0.
  * LIBRARY UPDATE: Updated the utilities library to version 2.9.9.
-
+ * LIBRARY UPDATE: Updated the mascot_datfile library to version 2.2.1.
  
