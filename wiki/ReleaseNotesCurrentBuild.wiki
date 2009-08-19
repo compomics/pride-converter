@@ -7,5 +7,5 @@
  * BUG FIX: Updated the fragment ion CV term mappings to be able to handle H2O neutral losses using both 'O' (the letter) and '0' (the number) in the H2O tag.
  * LIBRARY UPDATE: ols-client-1.14 has been replaced by ols-dialog-1.0.
  * LIBRARY UPDATE: Updated the utilities library to version 2.9.9.
- * LIBRARY UPDATE: Updated the mascot_datfile library to version 2.2.1.
+ * LIBRARY UPDATE: Updated the mascot_datfile library to version 2.2.2.
  
