@@ -88,7 +88,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         JFormattedTextField tf = ((JSpinner.DefaultEditor) mascotConfidenceLevelJSpinner.getEditor()).getTextField();
         tf.setHorizontalAlignment(JFormattedTextField.CENTER);
 
-        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot DAT File")) {
 
             spectraJXTable.setModel(new javax.swing.table.DefaultTableModel(
                     new Object[][]{},
@@ -159,7 +159,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
         mascotConfidenceLevelJSpinner.setValue(PRIDEConverter.getProperties().getMascotConfidenceLevel());
 
-        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot DAT File")) {
             mascotConfidenceLevelJLabel.setEnabled(true);
             mascotConfidenceLevelJSpinner.setEnabled(true);
         }
@@ -782,7 +782,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
     private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backJButtonActionPerformed
 
         if (saveInsertedInformation()) {
-            if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File") ||
+            if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot DAT File") ||
                     PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
                 new DataFileSelection(this.getLocation());
             } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill") ||
@@ -1419,7 +1419,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                             "See ../Properties/ErrorLog.txt for more details.",
                                             "Error Parsing File", JOptionPane.ERROR_MESSAGE);
                                 }
-                            } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+                            } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot DAT File")) {
 
                                 PRIDEConverter.getProperties().setMascotConfidenceLevel(
                                         (Double) mascotConfidenceLevelJSpinner.getValue());
@@ -1890,7 +1890,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                         }
                     } else {
 
-                        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+                        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot DAT File")) {
                             if (((Integer) spectraJXTable.getValueAt(i, selectionColumn)).toString().equalsIgnoreCase(tempToken)) {
                                 spectraJXTable.setValueAt(new Boolean(true), i, 4);
                                 selected = true;

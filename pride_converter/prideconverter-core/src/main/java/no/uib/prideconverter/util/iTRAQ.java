@@ -117,7 +117,7 @@ public class iTRAQ {
 
     /**
      * Creates a new iTRAQ object that holds all the information needed for 
-     * the calculations. Only supports Mascot Dat Files.
+     * the calculations. Only supports Mascot DAT Files.
      * 
      * @param fileName
      * @param lowerRange
@@ -147,7 +147,7 @@ public class iTRAQ {
             //read dat file
             mascotDatFile = new MascotDatfile(file.getPath());
         } else {
-            System.out.println("Only Mascot Dat Files are supported!");
+            System.out.println("Only Mascot DAT Files are supported!");
         }
     }
 

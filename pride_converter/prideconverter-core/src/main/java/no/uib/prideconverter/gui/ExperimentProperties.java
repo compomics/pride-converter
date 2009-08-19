@@ -1413,7 +1413,7 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
                 PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File") ||
                 PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA") ||
                 PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims") ||
-                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+                PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot DAT File")) {
             new SpectraSelectionWithIdentifications(this.getLocation());
         } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")){
             new DataFileSelectionTPP(this.getLocation());

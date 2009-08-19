@@ -448,7 +448,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                     // detect the data source used, and use the corresponding transformSpectra method
                     if (properties.getDataSource().equalsIgnoreCase("ms_lims")) {
                         filenameToSpectrumID = MS_LimsConverter.transformSpectraFrom_ms_lims(mzDataSpectra);
-                    } else if (properties.getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+                    } else if (properties.getDataSource().equalsIgnoreCase("Mascot DAT File")) {
                         filenameToSpectrumID = MascotDatConverter.transformSpectraFromMascotDatFile(mzDataSpectra);
                     } else if (properties.getDataSource().equalsIgnoreCase("Mascot Generic File")) {
                         filenameToSpectrumID = MascotGenericConverter.transformSpectraFromMascotGenericFile(mzDataSpectra);
@@ -825,7 +825,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
                         String dataSourceShort = "";
 
-                        if (properties.getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+                        if (properties.getDataSource().equalsIgnoreCase("Mascot DAT File")) {
                             dataSourceShort = "mascotDatFile";
                         } else if (properties.getDataSource().equalsIgnoreCase("Mascot Generic File")) {
                             dataSourceShort = "mascotGenericFile";
@@ -2048,7 +2048,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
             Collection<UserParam> userParams = null;
             Collection<CvParam> cvParams = null;
 
-            if (properties.getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+            if (properties.getDataSource().equalsIgnoreCase("Mascot DAT File")) {
 
                 userParams = new ArrayList<UserParam>(1);
 //                userParams.add(new UserParamImpl("ScoreCalculation", 0, "MeanOfPeptideScores"));

@@ -54,7 +54,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
             ms_limsJRadioButton.setSelected(true);
             ms_limsJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot DAT File")) {
             mascotDatFileJRadioButton.setSelected(true);
             mascotDatFileJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
@@ -90,10 +90,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
             omssaJRadioButton.setSelected(true);
             omssaJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzML")) {
-            mzMLJRadioButton.setSelected(true);
-            mzMLJRadioButtonActionPerformed(null);
-            nextJButton.setEnabled(true);
         } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
             mzDataJRadioButton.setSelected(true);
             mzDataJRadioButtonActionPerformed(null);
@@ -122,8 +118,8 @@ public class DataSourceSelection extends javax.swing.JFrame {
                     "To get started select one of the supported data sources above and click Next.<br><br>" +
                     "For additional help click the help icons in the lower left corner of each frame.<br><br>" +
                     "More information about <b>PRIDE Converter</b> can be found here:<br>" +
-                    "<a href=\"http://code.google.com/p/pride-converter\">" +
-                    "http://code.google.com/p/pride-converter</a>");
+                    "<a href=\"http://pride-converter.googlecode.com\">" +
+                    "http://pride-converter.googlecode.com</a>");
             descriptionJEditorPane.setCaretPosition(0);
         }
 
@@ -168,8 +164,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         mzXMLJRadioButton = new javax.swing.JRadioButton();
         tppJRadioButton = new javax.swing.JRadioButton();
         omssaJRadioButton = new javax.swing.JRadioButton();
-        mzMLJRadioButton = new javax.swing.JRadioButton();
-        phenyxJRadioButton = new javax.swing.JRadioButton();
         ms_limsJRadioButton = new javax.swing.JRadioButton();
         vemsJRadioButton = new javax.swing.JRadioButton();
         ms2JRadioButton = new javax.swing.JRadioButton();
@@ -217,7 +211,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         buttonGroup1.add(mascotDatFileJRadioButton);
         mascotDatFileJRadioButton.setFont(mascotDatFileJRadioButton.getFont());
-        mascotDatFileJRadioButton.setText("Mascot Dat Files");
+        mascotDatFileJRadioButton.setText("Mascot DAT Files");
         mascotDatFileJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         mascotDatFileJRadioButton.setIconTextGap(20);
         mascotDatFileJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -327,34 +321,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
             }
         });
 
-        buttonGroup1.add(mzMLJRadioButton);
-        mzMLJRadioButton.setText("mzML");
-        mzMLJRadioButton.setToolTipText("In Development");
-        mzMLJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        mzMLJRadioButton.setEnabled(false);
-        mzMLJRadioButton.setIconTextGap(20);
-        mzMLJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        mzMLJRadioButton.setPreferredSize(new java.awt.Dimension(0, 0));
-        mzMLJRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mzMLJRadioButtonActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(phenyxJRadioButton);
-        phenyxJRadioButton.setText("Phenyx");
-        phenyxJRadioButton.setToolTipText("In Development");
-        phenyxJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        phenyxJRadioButton.setEnabled(false);
-        phenyxJRadioButton.setIconTextGap(20);
-        phenyxJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        phenyxJRadioButton.setPreferredSize(new java.awt.Dimension(0, 0));
-        phenyxJRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                phenyxJRadioButtonActionPerformed(evt);
-            }
-        });
-
         buttonGroup1.add(ms_limsJRadioButton);
         ms_limsJRadioButton.setText("ms_lims 7");
         ms_limsJRadioButton.setToolTipText("Mass Spectrometry Laboratory Information Managment System");
@@ -368,7 +334,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(vemsJRadioButton);
-        vemsJRadioButton.setText("VEMS");
+        vemsJRadioButton.setText("VEMS PKX Files");
         vemsJRadioButton.setToolTipText("Virtual Expert Mass Spectrometrist ");
         vemsJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         vemsJRadioButton.setIconTextGap(20);
@@ -433,25 +399,18 @@ public class DataSourceSelection extends javax.swing.JFrame {
                     .add(ms_limsJRadioButton))
                 .add(57, 57, 57)
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(71, 71, 71)
-                        .add(phenyxJRadioButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(vemsJRadioButton)
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(ms2JRadioButton)
-                        .add(18, 18, 18)
-                        .add(mzMLJRadioButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(ms2JRadioButton)
                     .add(mzXMLJRadioButton)
                     .add(mzDataJRadioButton)
                     .add(dtaSelectJRadioButton))
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(phenyxJRadioButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jPanel4Layout.createSequentialGroup()
                         .add(mascotDatFileJRadioButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -469,8 +428,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(sequestDTAFilesJRadioButton)
-                            .add(ms2JRadioButton)
-                            .add(mzMLJRadioButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(ms2JRadioButton))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(omssaJRadioButton)
@@ -610,7 +568,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
             PRIDEConverter.getProperties().setDataSource("ms_lims");
             new DataBaseDetails(this.getLocation());
         } else if (mascotDatFileJRadioButton.isSelected()) {
-            PRIDEConverter.getProperties().setDataSource("Mascot Dat File");
+            PRIDEConverter.getProperties().setDataSource("Mascot DAT File");
             new DataFileSelection(this.getLocation());
         } else if (mgfJRadioButton.isSelected()) {
             PRIDEConverter.getProperties().setDataSource("Mascot Generic File");
@@ -635,9 +593,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
             new DataFileSelection(this.getLocation());
         } else if (omssaJRadioButton.isSelected()) {
             PRIDEConverter.getProperties().setDataSource("OMSSA");
-            new DataFileSelection(this.getLocation());
-        } else if (mzMLJRadioButton.isSelected()) {
-            PRIDEConverter.getProperties().setDataSource("mzML");
             new DataFileSelection(this.getLocation());
         } else if (mzDataJRadioButton.isSelected()) {
             PRIDEConverter.getProperties().setDataSource("mzData");
@@ -733,14 +688,14 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         this.nextJButton.setEnabled(true);
         descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
-                "<b>Mascot Dat Files</b><br><br>" +
-                "Mascot Dat Files are result files " +
+                "<b>Mascot DAT Files</b><br><br>" +
+                "Mascot DAT Files are result files " +
                 "from a Mascot search. <br>Both the spectra and the identifications are included.<br><br>" +
                 "File Extension: .dat<br><br>" +
                 "Homepage: <a href=\"http://www.matrixscience.com\">www.matrixscience.com</a>");
         descriptionJEditorPane.setCaretPosition(0);
 
-        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot DAT File")) {
             resetDataSourceProperties();
         }
     }//GEN-LAST:event_mascotDatFileJRadioButtonActionPerformed
@@ -998,24 +953,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
      * 
      * @param evt
      */
-    private void mzMLJRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mzMLJRadioButtonActionPerformed
-        ((TitledBorder) descriptionJPanel.getBorder()).setTitle("Data Source Description");
-        repaint();
-
-        this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
-                "<b>mzML</b><br><br>" +
-                "mzML is a common file format for proteomics mass spectrometric data.<br><br>" +
-                "File Extension: .mzML<br><br>" +
-                "More Information: <a href=\"http://www.psidev.info/index.php?q=node/257\">" +
-                "http://www.psidev.info/index.php?q=node/257</a>");
-        descriptionJEditorPane.setCaretPosition(0);
-
-        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzML")) {
-            resetDataSourceProperties();
-        }
-}//GEN-LAST:event_mzMLJRadioButtonActionPerformed
-
     /**
      * See ms_limsJRadioButtonActionPerformed
      * 
@@ -1044,22 +981,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
      * 
      * @param evt
      */
-    private void phenyxJRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phenyxJRadioButtonActionPerformed
-        ((TitledBorder) descriptionJPanel.getBorder()).setTitle("Data Source Description");
-        repaint();
-
-        this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
-                "<b>Phenyx</b><br><br>" + "Phenyx<br><br>" + "File Extension: ?<br><br>" +
-                "More Information: <a href=\"http://www.genebio.com/products/phenyx/\">" +
-                "http://www.genebio.com/products/phenyx/</a>");
-        descriptionJEditorPane.setCaretPosition(0);
-
-        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Phenyx")) {
-            resetDataSourceProperties();
-        }
-}//GEN-LAST:event_phenyxJRadioButtonActionPerformed
-
     /**
      * See ms_limsJRadioButtonActionPerformed
      * 
@@ -1162,11 +1083,9 @@ public class DataSourceSelection extends javax.swing.JFrame {
     private javax.swing.JRadioButton ms2JRadioButton;
     private javax.swing.JRadioButton ms_limsJRadioButton;
     private javax.swing.JRadioButton mzDataJRadioButton;
-    private javax.swing.JRadioButton mzMLJRadioButton;
     private javax.swing.JRadioButton mzXMLJRadioButton;
     private javax.swing.JButton nextJButton;
     private javax.swing.JRadioButton omssaJRadioButton;
-    private javax.swing.JRadioButton phenyxJRadioButton;
     private javax.swing.JRadioButton pklFilesJRadioButton;
     private javax.swing.JRadioButton sequestDTAFilesJRadioButton;
     private javax.swing.JRadioButton sequestResultsJRadioButton;
