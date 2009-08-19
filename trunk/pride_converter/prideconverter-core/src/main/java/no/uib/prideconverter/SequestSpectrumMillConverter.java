@@ -426,7 +426,7 @@ public class SequestSpectrumMillConverter {
                                             //       - use arrays variable for peak masses and intensities
                                             //       - parse 'fragment_mass_tolerance' term from input file for mass delta
                                             //       - parse 'it a b b_nh3 b_h2o b_plus_h2o y y_nh3 y_h2o' term from input file for ion type definition
-                                            // 2 - add them to the fragmentIons list (see Mascot Dat File for how to do this)
+                                            // 2 - add them to the fragmentIons list (see Mascot DAT File for how to do this)
                                             // 3 - add new mappings to the FragmentIonsMapping.prop file
                                             // 4 - that's it, the rest is taken care of :)
 
@@ -861,7 +861,7 @@ public class SequestSpectrumMillConverter {
 
                                         // handle protein isoforms
                                         // not currently used and not finished.
-                                        // see Mascot Dat file for example.
+                                        // see Mascot DAT File for example.
 //                                        String nextLine = b.readLine();
 //
 //                                        // check for protein isoforms

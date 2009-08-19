@@ -46,7 +46,7 @@ public class Properties {
     private String spectraSelectionCriteria = null;
     private boolean selectionCriteriaIsFileName = true;
     private double peptideScoreThreshold = 0.0;
-    private String dataSource = ""; //e.g. Mascot Dat Files, PKL Files etc.
+    private String dataSource = ""; //e.g. Mascot DAT Files, PKL Files etc.
     private ArrayList<String> selectedSourceFiles = null;
     private ArrayList<String> selectedIdentificationFiles = null;
     private String proteinProphetFileName = null;
@@ -408,7 +408,7 @@ public class Properties {
     }
 
     /**
-     * Returns the current data source (e.g. PKL Files or Mascot Dat Files).
+     * Returns the current data source (e.g. PKL Files or Mascot DAT Files).
      * 
      * @return the current data source
      */
@@ -417,7 +417,7 @@ public class Properties {
     }
 
     /**
-     * Set the current data source (e.g. PKL Files or Mascot Dat Files).
+     * Set the current data source (e.g. PKL Files or Mascot DAT Files).
      * 
      * @param aDataSource
      */

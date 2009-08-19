@@ -351,7 +351,7 @@ public class DataFileSelection extends javax.swing.JFrame {
                 new SpectraSelectionNoIdentifications(this.getLocation());
             } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem") ||
                     PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA") ||
-                    PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+                    PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot DAT File")) {
                 new SpectraSelectionWithIdentifications(this.getLocation());
             }
 
@@ -472,7 +472,7 @@ public class DataFileSelection extends javax.swing.JFrame {
 
         if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Generic File")) {
             chooser.setFileFilter(new MgfFileFilter());
-        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot DAT File")) {
             chooser.setFileFilter(new DatFileFilter());
         } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST DTA File")) {
             chooser.setFileFilter(new DtaFileFilter());
@@ -550,7 +550,7 @@ public class DataFileSelection extends javax.swing.JFrame {
                                             " is already selected.\nThe same file can not be added twice.", "File already selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
-                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Dat File")) {
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot DAT File")) {
                             if (tempFile.getAbsolutePath().endsWith(".dat") ||
                                     tempFile.getAbsolutePath().endsWith(".DAT")) {
                                 if (!PRIDEConverter.getProperties().getSelectedSourceFiles().contains(

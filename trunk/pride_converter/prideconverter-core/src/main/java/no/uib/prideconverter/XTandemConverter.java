@@ -1277,7 +1277,7 @@ public class XTandemConverter {
                                 // 1 - get the fragment ions from the X!Tandem xml file somehow
                                 //     (when you know where to find this information, you might want to move the
                                 //      extraction of the info into one of the if's further down in this code)
-                                // 2 - add them to the fragmentIons list (see Mascot Dat File for how to do this)
+                                // 2 - add them to the fragmentIons list (see Mascot DAT File for how to do this)
                                 // 3 - add new mappings to the FragmentIonsMapping.prop file
                                 // 4 - that's it, the rest is taken care of :)
 
