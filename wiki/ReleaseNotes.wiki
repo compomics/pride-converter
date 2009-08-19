@@ -4,7 +4,7 @@
 ----
 
 *Changes in PRIDE Converter v2.0.2 - (Aug. 19. 2009):*
-* FEATURE IMPROVEMENT: The OLS Dialog has been redesigned (and made into a separate project (http://ols-dialog.googlecode.com)).
+ * FEATURE IMPROVEMENT: The OLS Dialog has been redesigned (and made into a separate project (http://ols-dialog.googlecode.com)).
  * FEATURE IMPROVEMENT: Made sure that an ambiguous spectrum mapping (for mapping a peptide identification to a spectrum) cancels the conversion process.
  * BUG FIX: Updated the fragment ion CV term mappings to be able to handle H2O neutral losses using both 'O' (the letter) and '0' (the number) in the H2O tag.
  * LIBRARY UPDATE: ols-client-1.14 has been replaced/extended by ols-dialog-1.0.1.
