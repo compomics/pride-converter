@@ -99,6 +99,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                 Class[] types = new Class[]{
                     java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Boolean.class, java.lang.Boolean.class
                 };
+
                 boolean[] canEdit = new boolean[]{
                     false, false, false, false, true
                 };
@@ -200,9 +201,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                 }
             }
 
-            numberOfSelectedSpectraJTextField.setText("" +
-                    numberOfSelectedSpectra + "/" +
-                    spectraJXTable.getRowCount());
+            numberOfSelectedSpectraJTextField.setText(
+                    "" + numberOfSelectedSpectra + "/" + spectraJXTable.getRowCount());
         }
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
@@ -815,7 +815,6 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         progressDialog.setIntermidiate(true);
 
         Thread t = new Thread(new Runnable() {
-
             public void run() {
                 progressDialog.setVisible(true);
             }
@@ -883,8 +882,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                         file = new File(selectedFiles.get(j));
 
-                        progressDialog.setString(file.getName() + " (" + (j + 1) +
-                                "/" + selectedFiles.size() + ")");
+                        progressDialog.setString(file.getName() + " (" + (j + 1) + "/" + selectedFiles.size() + ")");
 
                         spectrumID = -1;
                         precursorMass = 0.0;
@@ -920,17 +918,13 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                             for (int i = 0; i < nodes.getLength() && !spectrumTagFound; i++) {
                                 if (nodes.item(i).getAttributes() != null) {
                                     if (nodes.item(i).getAttributes().getNamedItem("type") != null) {
-                                        if (nodes.item(i).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase(
-                                                "parameters") &&
-                                                nodes.item(i).getAttributes().getNamedItem("label").getNodeValue().equalsIgnoreCase(
-                                                "input parameters")) {
+                                        if (nodes.item(i).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase("parameters") &&
+                                                nodes.item(i).getAttributes().getNamedItem("label").getNodeValue().equalsIgnoreCase("input parameters")) {
                                             parameterNodes = nodes.item(i).getChildNodes();
 
                                             for (int m = 0; m < parameterNodes.getLength() && !spectrumTagFound; m++) {
                                                 if (parameterNodes.item(m).getAttributes() != null) {
                                                     if (parameterNodes.item(m).getAttributes().getNamedItem("label").toString().equalsIgnoreCase("label=\"spectrum, path\"")) {
-                                                        //System.out.println(parameterNodes.item(m).getTextContent());
-                                                        //identifiedSpectraIds.add(parameterNodes.item(m).getTextContent() + "_" + spectrumID);
                                                         spectrumTag = parameterNodes.item(m).getTextContent();
                                                         spectrumTagFound = true;
                                                     }
@@ -978,11 +972,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                 }
 
                                 if (nodes.item(i).getAttributes() != null) {
-
                                     if (nodes.item(i).getAttributes().getNamedItem("type") != null) {
-
                                         if (nodes.item(i).getAttributes().getNamedItem("type").getNodeValue().equalsIgnoreCase("model")) {
-
                                             if (nodes.item(i).getAttributes().getNamedItem("id") != null) {
                                                 spectrumID = new Integer(nodes.item(i).getAttributes().getNamedItem("id").getNodeValue()).intValue();
                                                 identifiedSpectraIds.add(spectrumTag + "_" + spectrumID);
@@ -1194,8 +1185,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                         numberOfSelectedSpectra++;
                                     }
 
-                                    numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-                                            "/" + spectraJXTable.getRowCount());
+                                    numberOfSelectedSpectraJTextField.setText(
+                                            numberOfSelectedSpectra + "/" + spectraJXTable.getRowCount());
                                 }
                             }
 
@@ -1212,8 +1203,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                             }
                         }
                     } catch (FileNotFoundException ex) {
-                        JOptionPane.showMessageDialog(null, "The file named " +
-                                file.getPath() +
+                        JOptionPane.showMessageDialog(null, 
+                                "The file named " + file.getPath() +
                                 "\ncould not be found.",
                                 "File Not Found", JOptionPane.ERROR_MESSAGE);
                         Util.writeToErrorLog("Error when trying to read file: ");
@@ -1226,10 +1217,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                         String fileType = PRIDEConverter.getProperties().getDataSource();
 
                         JOptionPane.showMessageDialog(null,
-                                "The following file could not parsed as a " +
-                                fileType + ":\n " +
-                                file.getPath() +
-                                "\n\n" +
+                                "The following file could not parsed as a " + fileType + ":\n " +
+                                file.getPath() + "\n\n" +
                                 "See ../Properties/ErrorLog.txt for more details.",
                                 "Error Parsing File", JOptionPane.ERROR_MESSAGE);
                     }
@@ -1242,8 +1231,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                             file = new File(selectedFiles.get(j));
 
-                            progressDialog.setString(file.getName() + " (" + (j + 1) +
-                                    "/" + selectedFiles.size() + ")");
+                            progressDialog.setString(file.getName() + " (" + (j + 1) + "/" + selectedFiles.size() + ")");
 
                             spectrumID = -1;
                             precursorMass = 0.0;
@@ -1272,18 +1260,14 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                                     matchFound = false;
 
-                                    for (int i = 0; i <
-                                            PRIDEConverter.getProperties().getSelectedIdentificationFiles().size() &&
-                                            !matchFound; i++) {
+                                    for (int i = 0; i < PRIDEConverter.getProperties().getSelectedIdentificationFiles().size() && !matchFound; i++) {
 
                                         if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
-                                            matchFound = new File(PRIDEConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName().equalsIgnoreCase(file.getName() +
-                                                    ".spo");
-                                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
-
                                             matchFound = new File(PRIDEConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName().equalsIgnoreCase(
-                                                    file.getName().substring(0, file.getName().length() -
-                                                    4) + ".out");
+                                                    file.getName() + ".spo");
+                                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
+                                            matchFound = new File(PRIDEConverter.getProperties().getSelectedIdentificationFiles().get(i)).getName().equalsIgnoreCase(
+                                                    file.getName().substring(0, file.getName().length() - 4) + ".out");
                                         }
                                     }
 
@@ -1308,12 +1292,12 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                         numberOfSelectedSpectra++;
                                     }
 
-                                    numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-                                            "/" + spectraJXTable.getRowCount());
+                                    numberOfSelectedSpectraJTextField.setText(
+                                            numberOfSelectedSpectra + "/" + spectraJXTable.getRowCount());
 
                                 } catch (FileNotFoundException ex) {
-                                    JOptionPane.showMessageDialog(null, "The file named " +
-                                            file.getName() +
+                                    JOptionPane.showMessageDialog(null, 
+                                            "The file named " + file.getName() +
                                             "\ncould not be found.",
                                             "File Not Found", JOptionPane.ERROR_MESSAGE);
                                     Util.writeToErrorLog("File not found: ");
@@ -1330,8 +1314,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                     e.printStackTrace();
 
                                     JOptionPane.showMessageDialog(null,
-                                            "The following file could not parsed as a " +
-                                            fileName + ":\n " +
+                                            "The following file could not parsed as a " + fileName + ":\n " +
                                             file.getPath() + "\n\n" +
                                             "See ../Properties/ErrorLog.txt for more details.",
                                             "Error Parsing File", JOptionPane.ERROR_MESSAGE);
@@ -1339,8 +1322,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                                 if (!progressDialog.isVisible()) {
 
-                                    while (((DefaultTableModel) spectraJXTable.getModel()).getRowCount() >
-                                            0) {
+                                    while (((DefaultTableModel) spectraJXTable.getModel()).getRowCount() > 0) {
                                         ((DefaultTableModel) spectraJXTable.getModel()).removeRow(0);
                                     }
 
@@ -1391,9 +1373,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                                     new Boolean(selected)
                                                 });
 
-                                        numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-                                                "/" +
-                                                spectraJXTable.getRowCount());
+                                        numberOfSelectedSpectraJTextField.setText(
+                                                numberOfSelectedSpectra + "/" + spectraJXTable.getRowCount());
                                     }
 
                                     if (!progressDialog.isVisible()) {
@@ -1424,9 +1405,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                 PRIDEConverter.getProperties().setMascotConfidenceLevel(
                                         (Double) mascotConfidenceLevelJSpinner.getValue());
 
-                                double confidenceLevel = (100 -
-                                        PRIDEConverter.getProperties().getMascotConfidenceLevel()) /
-                                        100;
+                                double confidenceLevel = 
+                                        (100 - PRIDEConverter.getProperties().getMascotConfidenceLevel()) / 100;
 
                                 double size = (double) file.length() /
                                         PRIDEConverter.getProperties().NUMBER_OF_BYTES_PER_MEGABYTE;
@@ -1434,13 +1414,9 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                 if (size > PRIDEConverter.getProperties().MAX_MASCOT_DAT_FILESIZE_BEFORE_INDEXING) {
 
                                     //if the file is large
-                                    tempMascotDatfile = MascotDatfileFactory.create(
-                                            file.getPath(),
-                                            MascotDatfileType.INDEX);
+                                    tempMascotDatfile = MascotDatfileFactory.create(file.getPath(), MascotDatfileType.INDEX);
                                 } else {
-                                    tempMascotDatfile = MascotDatfileFactory.create(
-                                            file.getPath(),
-                                            MascotDatfileType.MEMORY);
+                                    tempMascotDatfile = MascotDatfileFactory.create(file.getPath(), MascotDatfileType.MEMORY);
                                 }
 
                                 queryToPeptideMap = tempMascotDatfile.getQueryToPeptideMap();
@@ -1492,13 +1468,12 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                         return;
                                     }
 
-                                    numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-                                            "/" + totalNumberOfSpectra);
+                                    numberOfSelectedSpectraJTextField.setText(
+                                            numberOfSelectedSpectra + "/" + totalNumberOfSpectra);
                                 }
                             }
                         }
                     }
-
                 }
 
                 if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("ms_lims")) {
@@ -1570,7 +1545,6 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                         }
                                     }
                                 } else {
-
                                     if (selectAllSpectraJRadioButton.isSelected()) {
                                         selected = true;
                                     } else if (selectIdentifiedJRadioButton.isSelected()) {
@@ -1592,9 +1566,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                             new Boolean(selected)
                                         });
 
-                                numberOfSelectedSpectraJTextField.setText("" +
-                                        numberOfSelectedSpectra + "/" +
-                                        spectraJXTable.getRowCount());
+                                numberOfSelectedSpectraJTextField.setText(
+                                        "" + numberOfSelectedSpectra + "/" + spectraJXTable.getRowCount());
                             }
                         }
                     } catch (OutOfMemoryError error) {
@@ -1633,8 +1606,8 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                 progressDialog.setVisible(false);
                 progressDialog.dispose();
 
-                numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-                        "/" + spectraJXTable.getRowCount());
+                numberOfSelectedSpectraJTextField.setText(
+                        numberOfSelectedSpectra + "/" + spectraJXTable.getRowCount());
 
                 if (numberOfSelectedSpectra == 0) {
 //                    JOptionPane.showMessageDialog(null, "The file did not contain any spectra.",
@@ -1671,28 +1644,23 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         }
 
         if (selectAll) {
-            for (int i = 0; i <
-                    spectraJXTable.getRowCount(); i++) {
+            for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
                 if (!(((Boolean) spectraJXTable.getValueAt(i, 4)).booleanValue())) {
                     spectraJXTable.setValueAt(new Boolean(true), i, 4);
                 }
             }
 
-            numberOfSelectedSpectraJTextField.setText("" +
-                    spectraJXTable.getRowCount() + "/" +
-                    spectraJXTable.getRowCount());
-            numberOfSelectedSpectra =
-                    spectraJXTable.getRowCount();
+            numberOfSelectedSpectraJTextField.setText(
+                    spectraJXTable.getRowCount() + "/" + spectraJXTable.getRowCount());
+            numberOfSelectedSpectra = spectraJXTable.getRowCount();
         } else {
-            for (int i = 0; i <
-                    spectraJXTable.getRowCount(); i++) {
+            for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
                 if ((((Boolean) spectraJXTable.getValueAt(i, 4)).booleanValue())) {
                     spectraJXTable.setValueAt(new Boolean(false), i, 4);
                 }
             }
 
-            numberOfSelectedSpectraJTextField.setText("0" + "/" +
-                    spectraJXTable.getRowCount());
+            numberOfSelectedSpectraJTextField.setText("0" + "/" + spectraJXTable.getRowCount());
             numberOfSelectedSpectra = 0;
         }
 
@@ -1734,16 +1702,14 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         numberOfSelectedSpectra = 0;
 
         for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
-            spectraJXTable.setValueAt(
-                    new Boolean(!((Boolean) spectraJXTable.getValueAt(i, 4)).booleanValue()), i, 4);
+            spectraJXTable.setValueAt(new Boolean(!((Boolean) spectraJXTable.getValueAt(i, 4)).booleanValue()), i, 4);
 
             if (((Boolean) spectraJXTable.getValueAt(i, 4)).booleanValue()) {
                 numberOfSelectedSpectra++;
             }
         }
 
-        numberOfSelectedSpectraJTextField.setText("" + numberOfSelectedSpectra +
-                "/" + spectraJXTable.getRowCount());
+        numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra + "/" + spectraJXTable.getRowCount());
 
         if (numberOfSelectedSpectra == 0) {
             nextJButton.setEnabled(false);
@@ -1790,8 +1756,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
             }
         }
 
-        numberOfSelectedSpectraJTextField.setText("" + numberOfSelectedSpectra +
-                "/" + spectraJXTable.getRowCount());
+        numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra + "/" + spectraJXTable.getRowCount());
 
         if (numberOfSelectedSpectra == 0) {
             nextJButton.setEnabled(false);
@@ -1889,7 +1854,6 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                             selected = true;
                         }
                     } else {
-
                         if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot DAT File")) {
                             if (((Integer) spectraJXTable.getValueAt(i, selectionColumn)).toString().equalsIgnoreCase(tempToken)) {
                                 spectraJXTable.setValueAt(new Boolean(true), i, 4);
@@ -1910,9 +1874,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
             }
         }
 
-        numberOfSelectedSpectraJTextField.setText("" +
-                numberOfSelectedSpectra + "/" +
-                spectraJXTable.getRowCount());
+        numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra + "/" + spectraJXTable.getRowCount());
 
         if (numberOfSelectedSpectra == 0) {
             nextJButton.setEnabled(false);
@@ -2040,16 +2002,13 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
             numberOfSelectedSpectra = 0;
 
-            for (int i = 0; i <
-                    spectraJXTable.getRowCount(); i++) {
+            for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
                 if (((Boolean) spectraJXTable.getValueAt(i, 4)).booleanValue()) {
                     numberOfSelectedSpectra++;
                 }
             }
 
-            numberOfSelectedSpectraJTextField.setText("" +
-                    numberOfSelectedSpectra + "/" +
-                    spectraJXTable.getRowCount());
+            numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra + "/" + spectraJXTable.getRowCount());
 
             if (numberOfSelectedSpectra == 0) {
                 nextJButton.setEnabled(false);
@@ -2112,7 +2071,6 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                 PRIDEConverter.getProperties().setSelectAllSpectra(false);
                 PRIDEConverter.getProperties().setSelectAllIdentifiedSpectra(false);
-
                 PRIDEConverter.getProperties().setSpectrumTableModel((DefaultTableModel) spectraJXTable.getModel());
             } else {
                 PRIDEConverter.getProperties().setSpectrumTableModel(null);
