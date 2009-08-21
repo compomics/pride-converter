@@ -426,8 +426,8 @@ public class OmssaConverter {
                     arrays = new double[2][mzValues.size()];
 
                     for (int j = 0; j < mzValues.size(); j++) {
-                        arrays[0][j] = mzValues.get(j) / omssaResponseScale;
-                        arrays[1][j] = intensityValues.get(j) / omssaAbundanceScale;
+                        arrays[0][j] = mzValues.get(j).doubleValue() / omssaResponseScale;
+                        arrays[1][j] = intensityValues.get(j).doubleValue() / omssaAbundanceScale;
                     }
 
                     // Precursor collection.
@@ -447,7 +447,7 @@ public class OmssaConverter {
 
                     ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
                             "MassToChargeRatio", ionSelection.size(),
-                            "" + tempSpectrum.MSSpectrum_precursormz / omssaResponseScale));
+                            "" + (((double) tempSpectrum.MSSpectrum_precursormz) / omssaResponseScale)));
 
                     precursors.add(new PrecursorImpl(null, null, ionSelection, null, 1, 0, 0));
 
@@ -618,7 +618,7 @@ public class OmssaConverter {
 
                         if (properties.getSampleDescriptionCVParamsQuantification().size() > 0) {
                             iTRAQValues = new iTRAQ(arrays,
-                                    tempSpectrum.MSSpectrum_precursormz / omssaResponseScale,
+                                    ((double) tempSpectrum.MSSpectrum_precursormz) / omssaResponseScale,
                                     tempSpectrum.MSSpectrum_charge.MSSpectrum_charge_E.get(0),
                                     userProperties.getPeakIntegrationRangeLower(),
                                     userProperties.getPeakIntegrationRangeUpper(),
@@ -716,14 +716,14 @@ public class OmssaConverter {
                                             // check if the fragment ion is within the mass error range
                                             if (Math.abs(mzValues.get(j) - fragmentIonMzValueUnscaled) <= (ionCoverageErrorMargin * omssaResponseScale)) {
 
-                                                // select this peak if it's the most intense peak withing range
+                                                // select this peak if it's the most intense peak within range
                                                 if ((intensityValues.get(j).doubleValue() / currentIntensityScale) > fragmentIonIntensityScaled) {
                                                     fragmentIonIntensityScaled = intensityValues.get(j).doubleValue() / currentIntensityScale;
 
                                                     // calculate the fragmet ion mass
                                                     fragmentIonMassError = (mzValues.get(j).doubleValue() - fragmentIonMzValueUnscaled)
                                                             / omssaResponseScale; // @TODO: or the other way around?? The order decides the sign.
-                                                    observedPeakMzValue = mzValues.get(j) / omssaResponseScale;
+                                                    observedPeakMzValue = mzValues.get(j).doubleValue() / omssaResponseScale;
                                                 }
                                             }
                                         }
