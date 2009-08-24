@@ -310,7 +310,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         });
         selectAllJPopupMenu.add(invertSelectionJMenuItem);
 
-        viewSpectrumAnnotationsJMenuItem.setText("View/Change Spectrum Parameters");
+        viewSpectrumAnnotationsJMenuItem.setText("View/Change Spectrum Annotations");
         viewSpectrumAnnotationsJMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 viewSpectrumAnnotationsJMenuItemActionPerformed(evt);
