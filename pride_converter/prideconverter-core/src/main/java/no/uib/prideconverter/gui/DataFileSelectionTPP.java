@@ -454,7 +454,9 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
             PRIDEConverter.getProperties().setPeptideProphetThreshold(
                     (Double) peptideProphetConfidenceLevelJSpinner.getValue());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "The PeptideProphet threshold is not a number!");
+            JOptionPane.showMessageDialog(this, 
+                    "PeptideProphet threshold is not a number!", "PeptideProphet Threshold",
+                    JOptionPane.INFORMATION_MESSAGE);
             peptideProphetConfidenceLevelJSpinner.requestFocus();
             saveOk = false;
         }
@@ -463,7 +465,9 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
             PRIDEConverter.getProperties().setProteinProphetThreshold(
                     (Double) proteinProphetConfidenceLevelJSpinner.getValue());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "The ProteinProphet threshold is not a number!");
+            JOptionPane.showMessageDialog(this, 
+                    "ProteinProphet threshold is not a number!", "ProteinProphet Threshold",
+                    JOptionPane.INFORMATION_MESSAGE);
             proteinProphetConfidenceLevelJSpinner.requestFocus();
             saveOk = false;
         }
@@ -528,7 +532,9 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
             PRIDEConverter.getProperties().setPeptideProphetThreshold(
                     (Double) peptideProphetConfidenceLevelJSpinner.getValue());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "The PeptideProphet threshold is not a number!");
+            JOptionPane.showMessageDialog(this, 
+                    "PeptideProphet threshold is not a number!", "PeptideProphet Threshold",
+                    JOptionPane.INFORMATION_MESSAGE);
             peptideProphetConfidenceLevelJSpinner.requestFocus();
             saveOk = false;
         }
@@ -537,7 +543,9 @@ public class DataFileSelectionTPP extends javax.swing.JFrame {
             PRIDEConverter.getProperties().setProteinProphetThreshold(
                     (Double) proteinProphetConfidenceLevelJSpinner.getValue());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "The ProteinProphet threshold is not a number!");
+            JOptionPane.showMessageDialog(this, 
+                    "ProteinProphet threshold is not a number!", "ProteinProphet Threshold",
+                    JOptionPane.INFORMATION_MESSAGE);
             proteinProphetConfidenceLevelJSpinner.requestFocus();
             saveOk = false;
         }

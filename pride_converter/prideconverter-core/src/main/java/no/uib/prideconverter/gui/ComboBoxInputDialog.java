@@ -182,7 +182,7 @@ public class ComboBoxInputDialog extends javax.swing.JDialog {
      */
     private void okJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okJButtonActionPerformed
         if (comboBoxInputable.alreadyInserted(inputJTextField.getText())) {
-            JOptionPane.showMessageDialog(this, "This name is already used. Please choose a different name.");
+            JOptionPane.showMessageDialog(this, "Name is already in use!");
         } else {
             comboBoxInputable.insertIntoComboBox(inputJTextField.getText());
             this.setVisible(false);

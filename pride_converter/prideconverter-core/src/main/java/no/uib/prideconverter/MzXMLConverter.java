@@ -186,7 +186,7 @@ public class MzXMLConverter {
 
                         if (xTmp != null) {
                             // we already stored a result for this ID!!!
-                            JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                            JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                                     "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                             Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
                                     + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );

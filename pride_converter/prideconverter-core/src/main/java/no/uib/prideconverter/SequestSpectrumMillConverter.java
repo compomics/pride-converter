@@ -1231,7 +1231,7 @@ public class SequestSpectrumMillConverter {
 
                                     if (xTmp != null) {
                                         // we already stored a result for this ID!!!
-                                        JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                        JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                                                 "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                         Util.writeToErrorLog("Ambiguous spectrum mapping for spectrum file '"
                                                 + PRIDEConverter.getCurrentFileName() + "'." );
@@ -1247,7 +1247,7 @@ public class SequestSpectrumMillConverter {
 
                                     if (xTmp != null) {
                                         // we already stored a result for this ID!!!
-                                        JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                        JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                                                 "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                         Util.writeToErrorLog("Ambiguous spectrum mapping for spectrum file '"
                                                 + PRIDEConverter.getCurrentFileName() + "'." );
@@ -1277,7 +1277,7 @@ public class SequestSpectrumMillConverter {
 
                                         if (xTmp != null) {
                                             // we already stored a result for this ID!!!
-                                            JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                            JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                                                     "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                             Util.writeToErrorLog("Ambiguous spectrum mapping for spectrum file '"
                                                     + PRIDEConverter.getCurrentFileName() + "'." );
@@ -1294,7 +1294,7 @@ public class SequestSpectrumMillConverter {
 
                                 if (xTmp != null) {
                                     // we already stored a result for this ID!!!
-                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                                             "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                     Util.writeToErrorLog("Ambiguous spectrum mapping for spectrum file '"
                                             + PRIDEConverter.getCurrentFileName() + "'." );
@@ -1306,7 +1306,7 @@ public class SequestSpectrumMillConverter {
                             }
                         }
                     } catch (FileNotFoundException ex) {
-                        JOptionPane.showMessageDialog(null, "The file named " +
+                        JOptionPane.showMessageDialog(null, "The file " +
                                 properties.getSelectedSourceFiles().get(j) +
                                 "\ncould not be found.",
                                 "File Not Found", JOptionPane.ERROR_MESSAGE);
@@ -1327,7 +1327,7 @@ public class SequestSpectrumMillConverter {
                             e.printStackTrace();
 
                             JOptionPane.showMessageDialog(null,
-                                    "The following file could not parsed as a " +
+                                    "The file could not parsed as a " +
                                     fileType + ":\n " +
                                     identificationFile.getPath() +
                                     "\n\n" +

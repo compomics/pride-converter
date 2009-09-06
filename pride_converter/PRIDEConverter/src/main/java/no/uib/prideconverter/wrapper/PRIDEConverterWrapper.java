@@ -89,7 +89,7 @@ public class PRIDEConverterWrapper {
             int option = javax.swing.JOptionPane.showConfirmDialog(null,
                     "You are using Java " + javaVersion + ".\n\n" +
                     "PRIDE Converter requires Java 1.5 or newer.\n\n" +
-                    "Do you want to upgrade your Java version now?",
+                    "Do you want to upgrade your Java version?",
                     "PRIDE Converter - Java Version Test",
                     javax.swing.JOptionPane.YES_NO_OPTION,
                     javax.swing.JOptionPane.ERROR_MESSAGE);
@@ -204,12 +204,12 @@ public class PRIDEConverterWrapper {
                             "Failed to start PRIDE Converter.\n\n" +
                             "Make sure that PRIDE Converter is installed in a path not containing\n" +
                             "special characters. On Linux it has to be run from a path without spaces.\n\n" +
-                            "The upper memory limit used may be too high for you computer to handle.\n" +
+                            "The upper memory limit used may be too high for your computer to handle.\n" +
                             "Try reducing it and see if this helps.\n\n" +
                             "For more details see:\n" +
                             System.getProperty("user.home") +
                             File.separator + "pride_converter.log\n\n" +
-                            "Or see \'Troubleshooting\' at http://code.google.com/p/pride-converter/",
+                            "Or see \'Troubleshooting\' at http://pride-converter.googlecode.com",
                             "PRIDE Converter - Startup Failed", JOptionPane.OK_OPTION);
 
                     File logFile = new File(System.getProperty("user.home") +

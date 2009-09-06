@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
-import no.uib.prideconverter.PRIDEConverter;
 
 /**
  * Takes care of saving and retrieving the fragmentat ion ion CV mappings.
@@ -85,18 +84,24 @@ public class FragmentIonMappings {
 
 
         } catch (FileNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "Error when reading the user FragmentIonMappings. " +
-                    "See ../Properties/ErrorLog.txt for more details.", "File Not Found", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    "Error reading the FragmentIonMappings. " +
+                    "See ../Properties/ErrorLog.txt for more details.", "File Not Found",
+                    JOptionPane.ERROR_MESSAGE);
             Util.writeToErrorLog("FragmentIonMappings: ");
             ex.printStackTrace();
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Error when reading the FragmentIonMappings. " +
-                    "See ../Properties/ErrorLog.txt for more details.", "File Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    "Errorreading the FragmentIonMappings. " +
+                    "See ../Properties/ErrorLog.txt for more details.", "File Error",
+                    JOptionPane.ERROR_MESSAGE);
             Util.writeToErrorLog("FragmentIonMappings: ");
             ex.printStackTrace();
         } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(null, "Error when reading the FragmentIonMappings. " +
-                    "See ../Properties/ErrorLog.txt for more details.", "File Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    "Error reading the FragmentIonMappings. " +
+                    "See ../Properties/ErrorLog.txt for more details.", "File Error",
+                    JOptionPane.ERROR_MESSAGE);
             Util.writeToErrorLog("FragmentIonMappings: ");
             ex.printStackTrace();
         }
@@ -131,8 +136,10 @@ public class FragmentIonMappings {
 
             f.close();
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Error when saving the FragmentIonMappings. " +
-                    "See the ErrorLog for more details.", "File Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    "Error when saving FragmentIonMappings. " +
+                    "See See ../Properties/ErrorLog.txt for more details.", "File Error",
+                    JOptionPane.ERROR_MESSAGE);
             Util.writeToErrorLog("FragmentIonMappings: ");
             ex.printStackTrace();
         }

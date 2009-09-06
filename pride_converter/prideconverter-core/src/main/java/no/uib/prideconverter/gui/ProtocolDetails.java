@@ -884,7 +884,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
         if (valuesChanged) {
 
             int value = JOptionPane.showConfirmDialog(this,
-                    "The protocol has been changed. Do you want to save this for later use?",
+                    "Protocol has been changed. Save changes?",
                     "Protocol Changed", JOptionPane.YES_NO_CANCEL_OPTION);
 
             if (value == JOptionPane.YES_OPTION) {
@@ -961,7 +961,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                 } else { //value == NO
 
                     String protocolName = JOptionPane.showInputDialog(this,
-                            "Please provide the name of the new protocol: ",
+                            "Provide the name of the new protocol: ",
                             "Protocol Name", JOptionPane.PLAIN_MESSAGE);
 
                     if (protocolName != null) {
@@ -974,7 +974,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
                         while (new File(newName).exists()) {
                             protocolName = JOptionPane.showInputDialog(this,
-                                    "This name is already in use. Please provide a new name: ",
+                                    "Name is already in use. Provide a different name: ",
                                     "Protocol Name", JOptionPane.PLAIN_MESSAGE);
 
                             newName = protocolPath +
@@ -1258,7 +1258,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
         if (valuesChanged) {
             int value = JOptionPane.showConfirmDialog(this,
-                    "The protocol has been changed. Do you want to save this for later use?",
+                    "Protocol has been changed. Save changes?",
                     "Protcol Changed", JOptionPane.YES_NO_CANCEL_OPTION);
 
             if (value == JOptionPane.YES_OPTION) {
@@ -1333,7 +1333,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
                 } else { //value == NO
 
                     String protocolName = JOptionPane.showInputDialog(this,
-                            "Please provide the name of the new protocol: ",
+                            "Provide the name of the new protocol: ",
                             "Protocol Name", JOptionPane.PLAIN_MESSAGE);
 
                     if (protocolName != null) {
@@ -1344,7 +1344,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
                         while (new File(newName).exists()) {
                             protocolName = JOptionPane.showInputDialog(this,
-                                    "This name is already in use. Please provide a new name: ",
+                                    "Name already in use. Provide a different name: ",
                                     "Protocol Name", JOptionPane.PLAIN_MESSAGE);
 
                             newName = protocolPath + protocolName + ".pro";

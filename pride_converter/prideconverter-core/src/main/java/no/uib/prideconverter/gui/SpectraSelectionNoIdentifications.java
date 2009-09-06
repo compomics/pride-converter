@@ -110,7 +110,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
                     if (insertedValue < 2) {
 
-                        JOptionPane.showMessageDialog(null, "The inserted MS level is smaller than 2!",
+                        JOptionPane.showMessageDialog(null, "Selected MS level is smaller than 2!",
                                 "Incorrect MS Level", JOptionPane.ERROR_MESSAGE);
                         spectraJXTable.changeSelection(spectraJXTable.getSelectedRow(), spectraJXTable.getSelectedColumn(),
                                 false, false);
@@ -120,7 +120,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                     } else if (insertedValue > 3) {
 
                         int option = JOptionPane.showConfirmDialog(null,
-                                "The inserted MS level is larger than 3. Are you sure this is the correct MS level?",
+                                "Selected MS level is larger than 3. Are you sure this is the correct MS level?",
                                 "Verify MS Level", JOptionPane.YES_NO_OPTION);
 
                         if (option == JOptionPane.NO_OPTION) {
@@ -982,8 +982,8 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                 "/" + numberOfSelectedSpectra);
 
                     } catch (FileNotFoundException ex) {
-                        JOptionPane.showMessageDialog(null, "The file named " +
-                                file.getPath() +
+                        JOptionPane.showMessageDialog(null, 
+                                "The file " + file.getPath() +
                                 "\ncould not be found.",
                                 "File Not Found", JOptionPane.ERROR_MESSAGE);
                         Util.writeToErrorLog("Error when trying to read file: ");
@@ -996,7 +996,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                         String fileType = PRIDEConverter.getProperties().getDataSource();
 
                         JOptionPane.showMessageDialog(null,
-                                "The following file could not parsed as a " +
+                                "The file could not parsed as a " +
                                 fileType + ":\n " +
                                 file.getPath() +
                                 "\n\n" +

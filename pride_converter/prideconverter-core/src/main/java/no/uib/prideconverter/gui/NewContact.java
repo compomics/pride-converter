@@ -594,7 +594,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
 
         if (valuesChanged) {
             int value = JOptionPane.showConfirmDialog(this,
-                    "The contact has been changed. Do you want to save this for later use?",
+                    "The contact has been changed. Do you want to save the changes?",
                     "Contact Changed", JOptionPane.YES_NO_CANCEL_OPTION);
 
             if (value == JOptionPane.YES_OPTION) {

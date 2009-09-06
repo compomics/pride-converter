@@ -637,7 +637,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                         if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
                             if (tempFile.getAbsolutePath().endsWith(".pkl") ||
                                     tempFile.getAbsolutePath().endsWith(".PKL")) {
-                                if (!PRIDEConverter.getProperties().getSelectedSourceFiles().contains(tempFile)) {
+                                if (!PRIDEConverter.getProperties().getSelectedSourceFiles().contains(tempFile.getPath())) {
                                     ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).addRow(
                                             new Object[]{
                                                 new Integer(selectedSpectraFilesJTable.getRowCount() + 1),
@@ -647,15 +647,16 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
 
                                     PRIDEConverter.getProperties().getSelectedSourceFiles().add(tempFile.getPath());
                                 } else {
-                                    JOptionPane.showMessageDialog(this, "A file with the name " + tempFile.getPath() +
-                                            " is already selected.\nThe same file can not be added twice.",
+                                    JOptionPane.showMessageDialog(this, 
+                                            "A file called " + tempFile.getPath() +
+                                            " is already selected.",
                                             "File Already Selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
                         } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
                             if (tempFile.getAbsolutePath().endsWith(".dta") ||
                                     tempFile.getAbsolutePath().endsWith(".DTA")) {
-                                if (!PRIDEConverter.getProperties().getSelectedSourceFiles().contains(tempFile)) {
+                                if (!PRIDEConverter.getProperties().getSelectedSourceFiles().contains(tempFile.getPath())) {
                                     ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).addRow(
                                             new Object[]{
                                                 new Integer(selectedSpectraFilesJTable.getRowCount() + 1),
@@ -665,14 +666,14 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
 
                                     PRIDEConverter.getProperties().getSelectedSourceFiles().add(tempFile.getPath());
                                 } else {
-                                    JOptionPane.showMessageDialog(this, "A file with the name " + tempFile.getPath() +
-                                            " is already selected.\nThe same file can not be added twice.",
+                                    JOptionPane.showMessageDialog(this, "A file called " + tempFile.getPath() +
+                                            " is already selected.",
                                             "File Already Selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
                         } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
                             if (chooser.getFileFilter().accept(tempFile)) {
-                                if (!PRIDEConverter.getProperties().getSelectedSourceFiles().contains(tempFile)) {
+                                if (!PRIDEConverter.getProperties().getSelectedSourceFiles().contains(tempFile.getPath())) {
                                     ((DefaultTableModel) selectedSpectraFilesJTable.getModel()).addRow(
                                             new Object[]{
                                                 new Integer(selectedSpectraFilesJTable.getRowCount() + 1),
@@ -682,8 +683,8 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
 
                                     PRIDEConverter.getProperties().getSelectedSourceFiles().add(tempFile.getPath());
                                 } else {
-                                    JOptionPane.showMessageDialog(this, "A file with the name " + tempFile.getPath() +
-                                            " is already selected.\nThe same file can not be added twice.",
+                                    JOptionPane.showMessageDialog(this, "A file called " + tempFile.getPath() +
+                                            " is already selected.",
                                             "File Already Selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
@@ -701,9 +702,9 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
 
                         PRIDEConverter.getProperties().getSelectedSourceFiles().add(currentFile.getPath());
                     } else {
-                        JOptionPane.showMessageDialog(this, "A file with the name " +
+                        JOptionPane.showMessageDialog(this, "A file called " +
                                 currentFile.getPath() +
-                                " is already selected.\nThe same file can not be added twice.", "File Already Selected",
+                                " is already selected.", "File Already Selected",
                                 JOptionPane.ERROR_MESSAGE);
                     }
                 }
@@ -804,7 +805,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                         if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Spectrum Mill")) {
                             if (tempFile.getAbsolutePath().endsWith(".spo") ||
                                     tempFile.getAbsolutePath().endsWith(".SPO")) {
-                                if (!PRIDEConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile)) {
+                                if (!PRIDEConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile.getPath())) {
                                     ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).addRow(
                                             new Object[]{
                                                 new Integer(selectedIdentificationFilesJTable.getRowCount() + 1),
@@ -815,15 +816,15 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                                     PRIDEConverter.getProperties().getSelectedIdentificationFiles().add(tempFile.getPath());
                                 } else {
                                     JOptionPane.showMessageDialog(this,
-                                            "A file with the name " + tempFile.getPath() +
-                                            " is already selected.\nThe same file can not be added twice.",
+                                            "A file called " + tempFile.getPath() +
+                                            " is already selected.",
                                             "File Already Selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
                         } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
                             if (tempFile.getAbsolutePath().endsWith(".out") ||
                                     tempFile.getAbsolutePath().endsWith(".OUT")) {
-                                if (!PRIDEConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile)) {
+                                if (!PRIDEConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile.getPath())) {
                                     ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).addRow(
                                             new Object[]{
                                                 new Integer(selectedIdentificationFilesJTable.getRowCount() + 1),
@@ -834,14 +835,14 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                                     PRIDEConverter.getProperties().getSelectedIdentificationFiles().add(tempFile.getPath());
                                 } else {
                                     JOptionPane.showMessageDialog(this,
-                                            "A file with the name " + tempFile.getPath() +
-                                            " is already selected.\nThe same file can not be added twice.",
+                                            "A file called " + tempFile.getPath() +
+                                            " is already selected.",
                                             "File Already Selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
                         } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("X!Tandem")) {
                             if (chooser.getFileFilter().accept(tempFile)) {
-                                if (!PRIDEConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile)) {
+                                if (!PRIDEConverter.getProperties().getSelectedIdentificationFiles().contains(tempFile.getPath())) {
                                     ((DefaultTableModel) selectedIdentificationFilesJTable.getModel()).addRow(
                                             new Object[]{
                                                 new Integer(selectedIdentificationFilesJTable.getRowCount() + 1),
@@ -852,8 +853,8 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                                     PRIDEConverter.getProperties().getSelectedIdentificationFiles().add(tempFile.getPath());
                                 } else {
                                     JOptionPane.showMessageDialog(this,
-                                            "A file with the name " + tempFile.getPath() +
-                                            " is already selected.\nThe same file can not be added twice.",
+                                            "A file called " + tempFile.getPath() +
+                                            " is already selected.",
                                             "File Already Selected", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
@@ -872,8 +873,8 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
                         PRIDEConverter.getProperties().getSelectedIdentificationFiles().add(currentFile.getPath());
                     } else {
                         JOptionPane.showMessageDialog(this,
-                                "A file with the name " + currentFile.getPath() +
-                                " is already selected.\nThe same file can not be added twice.",
+                                "A file called " + currentFile.getPath() +
+                                " is already selected.",
                                 "File Already Selected", JOptionPane.ERROR_MESSAGE);
                     }
                 }

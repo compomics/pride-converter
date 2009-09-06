@@ -352,8 +352,8 @@ public class ProjectSelection extends javax.swing.JFrame {
 
                     JOptionPane.showMessageDialog(null, 
                             "An error occured while retrieving project details.\n" +
-                            "See the ErrorLog.txt file in the Properties folder for more detals");
-                    Util.writeToErrorLog("Error while retrieving project details: ");
+                            "See ../Properties/ErrorLog.txt for more detals");
+                    Util.writeToErrorLog("Error retrieving project details: ");
                     sqle.printStackTrace();
                 }
             }

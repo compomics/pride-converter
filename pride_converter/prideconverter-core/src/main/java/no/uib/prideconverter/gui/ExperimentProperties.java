@@ -182,8 +182,7 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
                     JOptionPane.showMessageDialog(null,
                             "An error occured while trying to parse: " +
                             PRIDEConverter.getProperties().getSelectedSourceFiles().get(0) + "\n\n" +
-                            "See ../Properties/ErrorLog.txt for more details.\n" +
-                            "The file can most likely not be converted to PRIDE XML.",
+                            "See ../Properties/ErrorLog.txt for more details.\n",
                             "Parsing Error",
                             JOptionPane.ERROR_MESSAGE);
                 } catch (IOException e) {
@@ -195,8 +194,7 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
                     JOptionPane.showMessageDialog(null,
                             "An error occured while trying to parse: " +
                             PRIDEConverter.getProperties().getSelectedSourceFiles().get(0) + "\n\n" +
-                            "See ../Properties/ErrorLog.txt for more details.\n" +
-                            "The file can most likely not be converted to PRIDE XML.",
+                            "See ../Properties/ErrorLog.txt for more details.\n",
                             "Parsing Error",
                             JOptionPane.ERROR_MESSAGE);
                 }

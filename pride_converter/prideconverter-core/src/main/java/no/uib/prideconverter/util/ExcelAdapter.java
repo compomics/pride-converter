@@ -123,7 +123,7 @@ public class ExcelAdapter implements ActionListener {
                     numrows == rowsselected.length) &&
                     (numcols - 1 == colsselected[colsselected.length - 1] - colsselected[0] &&
                     numcols == colsselected.length))) {
-                JOptionPane.showMessageDialog(null, "You have to select a continguous block of cells",
+                JOptionPane.showMessageDialog(null, "You have to select a continuous block of cells",
                         "Invalid Copy Selection",
                         JOptionPane.ERROR_MESSAGE);//FIX ME???
                 return;
@@ -204,7 +204,7 @@ public class ExcelAdapter implements ActionListener {
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null,
-                        "An error occured during pasting. Perhaps you had an empty selection? \n" 
+                        "An error occured during pasting. Empty selection? \n"
                         + "See ../Properties/ErrorLog.txt for more details.");
                 Util.writeToErrorLog("Error occured during pasting: ");
                 ex.printStackTrace();
@@ -252,7 +252,7 @@ public class ExcelAdapter implements ActionListener {
                     numrows == rowsselected.length) &&
                     (numcols - 1 == colsselected[colsselected.length - 1] - colsselected[0] &&
                     numcols == colsselected.length))) {
-                JOptionPane.showMessageDialog(null, "You have to select a continguous block of cells",
+                JOptionPane.showMessageDialog(null, "You have to select a continuous block of cells",
                         "Invalid Copy Selection",
                         JOptionPane.ERROR_MESSAGE);//FIX ME???
                 return;
