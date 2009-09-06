@@ -177,7 +177,7 @@ public class XTandemConverter {
 
                         JOptionPane.showMessageDialog(null,
                                 "The X!Tandem file " + file.getPath() + "\n" +
-                                "does not contain the reference to the original spectra!\n" +
+                                "does not contain a reference to the original spectra!\n" +
                                 "The file can not be parsed.");
                         PRIDEConverter.setCancelConversion(true);
                     }
@@ -213,7 +213,7 @@ public class XTandemConverter {
                     e.printStackTrace();
 
                     JOptionPane.showMessageDialog(null,
-                            "The following file could not parsed as an X!Tandem file:\n " +
+                            "The file could not parsed as an X!Tandem file:\n " +
                             file.getName() +
                             "\n\n" +
                             "See ../Properties/ErrorLog.txt for more details.",
@@ -374,7 +374,7 @@ public class XTandemConverter {
 
                                     if (xTmp != null) {
                                         // we already stored a result for this ID!!!
-                                        JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                        JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                                                 "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                         Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
                                                 + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
@@ -592,7 +592,7 @@ public class XTandemConverter {
 
                                         if (xTmp != null) {
                                             // we already stored a result for this ID!!!
-                                            JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                            JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                                                     "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                             Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
                                                     + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
@@ -723,7 +723,7 @@ public class XTandemConverter {
 
                                 if (xTmp != null) {
                                     // we already stored a result for this ID!!!
-                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                                             "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                     Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
                                             + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
@@ -879,7 +879,7 @@ public class XTandemConverter {
 
                                     if (xTmp != null) {
                                         // we already stored a result for this ID!!!
-                                        JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                        JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                                                 "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                         Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
                                                 + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
@@ -1007,7 +1007,7 @@ public class XTandemConverter {
 
                             if (xTmp != null) {
                                 // we already stored a result for this ID!!!
-                                JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                                         "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                 Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
                                         + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
@@ -1142,7 +1142,7 @@ public class XTandemConverter {
 
                                 if (xTmp != null) {
                                     // we already stored a result for this ID!!!
-                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                                             "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                     Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
                                             + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
@@ -1159,7 +1159,7 @@ public class XTandemConverter {
                 br.close();
 
             } catch (FileNotFoundException ex) {
-                JOptionPane.showMessageDialog(null, "The file named " +
+                JOptionPane.showMessageDialog(null, "The file " +
                         file.getName() +
                         "\ncould not be found.",
                         "File Not Found", JOptionPane.ERROR_MESSAGE);
@@ -1171,7 +1171,7 @@ public class XTandemConverter {
                 e.printStackTrace();
 
                 JOptionPane.showMessageDialog(null,
-                        "The following file could not parsed as an X!Tandem spetrum file:\n " +
+                        "The file could not parsed as an X!Tandem spetrum file:\n " +
                         file.getName() +
                         "\n\n" +
                         "See ../Properties/ErrorLog.txt for more details.",
@@ -1250,7 +1250,7 @@ public class XTandemConverter {
 
                     JOptionPane.showMessageDialog(null,
                             "The X!Tandem file " + PRIDEConverter.getProperties().getSelectedIdentificationFiles().get(j) + "\n" +
-                            "does not contain the reference to the original spectra!\n" +
+                            "does not contain a reference to the original spectra!\n" +
                             "The file can not be parsed.");
                     PRIDEConverter.setCancelConversion(true);
                 } else {
@@ -1458,7 +1458,7 @@ public class XTandemConverter {
 
                                             JOptionPane.showMessageDialog(PRIDEConverter.getOutputFrame(),
                                                     "The X!Tandem file references an unknown MS spectrum.\n" +
-                                                    "Are you sure you are using the correct spectrum file?\n\n" +
+                                                    "Are you using the correct spectrum files?\n\n" +
                                                     "See ../Properties/ErrorLog.txt for more details.\n\n" +
                                                     "PRIDE XML file not created.",
                                                     "Error Parsing File", JOptionPane.ERROR_MESSAGE);
@@ -1544,7 +1544,7 @@ public class XTandemConverter {
                     }
                 }
             } catch (FileNotFoundException ex) {
-                JOptionPane.showMessageDialog(null, "The file named " +
+                JOptionPane.showMessageDialog(null, "The file " +
                         PRIDEConverter.getProperties().getSelectedIdentificationFiles().get(j) +
                         "\ncould not be found.",
                         "File Not Found", JOptionPane.ERROR_MESSAGE);
@@ -1556,7 +1556,7 @@ public class XTandemConverter {
                 e.printStackTrace();
 
                 JOptionPane.showMessageDialog(null,
-                        "The following file could not parsed as an X!Tandem file:\n " +
+                        "The file could not parsed as an X!Tandem file:\n " +
                         PRIDEConverter.getProperties().getSelectedIdentificationFiles().get(j) +
                         "\n\n" +
                         "See ../Properties/ErrorLog.txt for more details.",

@@ -379,7 +379,7 @@ public class DataFileSelectionDTASelect extends javax.swing.JFrame {
 
         if (new File(PRIDEConverter.getProperties().getSpectrumFilesFolderName()).list().length == 0) {
             JOptionPane.showMessageDialog(this,
-                    "The spectrum folder is empty! Please verify that you have selected the correct folder.",
+                    "The spectrum folder is empty! Verify that you have selected the correct folder.",
                     "Spectrum Folder Empty", JOptionPane.ERROR_MESSAGE);
             saveOk = false;
         }

@@ -213,25 +213,23 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         // check if the sample already exists
         if (new File(newName).exists()) {
 
-            int option =
-                    JOptionPane.showConfirmDialog(this,
+            int option = JOptionPane.showConfirmDialog(this,
                     "The sample name \'" +
                     sampleName +
-                    "\' is already in use.\nDo you want to use the existing sample?",
+                    "\' is already in use.\nUse existing sample?",
                     "Use Existing Sample?",
                     JOptionPane.YES_NO_OPTION);
 
             if (option == JOptionPane.NO_OPTION) {
 
-                option =
-                        JOptionPane.showConfirmDialog(this,
-                        "Do you want to overwrite this sample?",
+                option = JOptionPane.showConfirmDialog(this,
+                        "Overwrite existing sample?",
                         "Overwrite Existing Sample?",
                         JOptionPane.YES_NO_OPTION);
 
                 if (option == JOptionPane.NO_OPTION) {
 
-                    sampleName = JOptionPane.showInputDialog(this, "Please provide the name of the new sample:",
+                    sampleName = JOptionPane.showInputDialog(this, "Provide the name of the new sample:",
                             sampleName);
 
                     while (sampleName == null) {
@@ -1138,11 +1136,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         if (singleSampleDetailsJTable.getRowCount() > 0 &&
                 multipleSamplesDetailsJTable.getRowCount() > 0) {
             JOptionPane.showMessageDialog(this,
-                    "It seems as if you have inserted elements into both\n" +
-                    "the single and multiple samples tables. You can only\n" +
-                    "use one of the sample types at the time. Please delete\n" +
-                    "all rows in the table from the sample type you do not\n" +
-                    "want to use before continuing to the next step.",
+                    "You can only use one sample type at the time. Delete\n" +
+                    "all details about the sample type you do not want to use.",
                     "Verify Inserted Sample Details",
                     JOptionPane.WARNING_MESSAGE);
         } else {
@@ -1427,7 +1422,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         if (valuesChanged) {
 
             int value = JOptionPane.showConfirmDialog(this,
-                    "The sample set has been changed. Do you want to save this for later use?",
+                    "The sample set has been changed. Save changes?",
                     "Sample Set Changed", JOptionPane.YES_NO_CANCEL_OPTION);
 
             if (value == JOptionPane.YES_OPTION) {
@@ -1451,7 +1446,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 } else { //value == NO
 
                     String newSampleName = JOptionPane.showInputDialog(this,
-                            "Please provide the name of the new sample set: ",
+                            "Provide the name of the new sample set: ",
                             "Sample Set Name", JOptionPane.PLAIN_MESSAGE);
 
                     if (newSampleName != null) {
@@ -2338,7 +2333,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
         if (valuesChanged) {
             int value = JOptionPane.showConfirmDialog(this,
-                    "The sample set has been changed. Do you want to save this for later use?",
+                    "The sample set has been changed. Save changes?",
                     "Sample Set Changed", JOptionPane.YES_NO_CANCEL_OPTION);
 
             if (value == JOptionPane.YES_OPTION) {
@@ -2359,33 +2354,26 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 } else { //value == NO
 
                     String newSampleName = JOptionPane.showInputDialog(this,
-                            "Please provide the name of the new sample set: ",
+                            "Provide the name of the new sample set: ",
                             "Sample Set Name", JOptionPane.PLAIN_MESSAGE);
 
                     if (newSampleName != null) {
 
                         String newName;
 
-                        newName = samplePath +
-                                newSampleName +
-                                ".sam";
+                        newName = samplePath + newSampleName + ".sam";
 
                         while (new File(newName).exists()) {
                             newSampleName = JOptionPane.showInputDialog(this,
-                                    "This name is already in use. Please provide a new name: ",
+                                    "This name is already in use. Please provide a different name: ",
                                     "Sample Set Name", JOptionPane.PLAIN_MESSAGE);
 
-                            newName = samplePath +
-                                    newSampleName +
-                                    ".sam";
+                            newName = samplePath + newSampleName + ".sam";
                         }
 
                         if (newSampleName != null) {
-
                             PRIDEConverter.getUserProperties().setCurrentSampleSet(newSampleName);
-
                             saveSample(newName, newSampleName);
-
                         } else {
                             cancel = true;
                         }
@@ -2427,7 +2415,9 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 PRIDEConverter.getUserProperties().setPeakIntegrationRangeLower(
                         new Double(lowerRangeJTextField.getText()).doubleValue());
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Peak Integreation Lower Range is not a number.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Peak Integreation Lower Range is not a number.",
+                        "Input Error", JOptionPane.ERROR_MESSAGE);
                 cancel = true;
                 lowerRangeJTextField.requestFocus();
             }

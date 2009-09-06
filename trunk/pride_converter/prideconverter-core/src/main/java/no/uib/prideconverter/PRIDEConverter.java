@@ -168,7 +168,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(dataBaseDetails,
                         "Database connection not established:\n" +
-                        "Please check that you are using the supported version of ms_lims,\n" +
+                        "Verify that you are using the supported version of ms_lims,\n" +
                         "and upgrade if necessary: http://genesis.ugent.be/ms_lims.",
                         "Database Error", JOptionPane.ERROR_MESSAGE);
                 connectionSuccessfull = false;
@@ -1049,7 +1049,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                             "details. The PRIDE XML file was not created.\n\n" +
                             "If the data sets are too big for your computer, e-mail a support\n" +
                             "request to the PRIDE team at the EBI: pride-support@ebi.ac.uk",
-                            "Out of Memory Error",
+                            "Out Of Memory Error",
                             JOptionPane.ERROR_MESSAGE);
 
                     Util.writeToErrorLog("XML Parser: Ran out of memory!");
@@ -1445,7 +1445,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
                                 if (xTmp != null) {
                                     // we already stored a result for this ID!!!
-                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                                             "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                     Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + scanNumber
                                             + "' and spectrum file '" + usedFileName + "'." );
@@ -1512,7 +1512,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
                 if (xTmp != null) {
                     // we already stored a result for this ID!!!
-                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                             "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                     Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + scanNumber
                             + "' and spectrum file '" + usedFileName + "'." );
@@ -2510,7 +2510,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
                     if (xTmp != null) {
                         // we already stored a result for this ID!!!
-                        JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                        JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                                 "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                         Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + spectrum.getSpectrumId()
                                 + "' and spectrum file '" + new File(filePath).getName() + "'." );
@@ -2524,8 +2524,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
                 JOptionPane.showMessageDialog(null,
                         "An error occured while trying to parse: " + filePath + "\n\n" +
-                        "See ../Properties/ErrorLog.txt for more details.\n" +
-                        "The file can most likely not be converted to PRIDE XML.",
+                        "See ../Properties/ErrorLog.txt for more details.\n",
                         "Parsing Error",
                         JOptionPane.ERROR_MESSAGE);
             } catch (IOException e) {
@@ -2535,8 +2534,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
                 JOptionPane.showMessageDialog(null,
                         "An error occured while trying to parse: " + filePath + "\n\n" +
-                        "See ../Properties/ErrorLog.txt for more details.\n" +
-                        "The file can most likely not be converted to PRIDE XML.",
+                        "See ../Properties/ErrorLog.txt for more details.\n",
                         "Parsing Error",
                         JOptionPane.ERROR_MESSAGE);
             }

@@ -507,14 +507,14 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
         } catch (RemoteException ex) {
             this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(
-                    this, "Not able to contact the OLS. Make sure that you are online and try again.",
+                    this, "Unable to contact the OLS. Make sure that you are online.",
                     "OLS not available", JOptionPane.ERROR_MESSAGE);
             Util.writeToErrorLog("Error when trying to access OLS: ");
             ex.printStackTrace();
             error = true;
         } catch (ServiceException ex) {
             JOptionPane.showMessageDialog(
-                    this, "Not able to contact the OLS. Make sure that you are online and try again.",
+                    this, "Unable to contact the OLS. Make sure that you are online.",
                     "OLS not available", JOptionPane.ERROR_MESSAGE);
             Util.writeToErrorLog("Error when trying to access OLS: ");
             ex.printStackTrace();

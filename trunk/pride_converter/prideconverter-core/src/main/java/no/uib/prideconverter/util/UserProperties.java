@@ -141,7 +141,7 @@ public class UserProperties {
 
                 if (option == JOptionPane.YES_OPTION) {
                     option = JOptionPane.showConfirmDialog(null,
-                            "Do you want to import the settings from the previous version?",
+                            "Import the settings from the previous version?",
                             "Import Settings?", JOptionPane.YES_NO_OPTION);
 
                     if (option == JOptionPane.YES_OPTION) {
@@ -265,7 +265,7 @@ public class UserProperties {
 
                 int option = JOptionPane.showConfirmDialog(null,
                         "Please locate the old settings file 'UserProperties.prop'.\n" +
-                        "It is in the Properties folder of the previous installation.",
+                        "(It is in the Properties folder of the previous installation.)",
                         "Locate Old Settings File", JOptionPane.OK_CANCEL_OPTION);
 
                 if (option == JOptionPane.OK_OPTION) {
@@ -420,8 +420,8 @@ public class UserProperties {
 
             if (settingsFile != null) {
                 JOptionPane.showMessageDialog(null,
-                        "The settings from the previous version has been successfully imported.\n" +
-                        "(Changes to the default memory settings requires a restart of the program.)",
+                        "The old settings has been successfully imported.\n" +
+                        "(Changes to the memory settings requires a restart.)",
                         "Settings Imported", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (FileNotFoundException ex) {
@@ -466,12 +466,12 @@ public class UserProperties {
             bw.close();
 
         } catch (FileNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "Error when importing old user settings. " +
+            JOptionPane.showMessageDialog(null, "Error when importing user settings. " +
                     "See ../Properties/ErrorLog.txt for more details.", "File Not Found", JOptionPane.ERROR_MESSAGE);
             Util.writeToErrorLog("UserProperties: ");
             ex.printStackTrace();
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Error when importing old user settings. " +
+            JOptionPane.showMessageDialog(null, "Error when importing user settings. " +
                     "See ../Properties/ErrorLog.txt for more details.", "File Error", JOptionPane.ERROR_MESSAGE);
             Util.writeToErrorLog("UserProperties: ");
             ex.printStackTrace();

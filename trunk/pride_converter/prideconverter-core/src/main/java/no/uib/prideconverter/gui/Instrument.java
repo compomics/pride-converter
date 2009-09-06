@@ -206,21 +206,16 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
         if (mzXmlFileFound || PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
 
-            String newName =
-                    instrumentPath +
-                    instrumentName +
-                    ".int";
+            String newName = instrumentPath + instrumentName + ".int";
 
             boolean useExistingInstrument = false;
 
             // check if the instrument already exists
             if (new File(newName).exists()) {
 
-                int option =
-                        JOptionPane.showConfirmDialog(this,
-                        "The instrument name \'" +
-                        instrumentName +
-                        "\' is already in use.\nDo you want to use the existing instrument?",
+                int option = JOptionPane.showConfirmDialog(this,
+                        "The instrument name \'" + instrumentName + "\' is already in use.\n" +
+                        "Use existing instrument?",
                         "Use Existing Instrument?",
                         JOptionPane.YES_NO_OPTION);
 
@@ -228,16 +223,15 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                     useExistingInstrument = false;
 
-                    option =
-                            JOptionPane.showConfirmDialog(this,
-                            "Do you want to overwrite the existing instrument?",
+                    option = JOptionPane.showConfirmDialog(this,
+                            "Overwrite existing instrument?",
                             "Overwrite Existing Instrument?",
                             JOptionPane.YES_NO_OPTION);
 
                     if (option == JOptionPane.NO_OPTION) {
 
                         instrumentName = JOptionPane.showInputDialog(this,
-                                "Please provide the name of the new instrument:",
+                                "Provide the name of the new instrument:",
                                 instrumentName);
 
                         while (instrumentName == null || instrumentName.lastIndexOf("\\") != -1) {
@@ -331,10 +325,10 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     softwareVersionJTextField.setText(msXMLParser.getHeaderInfo().
                             getInstrumentInfo().getSoftwareInfo().version);
 
-                    JOptionPane.showMessageDialog(this, "Some of the instrument details have been " +
-                            "extracted directly from the data file(s). \n" +
-                            "Please verify that the information is correct and provide any missing " +
-                            "information.", "Instrument Properties Extracted",
+                    JOptionPane.showMessageDialog(this, 
+                            "Instrument proerties have been extracted from the data file(s).\n" +
+                            "Verify the information and provide any missing details.",
+                            "Instrument Properties Extracted",
                             JOptionPane.INFORMATION_MESSAGE);
 
                 } else { // mzData
@@ -376,7 +370,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         setInstrumentSource(tempCVTerm.getName(),
                                 tempCVTerm.getAccession(), tempCVTerm.getCVLookup());
                     } else {
-                        JOptionPane.showMessageDialog(this, "Please use OLS to map the instruments source \'" +
+                        JOptionPane.showMessageDialog(this, "Use OLS to map the instruments source \'" +
                                 msXMLParser.getHeaderInfo().getInstrumentInfo().getIonization() +
                                 "\' to the correct CV term.", "CV Term Mapping",
                                 JOptionPane.INFORMATION_MESSAGE);
@@ -397,7 +391,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         setInstrumentDetector(tempCVTerm.getName(),
                                 tempCVTerm.getAccession(), tempCVTerm.getCVLookup());
                     } else {
-                        JOptionPane.showMessageDialog(this, "Please use OLS to map the instruments detector \'" +
+                        JOptionPane.showMessageDialog(this, "Use OLS to map the instruments detector \'" +
                                 msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector() +
                                 "\' to the correct CV term.", "CV Term Mapping",
                                 JOptionPane.INFORMATION_MESSAGE);
@@ -432,7 +426,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                         PRIDEConverter.getProperties().setAnalyzerList(new ArrayList());
 
-                        JOptionPane.showMessageDialog(this, "Please use OLS to map the mass analyzer \'" +
+                        JOptionPane.showMessageDialog(this, "Use OLS to map the mass analyzer \'" +
                                 msXMLParser.getHeaderInfo().getInstrumentInfo().getMassAnalyzer() +
                                 "\' to the correct CV term.", "CV Term Mapping",
                                 JOptionPane.INFORMATION_MESSAGE);
@@ -497,10 +491,10 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         }
                     }
 
-                    JOptionPane.showMessageDialog(this, "Some of the instrument details have been " +
-                            "extracted directly from the data file(s). \n" +
-                            "Please verify that the information is correct and provide any missing " +
-                            "information.", "Instrument Properties Extracted",
+                    JOptionPane.showMessageDialog(this,
+                            "Instrument proerties have been extracted from the data file(s).\n" +
+                            "Verify the information and provide any missing details.",
+                            "Instrument Properties Extracted",
                             JOptionPane.INFORMATION_MESSAGE);
                 }
 
@@ -1234,7 +1228,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
         if (valuesChanged) {
             int value = JOptionPane.showConfirmDialog(this,
-                    "The instrument has been changed. Do you want to save this for later use?",
+                    "The instrument has been changed. Save changes?",
                     "Instrument Changed", JOptionPane.YES_NO_CANCEL_OPTION);
 
             if (value == JOptionPane.YES_OPTION) {
@@ -1251,7 +1245,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                 } else { //value == NO
 
                     String instrumentName = JOptionPane.showInputDialog(this,
-                            "Please provide the name of the new instrument: ",
+                            "Provide the name of the new instrument: ",
                             "Instrument Name", JOptionPane.PLAIN_MESSAGE);
 
                     if (instrumentName != null) {
@@ -1261,9 +1255,8 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         newName = instrumentPath + instrumentName + ".int";
 
                         while (new File(newName).exists()) {
-                            instrumentName =
-                                    JOptionPane.showInputDialog(this,
-                                    "Please provide the name of the new instrument: ",
+                            instrumentName = JOptionPane.showInputDialog(this,
+                                    "Provide the name of the new instrument: ",
                                     "Instrument Name", JOptionPane.PLAIN_MESSAGE);
 
                             newName = instrumentPath + instrumentName + ".int";
@@ -1349,7 +1342,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
         if (valuesChanged) {
             int value = JOptionPane.showConfirmDialog(this,
-                    "The instrument has been changed. Do you want to save this for later use?",
+                    "The instrument has been changed. Save changes?",
                     "Instrument Changed", JOptionPane.YES_NO_CANCEL_OPTION);
 
             if (value == JOptionPane.YES_OPTION) {
@@ -1366,7 +1359,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                 } else { //value == NO
 
                     String instrumentName = JOptionPane.showInputDialog(this,
-                            "Please provide the name of the new instrument: ",
+                            "Provide the name of the new instrument: ",
                             "Instrument Name", JOptionPane.PLAIN_MESSAGE);
 
                     if (instrumentName != null) {
@@ -1378,7 +1371,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         while (new File(newName).exists()) {
                             instrumentName =
                                     JOptionPane.showInputDialog(this,
-                                    "Please provide the name of the new instrument: ",
+                                    "Provide the name of the new instrument: ",
                                     "Instrument Name", JOptionPane.PLAIN_MESSAGE);
 
                             newName = instrumentPath + instrumentName + ".int";
@@ -1832,7 +1825,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         if (valuesChanged) {
 
             int value = JOptionPane.showConfirmDialog(this,
-                    "The instrument has been changed. Do you want to save this for later use?",
+                    "The instrument has been changed. Save changes?",
                     "Instrument Changed", JOptionPane.YES_NO_CANCEL_OPTION);
 
             if (value == JOptionPane.YES_OPTION) {
@@ -1956,7 +1949,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                 } else { //value == NO
 
                     String instrumentName = JOptionPane.showInputDialog(this,
-                            "Please provide the name of the new instrument: ",
+                            "Provide the name of the new instrument: ",
                             "Instrument Name", JOptionPane.PLAIN_MESSAGE);
 
                     if (instrumentName != null) {
@@ -1968,7 +1961,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         while (new File(newName).exists()) {
                             instrumentName =
                                     JOptionPane.showInputDialog(this,
-                                    "This name is already in use. Please provide a new name: ",
+                                    "This name is already in use. Provide a different name: ",
                                     "Instrument Name", JOptionPane.PLAIN_MESSAGE);
 
                             newName = instrumentPath + instrumentName + ".int";
@@ -2358,8 +2351,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             boolean deleted = new File(newName).delete();
 
             if (!deleted) {
-                JOptionPane.showMessageDialog(this,
-                        "The file could not be deleted!");
+                JOptionPane.showMessageDialog(this, "The file could not be deleted!");
             } else {
                 lastSelectedInstrumentName = null;
                 valuesChanged = false;

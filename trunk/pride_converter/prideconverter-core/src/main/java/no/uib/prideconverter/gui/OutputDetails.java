@@ -85,8 +85,8 @@ public class OutputDetails extends javax.swing.JFrame {
                 outPutPathJTextField.setText(PRIDEConverter.getUserProperties().getOutputPath());
             } else {
                 JOptionPane.showMessageDialog(this,
-                        "Preferred output folder not found! Using your home folder instead.",
-                        "Output folder not found", JOptionPane.WARNING_MESSAGE);
+                        "Output folder not found! Using your home folder instead.",
+                        "Output Folder Not Found", JOptionPane.WARNING_MESSAGE);
                 outPutPathJTextField.setText(System.getProperty("user.home"));
             }
         }
@@ -103,7 +103,7 @@ public class OutputDetails extends javax.swing.JFrame {
         } else {
             if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
                 JOptionPane.showMessageDialog(this,
-                        "Please provide the OMSSA installation folder.",
+                        "Provide the OMSSA installation folder.",
                         "OMSSA Installation Folder",
                         JOptionPane.INFORMATION_MESSAGE);
                 findOmssaFolderJButtonActionPerformed(null);

@@ -950,8 +950,9 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                                 JOptionPane.showMessageDialog(null,
                                         "The X!Tandem file " + selectedFiles.get(j) + "\n" +
-                                        "does not contain the reference to the original spectra!\n" +
-                                        "The file can not be parsed.");
+                                        "does not contain a reference to the original spectra!\n" +
+                                        "The file can not be parsed.",
+                                        "Error Parsing File", JOptionPane.ERROR_MESSAGE);
                                 return;
                             }
 
@@ -983,7 +984,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                 }
                             }
                         } catch (FileNotFoundException ex) {
-                            JOptionPane.showMessageDialog(null, "The file named " +
+                            JOptionPane.showMessageDialog(null, "The file " +
                                     selectedFiles.get(j) +
                                     "\ncould not be found.",
                                     "File Not Found", JOptionPane.ERROR_MESSAGE);
@@ -1204,7 +1205,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                         }
                     } catch (FileNotFoundException ex) {
                         JOptionPane.showMessageDialog(null, 
-                                "The file named " + file.getPath() +
+                                "The file " + file.getPath() +
                                 "\ncould not be found.",
                                 "File Not Found", JOptionPane.ERROR_MESSAGE);
                         Util.writeToErrorLog("Error when trying to read file: ");
@@ -1217,7 +1218,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                         String fileType = PRIDEConverter.getProperties().getDataSource();
 
                         JOptionPane.showMessageDialog(null,
-                                "The following file could not parsed as a " + fileType + ":\n " +
+                                "The file could not parsed as a " + fileType + ":\n " +
                                 file.getPath() + "\n\n" +
                                 "See ../Properties/ErrorLog.txt for more details.",
                                 "Error Parsing File", JOptionPane.ERROR_MESSAGE);
@@ -1297,7 +1298,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                                 } catch (FileNotFoundException ex) {
                                     JOptionPane.showMessageDialog(null, 
-                                            "The file named " + file.getName() +
+                                            "The file " + file.getName() +
                                             "\ncould not be found.",
                                             "File Not Found", JOptionPane.ERROR_MESSAGE);
                                     Util.writeToErrorLog("File not found: ");
@@ -1314,7 +1315,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                     e.printStackTrace();
 
                                     JOptionPane.showMessageDialog(null,
-                                            "The following file could not parsed as a " + fileName + ":\n " +
+                                            "The file could not parsed as a " + fileName + ":\n " +
                                             file.getPath() + "\n\n" +
                                             "See ../Properties/ErrorLog.txt for more details.",
                                             "Error Parsing File", JOptionPane.ERROR_MESSAGE);
@@ -1394,7 +1395,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                     e.printStackTrace();
 
                                     JOptionPane.showMessageDialog(null,
-                                            "The following file could not parsed as an OMSSA file:\n " +
+                                            "The file could not parsed as an OMSSA file:\n " +
                                             PRIDEConverter.getProperties().getSelectedSourceFiles().get(j) +
                                             "\n\n" +
                                             "See ../Properties/ErrorLog.txt for more details.",
@@ -1580,7 +1581,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                 "Memory boundaries are set in ../Properties/JavaOptions.txt.\n\n" +
                                 "If the data sets are too big for your computer, e-mail a support\n" +
                                 "request to the PRIDE team at the EBI: pride-support@ebi.ac.uk",
-                                "Out of memory error",
+                                "Out Of Memory Error",
                                 JOptionPane.ERROR_MESSAGE);
                     } catch (Exception e) {
                         progressDialog.setVisible(false);
@@ -2046,7 +2047,9 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         try {
             PRIDEConverter.getProperties().setPeptideScoreThreshold(new Double(this.peptideScoreJTextField.getText()).doubleValue());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "The peptide score threshold is not a number!");
+            JOptionPane.showMessageDialog(this, 
+                    "The peptide score threshold is not a number!", "Peptide Score Threshold",
+                    JOptionPane.INFORMATION_MESSAGE);
             peptideScoreJTextField.requestFocus();
             saveOk = false;
         }

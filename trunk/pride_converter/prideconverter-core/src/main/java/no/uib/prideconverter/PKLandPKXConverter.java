@@ -281,7 +281,7 @@ public class PKLandPKXConverter {
 
                                 if (xTmp != null) {
                                     // we already stored a result for this ID!!!
-                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                                    JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                                             "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                                     Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
                                             + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
@@ -453,7 +453,7 @@ public class PKLandPKXConverter {
 
                         if (xTmp != null) {
                             // we already stored a result for this ID!!!
-                            JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Please consult " +
+                            JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                                     "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
                             Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + currentSpectraCounter
                                     + "' and spectrum file '" + PRIDEConverter.getCurrentFileName() + "'." );
@@ -484,7 +484,7 @@ public class PKLandPKXConverter {
                     e.printStackTrace();
 
                     JOptionPane.showMessageDialog(null,
-                            "The following file could not parsed as a " +
+                            "The file could not parsed as a " +
                             fileType + ":\n " +
                             new File(properties.getSelectedSourceFiles().get(j)).getName() +
                             "\n\n" +

@@ -576,7 +576,7 @@ public class iTRAQ {
 
             } catch (FileNotFoundException ex) {
                 JOptionPane.showMessageDialog(
-                        null, "The file named " + file + " could not be found.",
+                        null, "The file " + file + " could not be found.",
                         "File Not Found", JOptionPane.ERROR_MESSAGE);
                 Util.writeToErrorLog("File not found: ");
                 ex.printStackTrace();
