@@ -2,5 +2,6 @@
 
 ----
 
- * (currently no changes)
+ * Updated the JOptionPane dialogs by simplifying and shortening the text. Also
+fixed some minor typos.
  
