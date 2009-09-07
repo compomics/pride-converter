@@ -5,7 +5,7 @@
 
 
    For updated information about PRIDE Converter please visit:
-   http://code.google.com/p/pride-converter
+   http://pride-converter.googlecode.com
 
 
 
@@ -39,5 +39,5 @@
 
    Please note that some of the JAR files used by the PRIDE Converter may 
    not have the same license as the PRIDE Converter itself. If you want 
-   to use one of these in a different context, make sure to obtain the 
+   to use any of these in a different context, make sure to obtain the 
    original license for the JAR file in question.
