@@ -280,9 +280,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                     if (deprecatedOrDeleted && getPrideConverterVersionNumber().lastIndexOf("beta") == -1) {
                         int option = JOptionPane.showConfirmDialog(null,
                                 "A newer version of PRIDE Converter is available.\n" +
-                                "Do you want to upgrade?\n\n" +
-                                "Selecting \'Yes\' will open the PRIDE Converter web page where you\n" +
-                                "can see a list of the changes and download the latest version.",
+                                "Do you want to upgrade?",
                                 "PRIDE Converter - Upgrade Available",
                                 JOptionPane.YES_NO_CANCEL_OPTION);
                         if (option == JOptionPane.YES_OPTION) {
