@@ -285,7 +285,15 @@ public class MS_LimsConverter {
                                             null);
 
                                     // add the created fragment ion to the list of all fragment ions
-                                    fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
+                                    FragmentIon tmpIon = new FragmentIonImpl(currentCvTerms, null);
+                                    if (!PRIDEConverter.containsFragmentIon(fragmentIons, tmpIon)) {
+                                        fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
+                                    } else {
+                                        Util.writeToErrorLog("Ignoring duplicated fragment ion for spectrum accession "
+                                                + tempIdentification.getAccession()
+                                                + " with sequence: " + tempIdentification.getSequence()
+                                                + " and spectrumKey: " + tempIdentification.getL_spectrumfileid());
+                                    }
                                 }
                             }
                         }

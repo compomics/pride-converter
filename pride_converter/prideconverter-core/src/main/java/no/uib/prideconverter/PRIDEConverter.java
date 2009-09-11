@@ -2879,4 +2879,20 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
         return currentCvParams;
     }
+
+    /**
+     * Checks if the specified collection of FragmentIons contains the provided fragment ion.
+     * This makes use of the FragmentIon.isIdenticalFragmentIon method.
+     *
+     * @param fragmentIons the collection to search in.
+     * @param ion the fragment ion to seach for.
+     * @return true if the provided ion was found in the collection.
+     */
+    public static boolean containsFragmentIon(ArrayList<FragmentIon> fragmentIons, FragmentIon ion) {
+        for (FragmentIon fragmentIon : fragmentIons) {
+            if (fragmentIon.isIdenticalFragmentIon(ion)) return true;
+        }
+        return false;
+    }
+
 }
