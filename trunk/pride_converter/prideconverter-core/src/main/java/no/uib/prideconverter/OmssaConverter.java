@@ -751,7 +751,15 @@ public class OmssaConverter {
                                                             null);
 
                                             // add the created fragment ion to the list of all fragment ions
-                                            fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
+                                            // only if not already present
+                                            FragmentIon tmpIon = new FragmentIonImpl(currentCvTerms, null);
+                                            if (!PRIDEConverter.containsFragmentIon(fragmentIons, tmpIon)) {
+                                                fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
+                                            } else {
+                                                Util.writeToErrorLog("Ignoring duplicated fragment ion for spectrum accession "
+                                                        + accession + " with sequence: " + peptideSequence.toUpperCase()
+                                                        + " and spectrumKey: " + PRIDEConverter.getSpectrumKey());
+                                            }
                                         }
                                     }
                                 }
@@ -824,4 +832,5 @@ public class OmssaConverter {
         PRIDEConverter.setTotalNumberOfSpectra(totalSpectraCounter);
         return mapping;
     }
+
 }

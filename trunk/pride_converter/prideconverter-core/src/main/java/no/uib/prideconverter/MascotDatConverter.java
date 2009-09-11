@@ -587,7 +587,16 @@ public class MascotDatConverter {
                                                             null);
 
                                                     // add the created fragment ion to the list of all fragment ions
-                                                    fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
+//                                                    fragmentIons.add(new FragmentIonImpl(currentCvTerms, null));
+                                                    FragmentIon tmpIon = new FragmentIonImpl(currentCvTerms, null);
+                                                    if (!PRIDEConverter.containsFragmentIon(fragmentIons, tmpIon)) {
+                                                        fragmentIons.add(tmpIon);
+                                                    } else {
+                                                        Util.writeToErrorLog("Ignoring duplicated fragment ion for spectrum accession "
+                                                                + PRIDEConverter.getProperties().getTempProteinHit().getAccession()
+                                                                + " with sequence: " + tempPeptideHit.getSequence()
+                                                                + " and spectrumKey: " + tempFile.getAbsolutePath() + "_" + currentQuery.getQueryNumber());
+                                                    }
                                                 }
                                             }
                                         }
