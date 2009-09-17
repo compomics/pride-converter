@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
-import uk.ac.ebi.jmzml.model.mzml.MzML;
 import uk.ac.ebi.pride.model.interfaces.mzdata.*;
 import uk.ac.ebi.pride.model.interfaces.core.Reference;
 import uk.ac.ebi.pride.model.interfaces.core.ProtocolStep;
@@ -25,7 +24,7 @@ public class Properties {
     public final int FRAME_WIDTH = 650;  //the hardcoded width of all frames
     public final int FRAME_HEIGHT = 600; //the hardcoded height of all frames
     public final int PROTEIN_ISOFORMS_ALWAYS_SELECT_FIRST = 0;
-    public final int PROTEIN_ISOFORMS_MAUNAL_SELECTION = 1;
+    public final int PROTEIN_ISOFORMS_MANUAL_SELECTION = 1;
     public final int PROTEIN_ISOFORMS_PROVIDE_LIST = 2;
     public final int ZERO_FILLED_NUMBER_LENGTH = 5;
     public final int MZ_ARRAY = 0;
@@ -54,8 +53,7 @@ public class Properties {
     private String dtaSelectFileName = null;
     private String spectrumFilesFolderName = null;
     private ArrayList selectedSpectraKeys;
-    private ArrayList selectedIsoformAccessions;
-    private ArrayList selectedIsoformPeptideSequences;
+    private HashMap<String, String> selectedIsoforms;
     private int proteinIsoformSelectionType;
     private double mascotConfidenceLevel = 95;
     private double proteinProphetThreshold = 0.9;
@@ -69,7 +67,6 @@ public class Properties {
     private String passwordDatabase;
     private DefaultTableModel spectrumTableModel = null;
     private MzData mzDataFile;
-    private MzML mzML;
     private boolean isGelFree = true;
     private FileFilter lastUsedFileFilter;
 
@@ -480,46 +477,30 @@ public class Properties {
     }
 
     /**
-     * Returns the selected protein isoform accesion numbers.
+     * Returns the selected protein isoforms hash map where the peptide sequence
+     * is the key and the protein accesion number the element.
      * 
-     * @return the selected protein isoform accesion numbers
+     * @return the selected protein isoforms
      */
-    public ArrayList getSelectedIsoformAccessions() {
-        return selectedIsoformAccessions;
+    public HashMap<String, String> getSelectedProteinIsoforms() {
+        return selectedIsoforms;
     }
 
     /**
-     * Sets the selected protein isoform accesion numbers.
+     * Sets the selected protein isoforms as a hash map where the peptide sequence
+     * is the key and the protein accesion number the element.
      * 
      * @param aSelectedIsoformAccessions
      */
-    public void setSelectedIsoformAccessions(ArrayList aSelectedIsoformAccessions) {
-        selectedIsoformAccessions = aSelectedIsoformAccessions;
-    }
-
-    /**
-     * Returns the selected isoform peptide sequences.
-     * 
-     * @return the selected isoform peptide sequences
-     */
-    public ArrayList getSelectedIsoformPeptideSequences() {
-        return selectedIsoformPeptideSequences;
-    }
-
-    /**
-     * Sets the selected isoform peptide sequences.
-     * 
-     * @param aSelectedIsoformPeptideSequences
-     */
-    public void setSelectedIsoformPeptideSequences(ArrayList aSelectedIsoformPeptideSequences) {
-        selectedIsoformPeptideSequences = aSelectedIsoformPeptideSequences;
+    public void setSelectedIsoforms(HashMap<String, String> aSelectedIsoforms) {
+        selectedIsoforms = aSelectedIsoforms;
     }
 
     /**
      * Returns the protein isoform selection type. 
      * 
      * PROTEIN_ISOFORMS_ALWAYS_SELECT_FIRST = 0;
-     * PROTEIN_ISOFORMS_MAUNAL_SELECTION = 1;
+     * PROTEIN_ISOFORMS_MANUAL_SELECTION = 1;
      * PROTEIN_ISOFORMS_PROVIDE_LIST = 2;
      * 
      * @return the protein isoform selection type: 0, 1 or 2.
@@ -532,7 +513,7 @@ public class Properties {
      * Sets the protein isoform selection type.
      * 
      * PROTEIN_ISOFORMS_ALWAYS_SELECT_FIRST = 0;
-     * PROTEIN_ISOFORMS_MAUNAL_SELECTION = 1;
+     * PROTEIN_ISOFORMS_MANUAL_SELECTION = 1;
      * PROTEIN_ISOFORMS_PROVIDE_LIST = 2;
      * 
      * @param aProteinIsoformSelectionType the protein isoform selection type: 0, 1 or 2.
@@ -1363,24 +1344,6 @@ public class Properties {
     }
 
     /**
-     * Returns the selected protein hits.
-     * 
-     * @return the selected protein hits
-     */
-    public ArrayList getSelectedProteinHits() {
-        return selectedProteinHits;
-    }
-
-    /**
-     * Sets the selected protein hits.
-     * 
-     * @param selectedProteinHits
-     */
-    public void setSelectedProteinHits(ArrayList selectedProteinHits) {
-        this.selectedProteinHits = selectedProteinHits;
-    }
-
-    /**
      * Returns true if the current data file has already been loaded.
      * 
      * @return true if the current data file has already been loaded
@@ -1452,24 +1415,6 @@ public class Properties {
         this.mzDataFile = mzDataFile;
     }
     
-    /**
-     * Returns the current mzML file.
-     * 
-     * @return the current mzML file
-     */
-    public MzML getMzMlFile() {
-        return mzML;
-    }
-
-    /**
-     * Set the mzML file.
-     * 
-     * @param mzML file
-     */
-    public void setMzMlFile(MzML mzML) {
-        this.mzML = mzML;
-    }
-
     /**
      * Returns the name of the ProteinProphet file.
      * 

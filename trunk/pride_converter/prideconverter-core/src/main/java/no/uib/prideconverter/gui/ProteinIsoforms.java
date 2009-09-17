@@ -1,7 +1,7 @@
 package no.uib.prideconverter.gui;
 
 import no.uib.prideconverter.PRIDEConverter;
-import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.table.DefaultTableModel;
 import no.uib.prideconverter.util.ExcelAdapter;
 
@@ -331,19 +331,17 @@ public class ProteinIsoforms extends javax.swing.JDialog {
                     PRIDEConverter.getProperties().PROTEIN_ISOFORMS_ALWAYS_SELECT_FIRST);
         } else if (manualSelectionJRadioButton.isSelected()) {
             PRIDEConverter.getProperties().setProteinIsoformSelectionType(
-                    PRIDEConverter.getProperties().PROTEIN_ISOFORMS_MAUNAL_SELECTION);
+                    PRIDEConverter.getProperties().PROTEIN_ISOFORMS_MANUAL_SELECTION);
         } else {
             PRIDEConverter.getProperties().setProteinIsoformSelectionType(
                     PRIDEConverter.getProperties().PROTEIN_ISOFORMS_PROVIDE_LIST);
 
-            PRIDEConverter.getProperties().setSelectedIsoformAccessions(new ArrayList());
-            PRIDEConverter.getProperties().setSelectedIsoformPeptideSequences(new ArrayList());
+            PRIDEConverter.getProperties().setSelectedIsoforms(new HashMap<String, String>());
 
             for (int i = 0; i < peptideToProteinJXTable.getRowCount(); i++) {
-                PRIDEConverter.getProperties().getSelectedIsoformPeptideSequences().add(
-                        peptideToProteinJXTable.getValueAt(i, 0));
-                PRIDEConverter.getProperties().getSelectedIsoformAccessions().add(
-                        peptideToProteinJXTable.getValueAt(i, 1));
+                PRIDEConverter.getProperties().getSelectedProteinIsoforms().put(
+                        (String) peptideToProteinJXTable.getValueAt(i, 0),
+                        (String) peptideToProteinJXTable.getValueAt(i, 1));
             }
         }
 

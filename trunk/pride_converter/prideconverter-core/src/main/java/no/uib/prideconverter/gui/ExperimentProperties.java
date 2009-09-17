@@ -24,7 +24,6 @@ import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import no.uib.prideconverter.util.Util;
-import uk.ac.ebi.jmzml.xml.io.MzMLUnmarshaller;
 import uk.ac.ebi.pride.model.implementation.core.ReferenceImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.ContactImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
@@ -198,102 +197,6 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
                             "Parsing Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
-
-                mandatoryFieldsCheck();
-                progressDialog.setVisible(false);
-                progressDialog.getParent().setVisible(true);
-                progressDialog.getParent().requestFocus();
-                progressDialog.dispose();
-
-                experimentTitleJTextArea.requestFocus();
-            }
-        });
-
-        t2.start();
-    }
-
-    /**
-     * Loads the mzML file. And extracts the contact details found and 
-     * inserts them into the Contacts table.
-     */
-    private void loadMzMLFile() {
-
-        progressDialog = new ProgressDialog(this, true);
-        progressDialog.setTitle("Loading mzData. Please Wait...");
-        progressDialog.setString(null);
-        progressDialog.setIntermidiate(true);
-
-        final Thread t = new Thread(new Runnable() {
-
-            public void run() {
-                progressDialog.setVisible(true);
-            }
-        }, "ProgressDialog");
-
-        t.start();
-
-        // Wait until progress dialog is visible.
-        //
-        // The following is not needed in Java 1.6, but seemed to be needed in 1.5.
-        //
-        // Not including the lines _used to_ result in a crash on Windows, but not anymore.
-        // Including the lines results in a crash on Linux and Mac.
-        if(System.getProperty("os.name").toLowerCase().lastIndexOf("windows") != -1){
-            while (!progressDialog.isVisible()) {
-            }
-        }
-
-        Thread t2 = new Thread(new Runnable() {
-
-            public void run() {
-
-//                try {
-
-                if (!PRIDEConverter.getProperties().hasDataFileBeenLoaded()) {
-                    MzMLUnmarshaller unmarshallerMzMl = new MzMLUnmarshaller(
-                            new File(PRIDEConverter.getProperties().getSelectedSourceFiles().get(0)));
-                    PRIDEConverter.getProperties().setMzMlFile(unmarshallerMzMl.unmarshall());
-                    PRIDEConverter.getProperties().setDataFileHasBeenLoaded(true);
-                }
-
-//                    PRIDEConverter.getProperties().getContacts()
-
-//                    PRIDEConverter.getProperties().setContacts(
-//                            PRIDEConverter.getProperties().getMzDataFile().getContactCollection());
-                insertStoredInformation();
-                mandatoryFieldsCheck();
-
-//                } catch (FileNotFoundException e) {
-//
-////                    progressDialog.setVisible(false);
-//
-//                    Util.writeToErrorLog("An error occured while trying to parse: " +
-//                            PRIDEConverter.getProperties().getSelectedSourceFiles().get(0) + " " + e.toString());
-//                    e.printStackTrace();
-//
-//                    JOptionPane.showMessageDialog(null,
-//                            "An error occured while trying to parse: " +
-//                            PRIDEConverter.getProperties().getSelectedSourceFiles().get(0) + "\n\n" +
-//                            "See ../Properties/ErrorLog.txt for more details.\n" +
-//                            "The file can most likely not be converted to PRIDE XML.",
-//                            "Parsing Error",
-//                            JOptionPane.ERROR_MESSAGE);
-//                } catch (IOException e) {
-//
-////                    progressDialog.setVisible(false);
-//
-//                    Util.writeToErrorLog("An error occured while trying to parse: " +
-//                            PRIDEConverter.getProperties().getSelectedSourceFiles().get(0) + " " + e.toString());
-//                    e.printStackTrace();
-//
-//                    JOptionPane.showMessageDialog(null,
-//                            "An error occured while trying to parse: " +
-//                            PRIDEConverter.getProperties().getSelectedSourceFiles().get(0) + "\n\n" +
-//                            "See ../Properties/ErrorLog.txt for more details.\n" +
-//                            "The file can most likely not be converted to PRIDE XML.",
-//                            "Parsing Error",
-//                            JOptionPane.ERROR_MESSAGE);
-//                }
 
                 mandatoryFieldsCheck();
                 progressDialog.setVisible(false);
