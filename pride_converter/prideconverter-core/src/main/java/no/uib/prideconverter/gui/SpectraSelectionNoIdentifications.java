@@ -13,7 +13,6 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import javax.swing.JOptionPane;
@@ -25,8 +24,6 @@ import org.jdesktop.swingx.JXTableHeader;
 import org.jdesktop.swingx.decorator.SortOrder;
 import org.systemsbiology.jrap.MSXMLParser;
 import org.systemsbiology.jrap.Scan;
-import uk.ac.ebi.jmzml.model.mzml.Spectrum;
-import uk.ac.ebi.jmzml.xml.io.MzMLUnmarshaller;
 import uk.ac.ebi.pride.model.interfaces.mzdata.MzData;
 import uk.ac.ebi.pride.xml.MzDataXMLUnmarshaller;
 
@@ -587,8 +584,6 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                 MSXMLParser msXMLParser;
                 int scanCount;
                 Scan scan;
-                MzMLUnmarshaller unmarshallerMzMl;
-                List<Spectrum> spectraMzMl;
                 FileReader reader;
                 MzDataXMLUnmarshaller unmarshallerMzData;
                 MzData mzData;
@@ -778,32 +773,6 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                         "/" +
                                         numberOfSelectedSpectra);
                             }
-                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzML")) {
-
-                            unmarshallerMzMl = new MzMLUnmarshaller(file);
-                            PRIDEConverter.getProperties().setMzMlFile(unmarshallerMzMl.unmarshall());
-                            spectraMzMl = PRIDEConverter.getProperties().getMzMlFile().getRun().getSpectrumList().getSpectrum();
-
-                            for (int i = 0; i < spectraMzMl.size(); i++) {
-
-                                ((DefaultTableModel) spectraJXTable.getModel()).addRow(
-                                        new Object[]{
-                                            file.getName(),
-                                            spectraMzMl.get(i).getId(),//.getIndex().toString(),
-                                            //spectraMzMl.get(i).getSpectrumDescription().getPrecursorList().getPrecursor().get(0).getSelectedIonList().getSelectedIon().get(0).getCvParam().get(0).getValue(),
-                                            null,
-                                            null,
-                                            2,
-                                            new Boolean(true)
-                                        });
-
-                                numberOfSelectedSpectra++;
-
-                                numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-                                        "/" + numberOfSelectedSpectra);
-                            }
-
-                            PRIDEConverter.getProperties().setDataFileHasBeenLoaded(true);
                         } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
 
                             reader = new FileReader(file);

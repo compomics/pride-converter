@@ -61,11 +61,13 @@ public class ProteinIsoFormSelection extends javax.swing.JDialog {
         
         proteinIsoformsJTable = new JTable(new DefaultTableModel()) {
 
+            @Override
             public void tableChanged(TableModelEvent e) {
                 super.tableChanged(e);
                 repaint();
             }
 
+            @Override
             public boolean isCellEditable(int row, int column) {
                 if (column == 3) {
                     return true;
@@ -77,6 +79,7 @@ public class ProteinIsoFormSelection extends javax.swing.JDialog {
 
         proteinIsoformsJTable.addMouseListener(new java.awt.event.MouseAdapter() {
 
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
 
                 int index = proteinIsoformsJTable.columnAtPoint(evt.getPoint());
@@ -108,18 +111,21 @@ public class ProteinIsoFormSelection extends javax.swing.JDialog {
         UIManager.put("RadioButton.focus", ui.getColor("control"));
 
         proteinIsoformsTableModel = new DefaultTableModel();
-        proteinIsoformsTableModel.setColumnIdentifiers(
-                new Object[]{"Accession", "Start", "Stop", " "});
+        proteinIsoformsTableModel.setColumnIdentifiers(new Object[]{"Accession", "Start", "Stop", " "});
         buttonGroup = new ButtonGroup();
 
         JRadioButton tempJRadioButton;
 
         for (int i = 0; i < peptideHit.getProteinHits().size(); i++) {
+
+            JRadioButton tempRadioButton = new JRadioButton();
+            tempRadioButton.setOpaque(true);
+
             proteinIsoformsTableModel.addRow(new Object[]{
                 ((ProteinHit) peptideHit.getProteinHits().get(i)).getAccession(),
                 ((ProteinHit) peptideHit.getProteinHits().get(i)).getStart(),
                 ((ProteinHit) peptideHit.getProteinHits().get(i)).getStop(),
-                new JRadioButton()
+                tempRadioButton
             });
 
             buttonGroup.add((JRadioButton) proteinIsoformsTableModel.getValueAt(i, 3));
@@ -320,12 +326,12 @@ public class ProteinIsoFormSelection extends javax.swing.JDialog {
      * @param evt
      */
     private void okJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okJButtonActionPerformed
+
         this.setVisible(false);
 
         int selectedIndex = -1;
 
-        for (int i = 0; i < proteinIsoformsJTable.getRowCount() &&
-                selectedIndex == -1; i++) {
+        for (int i = 0; i < proteinIsoformsJTable.getRowCount() && selectedIndex == -1; i++) {
             if (((JRadioButton) proteinIsoformsJTable.getValueAt(i, 3)).isSelected()) {
                 selectedIndex = i;
             }
@@ -334,13 +340,16 @@ public class ProteinIsoFormSelection extends javax.swing.JDialog {
         if(selectedIndex == -1){
             selectedIndex = 0;
         }
-        
+
+        // set the protein hit to use
         PRIDEConverter.getProperties().setTempProteinHit((ProteinHit) peptideHit.getProteinHits().get(selectedIndex));
 
+        // if 'alwaysChooseIsoform' is selected, add the mapping to the list. this will
+        // result in the accession number always being selected if in list of proteins
         if (alwaysChooseIsoformJCheckBox.isSelected()) {
-            if (!PRIDEConverter.getProperties().getSelectedProteinHits().contains(((ProteinHit) peptideHit.getProteinHits().get(selectedIndex)).getAccession())) {
-                PRIDEConverter.getProperties().getSelectedProteinHits().add(((ProteinHit) peptideHit.getProteinHits().get(selectedIndex)).getAccession());
-            }
+            PRIDEConverter.getProperties().getSelectedProteinIsoforms().put(
+                    peptideSequenceJTextField.getText(),
+                    ((ProteinHit) peptideHit.getProteinHits().get(selectedIndex)).getAccession());
         }
         
         this.dispose();

@@ -13,23 +13,23 @@ import javax.swing.table.*;
  */
 public class RadioButtonRenderer implements TableCellRenderer {
 
-    /** 
-     * Method overridden from TableCellRenderer
-     * 
-     * @param table
-     * @param value
-     * @param isSelected
-     * @param hasFocus
-     * @param row
-     * @param column
-     * @return Component
-     */
+    @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus, int row, int column) {
         if (value == null) {
             return null;
         }
-        
-        return (Component) value;
+
+        JRadioButton temp = (JRadioButton) value;
+
+        if (isSelected) {
+            temp.setBackground(table.getSelectionBackground());
+        } else {
+            temp.setBackground(Color.WHITE);
+        }
+
+        temp.setHorizontalAlignment(SwingConstants.CENTER);
+
+        return temp;
     }
 }

@@ -81,9 +81,7 @@ public class MascotDatConverter {
         Spectrum fragmentation;
 
         PRIDEConverter.setIds(new ArrayList<IdentificationGeneral>());
-        PRIDEConverter.getProperties().setSelectedProteinHits(new ArrayList());
-        PRIDEConverter.getProperties().setSelectedIsoformAccessions(new ArrayList());
-        PRIDEConverter.getProperties().setSelectedIsoformPeptideSequences(new ArrayList());
+        PRIDEConverter.getProperties().setSelectedIsoforms(new HashMap<String, String>());
         PRIDEConverter.setCancelConversion(false);
         PRIDEConverter.getProperties().setIsoFormsSelectionTypeSelected(false);
         boolean alreadySelected, peptideIsIdentified;
@@ -381,21 +379,29 @@ public class MascotDatConverter {
                                             if (PRIDEConverter.getProperties().getProteinIsoformSelectionType() ==
                                                     PRIDEConverter.getProperties().PROTEIN_ISOFORMS_ALWAYS_SELECT_FIRST) {
 
+                                                // set the protein hit to use
                                                 PRIDEConverter.getProperties().setTempProteinHit(
                                                         (ProteinHit) tempPeptideHit.getProteinHits().get(0));
 
                                             } else if (PRIDEConverter.getProperties().getProteinIsoformSelectionType() ==
-                                                    PRIDEConverter.getProperties().PROTEIN_ISOFORMS_MAUNAL_SELECTION) {
+                                                    PRIDEConverter.getProperties().PROTEIN_ISOFORMS_MANUAL_SELECTION) {
 
                                                 alreadySelected = false;
 
+                                                // check if the protein accession number has already been used and
+                                                // indicated as 'always select this accession number if in list'
                                                 for (int w = 0; w < tempPeptideHit.getProteinHits().size() && !alreadySelected; w++) {
-                                                    if (PRIDEConverter.getProperties().getSelectedProteinHits().contains(
+                                                    if (PRIDEConverter.getProperties().getSelectedProteinIsoforms().containsValue(
                                                             ((ProteinHit) tempPeptideHit.getProteinHits().get(w)).getAccession())) {
+
+                                                        // set the protein hit to use
+                                                        PRIDEConverter.getProperties().setTempProteinHit(
+                                                            (ProteinHit) tempPeptideHit.getProteinHits().get(w));
                                                         alreadySelected = true;
                                                     }
                                                 }
 
+                                                // not mapped. do manual mapping
                                                 if (!alreadySelected) {
 
                                                     if (PRIDEConverter.isConversionCanceled()) {
@@ -409,30 +415,34 @@ public class MascotDatConverter {
                                                 }
                                             } else {//list provided
 
-                                                if (PRIDEConverter.getProperties().getSelectedIsoformPeptideSequences().
-                                                        contains(tempPeptideHit.getSequence())) {
+                                                // check if the peptide is in the list of peptide sequence to protein accession numbers
+                                                if (PRIDEConverter.getProperties().getSelectedProteinIsoforms().containsKey(tempPeptideHit.getSequence())) {
 
-                                                    int index = PRIDEConverter.getProperties().getSelectedIsoformPeptideSequences().indexOf(
-                                                            tempPeptideHit.getSequence());
-
+                                                    // iterate the protein hits and find the correct protein hit
                                                     for (int h = 0; h < tempPeptideHit.getProteinHits().size(); h++) {
-
-                                                        if (((ProteinHit) tempPeptideHit.getProteinHits().
-                                                                get(h)).getAccession().equalsIgnoreCase(
-                                                                (String) PRIDEConverter.getProperties().getSelectedIsoformAccessions().get(index))) {
+                                                        if (((ProteinHit) tempPeptideHit.getProteinHits().get(h)).getAccession().equalsIgnoreCase(
+                                                                PRIDEConverter.getProperties().getSelectedProteinIsoforms().get(tempPeptideHit.getSequence()))) {
                                                             PRIDEConverter.getProperties().setTempProteinHit((ProteinHit) tempPeptideHit.getProteinHits().get(h));
                                                         }
                                                     }
-                                                } else {//not found. do manual selection
+                                                } else { // not found. do manual selection
+
                                                     alreadySelected = false;
 
+                                                    // check if the protein accession number has already been used and
+                                                    // indicated as 'always select this accession number if in list'
                                                     for (int w = 0; w < tempPeptideHit.getProteinHits().size() && !alreadySelected; w++) {
-                                                        if (PRIDEConverter.getProperties().getSelectedProteinHits().contains(
+                                                        if (PRIDEConverter.getProperties().getSelectedProteinIsoforms().containsValue(
                                                                 ((ProteinHit) tempPeptideHit.getProteinHits().get(w)).getAccession())) {
+
+                                                            // set the protein hit to use
+                                                            PRIDEConverter.getProperties().setTempProteinHit(
+                                                                (ProteinHit) tempPeptideHit.getProteinHits().get(w));
                                                             alreadySelected = true;
                                                         }
                                                     }
 
+                                                    // not mapped. do manual mapping
                                                     if (!alreadySelected) {
 
                                                         if (PRIDEConverter.isConversionCanceled()) {
@@ -458,12 +468,9 @@ public class MascotDatConverter {
                                         userParams = null;
 
                                         if (calculateITraq) {
-                                            iTraqNorm = (String[]) iTRAQValues.getAllNorms().get(
-                                                    currentQuery.getQueryNumber());
-                                            iTraqUT = (String[]) iTRAQValues.getAllUTs().get(
-                                                    currentQuery.getQueryNumber());
-                                            iTraqRatio = (String[][]) iTRAQValues.getAllRatios().get(
-                                                    currentQuery.getQueryNumber());
+                                            iTraqNorm = (String[]) iTRAQValues.getAllNorms().get(currentQuery.getQueryNumber());
+                                            iTraqUT = (String[]) iTRAQValues.getAllUTs().get(currentQuery.getQueryNumber());
+                                            iTraqRatio = (String[][]) iTRAQValues.getAllRatios().get(currentQuery.getQueryNumber());
 
                                             PRIDEConverter.addItraqCVTerms(cVParams, iTraqNorm);
                                             userParams = PRIDEConverter.addItraqUserTerms(iTraqRatio);
