@@ -2,6 +2,7 @@
 
 ----
 
- * Updated the JOptionPane dialogs by simplifying and shortening the text. Also
-fixed some minor typos.
+ * FEATURE IMPROVEMENT: The text in the JOptionPane dialogs has been by simplified and shortened. Some minor typos have also been fixed.
+ * FEATURE IMPROVEMENT: Reduced the size of the PRIDE Converter zip file by removing unused libraries.
+ * FEATURE IMPROVEMENT: Improved the radio button renderer.
  
