@@ -99,7 +99,6 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                 Class[] types = new Class[]{
                     java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Boolean.class, java.lang.Boolean.class
                 };
-
                 boolean[] canEdit = new boolean[]{
                     false, false, false, false, true
                 };
@@ -808,6 +807,9 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
+        // reset the sort order
+        spectraJXTable.resetSortOrder();
+
         numberOfSelectedSpectra = 0;
 
         progressDialog = new ProgressDialog(this, true);
@@ -815,6 +817,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         progressDialog.setIntermidiate(true);
 
         Thread t = new Thread(new Runnable() {
+
             public void run() {
                 progressDialog.setVisible(true);
             }
@@ -828,7 +831,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         //
         // Not including the lines _used to_ result in a crash on Windows, but not anymore.
         // Including the lines results in a crash on Linux and Mac.
-        if(System.getProperty("os.name").toLowerCase().lastIndexOf("windows") != -1){
+        if (System.getProperty("os.name").toLowerCase().lastIndexOf("windows") != -1) {
             while (!progressDialog.isVisible()) {
             }
         }
@@ -893,7 +896,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                         try {
                             //get the factory
                             dbf = DocumentBuilderFactory.newInstance();
-                            
+
                             dbf.setValidating(false);
                             dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
                             dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
@@ -1152,7 +1155,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                         }
                                     }
 
-                                    if(currentLine != null){
+                                    if (currentLine != null) {
                                         currentLine = b.readLine();
                                     }
                                 }
@@ -1204,7 +1207,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                             }
                         }
                     } catch (FileNotFoundException ex) {
-                        JOptionPane.showMessageDialog(null, 
+                        JOptionPane.showMessageDialog(null,
                                 "The file " + file.getPath() +
                                 "\ncould not be found.",
                                 "File Not Found", JOptionPane.ERROR_MESSAGE);
@@ -1297,7 +1300,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                             numberOfSelectedSpectra + "/" + spectraJXTable.getRowCount());
 
                                 } catch (FileNotFoundException ex) {
-                                    JOptionPane.showMessageDialog(null, 
+                                    JOptionPane.showMessageDialog(null,
                                             "The file " + file.getName() +
                                             "\ncould not be found.",
                                             "File Not Found", JOptionPane.ERROR_MESSAGE);
@@ -1359,9 +1362,9 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                         String fileName;
 
                                         // spectrum name is not mandatory, use spectrum number if no name is given
-                                        if(tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.size() == 0){
+                                        if (tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.size() == 0) {
                                             fileName = "" + tempSpectrum.MSSpectrum_number;
-                                        } else{
+                                        } else {
                                             fileName = tempSpectrum.MSSpectrum_ids.MSSpectrum_ids_E.get(0);
                                         }
 
@@ -1406,7 +1409,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                 PRIDEConverter.getProperties().setMascotConfidenceLevel(
                                         (Double) mascotConfidenceLevelJSpinner.getValue());
 
-                                double confidenceLevel = 
+                                double confidenceLevel =
                                         (100 - PRIDEConverter.getProperties().getMascotConfidenceLevel()) / 100;
 
                                 double size = (double) file.length() /
@@ -1637,7 +1640,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         int sortedTableColumn = -1;
         SortOrder sortOrder = null;
 
-        if(spectraJXTable.getSortedColumn() != null){
+        if (spectraJXTable.getSortedColumn() != null) {
             sortedTableColumn = spectraJXTable.getSortedColumn().getModelIndex();
             sortOrder = spectraJXTable.getSortOrder(sortedTableColumn);
             spectraJXTable.setSortable(false);
@@ -1673,7 +1676,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
         selectAll = !selectAll;
 
-        if(columnWasSorted){
+        if (columnWasSorted) {
             spectraJXTable.setSortable(true);
             spectraJXTable.setSortOrder(sortedTableColumn, sortOrder);
         }
@@ -1693,7 +1696,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         int sortedTableColumn = -1;
         SortOrder sortOrder = null;
 
-        if(spectraJXTable.getSortedColumn() != null){
+        if (spectraJXTable.getSortedColumn() != null) {
             sortedTableColumn = spectraJXTable.getSortedColumn().getModelIndex();
             sortOrder = spectraJXTable.getSortOrder(sortedTableColumn);
             spectraJXTable.setSortable(false);
@@ -1718,7 +1721,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
             nextJButton.setEnabled(true);
         }
 
-        if(columnWasSorted){
+        if (columnWasSorted) {
             spectraJXTable.setSortable(true);
             spectraJXTable.setSortOrder(sortedTableColumn, sortOrder);
         }
@@ -1738,7 +1741,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         int sortedTableColumn = -1;
         SortOrder sortOrder = null;
 
-        if(spectraJXTable.getSortedColumn() != null){
+        if (spectraJXTable.getSortedColumn() != null) {
             sortedTableColumn = spectraJXTable.getSortedColumn().getModelIndex();
             sortOrder = spectraJXTable.getSortOrder(sortedTableColumn);
             spectraJXTable.setSortable(false);
@@ -1765,7 +1768,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
             nextJButton.setEnabled(true);
         }
 
-        if(columnWasSorted){
+        if (columnWasSorted) {
             spectraJXTable.setSortable(true);
             spectraJXTable.setSortOrder(sortedTableColumn, sortOrder);
         }
@@ -1809,6 +1812,17 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
      */
     private void applyAdvancedSelectionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyAdvancedSelectionButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+
+        boolean columnWasSorted = false;
+        int sortedTableColumn = -1;
+        SortOrder sortOrder = null;
+
+        if (spectraJXTable.getSortedColumn() != null) {
+            sortedTableColumn = spectraJXTable.getSortedColumn().getModelIndex();
+            sortOrder = spectraJXTable.getSortOrder(sortedTableColumn);
+            spectraJXTable.setSortable(false);
+            columnWasSorted = true;
+        }
 
         StringTokenizer selectionCriteriaTokenizer;
         String tempToken;
@@ -1881,6 +1895,11 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
             nextJButton.setEnabled(false);
         } else {
             nextJButton.setEnabled(true);
+        }
+
+        if (columnWasSorted) {
+            spectraJXTable.setSortable(true);
+            spectraJXTable.setSortOrder(sortedTableColumn, sortOrder);
         }
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -1962,11 +1981,28 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
      */
     private void mascotConfidenceLevelJSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_mascotConfidenceLevelJSpinnerStateChanged
         if (spectraJXTable.getRowCount() > 0) {
+
+            boolean columnWasSorted = false;
+            int sortedTableColumn = -1;
+            SortOrder sortOrder = null;
+
+            if (spectraJXTable.getSortedColumn() != null) {
+                sortedTableColumn = spectraJXTable.getSortedColumn().getModelIndex();
+                sortOrder = spectraJXTable.getSortOrder(sortedTableColumn);
+                spectraJXTable.setSortable(false);
+                columnWasSorted = true;
+            }
+
             mascotConfidenceLevelJSpinner.setEnabled(false);
             mascotConfidenceLevelJSpinner.setFocusable(false);
             loadSpectraJButtonActionPerformed(null);
             mascotConfidenceLevelJSpinner.setFocusable(true);
             mascotConfidenceLevelJSpinner.setEnabled(true);
+
+            if (columnWasSorted) {
+                spectraJXTable.setSortable(true);
+                spectraJXTable.setSortOrder(sortedTableColumn, sortOrder);
+            }
         }
     }//GEN-LAST:event_mascotConfidenceLevelJSpinnerStateChanged
 
@@ -1979,7 +2015,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
         String spectrumKey = spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 1) + "_" +
                 spectraJXTable.getValueAt(spectraJXTable.getSelectedRow(), 2);
-        
+
         new SpectrumDetails(this, true, spectrumKey);
 }//GEN-LAST:event_viewSpectrumAnnotationsJMenuItemActionPerformed
 
@@ -2047,7 +2083,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
         try {
             PRIDEConverter.getProperties().setPeptideScoreThreshold(new Double(this.peptideScoreJTextField.getText()).doubleValue());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, 
+            JOptionPane.showMessageDialog(this,
                     "The peptide score threshold is not a number!", "Peptide Score Threshold",
                     JOptionPane.INFORMATION_MESSAGE);
             peptideScoreJTextField.requestFocus();
@@ -2092,7 +2128,6 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
         return saveOk;
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutJButton;
     private javax.swing.ButtonGroup advancedSelectionButtonGroup;
