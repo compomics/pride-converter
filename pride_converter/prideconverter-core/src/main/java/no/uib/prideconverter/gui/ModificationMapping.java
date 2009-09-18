@@ -438,8 +438,8 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
             }
 
             try {
-                Map map = qs.getTermXrefs(accession, ontologyShort);
-                //Map map = qs.getTermMetadata(accession, ontologyShort);
+                //Map map = qs.getTermXrefs(accession, ontologyShort);
+                Map map = qs.getTermMetadata(accession, ontologyShort);
 
                 Iterator iterator = map.keySet().iterator();
 
@@ -451,10 +451,6 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
                         modificationMass = new Double(temp.substring(temp.indexOf("\"") + 1, temp.length() - 1));
                     }
                 }
-
-//            if (map.get("DiffMono") != null) {
-//                modificationMass = new Double("" + map.get("DiffMono"));
-//            }
             } catch (IndexOutOfBoundsException e) {
                 Util.writeToErrorLog("An error occured while trying to get the mono mass for modification \'" + accession + "\'");
             }
