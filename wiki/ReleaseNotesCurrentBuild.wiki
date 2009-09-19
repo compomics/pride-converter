@@ -6,4 +6,5 @@
  * FEATURE IMPROVEMENT: Reduced the size of the PRIDE Converter zip file by removing unused libraries.
  * FEATURE IMPROVEMENT: Improved the radio button renderer.
  * BUG FIX: Fixed a problem in the spectra selection frame where the selection in the table was not always updated correctly if sorting was turned on.
+ * BUG FIX: The PSI-MOD modification mass check is now working again. (The DiffMono mass value had been moved back to the PSI-MOD metadata section after being in the xrefs section for a while.)
  
