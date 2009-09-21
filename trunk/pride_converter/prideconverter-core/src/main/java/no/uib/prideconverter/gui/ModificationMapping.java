@@ -4,7 +4,6 @@ import no.uib.prideconverter.PRIDEConverter;
 import be.proteomics.mascotdatfile.util.interfaces.Modification;
 import java.awt.Window;
 import java.rmi.RemoteException;
-import java.util.Iterator;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.xml.rpc.ServiceException;
@@ -439,16 +438,11 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
 
             try {
                 //Map map = qs.getTermXrefs(accession, ontologyShort);
-                Map map = qs.getTermMetadata(accession, ontologyShort);
+                Map currentMetaData = qs.getTermMetadata(accession, ontologyShort);
 
-                Iterator iterator = map.keySet().iterator();
-
-                while (iterator.hasNext()) {
-                    Object key = iterator.next();
-                    String temp = "" + map.get(key);
-
-                    if (temp.lastIndexOf("DiffMono\"") != -1) {
-                        modificationMass = new Double(temp.substring(temp.indexOf("\"") + 1, temp.length() - 1));
+                if (currentMetaData.containsKey("DiffMono")) {
+                    if (currentMetaData.get("DiffMono") != null) {
+                        modificationMass = new Double(currentMetaData.get("DiffMono").toString()).doubleValue();
                     }
                 }
             } catch (IndexOutOfBoundsException e) {
@@ -459,7 +453,6 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
 
                 if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File") &&
                         fixedModification) {
-
                     // sequest fixed modifications has to be handled separatly as they  
                     // include the total mass and not the modification mass
 //                    if (modificationMass != null) {
@@ -535,18 +528,18 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
      * @return true if the distance between the two numbers are greater
      *         than the given distance
      */
-    private boolean diffGreaterThan(double numberA, double numberB, double maxDiff){
+    private boolean diffGreaterThan(double numberA, double numberB, double maxDiff) {
 
         double diff;
 
-        if(numberA > 0 && numberB > 0){
+        if (numberA > 0 && numberB > 0) {
             diff = Math.abs(numberA - numberB);
-        } else if(numberA < 0 && numberB < 0){
+        } else if (numberA < 0 && numberB < 0) {
             diff = Math.abs(Math.abs(numberA) - Math.abs(numberB));
-        } else{
+        } else {
             diff = Math.abs(numberA) + Math.abs(numberB);
         }
-        
+
         return diff > maxDiff;
     }
 
@@ -557,22 +550,20 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
      * @param numberB
      * @return the distance between the two numbers
      */
-    private double getDistance(double numberA, double numberB){
+    private double getDistance(double numberA, double numberB) {
 
         double diff;
 
-        if(numberA > 0 && numberB > 0){
+        if (numberA > 0 && numberB > 0) {
             diff = Math.abs(numberA - numberB);
-        } else if(numberA < 0 && numberB < 0){
+        } else if (numberA < 0 && numberB < 0) {
             diff = Math.abs(Math.abs(numberA) - Math.abs(numberB));
-        } else{
+        } else {
             diff = Math.abs(numberA) + Math.abs(numberB);
         }
 
         return diff;
     }
-
-
 
     /**
      * See cancelJButtonActionPerformed
