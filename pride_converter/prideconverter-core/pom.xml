@@ -260,10 +260,6 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                     <groupId>commons-transaction</groupId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>db-ojb</artifactId>
-                    <groupId>ojb</groupId>
-                </exclusion>
-                <exclusion>
                     <artifactId>p6spy</artifactId>
                     <groupId>p6spy</groupId>
                 </exclusion>
@@ -295,6 +291,30 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                     <artifactId>ols-client</artifactId>
                     <groupId>ols</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>jdori</artifactId>
+                    <groupId>jdo</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jdo</artifactId>
+                    <groupId>jdo</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>commons-beanutils</artifactId>
+                    <groupId>commons-beanutils</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>commons-collections</artifactId>
+                    <groupId>commons-collections</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>commons-dbcp</artifactId>
+                    <groupId>commons-dbcp</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>commons-lang</artifactId>
+                    <groupId>commons-lang</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -321,15 +341,6 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                     <groupId>com.jhlabs</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-
-
-        <!-- the dependency below ought to be added as pride-core dependencies (?) -->
-        <!-- where org.apache.xerces.impl.dv.util.Base64 is used -->
-        <dependency>
-            <groupId>xerces</groupId>
-            <artifactId>xercesImpl</artifactId>
-            <version>2.4.0</version>
         </dependency>
 
     </dependencies>
