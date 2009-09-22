@@ -369,7 +369,8 @@ public class DataBaseDetails extends javax.swing.JFrame {
 
     /**
      * Checks that all mandatory information is filled in and enables or 
-     * disables the Next button. 
+     * disables the Next button. And if Enter is pressed and the Next
+     * button is enabled, clicks the Next button.
      * 
      * @param evt
      */
@@ -385,7 +386,8 @@ public class DataBaseDetails extends javax.swing.JFrame {
 
     /**
      * Checks that all mandatory information is filled in and enables or 
-     * disables the Next button. 
+     * disables the Next button. And if Enter is pressed and the Next
+     * button is enabled, clicks the Next button.
      * 
      * @param evt
      */
@@ -401,7 +403,8 @@ public class DataBaseDetails extends javax.swing.JFrame {
 
     /**
      * Checks that all mandatory information is filled in and enables or 
-     * disables the Next button. 
+     * disables the Next button. And if Enter is pressed and the Next
+     * button is enabled, clicks the Next button.
      * 
      * @param evt
      */
@@ -417,7 +420,8 @@ public class DataBaseDetails extends javax.swing.JFrame {
 
     /**
      * Checks that all mandatory information is filled in and enables or 
-     * disables the Next button. 
+     * disables the Next button. And if Enter is pressed and the Next
+     * button is enabled, clicks the Next button.
      * 
      * @param evt
      */

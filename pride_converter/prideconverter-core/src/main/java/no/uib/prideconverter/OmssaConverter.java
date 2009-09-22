@@ -51,11 +51,11 @@ public class OmssaConverter {
         no.uib.prideconverter.util.Properties properties = PRIDEConverter.getProperties();
         no.uib.prideconverter.util.UserProperties userProperties = PRIDEConverter.getUserProperties();
 
-
         HashMap<String, Long> mapping = new HashMap<String, Long>();
 
         int totalSpectraCounter = 0;
 
+        // ToDo: most of these variables declarations should be moved to where they er first used
         double[][] arrays;
         Collection<Precursor> precursors;
         Collection<CvParam> ionSelection;
@@ -66,7 +66,6 @@ public class OmssaConverter {
 
         PRIDEConverter.setIds(new ArrayList<IdentificationGeneral>());
 
-        int start;
         String accession, peptideSequence, upstreamFlankingSequence, downstreamFlankingSequence, database;
 
         MSPepHit currentMSPepHit;
@@ -80,7 +79,7 @@ public class OmssaConverter {
 
         MSModHit currentMSModHit;
 
-        int modType, modSite;
+        int start, modType, modSite;
 
         Iterator<MSModHit> modsIterator;
         ArrayList<CvParam> modificationCVParams;
@@ -177,10 +176,7 @@ public class OmssaConverter {
                                     modResidues = new Vector<String>();
 
                                     for (int m = 0; m < residueNodes.getLength(); m++) {
-
-                                        if (residueNodes.item(m).getNodeName().equalsIgnoreCase(
-                                                "MSModSpec_residues_E")) {
-
+                                        if (residueNodes.item(m).getNodeName().equalsIgnoreCase("MSModSpec_residues_E")) {
                                             modResidues.add(residueNodes.item(m).getTextContent());
                                         }
                                     }
@@ -192,8 +188,7 @@ public class OmssaConverter {
                             }
 
                             omssaModificationDetails.put(modNumber,
-                                    new OmssaModification(modNumber, modName,
-                                    modMonoMass, modResidues));
+                                    new OmssaModification(modNumber, modName, modMonoMass, modResidues));
                         }
                     }
                 }
@@ -265,7 +260,6 @@ public class OmssaConverter {
                                     modResidues = new Vector<String>();
 
                                     for (int m = 0; m < residueNodes.getLength(); m++) {
-
                                         if (residueNodes.item(m).getNodeName().equalsIgnoreCase("MSModSpec_residues_E")) {
                                             modResidues.add(residueNodes.item(m).getTextContent());
                                         }
@@ -306,8 +300,8 @@ public class OmssaConverter {
             progressDialog.setIntermidiate(true);
             progressCounter = 0;
             progressDialog.setValue(0);
-            progressDialog.setString(PRIDEConverter.getCurrentFileName() + " (" + (k + 1) + "/" +
-                    properties.getSelectedSourceFiles().size() + ")");
+            progressDialog.setString(PRIDEConverter.getCurrentFileName() + 
+                    " (" + (k + 1) + "/" + properties.getSelectedSourceFiles().size() + ")");
 
             // @TODO move the parsing of the mods.xml and usermodsxml into OmssaOmxFile
             omxFile = new OmssaOmxFile(properties.getSelectedSourceFiles().get(k), null, null);
@@ -318,32 +312,35 @@ public class OmssaConverter {
                     omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_variable.MSMod;
 
             // note: defaults to 100 if not found (as described in the OMSSA xsd file)
-            int omssaResponseScale =
-                    omxFile.getParserResult().MSSearch_response.MSResponse.get(0).MSResponse_scale;
+            int omssaResponseScale = omxFile.getParserResult().MSSearch_response.MSResponse.get(0).MSResponse_scale;
 
             double ionCoverageErrorMargin =
                     omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_msmstol;
 
             // fixed modifications
-            for (Integer fixedModification1 : fixedModifications) {
+            for (int i = 0; i < fixedModifications.size() && !PRIDEConverter.isConversionCanceled(); i++) {
+
+                int currentModification = fixedModifications.get(i);
 
                 new ModificationMapping(PRIDEConverter.getOutputFrame(), true, progressDialog, "" +
-                        omssaModificationDetails.get(fixedModification1).getModName(),
-                        omssaModificationDetails.get(fixedModification1).getModResiduesAsString(),
-                        omssaModificationDetails.get(fixedModification1).getModMonoMass(),
+                        omssaModificationDetails.get(currentModification).getModName(),
+                        omssaModificationDetails.get(currentModification).getModResiduesAsString(),
+                        omssaModificationDetails.get(currentModification).getModMonoMass(),
                         (CvParamImpl) userProperties.getCVTermMappings().get(
-                                omssaModificationDetails.get(fixedModification1).getModName()), true);
+                        omssaModificationDetails.get(currentModification).getModName()), true);
             }
 
             // variable modifications
-            for (Integer variableModification : variableModifications) {
+            for (int i = 0; i < variableModifications.size() && !PRIDEConverter.isConversionCanceled(); i++) {
+
+                int currentModification = variableModifications.get(i);
 
                 new ModificationMapping(PRIDEConverter.getOutputFrame(), true, progressDialog, "" +
-                        omssaModificationDetails.get(variableModification).getModName(),
-                        omssaModificationDetails.get(variableModification).getModResiduesAsString(),
-                        omssaModificationDetails.get(variableModification).getModMonoMass(),
+                        omssaModificationDetails.get(currentModification).getModName(),
+                        omssaModificationDetails.get(currentModification).getModResiduesAsString(),
+                        omssaModificationDetails.get(currentModification).getModMonoMass(),
                         (CvParamImpl) userProperties.getCVTermMappings().get(
-                                omssaModificationDetails.get(variableModification).getModName()), false);
+                        omssaModificationDetails.get(currentModification).getModName()), false);
             }
 
             results = omxFile.getSpectrumToHitSetMap();
@@ -353,7 +350,7 @@ public class OmssaConverter {
             progressDialog.setMax(results.keySet().size());
             progressDialog.setValue(0);
 
-            while (iterator.hasNext()) {
+            while (iterator.hasNext() && !PRIDEConverter.isConversionCanceled()) {
 
                 progressDialog.setValue(progressCounter++);
 
@@ -538,7 +535,7 @@ public class OmssaConverter {
 
                                         CvParamImpl tempCvParam =
                                                 (CvParamImpl) userProperties.getCVTermMappings().get(
-                                                        omssaModificationDetails.get(fixedModification).getModName());
+                                                omssaModificationDetails.get(fixedModification).getModName());
 
                                         modificationCVParams = new ArrayList<CvParam>();
                                         modificationCVParams.add(tempCvParam);
@@ -553,7 +550,7 @@ public class OmssaConverter {
                                             // from the file is used
                                             monoMasses.add(
                                                     new MonoMassDeltaImpl(omssaModificationDetails.get(
-                                                            fixedModification).getModMonoMass()));
+                                                    fixedModification).getModMonoMass()));
                                             //monoMasses = null;
                                         }
 
@@ -681,13 +678,13 @@ public class OmssaConverter {
                                 // mappings given in the FragmentIonsMapping.prop file
                                 FragmentIonMappedDetails fragmentIonMappedDetails =
                                         PRIDEConverter.getFragmentIonMappings().getCVTermMappings().get(properties.getDataSource() +
-                                                "_" + msIonType + msIonNeutralLossOrImmoniumIonTag);
+                                        "_" + msIonType + msIonNeutralLossOrImmoniumIonTag);
 
                                 // check if a mapping was found or not
                                 if (fragmentIonMappedDetails == null) {
                                     JOptionPane.showMessageDialog(PRIDEConverter.getOutputFrame(),
                                             "Unknown fragment ion \'" + currentFragmentIon.MSMZHit_ion.MSIonType + "\'. Ion not included in annotation.\n" +
-                                                    "Please contact the PRIDE support team at pride-support@ebi.ac.uk.",
+                                            "Please contact the PRIDE support team at pride-support@ebi.ac.uk.",
                                             "Unknown Fragment Ion",
                                             JOptionPane.INFORMATION_MESSAGE);
                                 } else {
@@ -733,8 +730,8 @@ public class OmssaConverter {
 
                                             JOptionPane.showMessageDialog(PRIDEConverter.getOutputFrame(),
                                                     "Unable to map the fragment ion \'" +
-                                                            currentFragmentIon.MSMZHit_ion.MSIonType + " " + currentFragmentIon.MSMZHit_number + "\'. Ion not included in annotation.\n" +
-                                                            "Please contact the PRIDE support team at pride-support@ebi.ac.uk.",
+                                                    currentFragmentIon.MSMZHit_ion.MSIonType + " " + currentFragmentIon.MSMZHit_number + "\'. Ion not included in annotation.\n" +
+                                                    "Please contact the PRIDE support team at pride-support@ebi.ac.uk.",
                                                     "Unable To Map Fragment Ion",
                                                     JOptionPane.INFORMATION_MESSAGE);
                                         } else {
@@ -742,13 +739,13 @@ public class OmssaConverter {
                                             // create the list of CV Params for the fragment ion
                                             ArrayList<CvParam> currentCvTerms =
                                                     PRIDEConverter.createFragmentIonCvParams(
-                                                            fragmentIonMappedDetails,
-                                                            observedPeakMzValue,
-                                                            currentFragmentIon.MSMZHit_charge,
-                                                            currentFragmentIon.MSMZHit_number,
-                                                            fragmentIonIntensityScaled,
-                                                            fragmentIonMassError, // @TODO: use absolute value?
-                                                            null);
+                                                    fragmentIonMappedDetails,
+                                                    observedPeakMzValue,
+                                                    currentFragmentIon.MSMZHit_charge,
+                                                    currentFragmentIon.MSMZHit_number,
+                                                    fragmentIonIntensityScaled,
+                                                    fragmentIonMassError, // @TODO: use absolute value?
+                                                    null);
 
                                             // add the created fragment ion to the list of all fragment ions
                                             // only if not already present
@@ -832,5 +829,4 @@ public class OmssaConverter {
         PRIDEConverter.setTotalNumberOfSpectra(totalSpectraCounter);
         return mapping;
     }
-
 }
