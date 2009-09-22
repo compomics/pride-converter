@@ -580,8 +580,12 @@ public class PRIDEConverter extends AbstractPrideConverter {
                             unidentifedSpectraCounter++;
                         }
                     }
-
-                    totalPeptideCount = omitDuplicates.size();
+    
+                    // for TPP and DTASelect the count must not be overwritten
+                    if(!properties.getDataSource().equalsIgnoreCase("TPP") &&
+                            !properties.getDataSource().equalsIgnoreCase("DTASelect")){
+                        totalPeptideCount = omitDuplicates.size();
+                    }
 
                     if (debug) {
                         System.out.println("\nTransformed " + (ids.size() -
