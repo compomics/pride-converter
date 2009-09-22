@@ -7,4 +7,5 @@
  * FEATURE IMPROVEMENT: Improved the radio button renderer.
  * BUG FIX: Fixed a problem in the spectra selection frame where the selection in the table was not always updated correctly if sorting was turned on.
  * BUG FIX: The PSI-MOD modification mass check is now working again. (The DiffMono mass value had been moved back to the PSI-MOD metadata section after being in the xrefs section for a while.)
- 
+ * BUG FIX: Clicking cancel when mapping OMSSA modifications to PSI-MOD modifications now cancels the conversion process.
+ * LIBRARY UPDATE: ols-dialog updated to v2.0 which includes modification mass search when mapping PSI-MOD modifications.
