@@ -1,5 +1,7 @@
 package no.uib.prideconverter.gui;
 
+import no.uib.prideconverter.util.BareBonesBrowserLaunch;
+
 /**
  * A dialog for sending e-mail requesting access to the PRIDE FTP server.
  *
@@ -9,7 +11,6 @@ package no.uib.prideconverter.gui;
  */
 public class RequestFtpAccess extends javax.swing.JDialog {
 
-    private OutputDetails outPutFrame;
 
     /**
      * Creates a new RequestFtpAccess dialog and makes it visible
@@ -20,11 +21,9 @@ public class RequestFtpAccess extends javax.swing.JDialog {
     public RequestFtpAccess(OutputDetails outPutFrame, boolean modal) {
         super(outPutFrame, modal);
 
-        this.outPutFrame = outPutFrame;
-
         initComponents();
 
-        submissionTipsJTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
+        submissionTipsJEditorPane.setFont(new java.awt.Font("Tahoma", 0, 11));
 
         setLocationRelativeTo(outPutFrame);
         setVisible(true);
@@ -41,8 +40,8 @@ public class RequestFtpAccess extends javax.swing.JDialog {
 
         closeJButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        submissionTipsJTextArea = new javax.swing.JTextArea();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        submissionTipsJEditorPane = new javax.swing.JEditorPane();
         aboutJButton = new javax.swing.JButton();
         helpJButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
@@ -60,15 +59,15 @@ public class RequestFtpAccess extends javax.swing.JDialog {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Submission Tips", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
 
-        submissionTipsJTextArea.setColumns(20);
-        submissionTipsJTextArea.setEditable(false);
-        submissionTipsJTextArea.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        submissionTipsJTextArea.setLineWrap(true);
-        submissionTipsJTextArea.setRows(5);
-        submissionTipsJTextArea.setTabSize(9);
-        submissionTipsJTextArea.setText("      \nThe size of your PRIDE XML file is larger than the recommended file size for using the 'Direct Submission' via the PRIDE web page.  We therefore recommend to use the PRIDE FTP server. To get access to the FTP server, please contact the PRIDE support team at pride-support@ebi.ac.uk. \n");
-        submissionTipsJTextArea.setWrapStyleWord(true);
-        jScrollPane3.setViewportView(submissionTipsJTextArea);
+        submissionTipsJEditorPane.setContentType("text/html");
+        submissionTipsJEditorPane.setEditable(false);
+        submissionTipsJEditorPane.setText("<html>\r\n  <head>\r\n\r\n  </head>\r\n  <body>\r\n    <p style=\"margin-top: 0\" align=\"justify\">\r\n<br>\n<font size=\"3\" face=\"Tahoma\">\nThe size of your PRIDE XML file is larger than the maximum file size for using the 'Direct Submission' via the PRIDE web page.<br> <br>\nWe therefore recommend using the PRIDE FTP server. To get access to the FTP server, please contact the PRIDE support team at \n<a href=\"mailto:pride-support@ebi.ac.uk?subject=PRIDE Converter: request FTP access&body=Dear PRIDE Team. %0A%0AI would like to request access to the PRIDE FTP server to upload my PRIDE XML file(s). %0A%0ABest regards, %0A(...Insert your name here...)\">pride-support@ebi.ac.uk</a>. \n<br><br>\n    </p>\r\n  </body>\r\n</html>\r\n");
+        submissionTipsJEditorPane.addHyperlinkListener(new javax.swing.event.HyperlinkListener() {
+            public void hyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {
+                submissionTipsJEditorPaneHyperlinkUpdate(evt);
+            }
+        });
+        jScrollPane1.setViewportView(submissionTipsJEditorPane);
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -76,15 +75,14 @@ public class RequestFtpAccess extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         aboutJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF"))); // NOI18N
@@ -115,16 +113,16 @@ public class RequestFtpAccess extends javax.swing.JDialog {
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 441, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 223, Short.MAX_VALUE)
                         .add(closeJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 65, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE))
+                    .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(18, 18, 18)
                 .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -172,6 +170,30 @@ public class RequestFtpAccess extends javax.swing.JDialog {
 }//GEN-LAST:event_closeJButtonActionPerformed
 
     /**
+     * Makes the links active.
+     *
+     * @param evt
+     */
+    private void submissionTipsJEditorPaneHyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {//GEN-FIRST:event_submissionTipsJEditorPaneHyperlinkUpdate
+        if (evt.getEventType().toString().equalsIgnoreCase(
+                javax.swing.event.HyperlinkEvent.EventType.ENTERED.toString())) {
+            setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        } else if (evt.getEventType().toString().equalsIgnoreCase(
+                javax.swing.event.HyperlinkEvent.EventType.EXITED.toString())) {
+            setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        } else if (evt.getEventType().toString().equalsIgnoreCase(
+                javax.swing.event.HyperlinkEvent.EventType.ACTIVATED.toString())) {
+            if (evt.getDescription().startsWith("#")) {
+                submissionTipsJEditorPane.scrollToReference(evt.getDescription());
+            } else {
+                this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+                BareBonesBrowserLaunch.openURL(evt.getDescription());
+                this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            }
+        }
+    }//GEN-LAST:event_submissionTipsJEditorPaneHyperlinkUpdate
+
+    /**
      * Makes the hyperlinks active.
      * 
      * @param evt
@@ -181,8 +203,8 @@ public class RequestFtpAccess extends javax.swing.JDialog {
     private javax.swing.JButton closeJButton;
     private javax.swing.JButton helpJButton;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextArea submissionTipsJTextArea;
+    private javax.swing.JEditorPane submissionTipsJEditorPane;
     // End of variables declaration//GEN-END:variables
 }
