@@ -331,7 +331,7 @@
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="referenceTextJLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="referencePMIDJLabel" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -416,8 +416,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="referenceTextJLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;If you publish your data as part of a paper, please include a reference to PRIDE Converter: &lt;/html&gt;"/>
-            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="text" type="java.lang.String" value="If the data is part of a paper, please include a reference to PRIDE Converter:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="referencePMIDJLabel">
@@ -515,7 +514,7 @@
                   <EmptySpace pref="12" max="32767" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="68" max="32767" attributes="0"/>
+                  <EmptySpace pref="69" max="32767" attributes="0"/>
                   <Component id="findOmssaFolderJButton" min="-2" pref="25" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>

@@ -339,8 +339,7 @@ public class OutputDetails extends javax.swing.JFrame {
         fileContentsJLabel.setText(" ");
         fileContentsJLabel.setEnabled(false);
 
-        referenceTextJLabel.setText("<html>If you publish your data as part of a paper, please include a reference to PRIDE Converter: </html>");
-        referenceTextJLabel.setEnabled(false);
+        referenceTextJLabel.setText("If the data is part of a paper, please include a reference to PRIDE Converter:");
 
         referencePMIDJLabel.setText("<html> <a href=\\\"http://www.ncbi.nlm.nih.gov/pubmed/19587657\">PMID:19587657</a></html>");
         referencePMIDJLabel.setEnabled(false);
@@ -374,7 +373,7 @@ public class OutputDetails extends javax.swing.JFrame {
                         .add(fileNameJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
                         .add(referenceTextJLabel)
-                        .add(0, 0, 0)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(referencePMIDJLabel)))
                 .addContainerGap())
         );
@@ -494,7 +493,7 @@ public class OutputDetails extends javax.swing.JFrame {
                     .add(jLabel7))
                 .addContainerGap(12, Short.MAX_VALUE))
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(68, Short.MAX_VALUE)
+                .addContainerGap(69, Short.MAX_VALUE)
                 .add(findOmssaFolderJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );

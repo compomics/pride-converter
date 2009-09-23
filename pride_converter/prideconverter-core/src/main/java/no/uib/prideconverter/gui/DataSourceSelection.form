@@ -32,25 +32,25 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="descriptionJPanel" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jPanel4" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="helpJButton" min="-2" pref="23" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="aboutJButton" min="-2" pref="25" max="-2" attributes="0"/>
-                      <EmptySpace pref="309" max="32767" attributes="0"/>
+                      <EmptySpace pref="259" max="32767" attributes="0"/>
                       <Component id="backJButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="nextJButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                       <Component id="cancelJButton" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jSeparator1" alignment="0" pref="630" max="32767" attributes="0"/>
+                  <Component id="jSeparator1" alignment="0" pref="580" max="32767" attributes="0"/>
                   <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jPanel4" alignment="0" max="32767" attributes="2"/>
+                  <Component id="descriptionJPanel" alignment="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -63,15 +63,15 @@
               <Component id="descriptionJPanel" max="32767" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="cancelJButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="nextJButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="backJButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cancelJButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -83,7 +83,7 @@
                       <Component id="aboutJButton" min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -138,37 +138,84 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="mgfJRadioButton" min="-2" max="-2" attributes="0"/>
-                      <Component id="xTandemJRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="mascotDatFileJRadioButton" min="-2" max="-2" attributes="0"/>
-                      <Component id="spectrumMillJRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="pklFilesJRadioButton" min="-2" max="-2" attributes="0"/>
+                      <Component id="mgfJRadioButton" pref="131" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="xTandemJRadioButton" pref="81" max="32767" attributes="0"/>
+                          <EmptySpace min="50" pref="50" max="50" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="mascotDatFileJRadioButton" pref="115" max="32767" attributes="0"/>
+                          <EmptySpace min="16" pref="16" max="16" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="spectrumMillJRadioButton" pref="95" max="32767" attributes="0"/>
+                          <EmptySpace min="36" pref="36" max="36" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="pklFilesJRadioButton" pref="127" max="32767" attributes="0"/>
+                          <EmptySpace min="4" pref="4" max="4" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="sequestResultsJRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="sequestDTAFilesJRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="tppJRadioButton" min="-2" max="-2" attributes="0"/>
-                      <Component id="omssaJRadioButton" min="-2" max="-2" attributes="0"/>
-                      <Component id="ms_limsJRadioButton" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="sequestResultsJRadioButton" pref="135" max="32767" attributes="0"/>
+                          <EmptySpace min="34" pref="34" max="34" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="sequestDTAFilesJRadioButton" pref="125" max="32767" attributes="0"/>
+                          <EmptySpace min="44" pref="44" max="44" attributes="0"/>
+                      </Group>
+                      <Component id="tppJRadioButton" pref="169" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="omssaJRadioButton" pref="69" max="32767" attributes="0"/>
+                          <EmptySpace min="100" pref="100" max="100" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="ms_limsJRadioButton" pref="79" max="32767" attributes="0"/>
+                          <EmptySpace min="90" pref="90" max="90" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="vemsJRadioButton" min="-2" max="-2" attributes="0"/>
-                      <Component id="ms2JRadioButton" min="-2" max="-2" attributes="0"/>
-                      <Component id="mzXMLJRadioButton" min="-2" max="-2" attributes="0"/>
-                      <Component id="mzDataJRadioButton" min="-2" max="-2" attributes="0"/>
-                      <Component id="dtaSelectJRadioButton" min="-2" max="-2" attributes="0"/>
+                      <Component id="vemsJRadioButton" pref="105" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="ms2JRadioButton" pref="53" max="32767" attributes="0"/>
+                          <EmptySpace min="52" pref="52" max="52" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="mzXMLJRadioButton" pref="65" max="32767" attributes="0"/>
+                          <EmptySpace min="40" pref="40" max="40" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="mzDataJRadioButton" pref="69" max="32767" attributes="0"/>
+                          <EmptySpace min="36" pref="36" max="36" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="dtaSelectJRadioButton" pref="83" max="32767" attributes="0"/>
+                          <EmptySpace min="22" pref="22" max="22" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace pref="56" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="vemsJRadioButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="ms2JRadioButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="mzDataJRadioButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="mzXMLJRadioButton" min="-2" pref="15" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="dtaSelectJRadioButton" min="-2" pref="15" max="-2" attributes="0"/>
+                      </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="mascotDatFileJRadioButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -181,33 +228,18 @@
                           <Component id="pklFilesJRadioButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="sequestResultsJRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="vemsJRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="sequestResultsJRadioButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="sequestDTAFilesJRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="ms2JRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="sequestDTAFilesJRadioButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="omssaJRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="mzDataJRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="omssaJRadioButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="tppJRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="mzXMLJRadioButton" alignment="3" min="-2" pref="15" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="tppJRadioButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="ms_limsJRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="dtaSelectJRadioButton" alignment="3" min="-2" pref="15" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="ms_limsJRadioButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="13" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -218,18 +250,13 @@
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="buttonGroup1"/>
             </Property>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-              <FontInfo relative="true">
-                <Font component="mascotDatFileJRadioButton" property="font" relativeSize="true" size="0"/>
-              </FontInfo>
-            </Property>
             <Property name="text" type="java.lang.String" value="Mascot DAT Files"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
               </Border>
             </Property>
-            <Property name="iconTextGap" type="int" value="20"/>
+            <Property name="iconTextGap" type="int" value="10"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -249,7 +276,7 @@
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
               </Border>
             </Property>
-            <Property name="iconTextGap" type="int" value="20"/>
+            <Property name="iconTextGap" type="int" value="10"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -269,7 +296,7 @@
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
               </Border>
             </Property>
-            <Property name="iconTextGap" type="int" value="20"/>
+            <Property name="iconTextGap" type="int" value="10"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -289,7 +316,7 @@
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
               </Border>
             </Property>
-            <Property name="iconTextGap" type="int" value="20"/>
+            <Property name="iconTextGap" type="int" value="10"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -309,7 +336,7 @@
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
               </Border>
             </Property>
-            <Property name="iconTextGap" type="int" value="20"/>
+            <Property name="iconTextGap" type="int" value="10"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -329,7 +356,7 @@
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
               </Border>
             </Property>
-            <Property name="iconTextGap" type="int" value="20"/>
+            <Property name="iconTextGap" type="int" value="10"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -349,7 +376,7 @@
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
               </Border>
             </Property>
-            <Property name="iconTextGap" type="int" value="20"/>
+            <Property name="iconTextGap" type="int" value="10"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -369,7 +396,7 @@
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
               </Border>
             </Property>
-            <Property name="iconTextGap" type="int" value="20"/>
+            <Property name="iconTextGap" type="int" value="10"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -389,7 +416,7 @@
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
               </Border>
             </Property>
-            <Property name="iconTextGap" type="int" value="20"/>
+            <Property name="iconTextGap" type="int" value="10"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -410,7 +437,7 @@
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
               </Border>
             </Property>
-            <Property name="iconTextGap" type="int" value="20"/>
+            <Property name="iconTextGap" type="int" value="10"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -431,7 +458,7 @@
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
               </Border>
             </Property>
-            <Property name="iconTextGap" type="int" value="20"/>
+            <Property name="iconTextGap" type="int" value="10"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -452,7 +479,7 @@
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
               </Border>
             </Property>
-            <Property name="iconTextGap" type="int" value="20"/>
+            <Property name="iconTextGap" type="int" value="10"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -472,7 +499,7 @@
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
               </Border>
             </Property>
-            <Property name="iconTextGap" type="int" value="20"/>
+            <Property name="iconTextGap" type="int" value="10"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -492,7 +519,7 @@
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
               </Border>
             </Property>
-            <Property name="iconTextGap" type="int" value="20"/>
+            <Property name="iconTextGap" type="int" value="10"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -512,7 +539,7 @@
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
               </Border>
             </Property>
-            <Property name="iconTextGap" type="int" value="20"/>
+            <Property name="iconTextGap" type="int" value="10"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -571,16 +598,16 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane2" pref="594" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" pref="544" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane2" pref="251" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" pref="249" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
