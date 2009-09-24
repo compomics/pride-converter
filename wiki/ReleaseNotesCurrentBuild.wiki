@@ -2,4 +2,4 @@
 
 ----
 
-(currently no changes)
+ * FEATURE IMPROVEMENT: Updated the default subject in the mailto links.
