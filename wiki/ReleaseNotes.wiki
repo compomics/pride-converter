@@ -3,8 +3,25 @@
 
 ----
 
+*Changes in PRIDE Converter v2.1 - (Sept. 24. 2009):*
+ * FEATURE IMPROVEMENT: The RequestFtpAccess dialog now includes a mailto link with a default e-mail for requesting FTP access.
+ * FEATURE IMPROVEMENT: The text in the JOptionPane dialogs has been by simplified and shortened. Some minor typos have also been fixed.
+ * FEATURE IMPROVEMENT: Reduced the size of the PRIDE Converter zip file by removing unused libraries.
+ * FEATURE IMPROVEMENT: Improved the radio button renderer.
+ * FEATURE IMPROVEMENT: The default browser launcher now recognizes more browsers.
+ * BUG FIX: Fixed a problem in the spectra selection frame where the selection in the table was not always updated correctly if sorting was turned on.
+ * BUG FIX: The PSI-MOD modification mass check is now working again. (The DiffMono mass value had been moved back to the PSI-MOD metadata section after being in the xrefs section for a while.)
+ * BUG FIX: Fixed a GUI bug in the peptide counter for DTASelect and TPP data sets. (Note: The bug did not affect the contents of the file.)
+ * BUG FIX: Clicking cancel when mapping OMSSA modifications to PSI-MOD modifications now cancels the conversion process.
+ * BUG FIX: Fixed two Mac and Linux GUI bugs where the content in the first and list frame was not shown correctly.
+ * LIBRARY UPDATE: ols-dialog updated to v2.0.1 which includes modification mass search when mapping PSI-MOD modifications.
+
+----
+
 *Changes in PRIDE Converter v2.0.3 - (Aug. 21. 2009):*
  * BUG FIX: Fixed a serious bug for OMSSA conversion where integer division was used when scaling the mz and intensity peak values, and the precursor mz value.
+
+Download Count: 53
 
 ----
 
