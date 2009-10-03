@@ -391,7 +391,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
 
         new OLSDialog(this, this, true, "modificationSelection",
                 "Protein Modifications (PSI-MOD) [MOD]", -1,
-                searchTerm, tempModificationMass, 0.1, OLSDialog.OLS_DIALOG_TEXT_SEARCH);
+                searchTerm, tempModificationMass, 0.1, OLSDialog.OLS_DIALOG_TERM_NAME_SEARCH);
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_psiModJButtonActionPerformed
