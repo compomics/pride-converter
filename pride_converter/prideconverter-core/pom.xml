@@ -175,18 +175,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         <dependency>
             <groupId>de.proteinms.omxparser</groupId>
             <artifactId>omssaparser</artifactId>
-            <version>1.3.3</version>
-
-            <!-- is excluded because the version included in omssaparser 1.3.3
-                 is not the latest version -->
-            <!-- when upgrading to omssaparser 1.3.4 this can be removed, along 
-                 with the separate utilities dependency below -->
-            <exclusions>
-                <exclusion>
-                    <artifactId>utilities</artifactId>
-                    <groupId>lennart</groupId>
-                </exclusion>
-            </exclusions>
+            <version>1.3.4</version>
         </dependency>
         
         <!-- remove when omssaparser is updated to version 1.3.4 -->
@@ -224,7 +213,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         <dependency>
             <groupId>no.uib</groupId>
             <artifactId>ols-dialog</artifactId>
-            <version>2.0.1</version>
+            <version>3.2.1</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.pride</groupId>
