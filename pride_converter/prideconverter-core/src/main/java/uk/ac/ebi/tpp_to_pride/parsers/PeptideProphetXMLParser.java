@@ -725,10 +725,14 @@ public class PeptideProphetXMLParser {
                 // If there was more than one protein, the additional ones are listed here.
                 aParser.moveToNextStartTag(true);
                 int tempProteinCount = proteinCount - 1;
-                Collection alternateProteins = new ArrayList(tempProteinCount);
 
+                //It could be that num_tot_proteins= "0" (Result of DECOY searches). In this case, the protein should not be considered.
+                Collection alternateProteins= null;
+                if(tempProteinCount<0){
+                    continue;// I want it to come back to the beginning of the loop (look for the next spectrum query).
+                }
                 while (tempProteinCount > 0) {
-
+                    alternateProteins= new ArrayList(tempProteinCount);
                     if (!ALTERNATIVE_PROTEIN.equals(aParser.getName())) {
                         logger.warn("There should have been an 'alternative_protein' at line " + aParser.getLineNumber() 
                                 + " (" + tempProteinCount + " alternative proteins left), instead, there was a '"
