@@ -23,7 +23,7 @@ Value: null
 1
 Accession: PSI:1000035
 CVLookup: PSI
-Name: PeakProcessing
+Name: Peak Processing
 Value: CentroidMassSpectrum
 
 #software

@@ -1194,8 +1194,11 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         int selectedRow = singleSampleDetailsJTable.getSelectedRow();
 
         String searchTerm = (String) singleSampleDetailsJTable.getValueAt(selectedRow, 1);
-        searchTerm = searchTerm.substring(0, searchTerm.indexOf("[") - 1);
 
+        String ontology = searchTerm.substring(searchTerm.lastIndexOf("[") + 1, searchTerm.lastIndexOf("]") - 1);
+        ontology = PRIDEConverter.getOntologyFromCvTerm(ontology);
+
+        searchTerm = searchTerm.substring(0, searchTerm.lastIndexOf("[") - 1);
         searchTerm = searchTerm.replaceAll("-", " ");
         searchTerm = searchTerm.replaceAll(":", " ");
         searchTerm = searchTerm.replaceAll("\\(", " ");
@@ -1206,7 +1209,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         searchTerm = searchTerm.replaceAll("\\]", " ");
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new OLSDialog(this, this, true, "singleSample", PRIDEConverter.getUserProperties().getLastSelectedSampleOntology(), selectedRow, searchTerm);
+        new OLSDialog(this, this, true, "singleSample", ontology, selectedRow, searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_editJMenuItemActionPerformed
 

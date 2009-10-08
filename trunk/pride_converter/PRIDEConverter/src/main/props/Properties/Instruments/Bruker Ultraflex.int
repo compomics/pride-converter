@@ -28,12 +28,12 @@ Value: false
 
 Accession: PSI:1000034
 CVLookup: PSI
-Name: ChargeDeconvolution
+Name: Charge Deconvolution
 Value: false
 
 Accession: PSI:1000035
 CVLookup: PSI
-Name: PeakProcessing
+Name: Peak Processing
 Value: CentroidMassSpectrum
 
 #software

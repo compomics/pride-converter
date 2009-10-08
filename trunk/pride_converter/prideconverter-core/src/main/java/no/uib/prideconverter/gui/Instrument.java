@@ -1161,8 +1161,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                 this.processingMethodsMoveUpJMenuItem.setEnabled(false);
             }
 
-            processingMethodsPopupJMenu.show(evt.getComponent(), evt.getX(),
-                    evt.getY());
+            processingMethodsPopupJMenu.show(evt.getComponent(), evt.getX(), evt.getY());
         } else if (evt.getButton() == 1 && evt.getClickCount() == 2) {
             processingMethodsEditJMenuItemActionPerformed(null);
         }
@@ -1440,9 +1439,16 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
         String searchTerm = null;
+        String ontology = PRIDEConverter.getUserProperties().getLastSelectedOntology();
 
         if (instrumentSourceJTextField.getText().length() > 0) {
-            searchTerm = instrumentSourceJTextField.getText().substring(0, instrumentSourceJTextField.getText().indexOf("[") - 1);
+
+            searchTerm = instrumentSourceJTextField.getText();
+
+            ontology = searchTerm.substring(searchTerm.lastIndexOf("[") + 1, searchTerm.lastIndexOf("]") - 1);
+            ontology = PRIDEConverter.getOntologyFromCvTerm(ontology);
+
+            searchTerm = instrumentSourceJTextField.getText().substring(0, instrumentSourceJTextField.getText().lastIndexOf("[") - 1);
             searchTerm = searchTerm.replaceAll("-", " ");
             searchTerm = searchTerm.replaceAll(":", " ");
             searchTerm = searchTerm.replaceAll("\\(", " ");
@@ -1453,8 +1459,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             searchTerm = searchTerm.replaceAll("\\]", " ");
         }
 
-        new OLSDialog(this, this, true, "instrumentSource", PRIDEConverter.getUserProperties().
-                getLastSelectedOntology(), searchTerm);
+        new OLSDialog(this, this, true, "instrumentSource", ontology, searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_instrumentSourceJButtonActionPerformed
 
@@ -1467,10 +1472,17 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
 
         String searchTerm = null;
+        String ontology = PRIDEConverter.getUserProperties().getLastSelectedOntology();
 
         if (instrumentDetectorJTextField.getText().length() > 0) {
+
+            searchTerm = instrumentDetectorJTextField.getText();
+
+            ontology = searchTerm.substring(searchTerm.lastIndexOf("[") + 1, searchTerm.lastIndexOf("]") - 1);
+            ontology = PRIDEConverter.getOntologyFromCvTerm(ontology);
+
             searchTerm = instrumentDetectorJTextField.getText().substring(
-                    0, instrumentDetectorJTextField.getText().indexOf("[") - 1);
+                    0, instrumentDetectorJTextField.getText().lastIndexOf("[") - 1);
             searchTerm = searchTerm.replaceAll("-", " ");
             searchTerm = searchTerm.replaceAll(":", " ");
             searchTerm = searchTerm.replaceAll("\\(", " ");
@@ -1521,8 +1533,11 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         int selectedRow = processingMethodsJTable.getSelectedRow();
 
         String searchTerm = (String) processingMethodsJTable.getValueAt(selectedRow, 1);
-        searchTerm = searchTerm.substring(0, searchTerm.indexOf("[") - 1);
 
+        String ontology = searchTerm.substring(searchTerm.lastIndexOf("[") + 1, searchTerm.lastIndexOf("]") - 1);
+        ontology = PRIDEConverter.getOntologyFromCvTerm(ontology);
+
+        searchTerm = searchTerm.substring(0, searchTerm.indexOf("[") - 1);
         searchTerm = searchTerm.replaceAll("-", " ");
         searchTerm = searchTerm.replaceAll(":", " ");
         searchTerm = searchTerm.replaceAll("\\(", " ");
@@ -1532,8 +1547,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         searchTerm = searchTerm.replaceAll("\\[", " ");
         searchTerm = searchTerm.replaceAll("\\]", " ");
 
-        new OLSDialog(this, this, true, "processingMethods", PRIDEConverter.getUserProperties().
-                getLastSelectedOntology(), selectedRow, searchTerm);
+        new OLSDialog(this, this, true, "processingMethods", ontology, selectedRow, searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_processingMethodsEditJMenuItemActionPerformed
 
