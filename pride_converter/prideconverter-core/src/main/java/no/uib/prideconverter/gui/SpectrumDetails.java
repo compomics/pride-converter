@@ -555,6 +555,7 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
         int selectedRow = cvTermsJTable.getSelectedRow();
 
         String searchTerm = (String) cvTermsJTable.getValueAt(selectedRow, 1);
+        String ontology = (String) cvTermsJTable.getValueAt(selectedRow, 3);
 
         searchTerm = searchTerm.replaceAll("-", " ");
         searchTerm = searchTerm.replaceAll(":", " ");
@@ -565,8 +566,7 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
         searchTerm = searchTerm.replaceAll("\\[", " ");
         searchTerm = searchTerm.replaceAll("\\]", " ");
 
-        new OLSDialog(this, this, true, "cvterms", PRIDEConverter.getUserProperties().getLastSelectedOntology(),
-                selectedRow, searchTerm);
+        new OLSDialog(this, this, true, "cvterms", ontology, selectedRow, searchTerm);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_editCvParamJMenuItemActionPerformed
 

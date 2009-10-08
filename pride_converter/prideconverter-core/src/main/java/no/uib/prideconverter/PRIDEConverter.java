@@ -2899,4 +2899,25 @@ public class PRIDEConverter extends AbstractPrideConverter {
         return false;
     }
 
+    /**
+     * Tries to extract the ontology from the given cv term.
+     * For example BTO:0000763 returns BTO.
+     *
+     * @param cvTerm the cv term to extract the ontology from, e.g., BTO:0000763
+     * @return the extracted ontology
+     */
+    public static String getOntologyFromCvTerm(String cvTerm){
+
+        String ontology = "";
+
+        if(cvTerm.lastIndexOf(":") != -1){
+            ontology = cvTerm.substring(0, cvTerm.lastIndexOf(":"));
+        } else if(cvTerm.lastIndexOf("_") != -1){
+            ontology = cvTerm.substring(0, cvTerm.lastIndexOf("_"));
+        } else{
+            ontology = "NEWT";
+        }
+
+        return ontology;
+    }
 }
