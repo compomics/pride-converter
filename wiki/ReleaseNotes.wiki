@@ -3,6 +3,14 @@
 
 ----
 
+*Changes in PRIDE Converter v2.1.1 - (Oct. 09. 2009):*
+ * FEATURE IMPROVEMENT: Updated the default subject in the mailto links.
+ * BUG FIX: When parsing decoy proteins from PeptideProphet XML files the total number of proteins can now be 0.
+ * LIBRARY UPDATE: OMSSA Parser updated to version 1.3.4.
+ * LIBRARY UPDATE: OLS Dialog updated to version 3.2.2, which includes new search options and additional features.
+
+----
+
 *Changes in PRIDE Converter v2.1 - (Sept. 24. 2009):*
  * FEATURE IMPROVEMENT: The RequestFtpAccess dialog now includes a mailto link with a default e-mail for requesting FTP access.
  * FEATURE IMPROVEMENT: The text in the JOptionPane dialogs has been by simplified and shortened. Some minor typos have also been fixed.
@@ -15,6 +23,8 @@
  * BUG FIX: Clicking cancel when mapping OMSSA modifications to PSI-MOD modifications now cancels the conversion process.
  * BUG FIX: Fixed two Mac and Linux GUI bugs where the content in the first and list frame was not shown correctly.
  * LIBRARY UPDATE: ols-dialog updated to v2.0.1 which includes modification mass search when mapping PSI-MOD modifications.
+
+Download Count: 29
 
 ----
 
