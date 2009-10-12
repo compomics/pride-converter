@@ -21,7 +21,7 @@
  * BUG FIX: The PSI-MOD modification mass check is now working again. (The DiffMono mass value had been moved back to the PSI-MOD metadata section after being in the xrefs section for a while.)
  * BUG FIX: Fixed a GUI bug in the peptide counter for DTASelect and TPP data sets. (Note: The bug did not affect the contents of the file.)
  * BUG FIX: Clicking cancel when mapping OMSSA modifications to PSI-MOD modifications now cancels the conversion process.
- * BUG FIX: Fixed two Mac and Linux GUI bugs where the content in the first and list frame was not shown correctly.
+ * BUG FIX: Fixed two Mac and Linux GUI bugs where the content in the first and last frame was not shown correctly.
  * LIBRARY UPDATE: ols-dialog updated to v2.0.1 which includes modification mass search when mapping PSI-MOD modifications.
 
 Download Count: 29
