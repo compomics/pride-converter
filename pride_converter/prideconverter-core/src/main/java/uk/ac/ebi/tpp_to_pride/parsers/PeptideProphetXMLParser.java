@@ -644,7 +644,7 @@ public class PeptideProphetXMLParser {
 
             // Assumed charge state.
             int assumed_charge = Integer.parseInt(aParser.getAttributeValue(null, "assumed_charge"));
-            
+
             // The index.
             int index = Integer.parseInt(aParser.getAttributeValue(null, "index"));
 
@@ -727,12 +727,18 @@ public class PeptideProphetXMLParser {
                 int tempProteinCount = proteinCount - 1;
 
                 //It could be that num_tot_proteins= "0" (Result of DECOY searches). In this case, the protein should not be considered.
-                Collection alternateProteins= null;
+
                 if(tempProteinCount<0){
                     continue;// I want it to come back to the beginning of the loop (look for the next spectrum query).
                 }
-                while (tempProteinCount > 0) {
+
+                // Handle alternate proteins:
+                Collection alternateProteins = null;
+                if(tempProteinCount>0){
                     alternateProteins= new ArrayList(tempProteinCount);
+                }
+
+                while (tempProteinCount > 0) {
                     if (!ALTERNATIVE_PROTEIN.equals(aParser.getName())) {
                         logger.warn("There should have been an 'alternative_protein' at line " + aParser.getLineNumber() 
                                 + " (" + tempProteinCount + " alternative proteins left), instead, there was a '"
