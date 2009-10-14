@@ -168,6 +168,8 @@ public class ParseOutputFiles {
             // Create a HashMap of proteins for quick retrieval.
             HashMap forProteinSequences = new HashMap();
 
+            //The list of proteins above the threshold is created here (accession -> ProteinProphetProteinID,
+            // containing the corresponding peptides)
             for (Iterator lIterator = proteins.iterator(); lIterator.hasNext();) {
                 ProteinProphetProteinID protein = (ProteinProphetProteinID) lIterator.next();
                 forProteinSequences.put(protein.getAccession(), protein);
@@ -180,6 +182,7 @@ public class ParseOutputFiles {
             // Also make a list of the identified scans per run (per mzXML file).
             logger.debug("Creating peptide lookup tables (" + dateTimeFormat.format(new Date()) + ")...");
 
+            //New HashMap (peptide sequence -> Collection of PeptideProphetQuery)
             HashMap peptidesToQueries = new HashMap();
             Iterator iter = runs.values().iterator();
 
@@ -207,6 +210,7 @@ public class ParseOutputFiles {
             // Create PRIDE protein objects.
             logger.debug("Creating PRIDE protein objects (" + dateTimeFormat.format(new Date()) + ")...");
             Collection PRIDE_proteins = new ArrayList();
+            //We need to match the runAndScan numbers to spectrumIDs in PRIDE XML
             HashMap runAndScanToSpectrumID = new HashMap();
             List mzDataSpectra = new ArrayList();
             // Load all mzXML spectra.
