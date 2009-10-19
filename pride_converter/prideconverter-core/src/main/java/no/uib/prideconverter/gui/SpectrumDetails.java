@@ -857,7 +857,7 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
     }
 
     /**
-     * See OLSInputable
+     * @see OLSInputable
      */
     public Window getWindow() {
         return (Window) this;

@@ -575,7 +575,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
     }
 
     /**
-     * See cancelJButtonActionPerformed
+     * @see #cancelJButtonActionPerformed(java.awt.event.ActionEvent)
      */
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         cancelJButtonActionPerformed(null);
@@ -601,7 +601,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
     // End of variables declaration//GEN-END:variables
 
     /**
-     * See OLSInputable
+     * @see OLSInputable
      */
     public void insertOLSResult(String field, String selectedValue, String accession,
             String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm) {
@@ -627,7 +627,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
     }
 
     /**
-     * See OLSInputable
+     * @see OLSInputable
      */
     public Window getWindow() {
         return (Window) this;

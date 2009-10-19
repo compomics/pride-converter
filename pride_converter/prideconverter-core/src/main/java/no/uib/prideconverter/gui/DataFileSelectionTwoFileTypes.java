@@ -440,7 +440,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
     }//GEN-LAST:event_nextJButtonActionPerformed
 
     /**
-     * See cancelJButtonActionPerformed
+     * @see #cancelJButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -912,7 +912,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
 }//GEN-LAST:event_deleteIdentificationsJMenuItemActionPerformed
 
     /**
-     * See deleteSpectraJMenuItemActionPerformed
+     * @see #deleteSpectraJMenuItemActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -923,7 +923,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
     }//GEN-LAST:event_selectedSpectraFilesJTableKeyReleased
 
     /**
-     * See deleteIdentificationsJMenuItemActionPerformed
+     * @see #deleteIdentificationsJMenuItemActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */

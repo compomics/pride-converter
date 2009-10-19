@@ -335,9 +335,7 @@ public class NewReference extends javax.swing.JDialog {
     }//GEN-LAST:event_insertRefJButtonActionPerformed
 
     /**
-     * See cancelJButtonActionPerformed
-     * 
-     * @param evt
+     * @see #cancelJButtonActionPerformed(java.awt.event.ActionEvent)
      */
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         this.setVisible(false);
@@ -391,18 +389,14 @@ public class NewReference extends javax.swing.JDialog {
     }//GEN-LAST:event_referenceJTextAreaKeyReleased
 
     /**
-     * See referenceJTextAreaKeyReleased
-     * 
-     * @param evt
+     * @see #referenceJTextAreaKeyReleased(java.awt.event.KeyEvent)
      */
     private void pmidIDJTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pmidIDJTextFieldKeyReleased
         referenceJTextAreaKeyReleased(null);
     }//GEN-LAST:event_pmidIDJTextFieldKeyReleased
 
     /**
-     * See referenceJTextAreaKeyReleased
-     * 
-     * @param evt
+     * @see #referenceJTextAreaKeyReleased(java.awt.event.KeyEvent)
      */
     private void doiJTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_doiJTextFieldKeyReleased
         referenceJTextAreaKeyReleased(null);

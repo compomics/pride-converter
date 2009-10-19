@@ -138,7 +138,7 @@ public class FragmentIonMappings {
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null,
                     "Error when saving FragmentIonMappings. " +
-                    "See See ../Properties/ErrorLog.txt for more details.", "File Error",
+                    "See ../Properties/ErrorLog.txt for more details.", "File Error",
                     JOptionPane.ERROR_MESSAGE);
             Util.writeToErrorLog("FragmentIonMappings: ");
             ex.printStackTrace();

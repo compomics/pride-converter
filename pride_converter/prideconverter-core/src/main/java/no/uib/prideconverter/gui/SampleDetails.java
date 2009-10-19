@@ -1274,9 +1274,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 }//GEN-LAST:event_moveDownJMenuItemActionPerformed
 
     /**
-     * See cancelJButtonActionPerformed
-     * 
-     * @param evt
+     * @see #cancelJButtonActionPerformed(java.awt.event.ActionEvent)
      */
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         cancelJButtonActionPerformed(null);
@@ -2549,7 +2547,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     // End of variables declaration//GEN-END:variables
 
     /**
-     * See ComboBoxInputable
+     * @see ComboBoxInputable
      */
     public void insertIntoComboBox(String text) {
 
@@ -2585,7 +2583,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     }
 
     /**
-     * See ComboBoxInputable
+     * @see ComboBoxInputable
      */
     public void resetComboBox() {
         lastSelectedSampleName = null;
@@ -2594,7 +2592,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     }
 
     /**
-     * See ComboBoxInputable
+     * @see ComboBoxInputable
      */
     public boolean alreadyInserted(String currentSampleName) {
 

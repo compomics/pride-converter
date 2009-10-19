@@ -380,7 +380,7 @@ public class NewProtocolStep extends javax.swing.JDialog implements OLSInputable
     }//GEN-LAST:event_insertJButtonActionPerformed
 
     /**
-     * See cancelJButtonActionPerformed
+     * @see #cancelJButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -584,7 +584,7 @@ public class NewProtocolStep extends javax.swing.JDialog implements OLSInputable
     private javax.swing.JPanel protocolStepJPanel;
     // End of variables declaration//GEN-END:variables
     /**
-     * See OLSInputable
+     * @see OLSInputable
      */
     public void insertOLSResult(String field, String selectedValue, String accession,
             String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm) {
@@ -594,7 +594,7 @@ public class NewProtocolStep extends javax.swing.JDialog implements OLSInputable
     }
 
     /**
-     * See OLSInputable
+     * @see OLSInputable
      */
     public Window getWindow() {
         return (Window) this;
