@@ -277,9 +277,7 @@ public class NewUserParameter extends javax.swing.JDialog {
     }//GEN-LAST:event_insertJButtonActionPerformed
 
     /**
-     * See cancelJButtonActionPerformed
-     * 
-     * @param evt
+     * @see #cancelJButtonActionPerformed(java.awt.event.ActionEvent)
      */
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         this.setVisible(false);
@@ -328,9 +326,7 @@ public class NewUserParameter extends javax.swing.JDialog {
     }//GEN-LAST:event_nameJTextFieldKeyReleased
 
     /**
-     * See nameJTextFieldKeyReleased
-     * 
-     * @param evt
+     * @see #nameJTextFieldKeyReleased(java.awt.event.KeyEvent)
      */
     private void valueJTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_valueJTextFieldKeyReleased
         nameJTextFieldKeyReleased(null);

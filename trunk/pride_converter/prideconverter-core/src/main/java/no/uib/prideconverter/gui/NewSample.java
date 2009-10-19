@@ -402,7 +402,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
 }//GEN-LAST:event_okJButtonActionPerformed
 
     /**
-     * See cancelJButtonActionPerformed
+     * @see #cancelJButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -615,7 +615,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
     private javax.swing.JTextField sampleNameJTextField;
     // End of variables declaration//GEN-END:variables
     /**
-     * See OLSInputable
+     * @see OLSInputable
      */
     public void insertOLSResult(String field, String selectedValue, String accession,
             String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm) {
@@ -625,7 +625,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
     }
 
     /**
-     * See OLSInputable
+     * @see OLSInputable
      */
     public Window getWindow() {
         return (Window) this;

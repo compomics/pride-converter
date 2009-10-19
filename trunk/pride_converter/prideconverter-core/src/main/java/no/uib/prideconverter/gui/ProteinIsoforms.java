@@ -299,7 +299,7 @@ public class ProteinIsoforms extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * See cancelJButtonActionPerformed
+     * @see #cancelJButtonActionPerformed(java.awt.event.ActionEvent)
      */
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         cancelJButtonActionPerformed(null);
@@ -373,14 +373,14 @@ public class ProteinIsoforms extends javax.swing.JDialog {
     }//GEN-LAST:event_provideListJRadioButtonActionPerformed
 
     /**
-     * See provideListJRadioButtonActionPerformed
+     * @see #provideListJRadioButtonActionPerformed(java.awt.event.ActionEvent)
      */
     private void selectFirstJRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectFirstJRadioButtonActionPerformed
         provideListJRadioButtonActionPerformed(null);
     }//GEN-LAST:event_selectFirstJRadioButtonActionPerformed
 
     /**
-     * See provideListJRadioButtonActionPerformed
+     * @see #provideListJRadioButtonActionPerformed(java.awt.event.ActionEvent)
      */
     private void manualSelectionJRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manualSelectionJRadioButtonActionPerformed
         provideListJRadioButtonActionPerformed(null);

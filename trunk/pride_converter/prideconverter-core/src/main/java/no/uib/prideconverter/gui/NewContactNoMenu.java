@@ -439,7 +439,7 @@ public class NewContactNoMenu extends javax.swing.JDialog {
     }//GEN-LAST:event_addJButtonActionPerformed
 
     /**
-     * See cancelJButtonActionPerformed
+     * @see #cancelJButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -469,7 +469,7 @@ public class NewContactNoMenu extends javax.swing.JDialog {
     }//GEN-LAST:event_helpJButtonActionPerformed
 
     /**
-     * See mandatoryFieldsCheck
+     * @see #mandatoryFieldsCheck()
      * 
      * @param evt
      */
@@ -479,7 +479,7 @@ public class NewContactNoMenu extends javax.swing.JDialog {
     }//GEN-LAST:event_contactInfoJTextFieldKeyReleased
 
     /**
-     * See mandatoryFieldsCheck
+     * @see #mandatoryFieldsCheck()
      * 
      * @param evt
      */
@@ -500,7 +500,7 @@ public class NewContactNoMenu extends javax.swing.JDialog {
     }//GEN-LAST:event_aboutJButtonActionPerformed
 
     /**
-     * See mandatoryFieldsCheck
+     * @see #mandatoryFieldsCheck()
      *
      * @param evt
      */
@@ -525,7 +525,7 @@ public class NewContactNoMenu extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     /**
-     * See ComboBoxInputable
+     * @see ComboBoxInputable
      */
     public void insertIntoComboBox(String text) {
 
@@ -568,7 +568,7 @@ public class NewContactNoMenu extends javax.swing.JDialog {
     }
 
     /**
-     * See ComboBoxInputable
+     * @see ComboBoxInputable
      */
     public boolean alreadyInserted(String currentContactName) {
         this.currentContactName = currentContactName;

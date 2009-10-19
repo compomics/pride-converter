@@ -1327,27 +1327,21 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
     }//GEN-LAST:event_backJButtonActionPerformed
 
     /**
-     * See mandatoryFieldsCheck
-     * 
-     * @param evt
+     * @see #mandatoryFieldsCheck()
      */
     private void experimentTitleJTextAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_experimentTitleJTextAreaKeyReleased
         mandatoryFieldsCheck();
     }//GEN-LAST:event_experimentTitleJTextAreaKeyReleased
 
     /**
-     * See mandatoryFieldsCheck
-     * 
-     * @param evt
+     * @see #mandatoryFieldsCheck()
      */
     private void experimentLabelJTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_experimentLabelJTextFieldKeyReleased
         mandatoryFieldsCheck();
     }//GEN-LAST:event_experimentLabelJTextFieldKeyReleased
 
     /**
-     * See cancelJButtonActionPerformed
-     * 
-     * @param evt
+     * @see #cancelJButtonActionPerformed(java.awt.event.ActionEvent)
      */
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         cancelJButtonActionPerformed(null);
@@ -1444,7 +1438,7 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
     }
 
     /**
-     * See ContactInputable
+     * @see ContactInputable
      */
     public Window getWindow() {
         return (Window) this;

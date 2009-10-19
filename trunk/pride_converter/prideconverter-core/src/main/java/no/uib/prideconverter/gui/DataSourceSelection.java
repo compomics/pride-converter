@@ -639,7 +639,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
     }//GEN-LAST:event_nextJButtonActionPerformed
 
     /**
-     * See cancelJButtonActionPerformed
+     * @see #cancelJButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -700,7 +700,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
     }//GEN-LAST:event_ms_limsJRadioButtonActionPerformed
 
     /**
-     * See ms_limsJRadioButtonActionPerformed
+     * @see #ms_limsJRadioButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -724,7 +724,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
     }//GEN-LAST:event_mascotDatFileJRadioButtonActionPerformed
 
     /**
-     * See ms_limsJRadioButtonActionPerformed
+     * @see #ms_limsJRadioButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -748,7 +748,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
 }//GEN-LAST:event_mgfJRadioButtonActionPerformed
 
     /**
-     * See ms_limsJRadioButtonActionPerformed
+     * @see #ms_limsJRadioButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -774,7 +774,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
 }//GEN-LAST:event_xTandemJRadioButtonActionPerformed
 
     /**
-     * See ms_limsJRadioButtonActionPerformed
+     * @see #ms_limsJRadioButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -798,7 +798,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
 }//GEN-LAST:event_sequestResultsJRadioButtonActionPerformed
 
     /**
-     * See ms_limsJRadioButtonActionPerformed
+     * @see #ms_limsJRadioButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -821,7 +821,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
 }//GEN-LAST:event_omssaJRadioButtonActionPerformed
 
     /**
-     * See ms_limsJRadioButtonActionPerformed
+     * @see #ms_limsJRadioButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -845,7 +845,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
 }//GEN-LAST:event_spectrumMillJRadioButtonActionPerformed
 
     /**
-     * See ms_limsJRadioButtonActionPerformed
+     * @see #ms_limsJRadioButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -896,7 +896,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
     }//GEN-LAST:event_descriptionJEditorPaneHyperlinkUpdate
 
     /**
-     * See ms_limsJRadioButtonActionPerformed
+     * @see #ms_limsJRadioButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -922,7 +922,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
 }//GEN-LAST:event_pklFilesJRadioButtonActionPerformed
 
     /**
-     * See ms_limsJRadioButtonActionPerformed
+     * @see #ms_limsJRadioButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -945,7 +945,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
 }//GEN-LAST:event_mzXMLJRadioButtonActionPerformed
 
     /**
-     * See ms_limsJRadioButtonActionPerformed
+     * @see #ms_limsJRadioButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -976,11 +976,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
      * 
      * @param evt
      */
-    /**
-     * See ms_limsJRadioButtonActionPerformed
-     * 
-     * @param evt
-     */
     private void mzDataJRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mzDataJRadioButtonActionPerformed
         ((TitledBorder) descriptionJPanel.getBorder()).setTitle("Data Source Description");
         repaint();
@@ -999,13 +994,9 @@ public class DataSourceSelection extends javax.swing.JFrame {
         }
 }//GEN-LAST:event_mzDataJRadioButtonActionPerformed
 
+
     /**
-     * See ms_limsJRadioButtonActionPerformed
-     * 
-     * @param evt
-     */
-    /**
-     * See ms_limsJRadioButtonActionPerformed
+     * @see #ms_limsJRadioButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -1029,7 +1020,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
 }//GEN-LAST:event_vemsJRadioButtonActionPerformed
 
     /**
-     * See ms_limsJRadioButtonActionPerformed
+     * @see #ms_limsJRadioButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -1053,7 +1044,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
 }//GEN-LAST:event_ms2JRadioButtonActionPerformed
 
     /**
-     * See ms_limsJRadioButtonActionPerformed
+     * @see #ms_limsJRadioButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */

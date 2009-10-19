@@ -823,7 +823,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
     }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**
-     * See cancelJButtonActionPerformed
+     * @see #cancelJButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -1460,7 +1460,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
     // End of variables declaration//GEN-END:variables
 
     /**
-     * See ComboBoxInputable
+     * @see ComboBoxInputable
      */
     public void insertIntoComboBox(String text) {
 
@@ -1497,7 +1497,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
     }
 
     /**
-     * See ComboBoxInputable
+     * @see ComboBoxInputable
      */
     public void resetComboBox() {
         lastSelectedProtocolName = null;
@@ -1506,7 +1506,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
     }
 
     /**
-     * See ComboBoxInputable
+     * @see ComboBoxInputable
      */
     public boolean alreadyInserted(String currentProtocolName) {
 

@@ -538,7 +538,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
     }//GEN-LAST:event_addJButtonActionPerformed
 
     /**
-     * See cancelJButtonActionPerformed
+     * @see #cancelJButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
@@ -568,7 +568,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
     }//GEN-LAST:event_helpJButtonActionPerformed
 
     /**
-     * See mandatoryFieldsCheck
+     * @see #mandatoryFieldsCheck()
      * 
      * @param evt
      */
@@ -728,7 +728,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
     }//GEN-LAST:event_namesJComboBoxActionPerformed
 
     /**
-     * See mandatoryFieldsCheck
+     * @see #mandatoryFieldsCheck()
      * 
      * @param evt
      */
@@ -840,7 +840,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
     // End of variables declaration//GEN-END:variables
 
     /**
-     * See ComboBoxInputable
+     * @see ComboBoxInputable
      */
     public void insertIntoComboBox(String text) {
 
@@ -883,7 +883,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
     }
 
     /**
-     * See ComboBoxInputable
+     * @see ComboBoxInputable
      */
     public void resetComboBox() {
 
@@ -898,7 +898,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
     }
 
     /**
-     * See ComboBoxInputable
+     * @see ComboBoxInputable
      */
     public boolean alreadyInserted(String currentContactName) {
         this.currentContactName = currentContactName;

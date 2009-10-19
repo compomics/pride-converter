@@ -579,7 +579,7 @@ public class OutputDetails extends javax.swing.JFrame {
     }//GEN-LAST:event_prideRegistrationJButtonActionPerformed
 
     /**
-     * See accessionJTextFieldKeyReleased
+     * @see #accessionJTextFieldKeyReleased(java.awt.event.KeyEvent)
      * 
      * @param evt
      */
@@ -789,7 +789,7 @@ public class OutputDetails extends javax.swing.JFrame {
     }//GEN-LAST:event_findOutPutFileJButtonActionPerformed
 
     /**
-     * See cancelJButtonActionPerformed
+     * @see #cancelJButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */

@@ -1784,9 +1784,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
     }//GEN-LAST:event_analyzerJTableMouseClicked
 
     /**
-     * See mandatoryFieldsCheck
-     * 
-     * @param evt
+     * @see #mandatoryFieldsCheck()
      */
     private void softwareNameJTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_softwareNameJTextFieldKeyReleased
         valuesChanged = true;
@@ -1794,9 +1792,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
     }//GEN-LAST:event_softwareNameJTextFieldKeyReleased
 
     /**
-     * See mandatoryFieldsCheck
-     * 
-     * @param evt
+     * @see #mandatoryFieldsCheck()
      */
     private void softwareVersionJTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_softwareVersionJTextFieldKeyReleased
         valuesChanged = true;
@@ -1804,9 +1800,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
     }//GEN-LAST:event_softwareVersionJTextFieldKeyReleased
 
     /**
-     * See cancelJButtonActionPerformed
-     * 
-     * @param evt
+     * @see #cancelJButtonActionPerformed(java.awt.event.ActionEvent)
      */
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         cancelJButtonActionPerformed(null);
@@ -2684,7 +2678,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
     // End of variables declaration//GEN-END:variables
 
     /**
-     * See ComboBoxInputable
+     * @see ComboBoxInputable
      */
     public void insertIntoComboBox(String text) {
 
@@ -2741,7 +2735,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
     }
 
     /**
-     * See ComboBoxInputable
+     * @see ComboBoxInputable
      */
     public void resetComboBox() {
         lastSelectedInstrumentName = null;
@@ -2750,7 +2744,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
     }
 
     /**
-     * See ComboBoxInputable
+     * @see ComboBoxInputable
      */
     public boolean alreadyInserted(String currentInstrumentName) {
 
@@ -2899,7 +2893,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
     }
 
     /**
-     * See OLSInputable
+     * @see OLSInputable
      */
     public void insertOLSResult(String field, String selectedValue,
             String accession,
@@ -2937,7 +2931,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
     }
 
     /**
-     * See OLSInputable
+     * @see OLSInputable
      */
     public Window getWindow() {
         return (Window) this;

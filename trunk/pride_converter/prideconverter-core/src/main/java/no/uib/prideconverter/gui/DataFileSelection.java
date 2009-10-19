@@ -363,7 +363,7 @@ public class DataFileSelection extends javax.swing.JFrame {
     }//GEN-LAST:event_nextJButtonActionPerformed
 
     /**
-     * See cancelJButtonActionPerformed
+     * @see #cancelJButtonActionPerformed(java.awt.event.ActionEvent)
      * 
      * @param evt
      */
