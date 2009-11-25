@@ -4,7 +4,7 @@
 ----
 
 *Changes in PRIDE Converter v2.1.2 - (Nov. 25. 2009):*
-* FEATURE IMPROVEMENT: On Windows platforms PRIDE Converter can now be run from paths containing spaces.
+ * FEATURE IMPROVEMENT: On Windows platforms PRIDE Converter can now be run from paths containing spaces.
 
 ----
 
