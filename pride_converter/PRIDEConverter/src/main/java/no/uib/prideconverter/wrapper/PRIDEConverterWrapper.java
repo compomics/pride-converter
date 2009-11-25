@@ -149,8 +149,14 @@ public class PRIDEConverterWrapper {
             String javaHome = System.getProperty("java.home") + File.separator +
                     "bin" + File.separator;
 
-            cmdLine = javaHome + "java " + options + " -jar " +
-                    new File(tempFile, prideConverterSourceJarFileName).getAbsolutePath();
+            String quote = "";
+
+            if(System.getProperty("os.name").lastIndexOf("Windows") != -1){
+                quote = "\"";
+            }
+
+            cmdLine = javaHome + "java " + options + " -jar " 
+                    + quote + new File(tempFile, prideConverterSourceJarFileName).getAbsolutePath() + quote;
 
             if (debug) {
                 System.out.println(cmdLine);
