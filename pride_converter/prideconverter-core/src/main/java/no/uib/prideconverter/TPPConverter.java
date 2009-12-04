@@ -15,6 +15,7 @@ import uk.ac.ebi.tpp_to_pride.parsers.ProteinProphetXMLParser;
 import uk.ac.ebi.tpp_to_pride.wrappers.proteinprophet.ProteinProphetSummary;
 import uk.ac.ebi.tpp_to_pride.wrappers.proteinprophet.ProteinProphetProteinID;
 import uk.ac.ebi.tpp_to_pride.wrappers.proteinprophet.ProteinProphetIsoform;
+import uk.ac.ebi.tpp_to_pride.wrappers.proteinprophet.ProteinProphetPeptideID;
 import uk.ac.ebi.tpp_to_pride.wrappers.peptideprophet.*;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CVLookupImpl;
@@ -185,7 +186,7 @@ public class TPPConverter {
                 }
 
                 Collection<Peptide> PRIDE_peptides = new ArrayList<Peptide>();
-                HashMap peptides = protein.getPeptides();
+                HashMap <String, ProteinProphetPeptideID > peptides = protein.getPeptides();
 
                 Iterator innerIt = peptides.keySet().iterator();
 
@@ -317,24 +318,28 @@ public class TPPConverter {
                                     char residue = pepSequence.charAt(ppma.getPosition() - 1);
                                     String key = mass + "_" + residue;
 
+                                    // We have to introduce a temporary mass in order to deal with a bug in the rounding:
+                                    Double tempRoundedMass = null;
+
                                     // Now look this up; precision differs between the definitions however :(,
                                     // so we have to find the correct result.
+                                    // We had to introduce the counter as well in order to deal with the rounding problem:
+                                    int count_scale =1;
                                     while (modificationByMass.get(key) == null) {
+                                        
                                         BigDecimal bd = new BigDecimal(Double.toString(mass));
                                         // If we round ALL decimals, something is horribly wrong!
-                                        bd = bd.setScale(bd.scale() - 1, BigDecimal.ROUND_HALF_UP);
-
+                                        bd = bd.setScale(bd.scale() - count_scale, BigDecimal.ROUND_HALF_UP);
                                         if (bd.scale() == 0) {
                                             if (debug) {
                                                 System.out.println("Rounded down modification mass for '" + ppma.getMass() + "_" + residue + "' down to '" + bd.doubleValue() +
                                                         "' without finding a match!");
                                             }
-
                                             break;
                                         }
-
-                                        mass = bd.doubleValue();
-                                        key = mass + "_" + residue;
+                                        tempRoundedMass = bd.doubleValue();
+                                        key = tempRoundedMass + "_" + residue;
+                                        count_scale++;
                                     }
 
                                     // Okay, we can now try to retrieve the modification.
