@@ -57,7 +57,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
     private static Connection conn = null;
     private static MzData mzData;
     private static boolean useErrorLog = true;
-    private static boolean debug = false;
+    private static boolean debug = true;
 
     static {
         userProperties = new UserProperties();
@@ -1815,6 +1815,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
          * @param aCharge
          * @param aSequestXcorr
          * @param aSequestDelta
+         * @param aPercConf (from Sequest 2.0.5)
          * @param aPeptideMass
          * @param aCalculatedPeptideMass
          * @param aTotalIntensity
@@ -1828,7 +1829,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
          * @param aCvParams
          * @param aUserParams
          */
-        public void addPeptide(Long aSpectrumRef, Integer aCharge, Double aSequestXcorr, Double aSequestDelta,
+        public void addPeptide(Long aSpectrumRef, Integer aCharge, Double aSequestXcorr, Double aSequestDelta, Double aPercConf,
                 Double aPeptideMass, Double aCalculatedPeptideMass, Double aTotalIntensity, Integer aSequestRSp,
                 Double aSequestSp, Double aIonProportion, Integer aRedundancy, String aSequence, String aPreAA,
                 String aPostAA, Collection aModifications, Collection<CvParam> aCvParams, Collection<UserParam> aUserParams) {
@@ -1865,6 +1866,10 @@ public class PRIDEConverter extends AbstractPrideConverter {
             aUserParams.add(new UserParamImpl("Total Intensity", 3, aTotalIntensity.toString()));
             aUserParams.add(new UserParamImpl("Ion Proportion", 4, aIonProportion.toString()));
             aUserParams.add(new UserParamImpl("Redundancy", 5, aRedundancy.toString()));
+            // Add the new UserParam from DTASelect 2.0.5
+            if(aPercConf !=null){
+                aUserParams.add(new UserParamImpl("% Confidence Validator", 5, aPercConf.toString()));    
+            }
 
             iPeptides.add(new PeptideImpl(aSpectrumRef, aSequence, null, aModifications, aCvParams, aUserParams));
         }
