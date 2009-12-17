@@ -397,6 +397,9 @@ public class DTASelectConverter {
             Double ionProportion = null;
             Integer redundancy = null;
 
+            //For DTASelect version 2.0.5
+            Double percentageConf = null;
+
             // Information about the peptides
             String preDigSiteAA = null;
             String peptideSequence = null;
@@ -672,6 +675,17 @@ public class DTASelectConverter {
 
                             Long specRef = filenameToMzDataIDMapping.get(key);
 
+                            //In order to deal with possible problems in the number of "0" in front of the figures in the
+                            // MS2 files
+                            if(specRef ==null){
+                                // Add a possible first "0" (depending on the output of the DTASelect-filter.txt file
+                                if(!scanNumber.startsWith("0")){
+                                    String secondKey = spectrumFile + "_0" + scanNumber;
+                                    specRef = filenameToMzDataIDMapping.get(secondKey);
+                                }
+                            }
+
+
                             if (debug) {
                                 System.out.println("testing long value. The value is : " + specRef);
                             }
@@ -701,7 +715,7 @@ public class DTASelectConverter {
                                         variableModifications, fixedModifications);
 
                                 //Add information about each peptide to the protein instance
-                                protein.addPeptide(specRef, charge, sequestXcorr, sequestDelta, peptideMass, calculatedPeptideMass,
+                                protein.addPeptide(specRef, charge, sequestXcorr, sequestDelta, percentageConf, peptideMass, calculatedPeptideMass,
                                         totalIntensity, sequestRSp, sequestSp, ionProportion, redundancy, peptideSequence,
                                         preDigSiteAA, postDigSiteAA, peptideModifications, null, null);
 
@@ -785,6 +799,16 @@ public class DTASelectConverter {
                             String key = spectrumFile + "_" + scanNumber;
                             Long specRef = filenameToMzDataIDMapping.get(key);
 
+                            //In order to deal with possible problems in the number of "0" in front of the figures in the
+                            // MS2 files
+                            if(specRef ==null){
+                                // Add a possible first "0" (depending on the output of the DTASelect-filter.txt file
+                                if(!scanNumber.startsWith("0")){
+                                    String secondKey = spectrumFile + "_0" + scanNumber;
+                                    specRef = filenameToMzDataIDMapping.get(secondKey);
+                                }
+                            }
+
                             if (debug) {
                                 System.out.println("testing long value. The value is : " + specRef);
                             }
@@ -815,12 +839,156 @@ public class DTASelectConverter {
                                         variableModifications, fixedModifications);
 
                                 //Add information about each peptide to the protein instance
-                                protein.addPeptide(specRef, charge, sequestXcorr, sequestDelta, peptideMass, calculatedPeptideMass,
+                                protein.addPeptide(specRef, charge, sequestXcorr, sequestDelta, percentageConf, peptideMass, calculatedPeptideMass,
                                         totalIntensity, sequestRSp, sequestSp, ionProportion, redundancy, peptideSequence,
                                         preDigSiteAA, postDigSiteAA, peptideModifications, null, null);
 
                                 PRIDEConverter.setTotalPeptideCount(PRIDEConverter.getTotalPeptideCount() + 1); // increase the peptide counter
                             }
+
+
+                        // We found another possibility (13 tokens and an additional column called Conf%) From DTASelect
+                        // version 2.0.5
+                        } else if (peptidesTokens.length == 13) {
+
+                            // All seems to be OK. Let's parse the relevant information.
+                            unique = peptidesTokens[0].trim(); // we do not really need this // ToDo: never used !?
+
+                            // we will need to get the fileName information
+                            fileName = peptidesTokens[1].trim();
+
+                            // In order to use "." in the String split() method, it is neccesary to escape it twice.
+                            String[] fileInfo = fileName.split("\\.");
+
+                            // In most cases the name of the files has an appended "-a"
+                            if (fileInfo[0].endsWith("-a")) {
+                                spectrumFile = fileInfo[0].substring(0, fileInfo[0].indexOf("-a")).trim();
+                            } else {
+                                spectrumFile = fileInfo[0].trim();
+                            }
+
+                            scanNumber = fileInfo[1].trim();
+
+                            // tokens 2 and 3 will be the same, we do not need this
+                            charge = new Integer(fileInfo[3].trim());
+
+                            sequestXcorr = new Double(peptidesTokens[2].trim());
+
+                            // Again, we have to handle here the existence of a missing value for that parameter in the text file
+                            try {
+                                sequestDelta = new Double(peptidesTokens[3].trim());
+                            } catch (NumberFormatException nfe) {
+                                Util.writeToErrorLog("Warning: The sequestDelta parameter was not specified in the correct format!! " +
+                                        "The token was: '" + peptidesTokens[3] + "'");
+                                nfe.printStackTrace();
+                                sequestDelta = null;
+                            }
+
+                            try {
+                                percentageConf = new Double(peptidesTokens[4].trim());
+                            } catch (NumberFormatException nfe) {
+                                Util.writeToErrorLog("Warning: The %Conf parameter was not specified in the correct format!! " +
+                                        "The token was: '" + peptidesTokens[4] + "'");
+                                nfe.printStackTrace();
+                                percentageConf = null;
+                            }
+
+
+
+                            peptideMass = new Double(peptidesTokens[5].trim());
+                            calculatedPeptideMass = new Double(peptidesTokens[6].trim());
+                            totalIntensity = new Double(peptidesTokens[7].trim());
+
+                            // The same again (possible missing value)
+                            try {
+                                sequestRSp = Integer.parseInt(peptidesTokens[8].trim());
+                            } catch (NumberFormatException nfe) {
+                                Util.writeToErrorLog("Warning: The RSp parameter was not specified in the correct format!! " +
+                                        "The token was: '" + peptidesTokens[8] + "'");
+                                nfe.printStackTrace();
+                                sequestRSp = null;
+                            }
+
+                            sequestSp = new Double(peptidesTokens[9].trim());
+                            ionProportion = new Double(peptidesTokens[10].trim());
+                            redundancy = new Integer(peptidesTokens[11].trim());
+
+                            // Peptide sequence:
+                            String peptide = peptidesTokens[12].trim();
+
+                            // In order to use "." in the String split() method, it is necessary to escape it twice.
+                            String[] peptideAA = peptide.split("\\.");
+                            preDigSiteAA = null;
+                            peptideSequence = null;
+                            postDigSiteAA = null;
+
+                            // In some cases the post aa after digestion is not indicated.
+                            preDigSiteAA = peptideAA[0].trim();
+                            peptideSequence = peptideAA[1].trim();
+
+                            if (peptideAA.length == 3) {
+                                postDigSiteAA = peptideAA[2].trim();
+                            } else {
+                                postDigSiteAA = "";
+                            }
+
+
+                            // *** HERE IT IS WHEN THE JOINT IS MADE WITH THE SPECTRA. I HAVE SEEN TWO POSSIBILITIES TO DO IT:
+                            // Check if the spectrumFile_scanNumber is not present in the HashMap
+
+                            // In this case, it is the second one:
+                            String key = spectrumFile + "_" + scanNumber;
+
+                            Long specRef = filenameToMzDataIDMapping.get(key);
+
+                            //In order to deal with possible problems in the number of "0" in front of the figures in the
+                            // MS2 files
+                            if(specRef ==null){
+                                // Add a possible first "0" (depending on the output of the DTASelect-filter.txt file
+                                if(!scanNumber.startsWith("0")){
+                                    String secondKey = spectrumFile + "_0" + scanNumber;
+                                    specRef = filenameToMzDataIDMapping.get(secondKey);
+                                }
+                            }
+
+
+                            if (debug) {
+                                System.out.println("testing long value. The value is : " + specRef);
+                            }
+
+                            // check if the spectrum exists or not
+                            // Remember that the code is duplicated below!!
+
+                            if (specRef == null) {
+                                JOptionPane.showMessageDialog(null,
+                                        "The spectrum file " + spectrumFile + ".ms2" +
+                                        "\ndoes not contain the spectrum with scan number " + scanNumber +
+                                        "\nas referenced in the DTASelect txt file!\n\n" +
+                                        "PRIDE XML file not created.",
+                                        "Spectrum Not Found",
+                                        JOptionPane.ERROR_MESSAGE);
+                                Util.writeToErrorLog("Error when parsing DTASelect file. Unknown scan number: " + scanNumber + " in file " + spectrumFile);
+                                PRIDEConverter.setCancelConversion(true);
+                            }
+
+                            if (!PRIDEConverter.isConversionCanceled()) {
+                                // add the modifications
+                                ArrayList peptideModifications = new ArrayList();
+
+                                // adds the modification details to the peptideModifications list
+                                // and returns the unmodified sequence
+                                peptideSequence = PRIDEConverter.addModificationDetails(peptideModifications, peptideSequence,
+                                        variableModifications, fixedModifications);
+
+                                //Add information about each peptide to the protein instance
+                                protein.addPeptide(specRef, charge, sequestXcorr, sequestDelta, percentageConf, peptideMass, calculatedPeptideMass,
+                                        totalIntensity, sequestRSp, sequestSp, ionProportion, redundancy, peptideSequence,
+                                        preDigSiteAA, postDigSiteAA, peptideModifications, null, null);
+
+                                PRIDEConverter.setTotalPeptideCount(PRIDEConverter.getTotalPeptideCount() + 1); // increase the peptide counter
+                            }
+                        // If the first token is empty, the split method will not take it into account
+
                         } else {
 
                             // In case the number of tokens is different:
@@ -840,7 +1008,7 @@ public class DTASelectConverter {
                     }
                 }
 
-                // This is necesasry to add peptides to proteins that have alternative locus names.
+                // This is necessary to add peptides to proteins that have alternative locus names.
                 previousLine = line;
             }
 
