@@ -57,7 +57,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
     private static Connection conn = null;
     private static MzData mzData;
     private static boolean useErrorLog = true;
-    private static boolean debug = true;
+    private static boolean debug = false;
 
     static {
         userProperties = new UserProperties();
