@@ -75,7 +75,7 @@ public final class Util {
         }
 
         // See if there are multiple charges assigned to this spectrum.
-        if (trimmedCharge.indexOf(",") >= 0) {
+        if (trimmedCharge.indexOf(",") >= 0 || trimmedCharge.indexOf("and") >= 0) {
             multiCharge = true;
         }
 
