@@ -2,4 +2,4 @@
 
 ----
 
-(currently no changes)
+ * FEATURE IMPROVEMENT: Added support for multiple charges in mgf files when the charge values are separated by "and". 
