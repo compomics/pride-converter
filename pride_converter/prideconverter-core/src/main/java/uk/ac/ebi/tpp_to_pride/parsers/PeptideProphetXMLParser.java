@@ -1,26 +1,25 @@
 package uk.ac.ebi.tpp_to_pride.parsers;
 
+import no.uib.prideconverter.gui.ProgressDialog;
+import no.uib.prideconverter.util.MascotGenericFile_MultipleSpectra;
+import no.uib.prideconverter.util.Util;
 import org.apache.log4j.Logger;
 import org.systemsbiology.jrap.MSInstrumentInfo;
 import org.systemsbiology.jrap.MZXMLFileInfo;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import uk.ac.ebi.tpp_to_pride.wrappers.peptideprophet.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.*;
-
-import javax.swing.JOptionPane;
-import no.uib.prideconverter.gui.ProgressDialog;
-import no.uib.prideconverter.util.MascotGenericFile_MultipleSpectra;
-import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.implementation.mzData.BinaryArrayImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.PrecursorImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.SpectrumImpl;
 import uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum;
+import uk.ac.ebi.tpp_to_pride.wrappers.peptideprophet.*;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * This class uses the XmlPullParser to read a PeptideProphet output XML
@@ -35,6 +34,7 @@ public class PeptideProphetXMLParser {
     private static final String MSMS_RUN_SUMMARY = "msms_run_summary";
     private static final String SEARCH_SUMMARY = "search_summary";
     private static final String AMINOACID_MODIFICATION = "aminoacid_modification";
+    private static final String TERMINAL_MODIFICATION = "terminal_modification";
     private static final String PARAMETER = "parameter";
     private static final String SPECTRUM_QUERY = "spectrum_query";
     private static final String SEARCH_SCORE = "search_score";
@@ -460,7 +460,9 @@ public class PeptideProphetXMLParser {
         // Start with the MS/MS summary data.
         String baseName = aParser.getAttributeValue(null, "base_name");
         // Remove paths from base_name.
-        baseName = baseName.substring(baseName.lastIndexOf("/") + 1);
+        int pathIndex = Math.max(baseName.lastIndexOf("/"), baseName.lastIndexOf("\\"));
+        baseName = baseName.substring(pathIndex + 1);
+
         String msManufacturer = aParser.getAttributeValue(null, "msManufacturer");
         String msModel = aParser.getAttributeValue(null, "msModel");
         String msIonization = aParser.getAttributeValue(null, "msIonization");
@@ -519,7 +521,7 @@ public class PeptideProphetXMLParser {
 
             // Number of correct enzymatic termini to be found.
             min_number_termini = Integer.parseInt(aParser.getAttributeValue(null, "min_number_termini"));
-            
+
             // Move to the next tag.
             aParser.moveToNextStartTagWithEndBreaker(SEARCH_SUMMARY);
         } else {
@@ -540,9 +542,9 @@ public class PeptideProphetXMLParser {
 
         // Now a series of modifications are reported.
         HashMap modifications = new HashMap();
-
-        while (AMINOACID_MODIFICATION.equals(aParser.getName())) {
-            String aminoacid = aParser.getAttributeValue(null, "aminoacid");
+        // this section is modified to handle terminal_modification
+        while (AMINOACID_MODIFICATION.equals(aParser.getName()) || TERMINAL_MODIFICATION.equals(aParser.getName())) {
+            String aminoacid = AMINOACID_MODIFICATION.equals(aParser.getName()) ? aParser.getAttributeValue(null, "aminoacid") : aParser.getAttributeValue(null, "terminus");;
             double massDiff = Double.parseDouble(aParser.getAttributeValue(null, "massdiff"));
             double mass = Double.parseDouble(aParser.getAttributeValue(null, "mass"));
 
@@ -740,7 +742,7 @@ public class PeptideProphetXMLParser {
 
                 while (tempProteinCount > 0) {
                     if (!ALTERNATIVE_PROTEIN.equals(aParser.getName())) {
-                        logger.warn("There should have been an 'alternative_protein' at line " + aParser.getLineNumber() 
+                        logger.warn("There should have been an 'alternative_protein' at line " + aParser.getLineNumber()
                                 + " (" + tempProteinCount + " alternative proteins left), instead, there was a '"
                                 + aParser.getName() + "' tag!");
                         break;
@@ -839,7 +841,7 @@ public class PeptideProphetXMLParser {
                     // The query.
                     PeptideProphetQuery ppq = new PeptideProphetQuery(
                             assumed_charge, end_scan, index, precMass, run, ppsh, start_scan, spectrumTitle);
-                    
+
                     // Add the query to the collection.
                     queries.add(ppq);
 
