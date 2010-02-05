@@ -1,12 +1,21 @@
 #summary Short summary of changes for each version of PRIDE Converter.
 #labels Featured
 
+
+*Changes in PRIDE Converter v2.2.1 - (Feb. 5. 2010):*
+
+* FEATURE IMPROVEMENT: Added support for multiple charges in mgf files when the charge values are separated by "and". 
+
+* FEATURE IMPROVEMENT: Added support for Terminal Modifications in PeptideProphet files.
+
 ----
 
 *Changes in PRIDE Converter v2.2 - (Dec. 22. 2009):*
  * FEATURE IMPROVEMENT: Improved support for DTASelect.
  * BUG FIX: TPP Converter handling of modifications.
  * LIBRARY UPDATE: mascot_datfile updated from 2.2.2 to 2.2.3.
+
+Download Count: 65
 
 ----
 
