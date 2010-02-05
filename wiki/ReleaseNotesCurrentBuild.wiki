@@ -1,7 +1,4 @@
 #summary Short summary of changes for the current build of PRIDE Converter. (Note that this may not be the same as the released version.)
 
 ----
-
- * FEATURE IMPROVEMENT: Added support for multiple charges in mgf files when the charge values are separated by "and". 
-
- * FEATURE IMPROVEMENT: Added support for Terminal Modifications in PeptideProphet files. 
+ 
