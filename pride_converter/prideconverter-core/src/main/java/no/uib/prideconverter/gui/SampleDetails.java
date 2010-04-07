@@ -1,43 +1,26 @@
 package no.uib.prideconverter.gui;
 
-import java.awt.Window;
-import no.uib.prideconverter.PRIDEConverter;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Vector;
-import javax.swing.DefaultCellEditor;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
-import javax.swing.JTable;
-import javax.swing.table.JTableHeader;
-import java.awt.event.MouseEvent;
-import java.util.Collection;
-import java.util.StringTokenizer;
-import javax.swing.SwingConstants;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import no.uib.olsdialog.OLSDialog;
 import no.uib.olsdialog.OLSInputable;
+import no.uib.prideconverter.PRIDEConverter;
 import no.uib.prideconverter.util.ComboBoxInputable;
 import no.uib.prideconverter.util.MyComboBoxRenderer;
 import no.uib.prideconverter.util.Util;
+import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
+
+import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.io.*;
+import java.util.*;
 
 /**
  * A frame where information about the samples can be inserted.
@@ -715,7 +698,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 2, 11));
-        jLabel2.setText("Preferred Ontologies: NEWT (species), BTO (tissue), CTO (cell type), GO and DO (disease state)");
+        jLabel2.setText("Preferred Ontologies: NEWT (species), BTO (tissue), CL (cell type), GO and DO (disease state)");
 
         singleSampleDetailsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
