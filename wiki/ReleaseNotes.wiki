@@ -3,10 +3,20 @@
 
 ----
 
+*Changes in PRIDE Converter v2.3 - (April. 7. 2010):*
+
+ * FEATURE IMPROVEMENT: Integrated the new release of Mascot dat library, version 3.0.2.  
+ * FEATURE IMPROVEMENT: Change the way of capturing reference metadata.
+ * FEATURE IMPROVEMENT: Minor change on the label of sample description.
+
+----
+
 *Changes in PRIDE Converter v2.2.1 - (Feb. 5. 2010):*
 
  * FEATURE IMPROVEMENT: Added support for multiple charges in mgf files when the charge values are separated by "and". 
  * FEATURE IMPROVEMENT: Added support for Terminal Modifications in PeptideProphet files.
+
+Download Count: 113
 
 ----
 
