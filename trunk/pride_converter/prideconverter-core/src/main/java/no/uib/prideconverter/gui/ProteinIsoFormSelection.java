@@ -1,19 +1,15 @@
 package no.uib.prideconverter.gui;
 
+import com.compomics.mascotdatfile.util.mascot.PeptideHit;
+import com.compomics.mascotdatfile.util.mascot.ProteinHit;
 import no.uib.prideconverter.PRIDEConverter;
-import be.proteomics.mascotdatfile.util.mascot.PeptideHit;
-import be.proteomics.mascotdatfile.util.mascot.ProteinHit;
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JRadioButton;
-import javax.swing.JTable;
-import javax.swing.UIDefaults;
-import javax.swing.UIManager;
+import no.uib.prideconverter.util.RadioButtonEditor;
+import no.uib.prideconverter.util.RadioButtonRenderer;
+
+import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import no.uib.prideconverter.util.RadioButtonEditor;
-import no.uib.prideconverter.util.RadioButtonRenderer;
 
 /**
  * This dialog lets you choose between a different protein isoforms.

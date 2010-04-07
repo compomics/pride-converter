@@ -308,7 +308,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                         path = path.replace("%20", " ");
 
                         File file = new File(path);
-                        System.setOut(new java.io.PrintStream(new FileOutputStream(file, true)));
+                        //System.setOut(new java.io.PrintStream(new FileOutputStream(file, true)));
                         System.setErr(new java.io.PrintStream(new FileOutputStream(file, true)));
 
                         // creates a new error log file if it does not exist

@@ -1,6 +1,6 @@
 package no.uib.prideconverter.util;
 
-import be.proteomics.mascotdatfile.util.mascot.ProteinHit;
+import com.compomics.mascotdatfile.util.mascot.ProteinHit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

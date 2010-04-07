@@ -1,28 +1,26 @@
 package no.uib.prideconverter;
 
-import be.proteomics.lims.db.accessors.Spectrumfile;
-import be.proteomics.lims.db.accessors.Identification;
 import be.proteomics.lims.db.accessors.Fragmention;
+import be.proteomics.lims.db.accessors.Identification;
+import be.proteomics.lims.db.accessors.Spectrumfile;
 import be.proteomics.lims.util.fileio.MascotGenericFile;
-
-import java.util.*;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.io.IOException;
-
-import uk.ac.ebi.pride.model.interfaces.mzdata.*;
-import uk.ac.ebi.pride.model.interfaces.core.FragmentIon;
-import uk.ac.ebi.pride.model.implementation.mzData.*;
-import uk.ac.ebi.pride.model.implementation.core.FragmentIonImpl;
-import uk.ac.ebi.pride.model.implementation.core.ModificationImpl;
-import no.uib.prideconverter.util.IdentificationGeneral;
-import no.uib.prideconverter.util.iTRAQ;
-import no.uib.prideconverter.util.FragmentIonMappedDetails;
-import no.uib.prideconverter.util.Util;
 import no.uib.prideconverter.gui.ModificationMapping;
 import no.uib.prideconverter.gui.ProgressDialog;
+import no.uib.prideconverter.util.FragmentIonMappedDetails;
+import no.uib.prideconverter.util.IdentificationGeneral;
+import no.uib.prideconverter.util.Util;
+import no.uib.prideconverter.util.iTRAQ;
+import uk.ac.ebi.pride.model.implementation.core.FragmentIonImpl;
+import uk.ac.ebi.pride.model.implementation.core.ModificationImpl;
+import uk.ac.ebi.pride.model.implementation.mzData.*;
+import uk.ac.ebi.pride.model.interfaces.core.FragmentIon;
+import uk.ac.ebi.pride.model.interfaces.mzdata.*;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Florian Reisinger

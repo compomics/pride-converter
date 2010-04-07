@@ -1,34 +1,24 @@
 package no.uib.prideconverter.gui;
 
 import no.uib.prideconverter.PRIDEConverter;
-import java.awt.Dimension;
-import java.awt.KeyboardFocusManager;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.Window;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Vector;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.KeyStroke;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.pride.model.implementation.core.ReferenceImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.ContactImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 import uk.ac.ebi.pride.model.interfaces.core.Reference;
 import uk.ac.ebi.pride.xml.MzDataXMLUnmarshaller;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * This frame handles the experiment information (title and label) plus 
@@ -399,20 +389,20 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
 
         if (pmid.length() > 0) {
             tempCollection.add(new CvParamImpl(
-                    pmid,
+                    "PRIDE:0000029",
+                    "PRIDE",
                     "PubMed",
-                    pmid,
                     new Long(counter++),
-                    ""));
+                    pmid));
         }
 
         if (doi.length() > 0) {
             tempCollection.add(new CvParamImpl(
-                    doi,
+                    "PRIDE:0000042",
+                    "PRIDE",
                     "DOI",
-                    doi,
                     new Long(counter),
-                    ""));
+                    doi));
         }
 
         if (pmid.length() == 0 && doi.length() == 0) {
