@@ -148,6 +148,10 @@ Mascot DAT File_z-H20|z ion -H20|PRIDE:0000231|1
 Mascot DAT File_z++-H20|z ion -H20|PRIDE:0000231|2
 Mascot DAT File_z-NH3|z ion -NH3|PRIDE:0000232|1
 Mascot DAT File_z++-NH3|z ion -NH3|PRIDE:0000232|2
+Mascot DAT File_zH|zH ion|PRIDE:0000280|1
+Mascot DAT File_zHH|zHH ion|PRIDE:0000281|1
+Mascot DAT File_zHH++|zHH++ ion|PRIDE:0000281|2
+Mascot DAT File_zH++|zH++ ion|PRIDE:0000280|2
 #
 Mascot DAT File_Prec|precursor|PRIDE:0000263|1
 Mascot DAT File_Prec 1+|precursor|PRIDE:0000263|1
