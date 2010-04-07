@@ -149,16 +149,20 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         </repository>
 
          <!-- UGent Genesis Maven 1 repository -->
-        <repository>
-            <id>genesis-maven-repository</id>
-            <name>Genesis repository</name>
-            <url>http://genesis.UGent.be/maven</url>
-            <layout>legacy</layout>
-            <releases>
-            </releases>
-            <snapshots>
-            </snapshots>
-        </repository>
+		<repository>
+			<id>genesis-maven-repository</id>
+			<name>Genesis repository</name>
+			<url>http://genesis.UGent.be/maven</url>
+			<layout>legacy</layout>
+		</repository>
+
+		<!-- UGent Genesis Maven 2 repository -->
+		<repository>
+			<id>genesis-maven2-repository</id>
+			<name>Genesis maven2 repository</name>
+			<url>http://genesis.UGent.be/maven2</url>
+			<layout>default</layout>
+		</repository>
 
          <!-- PRIDE SourceForge Maven 2 repository -->
         <repository>
@@ -201,9 +205,9 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <version>1.1</version>
         </dependency>
         <dependency>
-            <groupId>kenny</groupId>
-            <artifactId>mascot_datfile</artifactId>
-            <version>2.2.3</version>
+            <groupId>com.compomics</groupId>
+            <artifactId>mascotdatfile</artifactId>
+            <version>3.0.2</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

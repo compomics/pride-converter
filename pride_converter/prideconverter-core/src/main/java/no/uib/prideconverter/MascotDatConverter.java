@@ -1,33 +1,31 @@
 package no.uib.prideconverter;
 
-import be.proteomics.mascotdatfile.util.interfaces.QueryToPeptideMapInf;
-import be.proteomics.mascotdatfile.util.interfaces.MascotDatfileInf;
-import be.proteomics.mascotdatfile.util.interfaces.Modification;
-import be.proteomics.mascotdatfile.util.mascot.iterator.QueryEnumerator;
-import be.proteomics.mascotdatfile.util.mascot.*;
-import be.proteomics.mascotdatfile.util.mascot.enumeration.MascotDatfileType;
-import be.proteomics.mascotdatfile.util.mascot.factory.MascotDatfileFactory;
-
-import java.util.*;
-import java.io.IOException;
-import java.io.File;
-
-import uk.ac.ebi.pride.model.interfaces.mzdata.*;
+import com.compomics.mascotdatfile.util.interfaces.MascotDatfileInf;
+import com.compomics.mascotdatfile.util.interfaces.Modification;
+import com.compomics.mascotdatfile.util.interfaces.QueryToPeptideMapInf;
+import com.compomics.mascotdatfile.util.mascot.*;
+import com.compomics.mascotdatfile.util.mascot.enumeration.MascotDatfileType;
+import com.compomics.mascotdatfile.util.mascot.factory.MascotDatfileFactory;
+import com.compomics.mascotdatfile.util.mascot.iterator.QueryEnumerator;
+import no.uib.prideconverter.gui.ModificationMapping;
+import no.uib.prideconverter.gui.ProteinIsoFormSelection;
+import no.uib.prideconverter.gui.ProteinIsoforms;
+import no.uib.prideconverter.util.FragmentIonMappedDetails;
+import no.uib.prideconverter.util.IdentificationGeneral;
+import no.uib.prideconverter.util.Util;
+import no.uib.prideconverter.util.iTRAQ;
+import uk.ac.ebi.pride.model.implementation.core.FragmentIonImpl;
+import uk.ac.ebi.pride.model.implementation.core.ModificationImpl;
+import uk.ac.ebi.pride.model.implementation.core.MonoMassDeltaImpl;
+import uk.ac.ebi.pride.model.implementation.mzData.*;
 import uk.ac.ebi.pride.model.interfaces.core.FragmentIon;
 import uk.ac.ebi.pride.model.interfaces.core.MassDelta;
-import uk.ac.ebi.pride.model.implementation.mzData.*;
-import uk.ac.ebi.pride.model.implementation.core.MonoMassDeltaImpl;
-import uk.ac.ebi.pride.model.implementation.core.ModificationImpl;
-import uk.ac.ebi.pride.model.implementation.core.FragmentIonImpl;
-import no.uib.prideconverter.util.IdentificationGeneral;
-import no.uib.prideconverter.util.iTRAQ;
-import no.uib.prideconverter.util.Util;
-import no.uib.prideconverter.util.FragmentIonMappedDetails;
-import no.uib.prideconverter.gui.ModificationMapping;
-import no.uib.prideconverter.gui.ProteinIsoforms;
-import no.uib.prideconverter.gui.ProteinIsoFormSelection;
+import uk.ac.ebi.pride.model.interfaces.mzdata.*;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @author Florian Reisinger
@@ -185,6 +183,7 @@ public class MascotDatConverter {
                 PRIDEConverter.getProgressDialog().setValue(progressCounter++);
 
                 currentQuery = queries.nextElement();
+                System.out.println(currentQuery.getQueryNumber());
                 matchFound = false;
                 fileName = currentQuery.getFilename();
                 PRIDEConverter.setSpectrumKey(fileName + "_" + tempMascotDatfile.getFileName() + "_" + currentQuery.getQueryNumber());
@@ -276,6 +275,7 @@ public class MascotDatConverter {
                             // Spectrum description comments.
                             spectrumDescriptionComments = new ArrayList<SpectrumDescComment>();
 
+                            System.out.println(currentQuery.getQueryNumber());
                             tempPeptideHit = queryToPeptideMap.getPeptideHitOfOneQuery(currentQuery.getQueryNumber());
 
                             if (tempPeptideHit != null) {
@@ -559,8 +559,8 @@ public class MascotDatConverter {
                                         for (Object currentFragmentIon1 : currentFragmentIons) {
 
                                             // Note: 'FragmentIon' is included in several projects so the complete path is required
-                                            be.proteomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl currentFragmentIon =
-                                                    (be.proteomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl) currentFragmentIon1;
+                                            com.compomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl currentFragmentIon =
+                                                    (com.compomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl) currentFragmentIon1;
 
                                             // map the reported fragment ion to its corresponding CV term by using the
                                             // mappings given in the FragmentIonsMapping.prop file

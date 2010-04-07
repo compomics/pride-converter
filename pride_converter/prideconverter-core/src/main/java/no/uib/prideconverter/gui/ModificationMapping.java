@@ -1,7 +1,7 @@
 package no.uib.prideconverter.gui;
 
 import no.uib.prideconverter.PRIDEConverter;
-import be.proteomics.mascotdatfile.util.interfaces.Modification;
+import com.compomics.mascotdatfile.util.interfaces.Modification;
 import java.awt.Window;
 import java.rmi.RemoteException;
 import java.util.Map;

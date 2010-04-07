@@ -1,20 +1,16 @@
 package no.uib.prideconverter.util;
 
-import be.proteomics.mascotdatfile.util.mascot.MascotDatfile;
-import be.proteomics.mascotdatfile.util.mascot.Peak;
-import be.proteomics.mascotdatfile.util.mascot.Query;
+import com.compomics.mascotdatfile.util.mascot.MascotDatfile;
+import com.compomics.mascotdatfile.util.mascot.Peak;
+import com.compomics.mascotdatfile.util.mascot.Query;
+
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.Vector;
-import javax.swing.JOptionPane;
+import java.util.*;
 
 /**
  * A class that lets you extract iTRAQ values for a given dataset. Translated 
