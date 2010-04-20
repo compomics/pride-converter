@@ -38,6 +38,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     private boolean keepQuantificationSelection = false;
     private Vector tempSampleCvParameters;
 
+    private boolean speciesCheckDone = false;
+
     /**
      * Opens a new SampleDetails frame.
      * 
@@ -1116,6 +1118,15 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
      */
     private void nextJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextJButtonActionPerformed
 
+        // we do a little hack:
+        // this action will forward to the next page of PRIDE converter, however we want check on the species param
+        // we can only perform the action (which means a forward to the next page) or don't perform the action (which
+        // means the same check is done the next time the action is performed) Hence if no species param was given,
+        // it will not forward to the next page. It will effectively act as a enforcement
+        // So in order to take care of cases where the user gets a warning, but does not want to provide a species, we
+        // need a flag to tell us if the species check has already been done (and is deliberately ignored).
+
+        // first criterion is a MUST condition
         if (singleSampleDetailsJTable.getRowCount() > 0 &&
                 multipleSamplesDetailsJTable.getRowCount() > 0) {
             JOptionPane.showMessageDialog(this,
@@ -1123,15 +1134,39 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                     "all details about the sample type you do not want to use.",
                     "Verify Inserted Sample Details",
                     JOptionPane.WARNING_MESSAGE);
-        } else {
-
+        } else if ( speciesCheckDone || speciesParamGiven() ) { // this is only a SHOULD condition and we will proceed if the user is determined to go on
+            // if the species is given or a check has been done, but was ignored, we continue
+            // we reset the speciesCheckDone flag, since we are going on in any case
             if (saveInsertedInformation()) {
+                // before we go on, we reset the species check, just in case...
                 new ProtocolDetails(this.getLocation());
                 this.setVisible(false);
                 this.dispose();
             }
+        } else {
+            // the species was not given, so we provide a warning
+            JOptionPane.showMessageDialog(this,
+                    "No species annotation found! We strongly recommend to " +
+                    "annotate the dataset with a NEWT ontology term.",
+                    "Check Inserted Sample Details",
+                    JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_nextJButtonActionPerformed
+
+    private boolean speciesParamGiven() {
+        boolean found = false;
+        // iterate over all sample associated CV terms and see if we have a NEWT taxonomy term
+        for (Object cvObject : tempSampleCvParameters) {
+            CvParamImpl cvParam = (CvParamImpl) cvObject;
+            if (cvParam.getCVLookup().equalsIgnoreCase("NEWT")) {
+                found = true; // taxonomy term specified - we are happy
+                break; // no need to look further
+            }
+        }
+        // before we return the result, we register that the search has run
+        speciesCheckDone = true;
+        return found;
+    }
 
     /**
      * Stores the sample set selected and opens the previous frame (ExperimentProperties).
