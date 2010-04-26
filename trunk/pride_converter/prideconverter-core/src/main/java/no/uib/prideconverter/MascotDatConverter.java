@@ -183,7 +183,7 @@ public class MascotDatConverter {
                 PRIDEConverter.getProgressDialog().setValue(progressCounter++);
 
                 currentQuery = queries.nextElement();
-                System.out.println(currentQuery.getQueryNumber());
+
                 matchFound = false;
                 fileName = currentQuery.getFilename();
                 PRIDEConverter.setSpectrumKey(fileName + "_" + tempMascotDatfile.getFileName() + "_" + currentQuery.getQueryNumber());
@@ -275,7 +275,6 @@ public class MascotDatConverter {
                             // Spectrum description comments.
                             spectrumDescriptionComments = new ArrayList<SpectrumDescComment>();
 
-                            System.out.println(currentQuery.getQueryNumber());
                             tempPeptideHit = queryToPeptideMap.getPeptideHitOfOneQuery(currentQuery.getQueryNumber());
 
                             if (tempPeptideHit != null) {
