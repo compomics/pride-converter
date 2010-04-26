@@ -4,7 +4,7 @@
 ----
 
 *Changes in PRIDE Converter v2.3.2 - (April. 26. 2010):*
- * BUG FIX: Turned the 'ErrorLog' back on again.
+ * BUG FIX: Turned the `ErrorLog` back on again.
  * BUG FIX: Converting Mascot Dat files is now working again.
  * LIBRARY UPDATE: omssa-parser library updated to versin 1.3.6.
 
