@@ -178,17 +178,9 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
     <dependencies>
         <dependency>
             <groupId>de.proteinms.omxparser</groupId>
-            <artifactId>omssaparser</artifactId>
-            <version>1.3.4</version>
+            <artifactId>omssa-parser</artifactId>
+            <version>1.3.6</version>
         </dependency>
-        
-        <!-- remove when omssaparser is updated to version 1.3.4 -->
-        <dependency>
-            <groupId>lennart</groupId>
-            <artifactId>utilities</artifactId>
-            <version>2.9.9</version>
-        </dependency>
-        
         <dependency>
             <groupId>com.jgoodies</groupId>
             <artifactId>looks</artifactId>
