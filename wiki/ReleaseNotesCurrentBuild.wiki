@@ -1,4 +1,6 @@
 #summary Short summary of changes for the current build of PRIDE Converter. (Note that this may not be the same as the released version.)
 
 ----
- 
+
+ * NEW FEATURE: ms_lims version 7.3 is now supported.
+ * LIBRARY UPDATE: ms_lims updated to 7.3
