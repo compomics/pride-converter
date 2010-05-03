@@ -1,9 +1,9 @@
 package no.uib.prideconverter;
 
-import be.proteomics.lims.db.accessors.Fragmention;
-import be.proteomics.lims.db.accessors.Identification;
-import be.proteomics.lims.db.accessors.Spectrumfile;
-import be.proteomics.lims.util.fileio.MascotGenericFile;
+import com.compomics.mslims.db.accessors.Fragmention;
+import com.compomics.mslims.db.accessors.Identification;
+import com.compomics.mslims.db.accessors.Spectrum;
+import com.compomics.mslims.util.fileio.MascotGenericFile;
 import no.uib.prideconverter.gui.ModificationMapping;
 import no.uib.prideconverter.gui.ProgressDialog;
 import no.uib.prideconverter.util.FragmentIonMappedDetails;
@@ -39,7 +39,8 @@ public class MS_LimsConverter {
      * @return a HashMap
      * @throws java.io.IOException in case of an error reading the input file.
      */
-    protected static HashMap<String, Long> transformSpectraFrom_ms_lims(ArrayList<Spectrum> aTransformedSpectra) throws IOException {
+    protected static HashMap<String, Long> transformSpectraFrom_ms_lims(
+            ArrayList<uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum> aTransformedSpectra) throws IOException {
 
         // temporary variables
         ProgressDialog progressDialog = PRIDEConverter.getProgressDialog();
@@ -54,9 +55,9 @@ public class MS_LimsConverter {
 
         int idCounter = 0;
         Iterator iter = selectedSpectra.iterator();
-        Spectrumfile dbSpectrum;
+        Spectrum dbSpectrum;
 
-        String filename, file;
+        String filename, spectrumFile;
         MascotGenericFile lSpectrumFile;
 
         double[][] arrays;
@@ -69,7 +70,7 @@ public class MS_LimsConverter {
 
         long identificationCount;
         String identified;
-        Spectrum fragmentation;
+        uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum fragmentation;
         Double mzRangeStart, mzRangeStop;
 
         TreeSet treeSet = new TreeSet();
@@ -81,7 +82,7 @@ public class MS_LimsConverter {
         int progressCounter = 0;
 
         while (iter.hasNext() && !PRIDEConverter.isConversionCanceled()) {
-            dbSpectrum = (Spectrumfile) iter.next();
+            dbSpectrum = (Spectrum) iter.next();
             filename = dbSpectrum.getFilename();
 
             PRIDEConverter.setSpectrumKey(filename + "_null");
@@ -89,8 +90,8 @@ public class MS_LimsConverter {
             progressDialog.setValue(progressCounter++);
             progressDialog.setString(filename + " (" + (progressCounter) + "/" + selectedSpectra.size() + ")");
 
-            file = new String(dbSpectrum.getUnzippedFile());
-            lSpectrumFile = new MascotGenericFile(filename, file);
+            spectrumFile = PRIDEConverter.getMsLimsSpectrumFileFromDatabase(dbSpectrum.getSpectrumid());
+            lSpectrumFile = new MascotGenericFile(filename, spectrumFile);
 
             // Transform peaklist into double arrays.
             arrays = transformPeakListToArrays_ms_lims(lSpectrumFile.getPeaks(), treeSet);
@@ -151,13 +152,13 @@ public class MS_LimsConverter {
                         null, null);
 
                 // Store (spectrumfileid, spectrumid) mapping.
-                Long xTmp = mapping.put("" + dbSpectrum.getSpectrumfileid(), (long) idCounter);
+                Long xTmp = mapping.put("" + dbSpectrum.getSpectrumid(), (long) idCounter);
 
                 if (xTmp != null) {
                     // we already stored a result for this ID!!!
                     JOptionPane.showMessageDialog(null, "Ambiguous spectrum mapping. Consult " +
                             "the error log file for details.", "Mapping Error", JOptionPane.ERROR_MESSAGE);
-                    Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + dbSpectrum.getSpectrumfileid() + "'.");
+                    Util.writeToErrorLog("Ambiguous spectrum mapping for ID '" + dbSpectrum.getSpectrumid() + "'.");
                     PRIDEConverter.setCancelConversion(true);
                 }
 
@@ -195,7 +196,7 @@ public class MS_LimsConverter {
             try {
                 progressDialog.setValue(i);
                 tempIdentification = Identification.getIdentification(PRIDEConverter.getConn(),
-                        ((Spectrumfile) selectedSpectra.get(i)).getFilename());
+                        ((Spectrum) selectedSpectra.get(i)).getFilename());
 
                 if (tempIdentification != null) {
 
@@ -290,7 +291,7 @@ public class MS_LimsConverter {
                                         Util.writeToErrorLog("Ignoring duplicated fragment ion for spectrum accession "
                                                 + tempIdentification.getAccession()
                                                 + " with sequence: " + tempIdentification.getSequence()
-                                                + " and spectrumKey: " + tempIdentification.getL_spectrumfileid());
+                                                + " and spectrumKey: " + tempIdentification.getL_spectrumid());
                                     }
                                 }
                             }
@@ -433,7 +434,7 @@ public class MS_LimsConverter {
                         }
 
                         PRIDEConverter.getIds().add(new IdentificationGeneral(
-                                "" + tempIdentification.getL_spectrumfileid(), // spectrum file id
+                                "" + tempIdentification.getL_spectrumid(), // spectrum file id
                                 tempIdentification.getAccession(), // peptide accession number
                                 "Mascot " + tempIdentification.getMascot_version(), // search engine
                                 tempIdentification.getDb(), // database

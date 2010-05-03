@@ -1,8 +1,7 @@
 package no.uib.prideconverter;
 
-import be.proteomics.lims.db.accessors.Identification;
-import be.proteomics.lims.db.accessors.Protocol;
-import be.proteomics.lims.db.accessors.Spectrumfile;
+import com.compomics.mslims.db.accessors.Identification;
+import com.compomics.mslims.db.accessors.Spectrum_file;
 import no.uib.prideconverter.gui.*;
 import no.uib.prideconverter.util.*;
 import no.uib.prideconverter.util.Properties;
@@ -163,8 +162,9 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
             //test to check if the supported version of ms_lims is used
             try {
-                Protocol.getAllProtocols(conn); // test for ms_lims 7
-            //Identification.getIdentification(conn, ""); // test for ms_lims 6
+                Spectrum_file.findFromID(0, conn); // test for ms_lims 7.3
+                //Protocol.getAllProtocols(conn); // test for ms_lims 7
+                //Identification.getIdentification(conn, ""); // test for ms_lims 6
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(dataBaseDetails,
                         "Database connection not established:\n" +
@@ -2294,7 +2294,8 @@ public class PRIDEConverter extends AbstractPrideConverter {
      */
     protected static ArrayList getSelectedSpectraFromDatabase() {
 
-        ArrayList<Spectrumfile> selectedSpectra = new ArrayList<Spectrumfile>();
+        ArrayList<com.compomics.mslims.db.accessors.Spectrum> selectedSpectra =
+                new ArrayList<com.compomics.mslims.db.accessors.Spectrum>();
         ArrayList<String> selectedFileNames = new ArrayList<String>();
 
         try {
@@ -2311,12 +2312,12 @@ public class PRIDEConverter extends AbstractPrideConverter {
                     }
 
                     progressDialog.setValue(i);
-                    selectedSpectra.add(Spectrumfile.getFromName(
+                    selectedSpectra.add(com.compomics.mslims.db.accessors.Spectrum.getFromName(
                             (String) ((Object[]) properties.getSelectedSpectraKeys().get(i))[0], conn));
                 }
             } else {
 
-                Spectrumfile[] dbSpectra;
+                com.compomics.mslims.db.accessors.Spectrum[] dbSpectra;
 
                 if (properties.getSpectraSelectionCriteria() != null) {
 
@@ -2339,17 +2340,16 @@ public class PRIDEConverter extends AbstractPrideConverter {
                         for (int i = 0; i < properties.getProjectIds().size(); i++) {
 
                             if (properties.isSelectionCriteriaFileName()) {
-
-                                dbSpectra = Spectrumfile.getAllSpectraForProject(properties.getProjectIds().get(i),
-                                        conn, "filename like '%" + tempToken + "%'");
+                                dbSpectra = com.compomics.mslims.db.accessors.Spectrum.getAllSpectraForProject(
+                                        properties.getProjectIds().get(i), conn, "filename like '%" + tempToken + "%'");
                             } else {
                                 Identification[] tempIdentifications = Identification.getAllIdentificationsforProject(
                                         conn, properties.getProjectIds().get(i), "identificationid = '" + tempToken + "'");
 
                                 if (tempIdentifications.length > 0) {
-                                    dbSpectra =
-                                            Spectrumfile.getAllSpectraForProject(properties.getProjectIds().get(i),
-                                            conn, "spectrumfileid = " + tempIdentifications[0].getL_spectrumfileid());
+                                    dbSpectra = com.compomics.mslims.db.accessors.Spectrum.getAllSpectraForProject(
+                                            properties.getProjectIds().get(i), conn,
+                                            "spectrumfileid = " + tempIdentifications[0].getL_spectrumid());
                                 } else {
                                     dbSpectra = null;
                                 }
@@ -2383,10 +2383,11 @@ public class PRIDEConverter extends AbstractPrideConverter {
                     for (int i = 0; i < properties.getProjectIds().size(); i++) {
 
                         if (properties.selectAllSpectra()) {
-                            dbSpectra = Spectrumfile.getAllSpectraForProject(properties.getProjectIds().get(i), conn);
+                            dbSpectra = com.compomics.mslims.db.accessors.Spectrum.getAllSpectraForProject(
+                                    properties.getProjectIds().get(i), conn);
                         } else { //selectAllIdentifiedSpectra
-                            dbSpectra = Spectrumfile.getAllSpectraForProject(properties.getProjectIds().get(i),
-                                    conn, "identified > 0");
+                            dbSpectra = com.compomics.mslims.db.accessors.Spectrum.getAllSpectraForProject(
+                                    properties.getProjectIds().get(i), conn, "identified > 0");
                         }
 
                         progressDialog.setMax(dbSpectra.length);
@@ -2417,6 +2418,39 @@ public class PRIDEConverter extends AbstractPrideConverter {
         }
 
         return selectedSpectra;
+    }
+
+    /**
+     * Tries to extract the spectrum for the given spectrum id.
+     *
+     * @param spectrumId the id of the spectrum to extract
+     * @return the spectrum file as a String
+     */
+    protected static String getMsLimsSpectrumFileFromDatabase(long spectrumId){
+
+        String spectrumFile = null;
+
+        try{
+            spectrumFile = new String(Spectrum_file.findFromID(spectrumId, conn).getUnzippedFile());
+        } catch (SQLException e) {
+            setCancelConversion(true);
+            JOptionPane.showMessageDialog(outputFrame,
+                    "An error occured when extracting data from the ms_lims database.\n" +
+                    "The conversion has been canceled.\n" +
+                    "See ../Properties/ErrorLog.txt for more details.",
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error accessing database: " + e.toString());
+        } catch (IOException e) {
+            setCancelConversion(true);
+            JOptionPane.showMessageDialog(outputFrame,
+                    "An error occured when extracting data from the ms_lims database.\n" +
+                    "The conversion has been canceled.\n" +
+                    "See ../Properties/ErrorLog.txt for more details.",
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
+            Util.writeToErrorLog("Error accessing database: " + e.toString());
+        }
+
+        return spectrumFile;
     }
 
     /**

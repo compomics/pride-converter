@@ -1,7 +1,6 @@
 package no.uib.prideconverter.gui;
 
-import be.proteomics.lims.db.accessors.Identification;
-import be.proteomics.lims.db.accessors.Spectrumfile;
+import com.compomics.mslims.db.accessors.Identification;
 import com.compomics.mascotdatfile.util.interfaces.MascotDatfileInf;
 import com.compomics.mascotdatfile.util.interfaces.QueryToPeptideMapInf;
 import com.compomics.mascotdatfile.util.mascot.PeptideHit;
@@ -9,6 +8,7 @@ import com.compomics.mascotdatfile.util.mascot.Query;
 import com.compomics.mascotdatfile.util.mascot.enumeration.MascotDatfileType;
 import com.compomics.mascotdatfile.util.mascot.factory.MascotDatfileFactory;
 import com.compomics.mascotdatfile.util.mascot.iterator.QueryEnumerator;
+import com.compomics.mslims.db.accessors.Spectrum;
 import de.proteinms.omxparser.OmssaOmxFile;
 import de.proteinms.omxparser.util.MSHitSet;
 import de.proteinms.omxparser.util.MSSpectrum;
@@ -1482,7 +1482,7 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
 
                         for (int j = 0; j < PRIDEConverter.getProperties().getProjectIds().size(); j++) {
 
-                            dbSpectra = Spectrumfile.getFilenameAndIdentifiedStatusForAllSpectraForProject(
+                            dbSpectra = Spectrum.getFilenameAndIdentifiedStatusForAllSpectraForProject(
                                     PRIDEConverter.getProperties().getProjectIds().get(j), PRIDEConverter.getConn());
 
                             identified = false;
