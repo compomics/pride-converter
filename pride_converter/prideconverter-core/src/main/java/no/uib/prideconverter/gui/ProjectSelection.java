@@ -1,7 +1,7 @@
 package no.uib.prideconverter.gui;
 
 import no.uib.prideconverter.PRIDEConverter;
-import be.proteomics.lims.db.accessors.Project;
+import com.compomics.mslims.db.accessors.Project;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;

@@ -187,9 +187,9 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <version>2.2.0</version>
         </dependency>
         <dependency>
-            <groupId>lennart</groupId>
-            <artifactId>ms_lims</artifactId>
-            <version>7.0</version>
+            <groupId>com.compomics</groupId>
+            <artifactId>ms-lims</artifactId>
+            <version>7.3</version>
         </dependency>
         <dependency>
             <groupId>lennart</groupId>
