@@ -3,21 +3,29 @@
 
 ----
 
-*Changes in PRIDE Converter v2.3.2 - (April. 26. 2010):*
+*Changes in PRIDE Converter v2.3.3 - (May 7. 2010):*
+ * NEW FEATURE: ms_lims version 7.3 is now supported.
+ * LIBRARY UPDATE: ms_lims updated to 7.3
+
+----
+
+*Changes in PRIDE Converter v2.3.2 - (April 26. 2010):*
  * BUG FIX: Turned the `ErrorLog` back on again.
  * BUG FIX: Converting Mascot Dat files is now working again.
  * LIBRARY UPDATE: omssa-parser library updated to version 1.3.6.
 
+Download Count: 35
+
 ----
 
-*Changes in PRIDE Converter v2.3.1 - (April. 22. 2010):*
+*Changes in PRIDE Converter v2.3.1 - (April 22. 2010):*
  * FEATURE IMPROVEMENT: Added species check to sample properties input frame and updated sample properties file. 
 
 Download Count: 8
 
 ----
 
-*Changes in PRIDE Converter v2.3 - (April. 7. 2010):*
+*Changes in PRIDE Converter v2.3 - (April 7. 2010):*
  * FEATURE IMPROVEMENT: Change the way of capturing reference metadata.
  * FEATURE IMPROVEMENT: Minor change on the label of sample description.
  * LIBRARY UPDATE: Integrated the new release of Mascot dat library, version 3.0.2.  
