@@ -2,5 +2,4 @@
 
 ----
 
- * NEW FEATURE: ms_lims version 7.3 is now supported.
- * LIBRARY UPDATE: ms_lims updated to 7.3
+(currently no changes)
