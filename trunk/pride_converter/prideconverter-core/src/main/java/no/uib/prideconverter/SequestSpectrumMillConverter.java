@@ -938,7 +938,7 @@ public class SequestSpectrumMillConverter {
                                                         1, sequence.length()).toUpperCase();
                                             }
 
-                                            System.out.println(sequence);
+                                            //System.out.println(sequence);
                                             sequence = sequence.substring(2, sequence.length() - 2);
                                             sequenceArray = new String[sequence.length()];
 
