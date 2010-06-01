@@ -179,7 +179,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         <dependency>
             <groupId>de.proteinms.omxparser</groupId>
             <artifactId>omssa-parser</artifactId>
-            <version>1.3.6</version>
+            <version>1.3.7</version>
         </dependency>
         <dependency>
             <groupId>com.jgoodies</groupId>

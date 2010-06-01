@@ -74,7 +74,7 @@ public class OmssaConverter {
         ArrayList<CvParam> cVParams;
         ArrayList<UserParam> userParams;
         List<Integer> mzValues, intensityValues;
-        int omssaAbundanceScale;
+        long omssaAbundanceScale;
         Collection<SpectrumDescComment> spectrumDescriptionComments;
 
         MSModHit currentMSModHit;
