@@ -1,24 +1,22 @@
 package no.uib.prideconverter;
 
+import no.uib.prideconverter.gui.ModificationMapping;
+import no.uib.prideconverter.gui.ProgressDialog;
 import no.uib.prideconverter.util.IdentificationGeneral;
 import no.uib.prideconverter.util.Util;
 import no.uib.prideconverter.util.iTRAQ;
-import no.uib.prideconverter.gui.ModificationMapping;
-import no.uib.prideconverter.gui.ProgressDialog;
-
-import java.util.*;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.io.*;
-
+import uk.ac.ebi.pride.model.implementation.core.ModificationImpl;
+import uk.ac.ebi.pride.model.implementation.core.MonoMassDeltaImpl;
+import uk.ac.ebi.pride.model.implementation.mzData.*;
 import uk.ac.ebi.pride.model.interfaces.core.FragmentIon;
 import uk.ac.ebi.pride.model.interfaces.core.MassDelta;
 import uk.ac.ebi.pride.model.interfaces.mzdata.*;
-import uk.ac.ebi.pride.model.implementation.mzData.*;
-import uk.ac.ebi.pride.model.implementation.core.MonoMassDeltaImpl;
-import uk.ac.ebi.pride.model.implementation.core.ModificationImpl;
 
 import javax.swing.*;
+import java.io.*;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Florian Reisinger
@@ -63,6 +61,7 @@ public class SequestSpectrumMillConverter {
         Double score = null;
         Double deltaCn = null;
         Double sp = null;
+        Double sf = null;
         String rankSp = null;
         Double mH = null;
         String ions = null;
@@ -901,10 +900,20 @@ public class SequestSpectrumMillConverter {
                                             deltaCn = Double.parseDouble(tok.nextToken()); //deltCn
                                             score = Double.parseDouble(tok.nextToken()); //XCorr
                                             sp = Double.parseDouble(tok.nextToken()); //Sp
-                                            ions = tok.nextToken(); //Ions
+
+                                            // add support for sf column
+                                            // sf score is calculated by a neural network algorithm
+                                            // this is added for SEQUEST v.28
+                                            String sfStr = tok.nextToken(); // sf
+                                            if (!sfStr.contains("/")) {
+                                                sf = Double.parseDouble(sfStr);
+                                                ions = tok.nextToken(); //Ions
+                                            } else {
+                                                ions = sfStr; // ions
+                                            }
 
                                             if (ions.endsWith("/")) {
-                                                ions += tok.nextToken();
+                                                    ions += tok.nextToken();
                                             }
 
                                             accession = tok.nextToken(); //Accession number
@@ -929,6 +938,7 @@ public class SequestSpectrumMillConverter {
                                                         1, sequence.length()).toUpperCase();
                                             }
 
+                                            System.out.println(sequence);
                                             sequence = sequence.substring(2, sequence.length() - 2);
                                             sequenceArray = new String[sequence.length()];
 
@@ -1092,6 +1102,11 @@ public class SequestSpectrumMillConverter {
                                     if (sp != null) {
                                         cVParams.add(new CvParamImpl("PRIDE:0000054",
                                                 "PRIDE", "Sp", cVParams.size(), "" + sp));
+                                    }
+
+                                    if (sf != null) {
+                                        cVParams.add(new CvParamImpl("PRIDE:0000284",
+                                                "PRIDE", "Sf", cVParams.size(), "" + sf));
                                     }
 
                                     if (ions != null) {
