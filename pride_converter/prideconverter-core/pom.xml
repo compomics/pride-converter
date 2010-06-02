@@ -296,6 +296,10 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                     <artifactId>commons-lang</artifactId>
                     <groupId>commons-lang</groupId>
                 </exclusion>
+                <exclusion>
+                    <groupId>psidev.psi.tools</groupId>
+                    <artifactId>xxindex</artifactId>    
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
