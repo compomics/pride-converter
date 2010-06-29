@@ -1,25 +1,24 @@
 package no.uib.prideconverter;
 
-import uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum;
-import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
-import uk.ac.ebi.pride.model.interfaces.mzdata.Precursor;
-import uk.ac.ebi.pride.model.interfaces.mzdata.SpectrumDescComment;
+import no.uib.prideconverter.util.Util;
+import uk.ac.ebi.pride.model.implementation.mzData.BinaryArrayImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.PrecursorImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.SpectrumImpl;
-import uk.ac.ebi.pride.model.implementation.mzData.BinaryArrayImpl;
+import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
+import uk.ac.ebi.pride.model.interfaces.mzdata.Precursor;
+import uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum;
+import uk.ac.ebi.pride.model.interfaces.mzdata.SpectrumDescComment;
 
-import java.util.HashMap;
+import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Vector;
-import java.io.IOException;
-import java.io.File;
-import java.io.BufferedReader;
-import java.io.FileReader;
-
-import javax.swing.JOptionPane;
-import no.uib.prideconverter.util.Util;
 
 /**
  * @author Florian Reisinger
@@ -60,6 +59,7 @@ public class MascotGenericConverter {
         Vector<Integer> charges;
         String[] values;
         Double precursorMz = null, precursorIntensity = null;
+        double precursorRetentionTime = -1;
         Integer precursorCharge = null;
         Double mzRangeStart, mzRangeStop;
 
@@ -118,9 +118,11 @@ public class MascotGenericConverter {
 
                             Object[] temp = (Object[]) PRIDEConverter.getProperties().getSelectedSpectraKeys().get(k);
 
+                            // ToDo: this does not guarantee uniquenes!! take optional TITLE parameter into account! store as temp[1] = ID column
+
                             if (((String) temp[0]).equalsIgnoreCase(PRIDEConverter.getCurrentFileName())) {
                                 if (((Double) temp[2]).doubleValue() == precursorMz) {
-                                    if (temp[3] != null) {
+                                    if (temp[3] != null && precursorCharge != null) {
                                         if (((Integer) temp[3]).intValue() == precursorCharge) {
                                             matchFound = true;
                                             PRIDEConverter.setSpectrumKey(PRIDEConverter.generateSpectrumKey(temp));
@@ -175,6 +177,12 @@ public class MascotGenericConverter {
                             }
                         }
 
+                         if (precursorRetentionTime != -1) {
+                                ionSelection.add(new CvParamImpl("PRIDE:0000203",
+                                        "PRIDE", "Parent ion retention time", ionSelection.size(),
+                                        Double.toString(precursorRetentionTime)));
+                            }
+
                         if (precursorMz != null) {
                             ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
                                     "MassToChargeRatio", 2, Double.toString(
@@ -186,6 +194,8 @@ public class MascotGenericConverter {
                                     ionSelection, null, msLevel - 1, 0, 0));
                         } else {
                             precursors = null;
+
+
                         }
 
                         // Spectrum description comments.
@@ -240,6 +250,7 @@ public class MascotGenericConverter {
                     precursorMz = null;
                     precursorIntensity = null;
                     precursorCharge = null;
+                    precursorRetentionTime = -1;
 
                 } // Read embedded parameters.
                 else if (inSpectrum && (line.indexOf("=") >= 0)) {
@@ -268,7 +279,12 @@ public class MascotGenericConverter {
                         // CHARGE line found.
                         // Note the extra parsing to read a Mascot Generic File charge (eg., 1+).
                         precursorCharge = Util.extractCharge(line.substring(equalSignIndex + 1));
+                    } else if (line.startsWith("RTINSECONDS")) {
+                        String value = line.substring(equalSignIndex + 1);
+                        precursorRetentionTime = new Double(value);
+
                     }
+
                 } // Read peaks, minding the possibility of charge present!
                 else if (inSpectrum) {
                     // We're inside the spectrum, with no '=' in the line, so it should be
