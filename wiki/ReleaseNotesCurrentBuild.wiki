@@ -3,3 +3,5 @@
 ----
 
  * LIBRARY UPDATE: omssa-parser updated to version 1.3.7.
+ * FEATURE IMPROVEMENT: Sequest converter now supports the sf column.
+ * FEATURE IMPROVEMENT: Addition of retention time parsing for mgf files.
