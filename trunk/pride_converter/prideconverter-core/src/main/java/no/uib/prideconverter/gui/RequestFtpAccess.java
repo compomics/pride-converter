@@ -57,11 +57,11 @@ public class RequestFtpAccess extends javax.swing.JDialog {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Submission Tips", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Submission Tips"));
 
         submissionTipsJEditorPane.setContentType("text/html");
         submissionTipsJEditorPane.setEditable(false);
-        submissionTipsJEditorPane.setText("<html>\r\n  <head>\r\n  </head>\r\n  <body>\r\n    <p style=\"margin-top: 0\" align=\"justify\">\r\n<br>\n<font size=\"3\" face=\"Tahoma\">\nThe size of your PRIDE XML file is larger than the maximum file size for using the 'Direct Submission' via the PRIDE web page.<br> <br>\nWe therefore recommend using the PRIDE FTP server. To get access to the FTP server, please contact the PRIDE team at \n<a href=\"mailto:pride-support@ebi.ac.uk?subject=PRIDE%20Converter%3A%20request%20FTP%20access&body=Dear%20PRIDE%20Team.%20%0D%0A%0D%0AI%20would%20like%20to%20request%20access%20to%20the%20PRIDE%20FTP%20server%20to%20upload%20my%20PRIDE%20XML%20file(s).%20%0D%0A%0D%0ABest%20regards,%20%0D%0A(...Insert%20your%20name%20here...)\">pride-support@ebi.ac.uk</a>.\n<br><br>\n    </p>\r\n  </body>\r\n</html>\r\n");
+        submissionTipsJEditorPane.setText("<html>\r\n  <head>\r\n  </head>\r\n  <body>\r\n    <p style=\"margin-top: 0\" align=\"justify\">\r\n<br>\nThe size of your PRIDE XML file is larger than the maximum file size for using the 'Direct Submission' via the PRIDE web page.<br> <br>\nWe therefore recommend using the PRIDE FTP server. To get access to the FTP server, please contact the PRIDE team at \n<a href=\"mailto:pride-support@ebi.ac.uk?subject=PRIDE%20Converter%3A%20request%20FTP%20access&body=Dear%20PRIDE%20Team.%20%0D%0A%0D%0AI%20would%20like%20to%20request%20access%20to%20the%20PRIDE%20FTP%20server%20to%20upload%20my%20PRIDE%20XML%20file(s).%20%0D%0A%0D%0ABest%20regards,%20%0D%0A(...Insert%20your%20name%20here...)\">pride-support@ebi.ac.uk</a>.\n<br><br>\n    </p>\r\n  </body>\r\n</html>\r\n");
         submissionTipsJEditorPane.addHyperlinkListener(new javax.swing.event.HyperlinkListener() {
             public void hyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {
                 submissionTipsJEditorPaneHyperlinkUpdate(evt);
@@ -75,7 +75,7 @@ public class RequestFtpAccess extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -115,7 +115,7 @@ public class RequestFtpAccess extends javax.swing.JDialog {
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 233, Short.MAX_VALUE)
                         .add(closeJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 65, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE))
+                    .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.1" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
@@ -34,14 +34,14 @@
                       <Component id="helpJButton" min="-2" pref="23" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="aboutJButton" min="-2" pref="25" max="-2" attributes="0"/>
-                      <EmptySpace pref="309" max="32767" attributes="0"/>
+                      <EmptySpace pref="335" max="32767" attributes="0"/>
                       <Component id="backJButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="nextJButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="cancelJButton" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jSeparator1" alignment="0" pref="630" max="32767" attributes="0"/>
+                  <Component id="jSeparator1" alignment="0" pref="658" max="32767" attributes="0"/>
                   <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="fileSelectionJPanel" alignment="0" max="32767" attributes="1"/>
                   <Component id="jPanel2" alignment="0" max="32767" attributes="1"/>
@@ -57,7 +57,7 @@
               <Component id="fileSelectionJPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel2" min="-2" max="-2" attributes="1"/>
-              <EmptySpace pref="274" max="32767" attributes="0"/>
+              <EmptySpace pref="266" max="32767" attributes="0"/>
               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
@@ -122,9 +122,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="File Selection">
-              <Color PropertyName="color" blue="0" green="0" red="0" type="rgb"/>
-            </TitledBorder>
+            <TitledBorder title="File Selection"/>
           </Border>
         </Property>
       </Properties>
@@ -140,13 +138,13 @@
                   </Group>
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="dtaSelectFileJTextField" pref="411" max="32767" attributes="0"/>
-                      <Component id="spectrumFileFolderJTextField" alignment="1" pref="411" max="32767" attributes="0"/>
+                      <Component id="dtaSelectFileJTextField" pref="405" max="32767" attributes="0"/>
+                      <Component id="spectrumFileFolderJTextField" alignment="1" pref="405" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="findDtaSelectFileJButton" pref="27" max="32767" attributes="0"/>
-                      <Component id="spectumFileFolderJButton" pref="27" max="32767" attributes="0"/>
+                      <Component id="findDtaSelectFileJButton" pref="33" max="32767" attributes="0"/>
+                      <Component id="spectumFileFolderJButton" pref="33" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -154,34 +152,30 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="dtaSelectFileJTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="2" attributes="0">
+                              <Component id="dtaSelectFileJTextField" linkSize="2" alignment="2" min="-2" max="-2" attributes="0"/>
+                              <Component id="findDtaSelectFileJButton" linkSize="2" alignment="2" min="-2" pref="25" max="-2" attributes="0"/>
                           </Group>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="findDtaSelectFileJButton" min="-2" pref="25" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="spectrumFileFolderJTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="2" attributes="0">
+                              <Component id="spectrumFileFolderJTextField" linkSize="2" alignment="2" min="-2" max="-2" attributes="0"/>
+                              <Component id="spectumFileFolderJButton" linkSize="2" alignment="2" min="-2" pref="17" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="spectumFileFolderJButton" min="-2" pref="17" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="57" pref="57" max="57" attributes="0"/>
+                          <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="20" pref="20" max="20" attributes="0"/>
+                          <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="19" max="32767" attributes="0"/>
+                  <EmptySpace pref="21" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -250,8 +244,10 @@
     </Container>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="11" style="2"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+          <FontInfo relative="true">
+            <Font component="jLabel3" italic="true" property="font" relativeSize="true" size="-2"/>
+          </FontInfo>
         </Property>
         <Property name="text" type="java.lang.String" value="Select the files you want to convert data from, and click on &apos;Next&apos;  to continue."/>
       </Properties>
@@ -284,9 +280,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Parameters">
-              <Color PropertyName="color" blue="0" green="0" red="0" type="rgb"/>
-            </TitledBorder>
+            <TitledBorder title="Parameters"/>
           </Border>
         </Property>
       </Properties>
@@ -294,11 +288,11 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jLabel1" min="-2" pref="106" max="-2" attributes="0"/>
-                  <EmptySpace pref="52" max="32767" attributes="0"/>
-                  <Component id="sequestParamFileJTextField" min="-2" pref="401" max="-2" attributes="1"/>
+                  <Component id="jLabel1" pref="161" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="sequestParamFileJTextField" min="-2" pref="407" max="-2" attributes="1"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="sequestParamFileJButton" min="-2" pref="29" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -308,13 +302,18 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                          <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="sequestParamFileJTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="2" attributes="0">
+                              <Component id="sequestParamFileJButton" linkSize="3" alignment="2" min="-2" pref="17" max="-2" attributes="0"/>
+                              <Component id="sequestParamFileJTextField" linkSize="3" alignment="2" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <Component id="sequestParamFileJButton" alignment="0" min="-2" pref="17" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="17" pref="17" max="17" attributes="0"/>
+                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace pref="21" max="32767" attributes="0"/>
               </Group>

@@ -124,7 +124,7 @@ public class DataBaseDetails extends javax.swing.JFrame {
             }
         });
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Login", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Login"));
 
         jLabel1.setText("Username:");
         jLabel1.setToolTipText("Username to access the ms_lims database");
@@ -175,6 +175,8 @@ public class DataBaseDetails extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jPanel4Layout.linkSize(new java.awt.Component[] {passordJPasswordField, userNameJTextField}, org.jdesktop.layout.GroupLayout.VERTICAL);
+
         helpJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/help.GIF"))); // NOI18N
         helpJButton.setToolTipText("Help");
         helpJButton.addActionListener(new java.awt.event.ActionListener() {
@@ -183,7 +185,7 @@ public class DataBaseDetails extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Database", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Database"));
 
         jLabel4.setText("Server Host:");
         jLabel4.setToolTipText("The host where the ms_lims database is located");
@@ -234,6 +236,8 @@ public class DataBaseDetails extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jPanel1Layout.linkSize(new java.awt.Component[] {schemaJTextField, serverHostJTextField}, org.jdesktop.layout.GroupLayout.VERTICAL);
+
         aboutJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF"))); // NOI18N
         aboutJButton.setToolTipText("About");
         aboutJButton.addActionListener(new java.awt.event.ActionListener() {
@@ -242,7 +246,7 @@ public class DataBaseDetails extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jLabel6.setFont(jLabel6.getFont().deriveFont((jLabel6.getFont().getStyle() | java.awt.Font.ITALIC), jLabel6.getFont().getSize()-2));
         jLabel6.setText("Insert the information needed to log on the ms_lims database, and click on 'Next' to continue.");
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
@@ -258,13 +262,13 @@ public class DataBaseDetails extends javax.swing.JFrame {
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 239, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 248, Short.MAX_VALUE)
                         .add(backJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(nextJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(18, 18, 18)
                         .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                    .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel6))
                 .addContainerGap())
         );
@@ -275,7 +279,7 @@ public class DataBaseDetails extends javax.swing.JFrame {
                 .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 280, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 277, Short.MAX_VALUE)
                 .add(jLabel6)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)

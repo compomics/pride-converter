@@ -147,8 +147,6 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
         // only works for Java 1.6 and newer
         //        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
         //                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
-
-        institutionJTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
     }
 
     /**
@@ -196,8 +194,8 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
 
             java.util.Collections.sort(contactNames);
 
-            contactNames.add("   Create a new contact...");
-            contactNames.insertElementAt("- Please select a contact -", 0);
+            contactNames.add("   Create a New Contact...");
+            contactNames.insertElementAt("- Please Select a Contact -", 0);
             namesJComboBox.setModel(new DefaultComboBoxModel(contactNames));
 
             lastSelectedContact = "" + namesJComboBox.getSelectedItem();
@@ -290,7 +288,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Contact", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Contact"));
 
         jLabel6.setText("Institution:");
 
@@ -298,6 +296,7 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
 
         jLabel8.setText("E-mail:");
 
+        contactInfoJTextField.setFont(contactInfoJTextField.getFont());
         contactInfoJTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 contactInfoJTextFieldKeyReleased(evt);
@@ -306,6 +305,11 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
 
         namesJComboBox.setMaximumSize(new java.awt.Dimension(32767, 20));
         namesJComboBox.setMinimumSize(new java.awt.Dimension(23, 20));
+        namesJComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                namesJComboBoxMouseClicked(evt);
+            }
+        });
         namesJComboBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 namesJComboBoxItemStateChanged(evt);
@@ -316,15 +320,11 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
                 namesJComboBoxActionPerformed(evt);
             }
         });
-        namesJComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                namesJComboBoxMouseClicked(evt);
-            }
-        });
 
         jScrollPane2.setEnabled(false);
 
         institutionJTextArea.setColumns(20);
+        institutionJTextArea.setFont(institutionJTextArea.getFont());
         institutionJTextArea.setLineWrap(true);
         institutionJTextArea.setRows(4);
         institutionJTextArea.setWrapStyleWord(true);
@@ -360,8 +360,8 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
                     .add(jLabel6))
                 .add(16, 16, 16)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, contactInfoJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, contactInfoJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
                         .add(namesJComboBox, 0, 397, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -371,23 +371,29 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel7)
-                    .add(namesJComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(deleteJButton))
-                .add(9, 9, 9)
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel8)
-                    .add(contactInfoJTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel1Layout.createSequentialGroup()
-                        .add(27, 27, 27)
-                        .add(jLabel6))
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
+                            .add(namesJComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(deleteJButton))
+                        .add(9, 9, 9)
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(jLabel8)
+                            .add(contactInfoJTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jPanel1Layout.createSequentialGroup()
+                                .add(27, 27, 27)
+                                .add(jLabel6))
+                            .add(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE))))
                     .add(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .add(3, 3, 3)
+                        .add(jLabel7)))
+                .addContainerGap())
         );
+
+        jPanel1Layout.linkSize(new java.awt.Component[] {deleteJButton, namesJComboBox}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
         addJButton.setText("OK");
         addJButton.setEnabled(false);
@@ -427,34 +433,33 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(layout.createSequentialGroup()
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 288, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 295, Short.MAX_VALUE)
                         .add(addJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 92, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 91, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 91, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 14, Short.MAX_VALUE)
+                .add(18, 18, 18)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(cancelJButton)
-                            .add(addJButton))
-                        .add(12, 12, 12))
+                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(cancelJButton)
+                        .add(addJButton))
                     .add(layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();

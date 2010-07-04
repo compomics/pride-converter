@@ -79,9 +79,6 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
         columnToolTips.add("PubMed ID");
         columnToolTips.add("Digital Object Identifier");
 
-        experimentTitleJTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
-        descriptionJTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
-
         referencesJTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         referencesJTable.getTableHeader().setReorderingAllowed(false);
         contactsJTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -92,8 +89,11 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
 
         contactsJTable.getColumn(" ").setMinWidth(40);
         contactsJTable.getColumn(" ").setMaxWidth(40);
+        contactsJTable.setRowHeight(contactsJTable.getFont().getSize() + PRIDEConverter.getProperties().tableRowHeightPaddingSize);
+
         referencesJTable.getColumn(" ").setMaxWidth(40);
         referencesJTable.getColumn(" ").setMinWidth(40);
+        referencesJTable.setRowHeight(referencesJTable.getFont().getSize() + PRIDEConverter.getProperties().tableRowHeightPaddingSize);
 
         insertStoredInformation();
         mandatoryFieldsCheck();
@@ -133,17 +133,6 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
         }, "ProgressDialog");
 
         t.start();
-
-        // Wait until progress dialog is visible.
-        //
-        // The following is not needed in Java 1.6, but seemed to be needed in 1.5.
-        //
-        // Not including the lines _used to_ result in a crash on Windows, but not anymore.
-        // Including the lines results in a crash on Linux and Mac.
-        if(System.getProperty("os.name").toLowerCase().lastIndexOf("windows") != -1){
-            while (!progressDialog.isVisible()) {
-            }
-        }
 
         Thread t2 = new Thread(new Runnable() {
 
@@ -617,12 +606,13 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
             }
         });
 
-        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Experiment Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Experiment Properties"));
 
         jLabel19.setText("Title:");
 
         jLabel20.setText("Label:");
 
+        experimentLabelJTextField.setFont(experimentLabelJTextField.getFont());
         experimentLabelJTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 experimentLabelJTextFieldKeyReleased(evt);
@@ -630,6 +620,7 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
         });
 
         experimentTitleJTextArea.setColumns(20);
+        experimentTitleJTextArea.setFont(experimentTitleJTextArea.getFont());
         experimentTitleJTextArea.setLineWrap(true);
         experimentTitleJTextArea.setRows(2);
         experimentTitleJTextArea.setWrapStyleWord(true);
@@ -643,11 +634,13 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
         jLabel1.setText("Project:");
         jLabel1.setToolTipText("Allows experiments to be grouped or organised under projects");
 
+        projectJTextField.setFont(projectJTextField.getFont());
         projectJTextField.setToolTipText("Allows experiments to be grouped or organised under projects");
 
         jLabel2.setText("Description:");
 
         descriptionJTextArea.setColumns(20);
+        descriptionJTextArea.setFont(descriptionJTextArea.getFont());
         descriptionJTextArea.setLineWrap(true);
         descriptionJTextArea.setRows(2);
         descriptionJTextArea.setToolTipText("A general free-text description of the experiment");
@@ -699,11 +692,12 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jLabel3.setFont(jLabel3.getFont().deriveFont((jLabel3.getFont().getStyle() | java.awt.Font.ITALIC), jLabel3.getFont().getSize()-2));
         jLabel3.setText("Insert the experiment properties, minimum one contact, references (if any) and click on 'Next' to continue.");
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Contact Information", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Contact Information"));
 
+        contactsJTable.setFont(contactsJTable.getFont());
         contactsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -727,14 +721,14 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
                 return canEdit [columnIndex];
             }
         });
-        contactsJTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                contactsJTableMouseClicked(evt);
-            }
-        });
         contactsJTable.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 contactsJTableKeyReleased(evt);
+            }
+        });
+        contactsJTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                contactsJTableMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(contactsJTable);
@@ -753,23 +747,24 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
             .add(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, addContactJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, addContactJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(addContactJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "References", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("References"));
         jPanel1.setPreferredSize(new java.awt.Dimension(560, 140));
 
+        referencesJTable.setFont(referencesJTable.getFont());
         referencesJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -819,15 +814,15 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, addRowJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
-                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, addRowJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
+                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(addRowJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -856,19 +851,19 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE)
                     .add(jPanel9, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 239, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 248, Short.MAX_VALUE)
                         .add(backJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(nextJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(18, 18, 18)
                         .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jSeparator2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                    .add(jSeparator2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE)
                     .add(jLabel3)
                     .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -879,9 +874,9 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
                 .addContainerGap()
                 .add(jPanel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
                 .add(18, 18, 18)
                 .add(jLabel3)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)

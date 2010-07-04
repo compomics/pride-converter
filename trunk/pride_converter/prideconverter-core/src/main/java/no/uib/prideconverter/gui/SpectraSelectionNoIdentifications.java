@@ -281,7 +281,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jLabel3.setFont(jLabel3.getFont().deriveFont((jLabel3.getFont().getStyle() | java.awt.Font.ITALIC), jLabel3.getFont().getSize()-2));
         jLabel3.setText("Select the spectra to include in the PRIDE XML file, and click on 'Next' to continue.");
 
         helpJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/help.GIF"))); // NOI18N
@@ -300,7 +300,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
             }
         });
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Manual Spectra Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Manual Spectra Selection"));
 
         loadSpectraJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/load2.GIF"))); // NOI18N
         loadSpectraJButton.setText("Load Spectra");
@@ -362,8 +362,8 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, loadSpectraJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, loadSpectraJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
                     .add(jPanel5Layout.createSequentialGroup()
                         .add(spectrumAnnotationJLabel)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 85, Short.MAX_VALUE)
@@ -387,7 +387,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Simple Spectra Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Simple Spectra Selection"));
 
         selectAllJCheckBox.setSelected(true);
         selectAllJCheckBox.setText("Select All Spectra");
@@ -405,7 +405,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
             .add(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(selectAllJCheckBox)
-                .addContainerGap(413, Short.MAX_VALUE))
+                .addContainerGap(459, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -428,13 +428,13 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 239, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 301, Short.MAX_VALUE)
                         .add(backJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(nextJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(18, 18, 18)
                         .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel3))
                 .addContainerGap())
         );
@@ -562,18 +562,6 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         });
 
         t.start();
-
-
-        // Wait until progress dialog is visible.
-        //
-        // The following is not needed in Java 1.6, but seemed to be needed in 1.5.
-        //
-        // Not including the lines _used to_ result in a crash on Windows, but not anymore.
-        // Including the lines results in a crash on Linux and Mac.
-        if(System.getProperty("os.name").toLowerCase().lastIndexOf("windows") != -1){
-            while (!progressDialog.isVisible()) {
-            }
-        }
 
         Thread t2 = new Thread(new Runnable() {
 

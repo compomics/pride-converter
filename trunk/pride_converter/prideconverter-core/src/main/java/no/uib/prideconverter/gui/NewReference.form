@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.1" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.3" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
+<Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="title" type="java.lang.String" value="New Reference"/>
@@ -30,7 +30,7 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <Component id="jPanel1" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                   </Group>
@@ -38,7 +38,7 @@
                       <Component id="helpJButton" min="-2" pref="23" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="aboutJButton" min="-2" pref="25" max="-2" attributes="0"/>
-                      <EmptySpace pref="239" max="32767" attributes="0"/>
+                      <EmptySpace pref="245" max="32767" attributes="0"/>
                       <Component id="insertRefJButton" min="-2" pref="114" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="cancelJButton" min="-2" pref="115" max="-2" attributes="0"/>
@@ -53,9 +53,9 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="103" groupAlignment="3" attributes="0">
+                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                       <Component id="cancelJButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="insertRefJButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -72,9 +72,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Reference">
-              <Color PropertyName="color" blue="0" green="0" red="0" type="rgb"/>
-            </TitledBorder>
+            <TitledBorder title="Reference"/>
           </Border>
         </Property>
       </Properties>
@@ -91,7 +89,7 @@
                   </Group>
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="jScrollPane1" alignment="0" pref="424" max="32767" attributes="1"/>
+                      <Component id="jScrollPane1" alignment="0" pref="425" max="32767" attributes="1"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="doiJTextField" max="32767" attributes="1"/>
@@ -117,7 +115,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="pmidIDJTextField" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -128,7 +126,7 @@
                               <Component id="doiJTextField" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Component id="pubMedJButton" min="-2" pref="47" max="-2" attributes="0"/>
+                      <Component id="pubMedJButton" alignment="0" min="-2" pref="51" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -148,6 +146,11 @@
             <Component class="javax.swing.JTextArea" name="referenceJTextArea">
               <Properties>
                 <Property name="columns" type="int" value="20"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                  <FontInfo relative="true">
+                    <Font component="referenceJTextArea" property="font" relativeSize="true" size="0"/>
+                  </FontInfo>
+                </Property>
                 <Property name="lineWrap" type="boolean" value="true"/>
                 <Property name="rows" type="int" value="3"/>
                 <Property name="wrapStyleWord" type="boolean" value="true"/>
@@ -188,6 +191,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="pubMedJButton">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/no/uib/prideconverter/icons/pubmed_2.JPG"/>
             </Property>
@@ -195,6 +201,8 @@
             <Property name="horizontalTextPosition" type="int" value="0"/>
           </Properties>
           <Events>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="pubMedJButtonMouseEntered"/>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="pubMedJButtonMouseExited"/>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pubMedJButtonActionPerformed"/>
           </Events>
         </Component>

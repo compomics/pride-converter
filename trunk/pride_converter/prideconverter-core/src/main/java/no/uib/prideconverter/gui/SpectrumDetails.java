@@ -81,9 +81,11 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
 
         cvTermsJTable.getColumn(" ").setMinWidth(40);
         cvTermsJTable.getColumn(" ").setMaxWidth(40);
+        cvTermsJTable.setRowHeight(cvTermsJTable.getFont().getSize() + 6);
 
         userParametersJTable.getColumn(" ").setMinWidth(40);
         userParametersJTable.getColumn(" ").setMaxWidth(40);
+        userParametersJTable.setRowHeight(userParametersJTable.getFont().getSize() + 6);
 
         cvTermsJTable.getTableHeader().setReorderingAllowed(false);
         cvTermsJTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -209,7 +211,7 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
         setTitle("Spectrum Annotations");
         setResizable(false);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CV Parameters", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("CV Parameters"));
 
         cvTermsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -263,8 +265,8 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
-                    .add(olsSearchJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE))
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
+                    .add(olsSearchJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -277,7 +279,7 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "User Parameters", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("User Parameters"));
 
         addUserParamterJButton.setText("Add User Parameter");
         addUserParamterJButton.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
@@ -330,8 +332,8 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
-                    .add(addUserParamterJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE))
+                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
+                    .add(addUserParamterJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -390,10 +392,10 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 398, Short.MAX_VALUE)
-                        .add(okJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 386, Short.MAX_VALUE)
+                        .add(okJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 65, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(cancelJButton)))
                 .addContainerGap())
         );
 

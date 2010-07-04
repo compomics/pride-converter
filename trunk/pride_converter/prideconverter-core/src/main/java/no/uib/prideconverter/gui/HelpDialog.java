@@ -254,6 +254,7 @@ public class HelpDialog extends javax.swing.JDialog {
         textJEditorPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
         textJEditorPane.setContentType("text/html");
         textJEditorPane.setEditable(false);
+        textJEditorPane.setFont(textJEditorPane.getFont());
         textJEditorPane.setMinimumSize(new java.awt.Dimension(10, 10));
         textJEditorPane.setPreferredSize(new java.awt.Dimension(10, 10));
         textJEditorPane.addHyperlinkListener(new javax.swing.event.HyperlinkListener() {
@@ -267,7 +268,6 @@ public class HelpDialog extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 255, Short.MAX_VALUE)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
@@ -277,7 +277,6 @@ public class HelpDialog extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 550, Short.MAX_VALUE)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)

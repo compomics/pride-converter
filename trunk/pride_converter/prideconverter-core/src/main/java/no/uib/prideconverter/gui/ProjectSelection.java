@@ -271,17 +271,6 @@ public class ProjectSelection extends javax.swing.JFrame {
 
         t.start();
 
-        // Wait until progress dialog is visible.
-        //
-        // The following is not needed in Java 1.6, but seemed to be needed in 1.5.
-        //
-        // Not including the lines _used to_ result in a crash on Windows, but not anymore.
-        // Including the lines results in a crash on Linux and Mac.
-        if(System.getProperty("os.name").toLowerCase().lastIndexOf("windows") != -1){
-            while (!progressDialog.isVisible()) {
-            }
-        }
-
         Thread t2 = new Thread(new Runnable() {
 
             public void run() {
@@ -417,7 +406,7 @@ public class ProjectSelection extends javax.swing.JFrame {
             }
         });
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Project Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Project Selection"));
 
         org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -425,7 +414,7 @@ public class ProjectSelection extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -436,10 +425,11 @@ public class ProjectSelection extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Project Description", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Project Description"));
 
         projectDescriptionJTextArea.setColumns(20);
         projectDescriptionJTextArea.setEditable(false);
+        projectDescriptionJTextArea.setFont(projectDescriptionJTextArea.getFont());
         projectDescriptionJTextArea.setLineWrap(true);
         projectDescriptionJTextArea.setRows(5);
         projectDescriptionJTextArea.setWrapStyleWord(true);
@@ -451,7 +441,7 @@ public class ProjectSelection extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -462,7 +452,7 @@ public class ProjectSelection extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jLabel3.setFont(jLabel3.getFont().deriveFont((jLabel3.getFont().getStyle() | java.awt.Font.ITALIC), jLabel3.getFont().getSize()-2));
         jLabel3.setText("Select the ms_lims project(s) to convert to PRIDE XML, and click on 'Next' to continue.");
 
         jSeparator1.setMaximumSize(new java.awt.Dimension(560, 10));
@@ -504,7 +494,7 @@ public class ProjectSelection extends javax.swing.JFrame {
                         .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                    .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
                     .add(jLabel3))
                 .addContainerGap())
         );

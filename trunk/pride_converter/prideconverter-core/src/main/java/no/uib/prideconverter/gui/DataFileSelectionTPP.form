@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.1" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
@@ -27,25 +27,25 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="fileSelectionJPanel" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="helpJButton" min="-2" pref="23" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="aboutJButton" min="-2" pref="25" max="-2" attributes="0"/>
-                      <EmptySpace pref="309" max="32767" attributes="0"/>
+                      <EmptySpace pref="332" max="32767" attributes="0"/>
                       <Component id="backJButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="nextJButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="cancelJButton" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jSeparator1" alignment="0" pref="630" max="32767" attributes="0"/>
+                  <Component id="jSeparator1" alignment="0" pref="655" max="32767" attributes="0"/>
                   <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jPanel1" alignment="1" max="32767" attributes="0"/>
+                  <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -60,7 +60,7 @@
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel2" min="-2" max="-2" attributes="1"/>
-              <EmptySpace pref="125" max="32767" attributes="0"/>
+              <EmptySpace pref="143" max="32767" attributes="0"/>
               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
@@ -125,9 +125,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="File Selection">
-              <Color PropertyName="color" blue="0" green="0" red="0" type="rgb"/>
-            </TitledBorder>
+            <TitledBorder title="File Selection"/>
           </Border>
         </Property>
       </Properties>
@@ -166,41 +164,39 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
+              <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="5" pref="5" max="5" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="peptideProphetFileJTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="2" attributes="0">
+                              <Component id="peptideProphetFileJTextField" linkSize="1" alignment="2" min="-2" max="-2" attributes="0"/>
+                              <Component id="findPeptideProphetFileJButton" linkSize="1" alignment="2" min="-2" pref="25" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="2" attributes="0">
+                              <Component id="proteinProphetFileJTextField" linkSize="1" alignment="2" min="-2" max="-2" attributes="0"/>
+                              <Component id="proteinProphetFileJButton" linkSize="1" alignment="2" min="-2" pref="25" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="2" attributes="0">
+                              <Component id="spectrumFileFolderJTextField" linkSize="1" alignment="2" min="-2" max="-2" attributes="0"/>
+                              <Component id="spectumFileFolderJButton" linkSize="1" alignment="2" min="-2" pref="25" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Component id="findPeptideProphetFileJButton" alignment="1" min="-2" pref="25" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="5" pref="5" max="5" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="proteinProphetFileJTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="17" pref="17" max="17" attributes="0"/>
+                          <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="proteinProphetFileJButton" alignment="1" min="-2" pref="25" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="5" pref="5" max="5" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="spectrumFileFolderJTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="65" pref="65" max="65" attributes="0"/>
+                          <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="spectumFileFolderJButton" alignment="1" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="108" pref="108" max="108" attributes="0"/>
+                          <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace pref="27" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -319,9 +315,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Selection Thresholds">
-              <Color PropertyName="color" blue="0" green="0" red="0" type="rgb"/>
-            </TitledBorder>
+            <TitledBorder title="Selection Thresholds"/>
           </Border>
         </Property>
       </Properties>
@@ -343,7 +337,7 @@
                           <Component id="proteinProphetConfidenceLevelJSpinner" min="-2" pref="54" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="385" max="32767" attributes="0"/>
+                  <EmptySpace pref="388" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -400,9 +394,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Protein Identifications">
-              <Color PropertyName="color" blue="0" green="0" red="0" type="rgb"/>
-            </TitledBorder>
+            <TitledBorder title="Protein Identifications"/>
           </Border>
         </Property>
       </Properties>
@@ -415,7 +407,7 @@
                   <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                   <Component id="proteinIdFilterJTextField" min="-2" pref="402" max="-2" attributes="0"/>
-                  <EmptySpace pref="38" max="32767" attributes="0"/>
+                  <EmptySpace pref="41" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

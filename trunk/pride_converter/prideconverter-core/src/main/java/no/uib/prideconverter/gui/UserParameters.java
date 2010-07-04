@@ -49,6 +49,7 @@ public class UserParameters extends javax.swing.JFrame {
 
         userParametersJTable.getColumn(" ").setMaxWidth(40);
         userParametersJTable.getColumn(" ").setMinWidth(40);
+        userParametersJTable.setRowHeight(userParametersJTable.getFont().getSize() + PRIDEConverter.getProperties().tableRowHeightPaddingSize);
 
         Iterator iterator = PRIDEConverter.getProperties().getExperimentUserParameters().iterator();
 
@@ -186,7 +187,7 @@ public class UserParameters extends javax.swing.JFrame {
             }
         });
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Experiment User Parameters - (Optional)", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Experiment User Parameters - (Optional)"));
 
         userParametersJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -237,8 +238,8 @@ public class UserParameters extends javax.swing.JFrame {
             .add(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, addRowJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, addRowJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -251,7 +252,7 @@ public class UserParameters extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jLabel3.setFont(jLabel3.getFont().deriveFont((jLabel3.getFont().getStyle() | java.awt.Font.ITALIC), jLabel3.getFont().getSize()-2));
         jLabel3.setText("Insert user defined parameters (if any) and click on 'Next' to continue.");
 
         helpJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/help.GIF"))); // NOI18N
@@ -287,7 +288,7 @@ public class UserParameters extends javax.swing.JFrame {
                         .add(nextJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(18, 18, 18)
                         .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                    .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
                     .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jLabel3))
                 .addContainerGap())

@@ -113,8 +113,6 @@ public class NewContactNoMenu extends javax.swing.JDialog {
         // only works for Java 1.6 and newer
         //        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
         //                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
-
-        institutionJTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
     }
 
     /**
@@ -218,7 +216,7 @@ public class NewContactNoMenu extends javax.swing.JDialog {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Contact", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Contact"));
 
         jLabel6.setText("Institution:");
 
@@ -235,6 +233,7 @@ public class NewContactNoMenu extends javax.swing.JDialog {
         jScrollPane2.setEnabled(false);
 
         institutionJTextArea.setColumns(20);
+        institutionJTextArea.setFont(institutionJTextArea.getFont());
         institutionJTextArea.setLineWrap(true);
         institutionJTextArea.setRows(4);
         institutionJTextArea.setWrapStyleWord(true);
@@ -331,7 +330,7 @@ public class NewContactNoMenu extends javax.swing.JDialog {
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 288, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 294, Short.MAX_VALUE)
                         .add(addJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 92, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 91, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))

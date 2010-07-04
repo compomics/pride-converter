@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.1" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
@@ -36,17 +36,17 @@
                       <Component id="helpJButton" min="-2" pref="23" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="aboutJButton" min="-2" pref="25" max="-2" attributes="0"/>
-                      <EmptySpace pref="309" max="32767" attributes="0"/>
+                      <EmptySpace pref="363" max="32767" attributes="0"/>
                       <Component id="backJButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="convertJButton" min="-2" pref="81" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="cancelJButton" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jSeparator1" alignment="0" pref="630" max="32767" attributes="0"/>
+                  <Component id="jSeparator1" alignment="0" pref="686" max="32767" attributes="0"/>
                   <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jPanel6" alignment="0" max="32767" attributes="1"/>
-                  <Component id="jPanel1" alignment="0" max="32767" attributes="1"/>
+                  <Component id="jPanel1" alignment="0" pref="686" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -55,17 +55,17 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel6" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="jPanel6" max="32767" attributes="0"/>
               <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-              <Component id="jPanel1" min="-2" pref="100" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jPanel1" pref="100" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="jPanel3" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jPanel2" max="32767" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
@@ -84,7 +84,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -129,9 +129,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Output Details">
-              <Color PropertyName="color" blue="0" green="0" red="0" type="rgb"/>
-            </TitledBorder>
+            <TitledBorder title="Output Details"/>
           </Border>
         </Property>
       </Properties>
@@ -143,7 +141,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="outPutJLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="outPutPathJTextField" pref="472" max="32767" attributes="1"/>
+                  <Component id="outPutPathJTextField" pref="515" max="32767" attributes="1"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="findOutPutFileJButton" min="-2" pref="27" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -157,9 +155,9 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                           <Component id="outPutJLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="outPutPathJTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="outPutPathJTextField" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="findOutPutFileJButton" alignment="0" min="-2" pref="17" max="-2" attributes="0"/>
+                      <Component id="findOutPutFileJButton" linkSize="2" alignment="0" min="-2" pref="17" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -196,9 +194,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Resubmission">
-              <Color PropertyName="color" blue="0" green="0" red="0" type="rgb"/>
-            </TitledBorder>
+            <TitledBorder title="Resubmission"/>
           </Border>
         </Property>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -217,10 +213,9 @@
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="accessionJTextField" pref="290" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="accessionJTextField" pref="298" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="jLabel2" alignment="1" pref="561" max="32767" attributes="0"/>
+                      <Component id="jLabel2" alignment="1" pref="617" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                   <Component id="dummyJButton" min="-2" pref="27" max="-2" attributes="0"/>
@@ -267,8 +262,10 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="11" style="2"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="jLabel2" italic="true" property="font" relativeSize="true" size="-2"/>
+              </FontInfo>
             </Property>
             <Property name="text" type="java.lang.String" value="* When resubmitting a PRIDE XML file please provide the original accession number"/>
           </Properties>
@@ -293,8 +290,10 @@
     </Container>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="11" style="2"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+          <FontInfo relative="true">
+            <Font component="jLabel3" italic="true" property="font" relativeSize="true" size="-2"/>
+          </FontInfo>
         </Property>
         <Property name="text" type="java.lang.String" value="Select an output folder and click on &apos;Convert!&apos;  to create the PRIDE XML file."/>
       </Properties>
@@ -305,9 +304,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="PRIDE Submission">
-              <Color PropertyName="color" blue="0" green="0" red="0" type="rgb"/>
-            </TitledBorder>
+            <TitledBorder title="PRIDE Submission"/>
           </Border>
         </Property>
       </Properties>
@@ -327,7 +324,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="fileNameJLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="fileNameJTextField" pref="502" max="32767" attributes="0"/>
+                          <Component id="fileNameJTextField" pref="542" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="referenceTextJLabel" min="-2" max="-2" attributes="0"/>
@@ -335,7 +332,7 @@
                           <Component id="referencePMIDJLabel" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -354,7 +351,7 @@
                       <Component id="referencePMIDJLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="referenceTextJLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="prideLoginJButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="prideRegistrationJButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -458,9 +455,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Format Specific Parameters">
-              <Color PropertyName="color" blue="0" green="0" red="0" type="rgb"/>
-            </TitledBorder>
+            <TitledBorder title="Format Specific Parameters"/>
           </Border>
         </Property>
       </Properties>
@@ -474,18 +469,18 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="omssaInstallationFolderJTextField" pref="468" max="32767" attributes="0"/>
+                          <Component id="omssaInstallationFolderJTextField" pref="506" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="findOmssaFolderJButton" min="-2" pref="27" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="roundDownScoreAndThresholdJCheckBox" min="-2" max="-2" attributes="1"/>
-                          <EmptySpace pref="156" max="32767" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="useCommaAsDecimalSymbolJCheckBox" min="-2" max="-2" attributes="1"/>
-                          <EmptySpace pref="175" max="32767" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -496,27 +491,30 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="roundDownScoreAndThresholdJCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="roundDownScoreAndThresholdJCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="useCommaAsDecimalSymbolJCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="2" attributes="0">
+                              <Component id="omssaInstallationFolderJTextField" linkSize="1" alignment="2" min="-2" max="-2" attributes="0"/>
+                              <Component id="findOmssaFolderJButton" linkSize="1" alignment="2" min="-2" pref="25" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="85" pref="85" max="85" attributes="0"/>
+                          <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="useCommaAsDecimalSymbolJCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="omssaInstallationFolderJTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace pref="12" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="69" max="32767" attributes="0"/>
-                  <Component id="findOmssaFolderJButton" min="-2" pref="25" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -534,8 +532,10 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="11" style="2"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="jLabel5" italic="true" property="font" relativeSize="true" size="-2"/>
+              </FontInfo>
             </Property>
             <Property name="text" type="java.lang.String" value="(Emulates Mascot Web Results)"/>
           </Properties>
@@ -575,8 +575,10 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="11" style="2"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="jLabel6" italic="true" property="font" relativeSize="true" size="-2"/>
+              </FontInfo>
             </Property>
             <Property name="text" type="java.lang.String" value="(Supported for MGF, PKL/PKX, MS2 and DTA Files)"/>
           </Properties>
