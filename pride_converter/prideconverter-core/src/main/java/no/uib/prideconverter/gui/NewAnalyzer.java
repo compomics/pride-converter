@@ -47,6 +47,7 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
 
         cvTermsJTable.getColumn(" ").setMinWidth(40);
         cvTermsJTable.getColumn(" ").setMaxWidth(40);
+        cvTermsJTable.setRowHeight(cvTermsJTable.getFont().getSize() + PRIDEConverter.getProperties().tableRowHeightPaddingSize);
 
         setLocationRelativeTo(instrument);
         setVisible(true);
@@ -199,7 +200,7 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
             }
         });
 
-        protocolStepJPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Analyzer", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        protocolStepJPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Analyzer"));
 
         cvTermsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -253,8 +254,8 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
             .add(protocolStepJPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(protocolStepJPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, olsSearchJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, olsSearchJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE))
                 .addContainerGap())
         );
         protocolStepJPanelLayout.setVerticalGroup(
@@ -328,7 +329,7 @@ public class NewAnalyzer extends javax.swing.JDialog implements OLSInputable {
                         .add(insertJButton))
                     .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();

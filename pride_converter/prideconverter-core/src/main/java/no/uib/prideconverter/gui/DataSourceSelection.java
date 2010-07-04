@@ -112,7 +112,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
             nextJButton.setEnabled(true);
         } else {
             ((TitledBorder) descriptionJPanel.getBorder()).setTitle("Welcome Message");
-            descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br><b>PRIDE Converter</b><br><br>" +
+            descriptionJEditorPane.setText("<br><b>PRIDE Converter</b><br><br>" +
                     "<b>PRIDE Converter</b> converts mass spectrometry data sets into valid PRIDE XML<br>" +
                     "for submission to the online <a href=\"http://www.ebi.ac.uk/pride/\">PRIDE repository</a>.<br><br>" +
                     "To get started select one of the supported data sources above and click Next.<br><br>" +
@@ -207,9 +207,10 @@ public class DataSourceSelection extends javax.swing.JFrame {
             }
         });
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Source", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Source"));
 
         buttonGroup1.add(mascotDatFileJRadioButton);
+        mascotDatFileJRadioButton.setFont(mascotDatFileJRadioButton.getFont());
         mascotDatFileJRadioButton.setText("Mascot DAT Files");
         mascotDatFileJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         mascotDatFileJRadioButton.setIconTextGap(10);
@@ -221,6 +222,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(mgfJRadioButton);
+        mgfJRadioButton.setFont(mgfJRadioButton.getFont());
         mgfJRadioButton.setText("Mascot Generic Files");
         mgfJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         mgfJRadioButton.setIconTextGap(10);
@@ -232,6 +234,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(xTandemJRadioButton);
+        xTandemJRadioButton.setFont(xTandemJRadioButton.getFont());
         xTandemJRadioButton.setText("X!Tandem");
         xTandemJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         xTandemJRadioButton.setIconTextGap(10);
@@ -243,6 +246,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(sequestResultsJRadioButton);
+        sequestResultsJRadioButton.setFont(sequestResultsJRadioButton.getFont());
         sequestResultsJRadioButton.setText("SEQUEST Result Files");
         sequestResultsJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         sequestResultsJRadioButton.setIconTextGap(10);
@@ -254,6 +258,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(spectrumMillJRadioButton);
+        spectrumMillJRadioButton.setFont(spectrumMillJRadioButton.getFont());
         spectrumMillJRadioButton.setText("Spectrum Mill");
         spectrumMillJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         spectrumMillJRadioButton.setIconTextGap(10);
@@ -265,6 +270,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(sequestDTAFilesJRadioButton);
+        sequestDTAFilesJRadioButton.setFont(sequestDTAFilesJRadioButton.getFont());
         sequestDTAFilesJRadioButton.setText("SEQUEST DTA Files");
         sequestDTAFilesJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         sequestDTAFilesJRadioButton.setIconTextGap(10);
@@ -276,6 +282,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(pklFilesJRadioButton);
+        pklFilesJRadioButton.setFont(pklFilesJRadioButton.getFont());
         pklFilesJRadioButton.setText("Micromass PKL Files");
         pklFilesJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         pklFilesJRadioButton.setIconTextGap(10);
@@ -287,6 +294,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(mzXMLJRadioButton);
+        mzXMLJRadioButton.setFont(mzXMLJRadioButton.getFont());
         mzXMLJRadioButton.setText("mzXML");
         mzXMLJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         mzXMLJRadioButton.setIconTextGap(10);
@@ -298,6 +306,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(tppJRadioButton);
+        tppJRadioButton.setFont(tppJRadioButton.getFont());
         tppJRadioButton.setText("Peptide- and ProteinProphet");
         tppJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         tppJRadioButton.setIconTextGap(10);
@@ -309,6 +318,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(omssaJRadioButton);
+        omssaJRadioButton.setFont(omssaJRadioButton.getFont());
         omssaJRadioButton.setText("OMSSA");
         omssaJRadioButton.setToolTipText("Open Mass Spectrometry Search Algorithm ");
         omssaJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -321,6 +331,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(ms_limsJRadioButton);
+        ms_limsJRadioButton.setFont(ms_limsJRadioButton.getFont());
         ms_limsJRadioButton.setText("ms_lims 7.3");
         ms_limsJRadioButton.setToolTipText("Mass Spectrometry Laboratory Information Managment System");
         ms_limsJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -333,6 +344,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(vemsJRadioButton);
+        vemsJRadioButton.setFont(vemsJRadioButton.getFont());
         vemsJRadioButton.setText("VEMS PKX Files");
         vemsJRadioButton.setToolTipText("Virtual Expert Mass Spectrometrist ");
         vemsJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -345,6 +357,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(ms2JRadioButton);
+        ms2JRadioButton.setFont(ms2JRadioButton.getFont());
         ms2JRadioButton.setText("MS2");
         ms2JRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         ms2JRadioButton.setIconTextGap(10);
@@ -356,6 +369,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(mzDataJRadioButton);
+        mzDataJRadioButton.setFont(mzDataJRadioButton.getFont());
         mzDataJRadioButton.setText("mzData");
         mzDataJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         mzDataJRadioButton.setIconTextGap(10);
@@ -367,6 +381,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(dtaSelectJRadioButton);
+        dtaSelectJRadioButton.setFont(dtaSelectJRadioButton.getFont());
         dtaSelectJRadioButton.setText("DTASelect");
         dtaSelectJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         dtaSelectJRadioButton.setIconTextGap(10);
@@ -383,57 +398,44 @@ public class DataSourceSelection extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel4Layout.createSequentialGroup()
                 .add(21, 21, 21)
-                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(mgfJRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(mgfJRadioButton)
                     .add(jPanel4Layout.createSequentialGroup()
-                        .add(xTandemJRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
-                        .add(50, 50, 50))
+                        .add(xTandemJRadioButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .add(jPanel4Layout.createSequentialGroup()
-                        .add(mascotDatFileJRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
-                        .add(16, 16, 16))
+                        .add(mascotDatFileJRadioButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .add(jPanel4Layout.createSequentialGroup()
-                        .add(spectrumMillJRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
-                        .add(36, 36, 36))
+                        .add(spectrumMillJRadioButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .add(jPanel4Layout.createSequentialGroup()
-                        .add(pklFilesJRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
-                        .add(4, 4, 4)))
-                .add(38, 38, 38)
-                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(sequestResultsJRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-                        .add(34, 34, 34))
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(sequestDTAFilesJRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
-                        .add(44, 44, 44))
-                    .add(tppJRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(omssaJRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-                        .add(100, 100, 100))
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(ms_limsJRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
-                        .add(90, 90, 90)))
-                .add(44, 44, 44)
-                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(vemsJRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(ms2JRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
-                        .add(52, 52, 52))
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(mzXMLJRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
-                        .add(40, 40, 40))
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(mzDataJRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-                        .add(36, 36, 36))
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(dtaSelectJRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
-                        .add(22, 22, 22)))
-                .add(56, 56, 56))
+                        .add(pklFilesJRadioButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .add(18, 18, 18)
+                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(sequestResultsJRadioButton)
+                    .add(omssaJRadioButton)
+                    .add(ms_limsJRadioButton)
+                    .add(tppJRadioButton)
+                    .add(sequestDTAFilesJRadioButton))
+                .add(18, 18, 18)
+                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(vemsJRadioButton)
+                    .add(ms2JRadioButton)
+                    .add(mzXMLJRadioButton)
+                    .add(mzDataJRadioButton)
+                    .add(dtaSelectJRadioButton))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel4Layout.linkSize(new java.awt.Component[] {dtaSelectJRadioButton, mascotDatFileJRadioButton, mgfJRadioButton, ms2JRadioButton, ms_limsJRadioButton, mzDataJRadioButton, mzXMLJRadioButton, omssaJRadioButton, pklFilesJRadioButton, sequestDTAFilesJRadioButton, sequestResultsJRadioButton, spectrumMillJRadioButton, tppJRadioButton, vemsJRadioButton, xTandemJRadioButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(jPanel4Layout.createSequentialGroup()
                         .add(vemsJRadioButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -441,19 +443,9 @@ public class DataSourceSelection extends javax.swing.JFrame {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(mzDataJRadioButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(mzXMLJRadioButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 15, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(mzXMLJRadioButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(dtaSelectJRadioButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 15, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(mascotDatFileJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(mgfJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(xTandemJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(spectrumMillJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(pklFilesJRadioButton))
+                        .add(dtaSelectJRadioButton))
                     .add(jPanel4Layout.createSequentialGroup()
                         .add(sequestResultsJRadioButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -463,11 +455,23 @@ public class DataSourceSelection extends javax.swing.JFrame {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(tppJRadioButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(ms_limsJRadioButton)))
+                        .add(ms_limsJRadioButton))
+                    .add(jPanel4Layout.createSequentialGroup()
+                        .add(mascotDatFileJRadioButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(mgfJRadioButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(xTandemJRadioButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(spectrumMillJRadioButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(pklFilesJRadioButton)))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jPanel4Layout.linkSize(new java.awt.Component[] {dtaSelectJRadioButton, mascotDatFileJRadioButton, mgfJRadioButton, ms2JRadioButton, ms_limsJRadioButton, mzDataJRadioButton, mzXMLJRadioButton, omssaJRadioButton, pklFilesJRadioButton, sequestDTAFilesJRadioButton, sequestResultsJRadioButton, spectrumMillJRadioButton, tppJRadioButton, vemsJRadioButton, xTandemJRadioButton}, org.jdesktop.layout.GroupLayout.VERTICAL);
+
+        jLabel3.setFont(jLabel3.getFont().deriveFont((jLabel3.getFont().getStyle() | java.awt.Font.ITALIC), jLabel3.getFont().getSize()-2));
         jLabel3.setText("Select the source you want to convert data from, and click on 'Next'  to continue.");
 
         helpJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/help.GIF"))); // NOI18N
@@ -486,10 +490,11 @@ public class DataSourceSelection extends javax.swing.JFrame {
             }
         });
 
-        descriptionJPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Source Description", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        descriptionJPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Source Description"));
 
         descriptionJEditorPane.setContentType("text/html");
         descriptionJEditorPane.setEditable(false);
+        descriptionJEditorPane.setFont(descriptionJEditorPane.getFont());
         descriptionJEditorPane.addHyperlinkListener(new javax.swing.event.HyperlinkListener() {
             public void hyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {
                 descriptionJEditorPaneHyperlinkUpdate(evt);
@@ -503,7 +508,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
             descriptionJPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(descriptionJPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
                 .addContainerGap())
         );
         descriptionJPanelLayout.setVerticalGroup(
@@ -525,13 +530,13 @@ public class DataSourceSelection extends javax.swing.JFrame {
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 259, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 319, Short.MAX_VALUE)
                         .add(backJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(nextJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(18, 18, 18)
                         .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel3)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, descriptionJPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -682,7 +687,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         repaint();
 
         this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
+        descriptionJEditorPane.setText("<br>" +
                 "<b>ms_lims 7</b><br><br>" +
                 "The ms_lims suite of software is mainly designed to " +
                 "automate data flow in the high-throughput proteomics lab. Taking in spectrum " +
@@ -710,7 +715,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         repaint();
 
         this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
+        descriptionJEditorPane.setText("<br>" +
                 "<b>Mascot DAT Files</b><br><br>" +
                 "Mascot DAT Files are result files " +
                 "from a Mascot search. <br>Both the spectra and the identifications are included.<br><br>" +
@@ -734,7 +739,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         repaint();
 
         this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
+        descriptionJEditorPane.setText("<br>" +
                 "<b>Mascot Generic Files</b><br><br>" +
                 "The Mascot Generic File format is a generic format for submitting " +
                 "data to Mascot. <br>It only contains information about the spectra.<br><br>" +
@@ -757,7 +762,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         repaint();
 
         this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
+        descriptionJEditorPane.setText("<br>" +
                 "<b>X!Tandem</b><br><br>" +
                 "X!Tandem is open source software that matches " +
                 "tandem mass spectra to peptide sequences.<br><br>" +
@@ -783,7 +788,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         repaint();
 
         this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
+        descriptionJEditorPane.setText("<br>" +
                 "<b>SEQUEST Result File</b><br><br>" + "SEQUEST Result File " +
                 "are result files from a SEQUEST search.<br> " +
                 "Includes two sets of files: *.dta (the spectrum files) and *.out " +
@@ -807,7 +812,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         repaint();
 
         this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
+        descriptionJEditorPane.setText("<br>" +
                 "<b>OMSSA</b><br><br>" +
                 "OMSSA MS/MS result files from the Open Mass Spectrometry Search Algorithm [OMSSA].<br><br>" +
                 "File Extension: .omx<br><br>" +
@@ -830,7 +835,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         repaint();
 
         this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
+        descriptionJEditorPane.setText("<br>" +
                 "<b>Spectrum Mill</b><br><br>" +
                 "Spectrum Mill search results consist of two sets of files: *.pkl (the spectrum files) and *.pkl.spo " +
                 "(the identification files)." + "<br><br>" +
@@ -855,7 +860,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         repaint();
 
         this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
+        descriptionJEditorPane.setText("<br>" +
                 "<b>SEQUEST DTA Files</b><br><br>" +
                 "SEQUEST DTA File is a simple MS/MS data format without identifications." +
                 "<br>The first line contains the singly protonated peptide mass (MH+) and the peptide charge " +
@@ -905,7 +910,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         repaint();
 
         this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
+        descriptionJEditorPane.setText("<br>" +
                 "<b>Micromass PKL Files</b><br><br>" + "Micromass PKL File " +
                 "is a simple MS/MS data format without identifications. The first line contains the " +
                 "observed m/z, intensity, and the charge state of the precursor peptide. <br>Subsequent lines " +
@@ -931,7 +936,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         repaint();
 
         this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
+        descriptionJEditorPane.setText("<br>" +
                 "<b>mzXML</b><br><br>" +
                 "mzXML is a common file format for proteomics mass spectrometric data.<br><br>" +
                 "File Extension: .mzXML<br><br>" +
@@ -954,7 +959,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         repaint();
 
         this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
+        descriptionJEditorPane.setText("<br>" +
                 "<b>Peptide- and ProteinProphet</b><br><br>" +
                 "PeptideProphet/ProteinProphet validates peptide assignments and protein identifications made " +
                 "on the basis of peptides assigned to MS/MS spectra made by database search programs " +
@@ -981,7 +986,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         repaint();
 
         this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
+        descriptionJEditorPane.setText("<br>" +
                 "<b>mzData</b><br><br>" +
                 "mzData is a common file format for proteomics mass spectrometric data.<br><br>" +
                 "File Extension: .mzData<br><br>" +
@@ -1005,7 +1010,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         repaint();
 
         this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
+        descriptionJEditorPane.setText("<br>" +
                 "<b>VEMS: Virtual Expert Mass Spectrometrist</b><br><br>" +
                 "The *.pkx format is a VEMS format and is very similar to the pkl format, but " +
                 "also includes the retention time of the precursor and the charge state of the fragments.<br><br>" +
@@ -1029,7 +1034,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         repaint();
 
         this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
+        descriptionJEditorPane.setText("<br>" +
                 "<b>MS2</b><br><br>" +
                 "MS2 files stores MS/MS data and can replace a folder of thousands of DTA files.<br>" +
                 "It contains all the spectral information necessary for database searching algorithms.<br><br>" +
@@ -1053,7 +1058,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         repaint();
 
         this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<font size=\"3\" face=\"Tahoma\"><br>" +
+        descriptionJEditorPane.setText("<br>" +
                 "<b>DTASelect</b><br><br>" +
                 "DTASelect reassembles SEQUEST peptide information into protein information.<br><br>" +
                 "File Extensions: .txt for the identifications (the DTASelect file) and .ms2 for the spectra<br><br>" +

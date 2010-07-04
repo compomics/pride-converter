@@ -46,7 +46,6 @@ public class NewReference extends javax.swing.JDialog {
 //        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
 //                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
 
-        referenceJTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
         setLocationRelativeTo(experimentProperties);
         setVisible(true);
     }
@@ -80,7 +79,6 @@ public class NewReference extends javax.swing.JDialog {
 //        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().
 //                getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF")));
 
-        referenceJTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
         referenceJTextArea.setText(currentRef.getReferenceLine());
 
         if (currentRef.getReferenceCvParameterList() != null) {
@@ -146,11 +144,12 @@ public class NewReference extends javax.swing.JDialog {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Reference", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Reference"));
 
         jLabel1.setText("Reference:");
 
         referenceJTextArea.setColumns(20);
+        referenceJTextArea.setFont(referenceJTextArea.getFont());
         referenceJTextArea.setLineWrap(true);
         referenceJTextArea.setRows(3);
         referenceJTextArea.setWrapStyleWord(true);
@@ -181,9 +180,18 @@ public class NewReference extends javax.swing.JDialog {
             }
         });
 
+        pubMedJButton.setBackground(new java.awt.Color(255, 255, 255));
         pubMedJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/pubmed_2.JPG"))); // NOI18N
         pubMedJButton.setToolTipText("Go to www.pubmed.gov");
         pubMedJButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        pubMedJButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pubMedJButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                pubMedJButtonMouseExited(evt);
+            }
+        });
         pubMedJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pubMedJButtonActionPerformed(evt);
@@ -202,7 +210,7 @@ public class NewReference extends javax.swing.JDialog {
                     .add(jLabel1))
                 .add(10, 10, 10)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1Layout.createSequentialGroup()
                         .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                             .add(doiJTextField)
@@ -221,7 +229,7 @@ public class NewReference extends javax.swing.JDialog {
                         .add(jLabel1)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jPanel1Layout.createSequentialGroup()
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1Layout.createSequentialGroup()
                         .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(jLabel2)
                             .add(pmidIDJTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
@@ -229,7 +237,7 @@ public class NewReference extends javax.swing.JDialog {
                         .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                             .add(jLabel3)
                             .add(doiJTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                    .add(pubMedJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 47, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, pubMedJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 51, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -278,7 +286,7 @@ public class NewReference extends javax.swing.JDialog {
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 239, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 245, Short.MAX_VALUE)
                         .add(insertRefJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 114, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 115, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -289,7 +297,7 @@ public class NewReference extends javax.swing.JDialog {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(18, 18, 18)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                         .add(cancelJButton)
@@ -412,6 +420,25 @@ public class NewReference extends javax.swing.JDialog {
         new HelpDialog(this, true, getClass().getResource("/no/uib/prideconverter/helpfiles/AboutPRIDE_Converter.html"));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_aboutJButtonActionPerformed
+
+    /**
+     * Changes the cursor to a hand cursor if the user hovers over the PubMed link
+     * 
+     * @param evt
+     */
+    private void pubMedJButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pubMedJButtonMouseEntered
+        setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_pubMedJButtonMouseEntered
+ 
+    /**
+     * Changes the cursor back to the default cursor when the user leaves the PubMed link
+     * 
+     * @param evt
+     */
+    private void pubMedJButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pubMedJButtonMouseExited
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_pubMedJButtonMouseExited
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutJButton;
     private javax.swing.JButton cancelJButton;

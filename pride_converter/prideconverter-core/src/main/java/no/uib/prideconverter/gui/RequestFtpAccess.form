@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.1" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
@@ -35,7 +35,7 @@
                       <EmptySpace pref="233" max="32767" attributes="0"/>
                       <Component id="closeJButton" min="-2" pref="65" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jSeparator1" alignment="0" pref="352" max="32767" attributes="0"/>
+                  <Component id="jSeparator1" alignment="0" pref="353" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -74,9 +74,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Submission Tips">
-              <Color PropertyName="color" blue="0" green="0" red="0" type="rgb"/>
-            </TitledBorder>
+            <TitledBorder title="Submission Tips"/>
           </Border>
         </Property>
       </Properties>
@@ -86,7 +84,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="316" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="317" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -109,7 +107,7 @@
               <Properties>
                 <Property name="contentType" type="java.lang.String" value="text/html"/>
                 <Property name="editable" type="boolean" value="false"/>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xd;&#xa;  &lt;head&gt;&#xd;&#xa;  &lt;/head&gt;&#xd;&#xa;  &lt;body&gt;&#xd;&#xa;    &lt;p style=&quot;margin-top: 0&quot; align=&quot;justify&quot;&gt;&#xd;&#xa;&lt;br&gt;&#xa;&lt;font size=&quot;3&quot; face=&quot;Tahoma&quot;&gt;&#xa;The size of your PRIDE XML file is larger than the maximum file size for using the &apos;Direct Submission&apos; via the PRIDE web page.&lt;br&gt; &lt;br&gt;&#xa;We therefore recommend using the PRIDE FTP server. To get access to the FTP server, please contact the PRIDE team at &#xa;&lt;a href=&quot;mailto:pride-support@ebi.ac.uk?subject=PRIDE%20Converter%3A%20request%20FTP%20access&amp;body=Dear%20PRIDE%20Team.%20%0D%0A%0D%0AI%20would%20like%20to%20request%20access%20to%20the%20PRIDE%20FTP%20server%20to%20upload%20my%20PRIDE%20XML%20file(s).%20%0D%0A%0D%0ABest%20regards,%20%0D%0A(...Insert%20your%20name%20here...)&quot;&gt;pride-support@ebi.ac.uk&lt;/a&gt;.&#xa;&lt;br&gt;&lt;br&gt;&#xa;    &lt;/p&gt;&#xd;&#xa;  &lt;/body&gt;&#xd;&#xa;&lt;/html&gt;&#xd;&#xa;"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xd;&#xa;  &lt;head&gt;&#xd;&#xa;  &lt;/head&gt;&#xd;&#xa;  &lt;body&gt;&#xd;&#xa;    &lt;p style=&quot;margin-top: 0&quot; align=&quot;justify&quot;&gt;&#xd;&#xa;&lt;br&gt;&#xa;The size of your PRIDE XML file is larger than the maximum file size for using the &apos;Direct Submission&apos; via the PRIDE web page.&lt;br&gt; &lt;br&gt;&#xa;We therefore recommend using the PRIDE FTP server. To get access to the FTP server, please contact the PRIDE team at &#xa;&lt;a href=&quot;mailto:pride-support@ebi.ac.uk?subject=PRIDE%20Converter%3A%20request%20FTP%20access&amp;body=Dear%20PRIDE%20Team.%20%0D%0A%0D%0AI%20would%20like%20to%20request%20access%20to%20the%20PRIDE%20FTP%20server%20to%20upload%20my%20PRIDE%20XML%20file(s).%20%0D%0A%0D%0ABest%20regards,%20%0D%0A(...Insert%20your%20name%20here...)&quot;&gt;pride-support@ebi.ac.uk&lt;/a&gt;.&#xa;&lt;br&gt;&lt;br&gt;&#xa;    &lt;/p&gt;&#xd;&#xa;  &lt;/body&gt;&#xd;&#xa;&lt;/html&gt;&#xd;&#xa;"/>
               </Properties>
               <Events>
                 <EventHandler event="hyperlinkUpdate" listener="javax.swing.event.HyperlinkListener" parameters="javax.swing.event.HyperlinkEvent" handler="submissionTipsJEditorPaneHyperlinkUpdate"/>

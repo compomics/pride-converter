@@ -44,6 +44,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
 
         cvTermsJTable.getColumn(" ").setMinWidth(40);
         cvTermsJTable.getColumn(" ").setMaxWidth(40);
+        cvTermsJTable.setRowHeight(cvTermsJTable.getFont().getSize() + PRIDEConverter.getProperties().tableRowHeightPaddingSize);
 
         setLocationRelativeTo(sampleDetails);
         setVisible(true);
@@ -208,7 +209,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
             }
         });
 
-        protocolStepJPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sample", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        protocolStepJPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Sample"));
 
         cvTermsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -270,12 +271,12 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, protocolStepJPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(protocolStepJPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, protocolStepJPanelLayout.createSequentialGroup()
                         .add(jLabel1)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(sampleNameJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, olsSearchJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, olsSearchJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE))
                 .addContainerGap())
         );
         protocolStepJPanelLayout.setVerticalGroup(
@@ -334,7 +335,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 225, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 231, Short.MAX_VALUE)
                         .add(okJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 117, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 116, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))

@@ -103,11 +103,13 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
         singleSampleDetailsJTable.getColumn(" ").setMaxWidth(40);
         singleSampleDetailsJTable.getColumn(" ").setMinWidth(40);
+        singleSampleDetailsJTable.setRowHeight(singleSampleDetailsJTable.getFont().getSize() + PRIDEConverter.getProperties().tableRowHeightPaddingSize);
 
         multipleSamplesDetailsJTable.getColumn(" ").setMaxWidth(40);
         multipleSamplesDetailsJTable.getColumn(" ").setMinWidth(40);
         multipleSamplesDetailsJTable.getColumn("Quantification").setMaxWidth(110);
         multipleSamplesDetailsJTable.getColumn("Quantification").setMinWidth(110);
+        multipleSamplesDetailsJTable.setRowHeight(multipleSamplesDetailsJTable.getFont().getSize() + PRIDEConverter.getProperties().tableRowHeightPaddingSize);
 
         columnToolTips = new Vector();
         columnToolTips.add(null);
@@ -414,8 +416,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
             namesJComboBox.setRenderer(new MyComboBoxRenderer(comboboxTooltips, SwingConstants.CENTER));
 
-            sampleNames.insertElementAt("- Please select a sample set -", 0);
-            sampleNames.add("   Create a new sample set...");
+            sampleNames.insertElementAt("- Please Select a Sample Set -", 0);
+            sampleNames.add("   Create a New Sample Set...");
 
             namesJComboBox.setModel(new DefaultComboBoxModel(sampleNames));
             namesJComboBox.setSelectedItem(PRIDEConverter.getUserProperties().getCurrentSampleSet());
@@ -667,7 +669,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             }
         });
 
-        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Samples Set", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Samples Set"));
 
         jLabel32.setText("Name:");
 
@@ -699,8 +701,8 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 2, 11));
-        jLabel2.setText("Preferred Ontologies: NEWT (species), BTO (tissue), CL (cell type), GO and DO (disease state)");
+        jLabel2.setFont(jLabel2.getFont().deriveFont((jLabel2.getFont().getStyle() | java.awt.Font.ITALIC), jLabel2.getFont().getSize()-2));
+        jLabel2.setText("Preferred Ontologies: NEWT (species), BTO (tissue), CTO (cell type), GO and DO (disease state)");
 
         singleSampleDetailsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -755,9 +757,9 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel2)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, sampleDetailsJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, sampleDetailsJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -766,7 +768,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 .addContainerGap()
                 .add(jLabel2)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(sampleDetailsJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -774,7 +776,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
 
         sampleJTabbedPane.addTab("Single Sample", jPanel1);
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jLabel4.setFont(jLabel4.getFont().deriveFont((jLabel4.getFont().getStyle() | java.awt.Font.ITALIC), jLabel4.getFont().getSize()-2));
         jLabel4.setText("Preferred Ontologies: NEWT (species), BTO (tissue), CTO (cell type), GO and DO (disease state)");
 
         multipleSamplesDetailsJTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -823,7 +825,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             }
         });
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Quantification Parameters", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Quantification Parameters"));
 
         lowerRangeJLabel.setText("Peak Integration Range Lower:");
         lowerRangeJLabel.setEnabled(false);
@@ -839,7 +841,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         upperRangeJTextField.setText("0.05");
         upperRangeJTextField.setEnabled(false);
 
-        peakRangeJLabel.setFont(new java.awt.Font("Tahoma", 2, 11));
+        peakRangeJLabel.setFont(peakRangeJLabel.getFont().deriveFont((peakRangeJLabel.getFont().getStyle() | java.awt.Font.ITALIC), peakRangeJLabel.getFont().getSize()-2));
         peakRangeJLabel.setText("(|lower range| + upper range < 1)");
         peakRangeJLabel.setEnabled(false);
 
@@ -874,14 +876,14 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel2Layout.createSequentialGroup()
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(intensityThresholdJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                            .add(upperRangeJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                            .add(lowerRangeJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
+                            .add(intensityThresholdJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
+                            .add(upperRangeJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
+                            .add(lowerRangeJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE))
                         .add(18, 18, 18)
                         .add(peakRangeJLabel)
                         .add(90, 90, 90))
                     .add(jPanel2Layout.createSequentialGroup()
-                        .add(purityCorrectionsJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                        .add(purityCorrectionsJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
                         .addContainerGap())))
         );
         jPanel2Layout.setVerticalGroup(
@@ -913,10 +915,10 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, addSampleJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, addSampleJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -925,7 +927,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                 .addContainerGap()
                 .add(jLabel4)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(addSampleJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(18, 18, 18)
@@ -942,7 +944,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, sampleJTabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, sampleJTabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
                     .add(jPanel8Layout.createSequentialGroup()
                         .add(jLabel32)
                         .add(18, 18, 18)
@@ -954,16 +956,21 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel8Layout.createSequentialGroup()
-                .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel32)
-                    .add(deleteJButton)
-                    .add(namesJComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
+                    .add(namesJComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(deleteJButton))
                 .add(18, 18, 18)
-                .add(sampleJTabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
+                .add(sampleJTabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
                 .addContainerGap())
+            .add(jPanel8Layout.createSequentialGroup()
+                .add(3, 3, 3)
+                .add(jLabel32)
+                .add(421, 421, 421))
         );
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jPanel8Layout.linkSize(new java.awt.Component[] {deleteJButton, namesJComboBox}, org.jdesktop.layout.GroupLayout.VERTICAL);
+
+        jLabel3.setFont(jLabel3.getFont().deriveFont((jLabel3.getFont().getStyle() | java.awt.Font.ITALIC), jLabel3.getFont().getSize()-2));
         jLabel3.setText("Select a sample set from the list, or create your own, and click on 'Next' to continue.");
 
         helpJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/help.GIF"))); // NOI18N
@@ -994,13 +1001,13 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 352, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 358, Short.MAX_VALUE)
                         .add(backJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(nextJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(18, 18, 18)
                         .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel3))
                 .addContainerGap())
         );

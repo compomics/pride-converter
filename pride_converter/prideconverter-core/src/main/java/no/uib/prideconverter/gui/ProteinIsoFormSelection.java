@@ -90,7 +90,8 @@ public class ProteinIsoFormSelection extends javax.swing.JDialog {
 
         proteinIsoformsTableHeader = proteinIsoformsJTable.getTableHeader();
         proteinIsoformsTableHeader.setReorderingAllowed(false);
-        jScrollPane1.setViewportView(proteinIsoformsJTable);
+        proteinIsoformsJTable.setRowHeight(proteinIsoformsJTable.getFont().getSize() + PRIDEConverter.getProperties().tableRowHeightPaddingSize);
+        isoformsJScrollPane.setViewportView(proteinIsoformsJTable);
 
         setLocationRelativeTo(outputDetails);
         setVisible(true);
@@ -155,7 +156,7 @@ public class ProteinIsoFormSelection extends javax.swing.JDialog {
         okJButton = new javax.swing.JButton();
         cancelJButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        isoformsJScrollPane = new javax.swing.JScrollPane();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -188,9 +189,9 @@ public class ProteinIsoFormSelection extends javax.swing.JDialog {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Protein Isoforms", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Protein Isoforms"));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jLabel1.setFont(jLabel1.getFont().deriveFont((jLabel1.getFont().getStyle() | java.awt.Font.ITALIC), jLabel1.getFont().getSize()-2));
         jLabel1.setText("Protein isoforms detected. Please select the wanted isoform in the list.");
 
         jLabel2.setText("Peptide Mass:");
@@ -214,7 +215,7 @@ public class ProteinIsoFormSelection extends javax.swing.JDialog {
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
+                    .add(isoformsJScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jLabel3)
@@ -240,7 +241,7 @@ public class ProteinIsoFormSelection extends javax.swing.JDialog {
                 .add(18, 18, 18)
                 .add(jLabel1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                .add(isoformsJScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
                 .add(9, 9, 9)
                 .add(alwaysChooseIsoformJCheckBox))
         );
@@ -385,11 +386,11 @@ public class ProteinIsoFormSelection extends javax.swing.JDialog {
     private javax.swing.JCheckBox alwaysChooseIsoformJCheckBox;
     private javax.swing.JButton cancelJButton;
     private javax.swing.JButton helpJButton;
+    private javax.swing.JScrollPane isoformsJScrollPane;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton okJButton;
     private javax.swing.JTextField peptideMassJTextField;
     private javax.swing.JTextField peptideSequenceJTextField;

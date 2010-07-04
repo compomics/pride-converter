@@ -21,8 +21,8 @@ import uk.ac.ebi.pride.model.interfaces.core.ProtocolStep;
  */
 public class Properties {
 
-    public final int FRAME_WIDTH = 650;  //the hardcoded width of all frames
-    public final int FRAME_HEIGHT = 600; //the hardcoded height of all frames
+    public final int FRAME_WIDTH = 800;  //the hardcoded width of all frames
+    public final int FRAME_HEIGHT = 750; //the hardcoded height of all frames
     public final int PROTEIN_ISOFORMS_ALWAYS_SELECT_FIRST = 0;
     public final int PROTEIN_ISOFORMS_MANUAL_SELECTION = 1;
     public final int PROTEIN_ISOFORMS_PROVIDE_LIST = 2;
@@ -34,6 +34,7 @@ public class Properties {
     public final double MAX_MASCOT_DAT_FILESIZE_BEFORE_INDEXING = 40; //in megabytes
     public final double PROTON_MASS = 1.00727646677;
     public final double HYDROGEN_MASS = 1.00794;
+    public final int tableRowHeightPaddingSize = 6;
     
     private boolean useCommaAsDecimalSymbol = false;
     private boolean roundMascotScoreAndThresholdDownToNearestInteger = false;
