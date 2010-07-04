@@ -3,9 +3,20 @@
 
 ----
 
+*Changes in PRIDE Converter v2.4 - (July 4. 2010):*
+ * FEATURE IMPROVEMENT: Major revision of the graphical user interface making it look better on Windows 7 and on high resolution screens.
+ * FEATURE IMPROVEMENT: Sequest converter now supports the sf column.
+ * FEATURE IMPROVEMENT: Addition of retention time parsing for mgf files.
+ * LIBRARY UPDATE: omssa-parser updated to version 1.3.7.
+ * LIBRARY UPDATE: old-dialog updated to version 3.2.3
+
+----
+
 *Changes in PRIDE Converter v2.3.4 - (May 19. 2010):*
  * NEW FEATURE: Added support for sf score in SEQUEST result file converter.
  * LIBRARY UPDATE: mascotdatfile update to 3.2.
+
+Download Count: 80
 
 ----
 
