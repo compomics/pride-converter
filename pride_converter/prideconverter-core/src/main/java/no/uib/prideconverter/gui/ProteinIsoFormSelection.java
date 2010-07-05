@@ -26,7 +26,6 @@ public class ProteinIsoFormSelection extends javax.swing.JDialog {
     private DefaultTableModel proteinIsoformsTableModel = null;
     private ButtonGroup buttonGroup;
     private ProgressDialog progressDialog;
-//    private PRIDEConverter prideConverter;
     private PeptideHit peptideHit;
 
     /**

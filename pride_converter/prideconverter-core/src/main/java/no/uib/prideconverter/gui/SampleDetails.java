@@ -704,6 +704,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         jLabel2.setFont(jLabel2.getFont().deriveFont((jLabel2.getFont().getStyle() | java.awt.Font.ITALIC), jLabel2.getFont().getSize()-2));
         jLabel2.setText("Preferred Ontologies: NEWT (species), BTO (tissue), CTO (cell type), GO and DO (disease state)");
 
+        singleSampleDetailsJTable.setFont(singleSampleDetailsJTable.getFont());
         singleSampleDetailsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -779,6 +780,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         jLabel4.setFont(jLabel4.getFont().deriveFont((jLabel4.getFont().getStyle() | java.awt.Font.ITALIC), jLabel4.getFont().getSize()-2));
         jLabel4.setText("Preferred Ontologies: NEWT (species), BTO (tissue), CTO (cell type), GO and DO (disease state)");
 
+        multipleSamplesDetailsJTable.setFont(multipleSamplesDetailsJTable.getFont());
         multipleSamplesDetailsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

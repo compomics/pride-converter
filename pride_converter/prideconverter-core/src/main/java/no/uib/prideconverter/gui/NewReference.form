@@ -95,7 +95,7 @@
                               <Component id="doiJTextField" max="32767" attributes="1"/>
                               <Component id="pmidIDJTextField" alignment="0" pref="317" max="32767" attributes="1"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="pubMedJButton" min="-2" pref="101" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -115,7 +115,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
+                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="pmidIDJTextField" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -126,9 +126,9 @@
                               <Component id="doiJTextField" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Component id="pubMedJButton" alignment="0" min="-2" pref="51" max="-2" attributes="0"/>
+                      <Component id="pubMedJButton" min="-2" pref="51" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

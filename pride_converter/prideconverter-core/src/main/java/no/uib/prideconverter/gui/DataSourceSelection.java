@@ -154,21 +154,24 @@ public class DataSourceSelection extends javax.swing.JFrame {
         backJButton = new javax.swing.JButton();
         cancelJButton = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
-        mascotDatFileJRadioButton = new javax.swing.JRadioButton();
-        mgfJRadioButton = new javax.swing.JRadioButton();
-        xTandemJRadioButton = new javax.swing.JRadioButton();
-        sequestResultsJRadioButton = new javax.swing.JRadioButton();
-        spectrumMillJRadioButton = new javax.swing.JRadioButton();
-        sequestDTAFilesJRadioButton = new javax.swing.JRadioButton();
-        pklFilesJRadioButton = new javax.swing.JRadioButton();
-        mzXMLJRadioButton = new javax.swing.JRadioButton();
-        tppJRadioButton = new javax.swing.JRadioButton();
-        omssaJRadioButton = new javax.swing.JRadioButton();
-        ms_limsJRadioButton = new javax.swing.JRadioButton();
+        jPanel1 = new javax.swing.JPanel();
         vemsJRadioButton = new javax.swing.JRadioButton();
         ms2JRadioButton = new javax.swing.JRadioButton();
         mzDataJRadioButton = new javax.swing.JRadioButton();
+        mzXMLJRadioButton = new javax.swing.JRadioButton();
         dtaSelectJRadioButton = new javax.swing.JRadioButton();
+        jPanel3 = new javax.swing.JPanel();
+        ms_limsJRadioButton = new javax.swing.JRadioButton();
+        tppJRadioButton = new javax.swing.JRadioButton();
+        omssaJRadioButton = new javax.swing.JRadioButton();
+        sequestDTAFilesJRadioButton = new javax.swing.JRadioButton();
+        sequestResultsJRadioButton = new javax.swing.JRadioButton();
+        jPanel5 = new javax.swing.JPanel();
+        pklFilesJRadioButton = new javax.swing.JRadioButton();
+        spectrumMillJRadioButton = new javax.swing.JRadioButton();
+        xTandemJRadioButton = new javax.swing.JRadioButton();
+        mgfJRadioButton = new javax.swing.JRadioButton();
+        mascotDatFileJRadioButton = new javax.swing.JRadioButton();
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         helpJButton = new javax.swing.JButton();
@@ -209,140 +212,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Source"));
 
-        buttonGroup1.add(mascotDatFileJRadioButton);
-        mascotDatFileJRadioButton.setFont(mascotDatFileJRadioButton.getFont());
-        mascotDatFileJRadioButton.setText("Mascot DAT Files");
-        mascotDatFileJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        mascotDatFileJRadioButton.setIconTextGap(10);
-        mascotDatFileJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        mascotDatFileJRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mascotDatFileJRadioButtonActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(mgfJRadioButton);
-        mgfJRadioButton.setFont(mgfJRadioButton.getFont());
-        mgfJRadioButton.setText("Mascot Generic Files");
-        mgfJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        mgfJRadioButton.setIconTextGap(10);
-        mgfJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        mgfJRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mgfJRadioButtonActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(xTandemJRadioButton);
-        xTandemJRadioButton.setFont(xTandemJRadioButton.getFont());
-        xTandemJRadioButton.setText("X!Tandem");
-        xTandemJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        xTandemJRadioButton.setIconTextGap(10);
-        xTandemJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        xTandemJRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                xTandemJRadioButtonActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(sequestResultsJRadioButton);
-        sequestResultsJRadioButton.setFont(sequestResultsJRadioButton.getFont());
-        sequestResultsJRadioButton.setText("SEQUEST Result Files");
-        sequestResultsJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        sequestResultsJRadioButton.setIconTextGap(10);
-        sequestResultsJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        sequestResultsJRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sequestResultsJRadioButtonActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(spectrumMillJRadioButton);
-        spectrumMillJRadioButton.setFont(spectrumMillJRadioButton.getFont());
-        spectrumMillJRadioButton.setText("Spectrum Mill");
-        spectrumMillJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        spectrumMillJRadioButton.setIconTextGap(10);
-        spectrumMillJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        spectrumMillJRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                spectrumMillJRadioButtonActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(sequestDTAFilesJRadioButton);
-        sequestDTAFilesJRadioButton.setFont(sequestDTAFilesJRadioButton.getFont());
-        sequestDTAFilesJRadioButton.setText("SEQUEST DTA Files");
-        sequestDTAFilesJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        sequestDTAFilesJRadioButton.setIconTextGap(10);
-        sequestDTAFilesJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        sequestDTAFilesJRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sequestDTAFilesJRadioButtonActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(pklFilesJRadioButton);
-        pklFilesJRadioButton.setFont(pklFilesJRadioButton.getFont());
-        pklFilesJRadioButton.setText("Micromass PKL Files");
-        pklFilesJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        pklFilesJRadioButton.setIconTextGap(10);
-        pklFilesJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        pklFilesJRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pklFilesJRadioButtonActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(mzXMLJRadioButton);
-        mzXMLJRadioButton.setFont(mzXMLJRadioButton.getFont());
-        mzXMLJRadioButton.setText("mzXML");
-        mzXMLJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        mzXMLJRadioButton.setIconTextGap(10);
-        mzXMLJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        mzXMLJRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mzXMLJRadioButtonActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(tppJRadioButton);
-        tppJRadioButton.setFont(tppJRadioButton.getFont());
-        tppJRadioButton.setText("Peptide- and ProteinProphet");
-        tppJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        tppJRadioButton.setIconTextGap(10);
-        tppJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        tppJRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tppJRadioButtonActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(omssaJRadioButton);
-        omssaJRadioButton.setFont(omssaJRadioButton.getFont());
-        omssaJRadioButton.setText("OMSSA");
-        omssaJRadioButton.setToolTipText("Open Mass Spectrometry Search Algorithm ");
-        omssaJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        omssaJRadioButton.setIconTextGap(10);
-        omssaJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        omssaJRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                omssaJRadioButtonActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(ms_limsJRadioButton);
-        ms_limsJRadioButton.setFont(ms_limsJRadioButton.getFont());
-        ms_limsJRadioButton.setText("ms_lims 7.3");
-        ms_limsJRadioButton.setToolTipText("Mass Spectrometry Laboratory Information Managment System");
-        ms_limsJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        ms_limsJRadioButton.setIconTextGap(10);
-        ms_limsJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        ms_limsJRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ms_limsJRadioButtonActionPerformed(evt);
-            }
-        });
-
         buttonGroup1.add(vemsJRadioButton);
         vemsJRadioButton.setFont(vemsJRadioButton.getFont());
         vemsJRadioButton.setText("VEMS PKX Files");
@@ -380,6 +249,18 @@ public class DataSourceSelection extends javax.swing.JFrame {
             }
         });
 
+        buttonGroup1.add(mzXMLJRadioButton);
+        mzXMLJRadioButton.setFont(mzXMLJRadioButton.getFont());
+        mzXMLJRadioButton.setText("mzXML");
+        mzXMLJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        mzXMLJRadioButton.setIconTextGap(10);
+        mzXMLJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        mzXMLJRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mzXMLJRadioButtonActionPerformed(evt);
+            }
+        });
+
         buttonGroup1.add(dtaSelectJRadioButton);
         dtaSelectJRadioButton.setFont(dtaSelectJRadioButton.getFont());
         dtaSelectJRadioButton.setText("DTASelect");
@@ -392,84 +273,248 @@ public class DataSourceSelection extends javax.swing.JFrame {
             }
         });
 
-        org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel4Layout.createSequentialGroup()
-                .add(21, 21, 21)
-                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(mgfJRadioButton)
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(xTandemJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(mascotDatFileJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(spectrumMillJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(pklFilesJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .add(18, 18, 18)
-                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(sequestResultsJRadioButton)
-                    .add(omssaJRadioButton)
-                    .add(ms_limsJRadioButton)
-                    .add(tppJRadioButton)
-                    .add(sequestDTAFilesJRadioButton))
-                .add(18, 18, 18)
-                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                     .add(vemsJRadioButton)
                     .add(ms2JRadioButton)
                     .add(mzXMLJRadioButton)
                     .add(mzDataJRadioButton)
                     .add(dtaSelectJRadioButton))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
 
-        jPanel4Layout.linkSize(new java.awt.Component[] {dtaSelectJRadioButton, mascotDatFileJRadioButton, mgfJRadioButton, ms2JRadioButton, ms_limsJRadioButton, mzDataJRadioButton, mzXMLJRadioButton, omssaJRadioButton, pklFilesJRadioButton, sequestDTAFilesJRadioButton, sequestResultsJRadioButton, spectrumMillJRadioButton, tppJRadioButton, vemsJRadioButton, xTandemJRadioButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+        jPanel1Layout.linkSize(new java.awt.Component[] {dtaSelectJRadioButton, ms2JRadioButton, mzDataJRadioButton, mzXMLJRadioButton, vemsJRadioButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
 
-        jPanel4Layout.setVerticalGroup(
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(vemsJRadioButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(ms2JRadioButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(mzDataJRadioButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(mzXMLJRadioButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(dtaSelectJRadioButton)
+                .addContainerGap(26, Short.MAX_VALUE))
+        );
+
+        jPanel1Layout.linkSize(new java.awt.Component[] {dtaSelectJRadioButton, ms2JRadioButton, mzDataJRadioButton, mzXMLJRadioButton, vemsJRadioButton}, org.jdesktop.layout.GroupLayout.VERTICAL);
+
+        buttonGroup1.add(ms_limsJRadioButton);
+        ms_limsJRadioButton.setFont(ms_limsJRadioButton.getFont());
+        ms_limsJRadioButton.setText("ms_lims 7.3");
+        ms_limsJRadioButton.setToolTipText("Mass Spectrometry Laboratory Information Managment System");
+        ms_limsJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        ms_limsJRadioButton.setIconTextGap(10);
+        ms_limsJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        ms_limsJRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ms_limsJRadioButtonActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(tppJRadioButton);
+        tppJRadioButton.setFont(tppJRadioButton.getFont());
+        tppJRadioButton.setText("Peptide- and ProteinProphet");
+        tppJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        tppJRadioButton.setIconTextGap(10);
+        tppJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        tppJRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tppJRadioButtonActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(omssaJRadioButton);
+        omssaJRadioButton.setFont(omssaJRadioButton.getFont());
+        omssaJRadioButton.setText("OMSSA");
+        omssaJRadioButton.setToolTipText("Open Mass Spectrometry Search Algorithm ");
+        omssaJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        omssaJRadioButton.setIconTextGap(10);
+        omssaJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        omssaJRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                omssaJRadioButtonActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(sequestDTAFilesJRadioButton);
+        sequestDTAFilesJRadioButton.setFont(sequestDTAFilesJRadioButton.getFont());
+        sequestDTAFilesJRadioButton.setText("SEQUEST DTA Files");
+        sequestDTAFilesJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        sequestDTAFilesJRadioButton.setIconTextGap(10);
+        sequestDTAFilesJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        sequestDTAFilesJRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sequestDTAFilesJRadioButtonActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(sequestResultsJRadioButton);
+        sequestResultsJRadioButton.setFont(sequestResultsJRadioButton.getFont());
+        sequestResultsJRadioButton.setText("SEQUEST Result Files");
+        sequestResultsJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        sequestResultsJRadioButton.setIconTextGap(10);
+        sequestResultsJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        sequestResultsJRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sequestResultsJRadioButtonActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(sequestResultsJRadioButton)
+                    .add(omssaJRadioButton)
+                    .add(tppJRadioButton)
+                    .add(sequestDTAFilesJRadioButton)
+                    .add(ms_limsJRadioButton))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(sequestResultsJRadioButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(sequestDTAFilesJRadioButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(omssaJRadioButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(tppJRadioButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(ms_limsJRadioButton)
+                .addContainerGap(26, Short.MAX_VALUE))
+        );
+
+        buttonGroup1.add(pklFilesJRadioButton);
+        pklFilesJRadioButton.setFont(pklFilesJRadioButton.getFont());
+        pklFilesJRadioButton.setText("Micromass PKL Files");
+        pklFilesJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        pklFilesJRadioButton.setIconTextGap(10);
+        pklFilesJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        pklFilesJRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pklFilesJRadioButtonActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(spectrumMillJRadioButton);
+        spectrumMillJRadioButton.setFont(spectrumMillJRadioButton.getFont());
+        spectrumMillJRadioButton.setText("Spectrum Mill");
+        spectrumMillJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        spectrumMillJRadioButton.setIconTextGap(10);
+        spectrumMillJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        spectrumMillJRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                spectrumMillJRadioButtonActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(xTandemJRadioButton);
+        xTandemJRadioButton.setFont(xTandemJRadioButton.getFont());
+        xTandemJRadioButton.setText("X!Tandem");
+        xTandemJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        xTandemJRadioButton.setIconTextGap(10);
+        xTandemJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        xTandemJRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                xTandemJRadioButtonActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(mgfJRadioButton);
+        mgfJRadioButton.setFont(mgfJRadioButton.getFont());
+        mgfJRadioButton.setText("Mascot Generic Files");
+        mgfJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        mgfJRadioButton.setIconTextGap(10);
+        mgfJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        mgfJRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mgfJRadioButtonActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(mascotDatFileJRadioButton);
+        mascotDatFileJRadioButton.setFont(mascotDatFileJRadioButton.getFont());
+        mascotDatFileJRadioButton.setText("Mascot DAT Files");
+        mascotDatFileJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        mascotDatFileJRadioButton.setIconTextGap(10);
+        mascotDatFileJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        mascotDatFileJRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mascotDatFileJRadioButtonActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(mgfJRadioButton)
+                    .add(xTandemJRadioButton)
+                    .add(mascotDatFileJRadioButton)
+                    .add(spectrumMillJRadioButton)
+                    .add(pklFilesJRadioButton))
+                .addContainerGap(56, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(mascotDatFileJRadioButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(mgfJRadioButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(xTandemJRadioButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(spectrumMillJRadioButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(pklFilesJRadioButton)
+                .addContainerGap(26, Short.MAX_VALUE))
+        );
+
+        org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(vemsJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(ms2JRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(mzDataJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(mzXMLJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(dtaSelectJRadioButton))
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(sequestResultsJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(sequestDTAFilesJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(omssaJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(tppJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(ms_limsJRadioButton))
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(mascotDatFileJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(mgfJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(xTandemJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(spectrumMillJRadioButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(pklFilesJRadioButton)))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4Layout.linkSize(new java.awt.Component[] {dtaSelectJRadioButton, mascotDatFileJRadioButton, mgfJRadioButton, ms2JRadioButton, ms_limsJRadioButton, mzDataJRadioButton, mzXMLJRadioButton, omssaJRadioButton, pklFilesJRadioButton, sequestDTAFilesJRadioButton, sequestResultsJRadioButton, spectrumMillJRadioButton, tppJRadioButton, vemsJRadioButton, xTandemJRadioButton}, org.jdesktop.layout.GroupLayout.VERTICAL);
+        jPanel4Layout.linkSize(new java.awt.Component[] {jPanel1, jPanel3, jPanel5}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
+                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel4Layout.linkSize(new java.awt.Component[] {jPanel1, jPanel3, jPanel5}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
         jLabel3.setFont(jLabel3.getFont().deriveFont((jLabel3.getFont().getStyle() | java.awt.Font.ITALIC), jLabel3.getFont().getSize()-2));
         jLabel3.setText("Select the source you want to convert data from, and click on 'Next'  to continue.");
@@ -508,14 +553,14 @@ public class DataSourceSelection extends javax.swing.JFrame {
             descriptionJPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(descriptionJPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
                 .addContainerGap())
         );
         descriptionJPanelLayout.setVerticalGroup(
             descriptionJPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(descriptionJPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -530,13 +575,13 @@ public class DataSourceSelection extends javax.swing.JFrame {
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 319, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 360, Short.MAX_VALUE)
                         .add(backJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(nextJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(18, 18, 18)
                         .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel3)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, descriptionJPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1094,7 +1139,10 @@ public class DataSourceSelection extends javax.swing.JFrame {
     private javax.swing.JRadioButton dtaSelectJRadioButton;
     private javax.swing.JButton helpJButton;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JRadioButton mascotDatFileJRadioButton;

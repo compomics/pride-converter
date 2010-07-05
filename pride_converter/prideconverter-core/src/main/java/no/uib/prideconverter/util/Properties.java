@@ -21,8 +21,8 @@ import uk.ac.ebi.pride.model.interfaces.core.ProtocolStep;
  */
 public class Properties {
 
-    public final int FRAME_WIDTH = 800;  //the hardcoded width of all frames
-    public final int FRAME_HEIGHT = 750; //the hardcoded height of all frames
+    public int FRAME_WIDTH = 800;  //the hardcoded width of all frames
+    public int FRAME_HEIGHT = 750; //the hardcoded height of all frames
     public final int PROTEIN_ISOFORMS_ALWAYS_SELECT_FIRST = 0;
     public final int PROTEIN_ISOFORMS_MANUAL_SELECTION = 1;
     public final int PROTEIN_ISOFORMS_PROVIDE_LIST = 2;

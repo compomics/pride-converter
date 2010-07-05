@@ -211,6 +211,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
 
         protocolStepJPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Sample"));
 
+        cvTermsJTable.setFont(cvTermsJTable.getFont());
         cvTermsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

@@ -199,6 +199,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
 
         jLabel4.setText("Selected Files:");
 
+        selectedSpectraFilesJTable.setFont(selectedSpectraFilesJTable.getFont());
         selectedSpectraFilesJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -293,6 +294,7 @@ public class DataFileSelectionTwoFileTypes extends javax.swing.JFrame {
 
         jLabel5.setText("Selected Files:");
 
+        selectedIdentificationFilesJTable.setFont(selectedIdentificationFilesJTable.getFont());
         selectedIdentificationFilesJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
