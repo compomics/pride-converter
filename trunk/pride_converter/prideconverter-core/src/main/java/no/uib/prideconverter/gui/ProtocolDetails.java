@@ -382,6 +382,7 @@ public class ProtocolDetails extends javax.swing.JFrame implements ComboBoxInput
 
         jLabel21.setText("Name:");
 
+        protocolStepsJTable.setFont(protocolStepsJTable.getFont());
         protocolStepsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

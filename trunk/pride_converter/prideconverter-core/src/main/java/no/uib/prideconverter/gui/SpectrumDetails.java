@@ -213,6 +213,7 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("CV Parameters"));
 
+        cvTermsJTable.setFont(cvTermsJTable.getFont());
         cvTermsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -290,6 +291,7 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
             }
         });
 
+        userParametersJTable.setFont(userParametersJTable.getFont());
         userParametersJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

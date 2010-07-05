@@ -216,14 +216,26 @@ public class PRIDEConverter extends AbstractPrideConverter {
     }
 
     /**
-     * Tries to set the look and feel to PlasticLookAndFeel. Then checks if 
-     * an ErrorLog is created, if not, it is created. And finally starts the 
-     * PRIDEConverter wizard. Also checks if a newer version of the PRIDE 
-     * Converter is available.
+     * Checks if an ErrorLog is created, if not, it is created. And finally
+     * starts the PRIDEConverter wizard. Also checks if a newer version of
+     * the PRIDE Converter is available, and sets the size of the wizard
+     * frames relative to the platform default font size.
      * 
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+
+        if(new JLabel().getFont().getSize() <= 12) {
+            properties.FRAME_WIDTH = 700;
+            properties.FRAME_HEIGHT = 650;
+        } else if (new JLabel().getFont().getSize() > 12 &&
+                new JLabel().getFont().getSize() <= 15) {
+            properties.FRAME_WIDTH = 800;
+            properties.FRAME_HEIGHT = 750;
+        } else if (new JLabel().getFont().getSize() > 15) {
+            properties.FRAME_WIDTH = 900;
+            properties.FRAME_HEIGHT = 850;
+        }
 
         // makes sure that '.' is used as the decimal sign
         Locale.setDefault(Locale.US);

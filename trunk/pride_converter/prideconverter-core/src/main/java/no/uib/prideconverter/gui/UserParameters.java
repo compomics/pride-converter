@@ -189,6 +189,7 @@ public class UserParameters extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Experiment User Parameters - (Optional)"));
 
+        userParametersJTable.setFont(userParametersJTable.getFont());
         userParametersJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
