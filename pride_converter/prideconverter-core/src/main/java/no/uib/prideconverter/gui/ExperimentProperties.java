@@ -294,6 +294,7 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
     private void mandatoryFieldsCheck() {
         if (experimentTitleJTextArea.getText().length() > 0 &&
                 experimentLabelJTextField.getText().length() > 0 &&
+                projectJTextField.getText().length() > 0 &&
                 contactsJTable.getRowCount() > 0) {
 
             boolean allContactDetailsFilledIn = true;
@@ -636,6 +637,11 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
 
         projectJTextField.setFont(projectJTextField.getFont());
         projectJTextField.setToolTipText("Allows experiments to be grouped or organised under projects");
+        projectJTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                projectJTextFieldKeyReleased(evt);
+            }
+        });
 
         jLabel2.setText("Description:");
 
@@ -1322,6 +1328,13 @@ public class ExperimentProperties extends javax.swing.JFrame implements ContactI
      * @see #mandatoryFieldsCheck()
      */
     private void experimentLabelJTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_experimentLabelJTextFieldKeyReleased
+        mandatoryFieldsCheck();
+    }//GEN-LAST:event_experimentLabelJTextFieldKeyReleased
+
+    /**
+     * @see #mandatoryFieldsCheck()
+     */
+    private void projectJTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_experimentLabelJTextFieldKeyReleased
         mandatoryFieldsCheck();
     }//GEN-LAST:event_experimentLabelJTextFieldKeyReleased
 
