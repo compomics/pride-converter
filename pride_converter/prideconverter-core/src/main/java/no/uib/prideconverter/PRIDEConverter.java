@@ -2711,7 +2711,6 @@ public class PRIDEConverter extends AbstractPrideConverter {
      *
      * @param cvParams the CV param list to be extended
      * @param iTRAQValues the values to add
-     * @return the updated CV param list
      */
     protected static void addItraqCVTerms(ArrayList<CvParam> cvParams, iTRAQ iTRAQValues) {
 

@@ -193,11 +193,6 @@ public class RequestFtpAccess extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_submissionTipsJEditorPaneHyperlinkUpdate
 
-    /**
-     * Makes the hyperlinks active.
-     * 
-     * @param evt
-     */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutJButton;
     private javax.swing.JButton closeJButton;

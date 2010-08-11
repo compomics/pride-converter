@@ -12,7 +12,7 @@ public interface ComboBoxInputable{
     /**
      * Insert the given text into the combo box.
      *  
-     * @param text
+     * @param text the text to insert
      */
     public void insertIntoComboBox(String text);
     
@@ -24,7 +24,7 @@ public interface ComboBoxInputable{
     /**
      * Test if the given text is already in the combo box.
      * 
-     * @param text
+     * @param text the text to insert
      * @return true if already inserted, false otherwise.
      */
     public boolean alreadyInserted(String text);
