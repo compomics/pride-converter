@@ -491,7 +491,7 @@ public class Properties {
      * Sets the selected protein isoforms as a hash map where the peptide sequence
      * is the key and the protein accesion number the element.
      * 
-     * @param aSelectedIsoformAccessions
+     * @param aSelectedIsoforms the hash map of selected isoforms
      */
     public void setSelectedIsoforms(HashMap<String, String> aSelectedIsoforms) {
         selectedIsoforms = aSelectedIsoforms;

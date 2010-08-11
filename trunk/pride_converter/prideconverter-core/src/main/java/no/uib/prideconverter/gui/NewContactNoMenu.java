@@ -35,12 +35,15 @@ public class NewContactNoMenu extends javax.swing.JDialog {
     private boolean valuesChanged = false;
 
     /**
-     * Opens a new NewContactNoMenu dialog
-     * 
-     * @param experimentProperties a reference to the ExperimentProperties frame
+     * Opens a new NewContactNoMenu dialog with a JFrame as a parent.
+     *
+     * @param parent the JFrame parent
+     * @param contactFrame the frame where the contact details will be inserted
      * @param modal
      * @param selectedRow the row to edit, -1 if adding new row
-     * @param name
+     * @param name the name of the current contact
+     * @param eMail the e-mail of the current contact
+     * @param institution the institution of the current contact
      */
     public NewContactNoMenu(JFrame parent, ContactInputable contactFrame, boolean modal, int selectedRow,
             String name, String eMail, String institution) {
@@ -64,12 +67,15 @@ public class NewContactNoMenu extends javax.swing.JDialog {
     }
 
     /**
-     * Opens a new NewContactNoMenu dialog
+     * Opens a new NewContactNoMenu dialog with a JDialog as a parent.
      *
-     * @param experimentProperties a reference to the ExperimentProperties frame
+     * @param parent the JDialog parent
+     * @param contactFrame the frame where the contact details will be inserted
      * @param modal
      * @param selectedRow the row to edit, -1 if adding new row
-     * @param name
+     * @param name the name of the current contact
+     * @param eMail the e-mail of the current contact
+     * @param institution the institution of the current contact
      */
     public NewContactNoMenu(JDialog parent, ContactInputable contactFrame, boolean modal, int selectedRow,
             String name, String eMail, String institution) {
@@ -524,7 +530,7 @@ public class NewContactNoMenu extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     /**
-     * @see ComboBoxInputable
+     * @see no.uib.prideconverter.util.ComboBoxInputable
      */
     public void insertIntoComboBox(String text) {
 
@@ -567,7 +573,7 @@ public class NewContactNoMenu extends javax.swing.JDialog {
     }
 
     /**
-     * @see ComboBoxInputable
+     * @see no.uib.prideconverter.util.ComboBoxInputable
      */
     public boolean alreadyInserted(String currentContactName) {
         this.currentContactName = currentContactName;

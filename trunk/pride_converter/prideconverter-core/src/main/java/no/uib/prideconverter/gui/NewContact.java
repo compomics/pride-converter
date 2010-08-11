@@ -39,9 +39,10 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
     private boolean valuesChanged = false;
 
     /**
-     * Opens a new NewContact dialog with a JFrame as a parent
-     * 
-     * @param experimentProperties a reference to the ExperimentProperties frame
+     * Opens a new NewContact dialog with a JFrame as a parent.
+     *
+     * @param frame the JFrame parent
+     * @param contactFrame the frame where the contact details will be inserted
      * @param modal
      */
     public NewContact(JFrame frame, ContactInputable contactFrame, boolean modal) {
@@ -58,12 +59,13 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
     }
 
     /**
-     * Opens a new NewContact dialog with a JFrame as a parent
-     * 
-     * @param experimentProperties a reference to the ExperimentProperties frame
+     * Opens a new NewContact dialog with a JFrame as a parent.
+     *
+     * @param parent the JFrame parent
+     * @param contactFrame the frame where the contact details will be inserted
      * @param modal
      * @param selectedRow the row to edit, -1 if adding new row
-     * @param name
+     * @param name the name of the current contact
      */
     public NewContact(JFrame parent, ContactInputable contactFrame, boolean modal,
             int selectedRow, String name) {
@@ -82,9 +84,10 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
     }
 
     /**
-     * Opens a new NewContact dialog with a JDialog as a parent
+     * Opens a new NewContact dialog with a JDialog as a parent.
      *
-     * @param experimentProperties a reference to the ExperimentProperties frame
+     * @param frame the JDialog parent
+     * @param contactFrame the frame where the contact details will be inserted
      * @param modal
      */
     public NewContact(JDialog frame, ContactInputable contactFrame, boolean modal) {
@@ -101,12 +104,13 @@ public class NewContact extends javax.swing.JDialog implements ComboBoxInputable
     }
 
     /**
-     * Opens a new NewContact dialog with a JDialog as a parent
+     * Opens a new NewContact dialog with a JDialog as a parent.
      *
-     * @param experimentProperties a reference to the ExperimentProperties frame
+     * @param parent the JDialog parent
+     * @param contactFrame the frame where the contact details will be inserted
      * @param modal
      * @param selectedRow the row to edit, -1 if adding new row
-     * @param name
+     * @param name the name of the current contact
      */
     public NewContact(JDialog parent, ContactInputable contactFrame, boolean modal,
             int selectedRow, String name) {
