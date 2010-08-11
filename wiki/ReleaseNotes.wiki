@@ -15,7 +15,7 @@
  * NEW FEATURE: Added support for sf score in SEQUEST result file converter.
  * LIBRARY UPDATE: mascotdatfile update to 3.2.
 
-Download Count: 80
+Download Count: 84
 
 ----
 
@@ -48,7 +48,7 @@ Download Count: 8
  * FEATURE IMPROVEMENT: Minor change on the label of sample description.
  * LIBRARY UPDATE: Integrated the new release of Mascot dat library, version 3.0.2.  
 
-Download Count: 26
+Download Count: 30
 
 ----
 
@@ -56,7 +56,7 @@ Download Count: 26
  * FEATURE IMPROVEMENT: Added support for multiple charges in mgf files when the charge values are separated by "and". 
  * FEATURE IMPROVEMENT: Added support for Terminal Modifications in PeptideProphet files.
 
-Download Count: 113
+Download Count: 114
 
 ----
 
@@ -82,7 +82,7 @@ Download Count: 34
  * LIBRARY UPDATE: OMSSA Parser updated to version 1.3.4.
  * LIBRARY UPDATE: OLS Dialog updated to version 3.2.2, which includes new search options and additional features.
 
-Download Count: 95
+Download Count: 98
 
 ----
 
@@ -106,7 +106,7 @@ Download Count: 29
 *Changes in PRIDE Converter v2.0.3 - (Aug. 21. 2009):*
  * BUG FIX: Fixed a serious bug for OMSSA conversion where integer division was used when scaling the mz and intensity peak values, and the precursor mz value.
 
-Download Count: 53
+Download Count: 55
 
 ----
 
