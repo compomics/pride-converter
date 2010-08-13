@@ -189,7 +189,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>ms-lims</artifactId>
-            <version>7.3</version>
+            <version>7.4.1</version>
         </dependency>
         <dependency>
             <groupId>lennart</groupId>
