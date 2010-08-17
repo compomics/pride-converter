@@ -912,7 +912,7 @@ public class OutputDetails extends javax.swing.JFrame {
     }//GEN-LAST:event_useCommaAsDecimalSymbolJCheckBoxActionPerformed
 
     /**
-     * Opens the the pubmed page showing the PRIDE Converter paper in the default web browser.
+     * Opens the pubmed page showing the PRIDE Converter paper in the default web browser.
      *
      * @param evt
      */
