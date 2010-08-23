@@ -12,6 +12,8 @@
  * FEATURE IMPROVEMENT: Project tag is now mandatory. 
  * LIBRARY UPDATE: ms-lims updated to version 7.4.1.
 
+Download Count: 18
+
 ----
 
 *Changes in PRIDE Converter v2.4 - (July 5. 2010):*
