@@ -27,6 +27,8 @@ import java.util.Vector;
  */
 public class MascotGenericConverter {
 
+
+    
     /**
      * This method transforms spectra from Mascot Generic files, returning
      * a HashMap that maps the filenames to their mzData spectrumID.
