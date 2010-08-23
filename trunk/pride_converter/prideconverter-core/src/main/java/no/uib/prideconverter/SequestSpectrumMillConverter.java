@@ -106,8 +106,8 @@ public class SequestSpectrumMillConverter {
         String currentMod, tempFileName;
         ArrayList<CvParam> cVParams;
         ArrayList<UserParam> userParams;
-        String variableModificationPattern = "[(]\\w.[ ][+-]\\d*[.]\\d{4}[)]";
-        String fixedModificationPattern = "\\w[=]\\d*[.]\\d{4}";
+        String variableModificationPattern="[(]\\w{1,6}.[ ][+-]\\d*[.]\\d{1,6}[)]";   ////Support higher accuracy (between 1 and 6)
+        String fixedModificationPattern = "\\w[=]\\d*[.]\\d{1,6}";            //Support higher accuracy (between 1 and 6)
         String[] sequenceArray;
         Spectrum fragmentation;
         String[] values;
@@ -806,7 +806,6 @@ public class SequestSpectrumMillConverter {
                                         matcher = pattern.matcher(modificationLine);
 
                                         while (matcher.find() && !PRIDEConverter.isConversionCanceled()) {
-
                                             currentModification = matcher.group().substring(1, matcher.group().length() - 1);
 
                                             modificationName = currentModification.substring(0, currentModification.indexOf(" "));
@@ -814,18 +813,27 @@ public class SequestSpectrumMillConverter {
                                             modificationMass = new Double(currentModification.substring(
                                                     currentModification.indexOf(" ") + 1));
 
-                                            if (!properties.getAlreadyChoosenModifications().contains(modificationName)) {
-                                                new ModificationMapping(PRIDEConverter.getOutputFrame(),
-                                                        true, progressDialog, modificationName,
-                                                        modificationNameShort,
-                                                        modificationMass,
-                                                        (CvParamImpl) userProperties.getCVTermMappings().get(modificationName),
-                                                        false);
+                                            String[] modificationNameCharacters=null;              //Support multiple variable PTMs inside out file
+						                    modificationNameCharacters=modificationName.split("");
 
-                                                properties.getAlreadyChoosenModifications().add(modificationName);
-                                            } else {
-                                                //do nothing, mapping already choosen
+                                            for (int i = 1; i < (modificationNameCharacters.length-1); i++) {
+                                                modificationName=modificationNameCharacters[i]+modificationNameCharacters[modificationNameCharacters.length-1];
+                                                modificationNameShort=modificationNameCharacters[i];
+                                                 if (!properties.getAlreadyChoosenModifications().contains(modificationName)) {
+                                                    new ModificationMapping(PRIDEConverter.getOutputFrame(),
+                                                            true, progressDialog, modificationName,
+                                                            modificationNameShort,
+                                                            modificationMass,
+                                                            (CvParamImpl) userProperties.getCVTermMappings().get(modificationName),
+                                                            false);
+
+                                                    properties.getAlreadyChoosenModifications().add(modificationName);
+                                                }
                                             }
+
+                                           
+
+
                                         }
 
                                         //fixed modifications
@@ -833,7 +841,7 @@ public class SequestSpectrumMillConverter {
                                         matcher = pattern.matcher(modificationLine);
 
                                         while (matcher.find() && !PRIDEConverter.isConversionCanceled()) {
-
+                                             
                                             currentModification = matcher.group();
 
                                             modificationName = currentModification.substring(0, currentModification.indexOf("="));
