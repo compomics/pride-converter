@@ -34,6 +34,7 @@ import java.util.*;
  */
 public class MascotDatConverter {
 
+
     /**
      * This method transforms spectra from Mascot dat files, returning
      * a HashMap that maps the filenames to their mzData spectrumID.
