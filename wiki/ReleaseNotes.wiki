@@ -3,6 +3,11 @@
 
 ----
 
+*Changes in PRIDE Converter v2.4.2 - (Aug. 23. 2010):*
+ * FEATURE IMPROVEMENT: Sequest parsing improved (PTM description). SEQUEST updated to v.28.
+
+----
+
 *Changes in PRIDE Converter v2.4.1 - (Aug. 13. 2010):*
  * FEATURE IMPROVEMENT: Project tag is now mandatory. 
  * LIBRARY UPDATE: ms-lims updated to version 7.4.1.
