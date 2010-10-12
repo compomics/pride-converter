@@ -80,8 +80,11 @@ public class OmssaModification {
         for(int i=0; i<modResidues.size(); i++){
             temp += modResidues.get(i) + ", ";
         }
-        
-        temp = temp.substring(0, temp.length()-2);
+
+        // remove the ", " at the end
+        if(temp.length() > 0) {
+            temp = temp.substring(0, temp.length()-2);
+        }
         
         return temp;
     }
