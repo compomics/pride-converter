@@ -3,8 +3,15 @@
 
 ----
 
+*Changes in PRIDE Converter v2.4.3 - (Oct. 12. 2010):*
+ * BUG FIX: Fixed a bug in the method for outputting the residues affected by a modification as defined by OMSSA.
+
+----
+
 *Changes in PRIDE Converter v2.4.2 - (Aug. 23. 2010):*
  * FEATURE IMPROVEMENT: Sequest parsing improved (PTM description). SEQUEST updated to v.28.
+
+Download Count: 99
 
 ----
 
