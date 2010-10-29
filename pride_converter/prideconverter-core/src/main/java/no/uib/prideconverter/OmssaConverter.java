@@ -9,6 +9,8 @@ import java.util.*;
 import java.io.IOException;
 import java.io.File;
 
+import java.util.regex.*;//NEW library
+
 import de.proteinms.omxparser.util.*;
 import de.proteinms.omxparser.OmssaOmxFile;
 import uk.ac.ebi.pride.model.interfaces.core.FragmentIon;
@@ -355,7 +357,6 @@ public class OmssaConverter {
                 progressDialog.setValue(progressCounter++);
 
                 tempSpectrum = iterator.next();
-
                 spectrumFileName = "";
 
                 // TODO: check: possible with more than one spectrum file name..?
@@ -436,11 +437,11 @@ public class OmssaConverter {
                     // @TODO: OMSSA question: possible with more than one charge per spectrum??
                     chargeString = "" + tempSpectrum.MSSpectrum_charge.MSSpectrum_charge_E.get(0);
                     chargeString = chargeString.replaceFirst("\\+", "");
-
-                    if (!chargeString.equalsIgnoreCase("0")) {
-                        ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
-                                "ChargeState", ionSelection.size(), chargeString));
-                    }
+// Charge here is related to spectrum: we don't want this charge
+//                    if (!chargeString.equalsIgnoreCase("0")) {
+//                        ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
+//                                "ChargeState", ionSelection.size(), chargeString));
+//                    }
 
                     ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
                             "MassToChargeRatio", ionSelection.size(),
@@ -499,16 +500,32 @@ public class OmssaConverter {
 
                         peptideSequence = currentMSHit.MSHits_pepstring;
 
+                    // Charge here is related peptide: this is what we want
+                         if (!chargeString.equalsIgnoreCase("0")) {
+                            ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
+                                "ChargeState", ionSelection.size(), Integer.toString(currentMSHit.MSHits_charge)));
+                            }
                         // @TODO: OMSSA question: how to handle protein isoforms?
                         // Currently handled by simply selection the first peptide hit (in the xml file)
                         currentMSPepHit = currentMSHit.MSHits_pephits.MSPepHit.get(0);
 
+                        if(currentMSPepHit.MSPepHit_defline.startsWith("sp|")){
+                            accession=currentMSPepHit.MSPepHit_defline;
+                            String[] accession_parsed = Pattern.compile("\\|").split(accession);
+                            accession=accession_parsed[1];
+                        }
+                        else if(currentMSPepHit.MSPepHit_defline.startsWith("tr|")){
+                            accession=currentMSPepHit.MSPepHit_defline;
+                            String[] accession_parsed = Pattern.compile("\\|").split(accession);
+                            accession=accession_parsed[1];
+                        }
                         //String accession = currentMSHit.MSHits_libaccession;
-                        if (currentMSPepHit.MSPepHit_accession != null) {
+                        else if (currentMSPepHit.MSPepHit_accession != null) {
                             accession = currentMSPepHit.MSPepHit_accession;
                         } else {
                             accession = "gi|" + currentMSPepHit.MSPepHit_gi;
                         }
+
 
                         if (omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_db != null) {
                             database = omxFile.getParserResult().MSSearch_request.MSRequest.get(0).MSRequest_settings.MSSearchSettings.MSSearchSettings_db;

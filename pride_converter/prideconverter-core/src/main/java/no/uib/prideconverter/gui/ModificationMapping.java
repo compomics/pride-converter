@@ -59,7 +59,13 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
         this.modification = modification;
 
         nameJTextField.setText(modification.getType());
-        massJTextField.setText("" + modification.getMass());
+        //massJTextField.setText("" + modification.getMass());
+        if ( modification.isValidMass() ) {
+            massJTextField.setText(Double.toString(modification.getMass()));
+        } else {
+            massJTextField.setText("n/a");
+        }
+
         locationJTextField.setText(modification.getLocation());
 
         // only works for Java 1.6 and newer
