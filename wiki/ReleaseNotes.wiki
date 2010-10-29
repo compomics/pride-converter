@@ -3,8 +3,17 @@
 
 ----
 
+*Changes in PRIDE Converter v2.4.4 - (Oct. 29. 2010):*
+ * FEATURE IMPROVEMENT: The charge state in OMSSA is captured now from the highest scored result, not from the spectrum.
+ * FEATURE IMPROVEMENT: Enhanced parsing for Swissprot and Trembl protein entries in OMSSA.
+ * BUG FIX: Fixed a bug in the GUI: ModificationMapping.java
+
+----
+
 *Changes in PRIDE Converter v2.4.3 - (Oct. 12. 2010):*
  * BUG FIX: Fixed a bug in the method for outputting the residues affected by a modification as defined by OMSSA.
+
+Download Count: 28
 
 ----
 
