@@ -211,7 +211,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>mascotdatfile</artifactId>
-            <version>3.2</version>
+            <version>3.2.2</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
