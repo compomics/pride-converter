@@ -519,6 +519,12 @@ public class OmssaConverter {
                             String[] accession_parsed = Pattern.compile("\\|").split(accession);
                             accession=accession_parsed[1];
                         }
+                        // New modification: sw as Swissprot
+                        else if(currentMSPepHit.MSPepHit_defline.startsWith("sw|")){
+                            accession=currentMSPepHit.MSPepHit_defline;
+                            String[] accession_parsed = Pattern.compile("\\|").split(accession);
+                            accession=accession_parsed[1];
+                        }
                         //String accession = currentMSHit.MSHits_libaccession;
                         else if (currentMSPepHit.MSPepHit_accession != null) {
                             accession = currentMSPepHit.MSPepHit_accession;
