@@ -1,22 +1,22 @@
 PRIDEConverter
 ${version.number}*
 OutputPath: user.home
-UserName: 
+UserName:
 ServerHost: localhost
 Schema: ms_lims_6
 LastSelectedOntology: Mass Spectroscopy CV (PSI-MS) [PSI]
 LastSelectedSampleOntology: NEWT UniProt Taxonomy Database [NEWT]
-CurrentSelectedInstrument: 
-CurrentSampleSet: 
-CurrentProtocol: 
-CurrentContact: 
+CurrentSelectedInstrument:
+CurrentSampleSet:
+CurrentProtocol:
+CurrentContact:
 FileNameSelectionCriteriaSeparator: ,
-SourceFileLocation: 
+SourceFileLocation:
 PeakIntegrationRangeLower: -0.05
 PeakIntegrationRangeUpper: 0.05
 ReporterIonIntensityThreshold: 0.0
 PurityCorrections: 0.0,1.0,5.9,2.0,0.0,2.0,5.6,0.1,0.0,3.0,4.5,0.1,0.1,4.0,3.5,0.1
-OmssaInstallDir: 
+OmssaInstallDir:
 CVTermMappings:
 Pyro-carbamidomethyl|MOD:00419|MOD|S-carbamoylmethylcysteine cyclization (N-terminus)|39.994915|
 Acetyl|MOD:00394|MOD|acetylated residue|42.010565|
@@ -54,11 +54,11 @@ Q=-17.0265|MOD:00040|MOD|2-pyrrolidone-5-carboxylic acid (Gln)|-17.026549|
 E=-18.0106|MOD:00420|MOD|2-pyrrolidone-5-carboxylic acid (Glu)|-18.010565|
 C=57.022|MOD:01214|MOD|iodoacetamide -site C|57.021464|
 M=15.9949|MOD:00425|MOD|monohydroxylated residue|15.994915|
-C=57.0215|MOD:01214|MOD|iodoacetamide -site C|57.021464|
+S=79.9663|MOD:00696|MOD|phosphorylated residue|79.966331|
+Y=79.9663|MOD:00696|MOD|phosphorylated residue|79.966331|
+T=79.9663|MOD:00696|MOD|phosphorylated residue|79.966331|
 P=15.9949|MOD:00425|MOD|monohydroxylated residue|15.994915|
-S=79.9663|MOD:00042|MOD|L-aspartic 4-phosphoric anhydride|79.966331|
 R=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
-T=79.9663|MOD:00042|MOD|L-aspartic 4-phosphoric anhydride|79.966331|
 F=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
 M=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
 V=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
@@ -68,7 +68,6 @@ L=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
 A=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
 G=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
 D=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
-Y=79.9663|MOD:00042|MOD|L-aspartic 4-phosphoric anhydride|79.966331|
 S=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
 K=42.0106|MOD:00394|MOD|acetylated residue|42.010565|
 W=15.9949|MOD:00425|MOD|monohydroxylated residue|15.994915|
