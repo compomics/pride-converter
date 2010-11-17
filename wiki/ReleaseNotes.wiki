@@ -1,5 +1,10 @@
 #summary Short summary of changes for each version of PRIDE Converter.
 #labels Featured
+----
+
+*Changes in PRIDE Converter v2.4.5 - (Nov. 17. 2010):*
+ * FEATURE IMPROVEMENT: Improved parsing for SwissProt database in OMSSA module
+ * FEATURE IMPROVEMENT: Re-definition of STY Phosphorylation in UserProperties.prop
 
 ----
 
@@ -7,6 +12,8 @@
  * FEATURE IMPROVEMENT: The charge state in OMSSA is captured now from the highest scored result, not from the spectrum.
  * FEATURE IMPROVEMENT: Enhanced parsing for Swissprot and Trembl protein entries in OMSSA.
  * BUG FIX: Fixed a bug in the GUI: `ModificationMapping.java`
+
+Download count: 52
 
 ----
 
