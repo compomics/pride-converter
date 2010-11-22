@@ -2350,7 +2350,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                                 if (tempIdentifications.length > 0) {
                                     dbSpectra = com.compomics.mslims.db.accessors.Spectrum.getAllSpectraForProject(
                                             properties.getProjectIds().get(i), conn,
-                                            "spectrumfileid = " + tempIdentifications[0].getL_spectrumid());
+                                            "spectrumid = " + tempIdentifications[0].getL_spectrumid());
                                 } else {
                                     dbSpectra = null;
                                 }
