@@ -1,10 +1,16 @@
 #summary Short summary of changes for each version of PRIDE Converter.
 #labels Featured
+
+*Changes in PRIDE Converter v2.4.6 - (Nov. 23. 2010):*
+ * FEATURE IMPROVEMENT: Fixed an issue with a remaining reference to the old ms_lims Spectrumfile table.
+
 ----
 
 *Changes in PRIDE Converter v2.4.5 - (Nov. 17. 2010):*
  * FEATURE IMPROVEMENT: Improved parsing for SwissProt database in OMSSA module
  * FEATURE IMPROVEMENT: Re-definition of STY Phosphorylation in UserProperties.prop
+
+Download count: 23
 
 ----
 
