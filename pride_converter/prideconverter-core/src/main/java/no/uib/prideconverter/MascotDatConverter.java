@@ -319,6 +319,16 @@ public class MascotDatConverter {
                                 addPeptide = false;
                             }
 
+                            // additional test for Peptide Score Threshold
+                            if (peptideIsIdentified && tempPeptideHit != null) {
+
+                                iconScore = new Double(tempPeptideHit.getIonsScore()).intValue();
+
+                                if (iconScore < PRIDEConverter.getProperties().getPeptideScoreThreshold()) {
+                                    addPeptide = false;
+                                }
+                            }
+
                             if (addPeptide) {
 
                                 spectrumDescriptionComments = PRIDEConverter.addUserSpectrumComments(spectrumDescriptionComments,
