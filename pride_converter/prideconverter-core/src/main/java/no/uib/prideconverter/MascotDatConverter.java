@@ -71,7 +71,8 @@ public class MascotDatConverter {
         String fileName;
 
         boolean matchFound = false;
-        int iconScore, threshold;
+        int iconScore, mascotConfidenceThreshold;
+        double peptideScoreThreshold;
         StringTokenizer tok;
 
         Double mzStartRange = null, mzStopRange = null;
@@ -280,16 +281,18 @@ public class MascotDatConverter {
 
                             if (tempPeptideHit != null) {
 
+                                iconScore = new Double(tempPeptideHit.getIonsScore()).intValue();
+                                peptideScoreThreshold = PRIDEConverter.getProperties().getPeptideScoreThreshold();
+
                                 //Added to make up for the "bug" in old version of the Mascot Perl script.
                                 //This script rounds down (!) to the lower integer both the threshold and
                                 //the score, and if the result is >= threshold it is labeled identified.
                                 if (PRIDEConverter.getProperties().roundMascotScoreAndThresholdDownToNearestInteger()) {
 
-                                    iconScore = new Double(tempPeptideHit.getIonsScore()).intValue();
-                                    threshold = new Double(tempPeptideHit.calculateIdentityThreshold((100 -
+                                    mascotConfidenceThreshold = new Double(tempPeptideHit.calculateIdentityThreshold((100 -
                                             PRIDEConverter.getProperties().getMascotConfidenceLevel()) / 100)).intValue();
 
-                                    if (iconScore >= threshold) {
+                                    if (iconScore >= mascotConfidenceThreshold && iconScore >= peptideScoreThreshold) {
                                         spectrumDescriptionComments.add(new SpectrumDescCommentImpl("Identified"));
                                         peptideIsIdentified = true;
                                     } else {
@@ -297,8 +300,9 @@ public class MascotDatConverter {
                                         peptideIsIdentified = false;
                                     }
                                 } else {
-                                    if (queryToPeptideMap.getPeptideHitsAboveIdentityThreshold(currentQuery.getQueryNumber(),
-                                            (100 - PRIDEConverter.getProperties().getMascotConfidenceLevel()) / 100).size() > 0) {
+                                    if ((queryToPeptideMap.getPeptideHitsAboveIdentityThreshold(currentQuery.getQueryNumber(),
+                                            (100 - PRIDEConverter.getProperties().getMascotConfidenceLevel()) / 100).size() > 0)
+                                            && iconScore >= peptideScoreThreshold) {
                                         spectrumDescriptionComments.add(new SpectrumDescCommentImpl("Identified"));
                                         peptideIsIdentified = true;
                                     } else {
@@ -311,25 +315,15 @@ public class MascotDatConverter {
                                 peptideIsIdentified = false;
                             }
 
-                            boolean addPeptide = true;
+                            boolean addSpectrum = true;
 
                             // special case for when the peptide is not identified and the select identified
                             // spectra option is selected
                             if (!peptideIsIdentified && PRIDEConverter.getProperties().selectAllIdentifiedSpectra()) {
-                                addPeptide = false;
+                                addSpectrum = false;
                             }
 
-                            // additional test for Peptide Score Threshold
-                            if (peptideIsIdentified && tempPeptideHit != null) {
-
-                                iconScore = new Double(tempPeptideHit.getIonsScore()).intValue();
-
-                                if (iconScore < PRIDEConverter.getProperties().getPeptideScoreThreshold()) {
-                                    addPeptide = false;
-                                }
-                            }
-
-                            if (addPeptide) {
+                            if (addSpectrum) {
 
                                 spectrumDescriptionComments = PRIDEConverter.addUserSpectrumComments(spectrumDescriptionComments,
                                         PRIDEConverter.getProperties().getSpectrumCvParams().get(PRIDEConverter.getSpectrumKey()),
