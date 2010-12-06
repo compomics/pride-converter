@@ -219,7 +219,7 @@ public class OutputDetails extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(outPutJLabel)
                 .add(18, 18, 18)
-                .add(outPutPathJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
+                .add(outPutPathJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(findOutPutFileJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 27, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -283,8 +283,8 @@ public class OutputDetails extends javax.swing.JFrame {
                         .add(18, 18, 18)
                         .add(jLabel1)
                         .add(18, 18, 18)
-                        .add(accessionJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE))
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE))
+                        .add(accessionJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE))
                 .add(6, 6, 6)
                 .add(dummyJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 27, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -302,7 +302,7 @@ public class OutputDetails extends javax.swing.JFrame {
                         .add(12, 12, 12)
                         .add(jLabel2))
                     .add(dummyJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 17, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         jLabel3.setFont(jLabel3.getFont().deriveFont((jLabel3.getFont().getStyle() | java.awt.Font.ITALIC), jLabel3.getFont().getSize()-2));
@@ -371,7 +371,7 @@ public class OutputDetails extends javax.swing.JFrame {
                     .add(jPanel2Layout.createSequentialGroup()
                         .add(fileNameJLabel)
                         .add(18, 18, 18)
-                        .add(fileNameJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE))
+                        .add(fileNameJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
                         .add(referenceTextJLabel)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
@@ -464,7 +464,7 @@ public class OutputDetails extends javax.swing.JFrame {
                     .add(jPanel3Layout.createSequentialGroup()
                         .add(jLabel7)
                         .add(18, 18, 18)
-                        .add(omssaInstallationFolderJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 506, Short.MAX_VALUE)
+                        .add(omssaInstallationFolderJTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(findOmssaFolderJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 27, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(jPanel3Layout.createSequentialGroup()
@@ -480,23 +480,19 @@ public class OutputDetails extends javax.swing.JFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel3Layout.createSequentialGroup()
-                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel3Layout.createSequentialGroup()
-                        .add(13, 13, 13)
-                        .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(roundDownScoreAndThresholdJCheckBox)
-                            .add(jLabel5))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(useCommaAsDecimalSymbolJCheckBox)
-                            .add(jLabel6))
-                        .add(13, 13, 13)
-                        .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
-                            .add(omssaInstallationFolderJTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(findOmssaFolderJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                    .add(jPanel3Layout.createSequentialGroup()
-                        .add(85, 85, 85)
-                        .add(jLabel7)))
+                .add(13, 13, 13)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(roundDownScoreAndThresholdJCheckBox)
+                    .add(jLabel5))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(useCommaAsDecimalSymbolJCheckBox)
+                    .add(jLabel6))
+                .add(13, 13, 13)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
+                    .add(omssaInstallationFolderJTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(findOmssaFolderJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel7))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -515,7 +511,7 @@ public class OutputDetails extends javax.swing.JFrame {
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 363, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 365, Short.MAX_VALUE)
                         .add(backJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(convertJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 81, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -533,7 +529,7 @@ public class OutputDetails extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jPanel6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(1, 1, 1)
-                .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -695,12 +691,12 @@ public class OutputDetails extends javax.swing.JFrame {
 
         if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("OMSSA")) {
             if (!new File(PRIDEConverter.getUserProperties().getOmssaInstallDir() + "mods.xml").exists()) {
-                JOptionPane.showConfirmDialog(this,
+                JOptionPane.showMessageDialog(this,
                         "The selected OMSSA installation folder does not contain the mods.xml\n" +
                         "file used by OMSSA. The conversion can not be done without this file.\n" +
                         "Please select the correct OMSSA installation folder.",
                         "Incorrect OMSSA Installation Folder",
-                        JOptionPane.YES_NO_OPTION);
+                        JOptionPane.INFORMATION_MESSAGE);
                 error = true;
                 findOmssaFolderJButtonActionPerformed(null);
             }
@@ -888,13 +884,13 @@ public class OutputDetails extends javax.swing.JFrame {
                         "OMSSA to PRIDE XML conversion can not be completed without these files.\n\n" +
                         "Please select the correct OMSSA installation folder.",
                         "Incorrect OMSSA Installation Folder",
-                        JOptionPane.YES_NO_OPTION);
+                        JOptionPane.INFORMATION_MESSAGE);
 
                 omssaInstallationFolderJTextField.setText(path);
                 findOmssaFolderJButtonActionPerformed(null);
-
             } else {
                 omssaInstallationFolderJTextField.setText(path);
+                convertJButton.setEnabled(true);
             }
         }
 
