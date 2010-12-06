@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.regex.Pattern;
 
 /**
  * @author Florian Reisinger
@@ -283,6 +284,8 @@ public class MascotGenericConverter {
                         precursorCharge = Util.extractCharge(line.substring(equalSignIndex + 1));
                     } else if (line.startsWith("RTINSECONDS")) {
                         String value = line.substring(equalSignIndex + 1);
+                        String[] split_values =  Pattern.compile("\\D").split(value);
+                        value=split_values[0];
                         precursorRetentionTime = new Double(value);
 
                     }
