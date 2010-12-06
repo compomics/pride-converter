@@ -1,6 +1,14 @@
 #summary Short summary of changes for each version of PRIDE Converter.
 #labels Featured
 
+*Changes in PRIDE Converter v2.4.8 - (Dec. 6. 2010):*
+ * BUG FIX: Mascot Generic files (MascotGenericConverter.java): Change in the Retention Time management: two retention times are now allowed.
+ * BUG FIX: For ms_lims the modification mass is now also added as a ModMonoDelta tag. Fixed an issue with the user name being set incorrectly in the default ms_lims login
+dialog.
+ * FEATURE IMPROVEMENT: Change ols-dalog from version 3.2.3 to 3.2.4.
+
+----
+
 *Changes in PRIDE Converter v2.4.7 - (Nov. 27. 2010):*
  * NEW FEATURE / BUG FIX: Using Peptide Score Threshold has now been implemented for Mascot dat files.
 
