@@ -16,7 +16,7 @@ PeakIntegrationRangeLower: -0.05
 PeakIntegrationRangeUpper: 0.05
 ReporterIonIntensityThreshold: 0.0
 PurityCorrections: 0.0,1.0,5.9,2.0,0.0,2.0,5.6,0.1,0.0,3.0,4.5,0.1,0.1,4.0,3.5,0.1
-OmssaInstallDir:
+OmssaInstallDir: null
 CVTermMappings:
 Pyro-carbamidomethyl|MOD:00419|MOD|S-carbamoylmethylcysteine cyclization (N-terminus)|39.994915|
 Acetyl|MOD:00394|MOD|acetylated residue|42.010565|
