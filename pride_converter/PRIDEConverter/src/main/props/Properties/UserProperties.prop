@@ -1,7 +1,7 @@
 PRIDEConverter
 ${version.number}*
 OutputPath: user.home
-UserName:
+UserName: 
 ServerHost: localhost
 Schema: ms_lims_6
 LastSelectedOntology: Mass Spectroscopy CV (PSI-MS) [PSI]

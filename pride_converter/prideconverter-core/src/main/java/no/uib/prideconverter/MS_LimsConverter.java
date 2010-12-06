@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import uk.ac.ebi.pride.model.implementation.core.MonoMassDeltaImpl;
+import uk.ac.ebi.pride.model.interfaces.core.MassDelta;
 
 /**
  * @author Florian Reisinger
@@ -324,12 +326,16 @@ public class MS_LimsConverter {
                                 modificationCVParams = new ArrayList<CvParam>();
                                 modificationCVParams.add(userProperties.getCVTermMappings().get(modificationName));
 
+                                ArrayList<MassDelta> monoMasses = new ArrayList<MassDelta>();
+                                monoMasses.add(new MonoMassDeltaImpl(
+                                        Double.parseDouble(userProperties.getCVTermMappings().get(modificationName).getValue())));
+
                                 peptideModifications.add(new ModificationImpl(
                                         userProperties.getCVTermMappings().get(modificationName).getAccession(),
                                         0,
                                         userProperties.getCVTermMappings().get(modificationName).getCVLookup(),
                                         null,
-                                        null,
+                                        monoMasses,
                                         null,
                                         modificationCVParams,
                                         null));
@@ -361,12 +367,16 @@ public class MS_LimsConverter {
                                 modificationCVParams = new ArrayList<CvParam>();
                                 modificationCVParams.add(userProperties.getCVTermMappings().get(modificationName));
 
+                                ArrayList<MassDelta> monoMasses = new ArrayList<MassDelta>();
+                                monoMasses.add(new MonoMassDeltaImpl(
+                                        Double.parseDouble(userProperties.getCVTermMappings().get(modificationName).getValue())));
+
                                 peptideModifications.add(new ModificationImpl(
                                         userProperties.getCVTermMappings().get(modificationName).getAccession(),
                                         peptideSequence.length() + 1,
                                         userProperties.getCVTermMappings().get(modificationName).getCVLookup(),
                                         null,
-                                        null,
+                                        monoMasses,
                                         null,
                                         modificationCVParams,
                                         null));
@@ -417,6 +427,10 @@ public class MS_LimsConverter {
                                 modificationCVParams.add(userProperties.getCVTermMappings().
                                         get(modificationName));
 
+                                ArrayList<MassDelta> monoMasses = new ArrayList<MassDelta>();
+                                monoMasses.add(new MonoMassDeltaImpl(
+                                        Double.parseDouble(userProperties.getCVTermMappings().get(modificationName).getValue())));
+
                                 peptideModifications.add(new ModificationImpl(
                                         userProperties.getCVTermMappings().
                                         get(modificationName).getAccession(),
@@ -424,7 +438,7 @@ public class MS_LimsConverter {
                                         userProperties.getCVTermMappings().
                                         get(modificationName).getCVLookup(),
                                         null,
-                                        null,
+                                        monoMasses,
                                         null,
                                         modificationCVParams,
                                         null));
@@ -442,7 +456,7 @@ public class MS_LimsConverter {
                                 tempIdentification.getSequence(), // peptide sequence
                                 new Long(tempIdentification.getStart()).intValue(), // start
                                 (double) tempIdentification.getScore(), // score
-                                (1 - tempIdentification.getConfidence().doubleValue()) * 100, // theshold
+                                (1 - tempIdentification.getConfidence().doubleValue()) * 100, // threshold
                                 null, null, null, // iTRAQ values
                                 cVParams, // cv params
                                 userParams, // user params
