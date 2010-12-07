@@ -437,8 +437,8 @@ public class ParseOutputFiles {
                 GelFreeIdentificationImpl PRIDE_protein = new GelFreeIdentificationImpl(protein.getAccession(), 
                         protein.getVersion(), null, ppSummary.getSourceDatabase(), PRIDE_peptides,
                         additionalCVParams, null, ppSummary.getSoftware(), ppSummary.getDbVersion(),
-                        new Double(protein.getPercent_coverage() / 100), new Double(protein.getProbability()),
-                        new Double(0.9), null);
+                        (protein.getPercent_coverage() > 0 ? (protein.getPercent_coverage() / 100) : 0D), protein.getProbability(),
+                        0.9, null);
                 PRIDE_proteins.add(PRIDE_protein);
             }
             logger.debug("Created PRIDE protein objects (" + dateTimeFormat.format(new Date()) + ").");

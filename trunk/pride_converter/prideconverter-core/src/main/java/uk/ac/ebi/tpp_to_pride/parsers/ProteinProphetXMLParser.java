@@ -198,10 +198,13 @@ public class ProteinProphetXMLParser {
         int isoformCount = Integer.parseInt(aParser.getAttributeValue(null, "n_indistinguishable_proteins"));
         double probability = Double.parseDouble(aParser.getAttributeValue(null, "probability"));
         double percent_coverage = -1;
-        // see if we have a 'percent_coverage' attribute. If so, parse it.
-        if(aParser.getAttributeValue(null, "percent_coverage") != null) {
-            percent_coverage = Double.parseDouble(aParser.getAttributeValue(null, "percent_coverage"));
-        }
+//        // see if we have a 'percent_coverage' attribute. If so, parse it.
+//        if(aParser.getAttributeValue(null, "percent_coverage") != null) {
+//            percent_coverage = Double.parseDouble(aParser.getAttributeValue(null, "percent_coverage"));
+//            if (percent_coverage < 0 || percent_coverage > 1) {
+//                throw new IllegalStateException("Coverage has to be a double value between 0 and 1! But is: " + percent_coverage);
+//            }
+//        }
         String peptidesLine = aParser.getAttributeValue(null, "unique_stripped_peptides");
         int totPeptides = Integer.parseInt(aParser.getAttributeValue(null, "total_number_peptides"));
 
