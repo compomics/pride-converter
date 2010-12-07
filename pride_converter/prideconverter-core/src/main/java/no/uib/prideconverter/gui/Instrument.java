@@ -28,7 +28,7 @@ import no.uib.olsdialog.OLSInputable;
 import no.uib.prideconverter.util.ComboBoxInputable;
 import no.uib.prideconverter.util.MyComboBoxRenderer;
 import no.uib.prideconverter.util.Util;
-import org.systemsbiology.jrap.MSXMLParser;
+import org.systemsbiology.jrap.stax.MSXMLParser;
 import uk.ac.ebi.pride.model.implementation.mzData.AnalyzerImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 import uk.ac.ebi.pride.model.interfaces.mzdata.Analyzer;
@@ -195,9 +195,9 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                 msXMLParser = new MSXMLParser(fileName);
 
-                instrumentName = msXMLParser.getHeaderInfo().
+                instrumentName = msXMLParser.rapFileHeader().
                         getInstrumentInfo().getManufacturer() + " " +
-                        msXMLParser.getHeaderInfo().getInstrumentInfo().getModel();
+                        msXMLParser.rapFileHeader().getInstrumentInfo().getModel();
             }
 
         } else { //mzData
@@ -284,47 +284,47 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
 
                     //add or updated the properties
-                    if (msXMLParser.getHeaderInfo().getDataProcessing().getCentroided() ==
-                            msXMLParser.getHeaderInfo().getDataProcessing().YES) {
+                    if (msXMLParser.rapFileHeader().getDataProcessing().getCentroided() ==
+                            msXMLParser.rapFileHeader().getDataProcessing().YES) {
                         addProcessingMethod("PeakProcessing", "PSI:1000035", "PSI",
                                 "CentroidMassSpectrum", -1);
-                    } else if (msXMLParser.getHeaderInfo().getDataProcessing().
+                    } else if (msXMLParser.rapFileHeader().getDataProcessing().
                             getCentroided() ==
-                            msXMLParser.getHeaderInfo().getDataProcessing().NO) {
+                            msXMLParser.rapFileHeader().getDataProcessing().NO) {
                     } else {
                         //unknown
                     }
 
-                    if (msXMLParser.getHeaderInfo().getDataProcessing().
+                    if (msXMLParser.rapFileHeader().getDataProcessing().
                             getChargeDeconvoluted() ==
-                            msXMLParser.getHeaderInfo().getDataProcessing().YES) {
+                            msXMLParser.rapFileHeader().getDataProcessing().YES) {
                         addProcessingMethod("ChargeDeconvolution", "PSI:1000034", "PSI",
                                 "true", -1);
-                    } else if (msXMLParser.getHeaderInfo().getDataProcessing().
+                    } else if (msXMLParser.rapFileHeader().getDataProcessing().
                             getChargeDeconvoluted() ==
-                            msXMLParser.getHeaderInfo().getDataProcessing().NO) {
+                            msXMLParser.rapFileHeader().getDataProcessing().NO) {
                         addProcessingMethod("ChargeDeconvolution", "PSI:1000034", "PSI",
                                 "false", -1);
                     } else {
                         //unknown
                     }
 
-                    if (msXMLParser.getHeaderInfo().getDataProcessing().getDeisotoped() ==
-                            msXMLParser.getHeaderInfo().getDataProcessing().YES) {
+                    if (msXMLParser.rapFileHeader().getDataProcessing().getDeisotoped() ==
+                            msXMLParser.rapFileHeader().getDataProcessing().YES) {
                         addProcessingMethod("Deisotoping", "PSI:1000033", "PSI", "true",
                                 -1);
-                    } else if (msXMLParser.getHeaderInfo().getDataProcessing().
+                    } else if (msXMLParser.rapFileHeader().getDataProcessing().
                             getDeisotoped() ==
-                            msXMLParser.getHeaderInfo().getDataProcessing().NO) {
+                            msXMLParser.rapFileHeader().getDataProcessing().NO) {
                         addProcessingMethod("Deisotoping", "PSI:1000033", "PSI", "false",
                                 -1);
                     } else {
                         //unknown
                     }
 
-                    softwareNameJTextField.setText(msXMLParser.getHeaderInfo().
+                    softwareNameJTextField.setText(msXMLParser.rapFileHeader().
                             getInstrumentInfo().getSoftwareInfo().name);
-                    softwareVersionJTextField.setText(msXMLParser.getHeaderInfo().
+                    softwareVersionJTextField.setText(msXMLParser.rapFileHeader().
                             getInstrumentInfo().getSoftwareInfo().version);
 
                     JOptionPane.showMessageDialog(this, 
@@ -363,56 +363,56 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     //instrument source
                     if (PRIDEConverter.getUserProperties().getCVTermMappings().
                             containsKey(
-                            msXMLParser.getHeaderInfo().getInstrumentInfo().getIonization())) {
+                            msXMLParser.rapFileHeader().getInstrumentInfo().getIonization())) {
 
                         tempCVTerm = (CvParamImpl) PRIDEConverter.getUserProperties().
                                 getCVTermMappings().get(
-                                msXMLParser.getHeaderInfo().getInstrumentInfo().getIonization());
+                                msXMLParser.rapFileHeader().getInstrumentInfo().getIonization());
 
                         setInstrumentSource(tempCVTerm.getName(),
                                 tempCVTerm.getAccession(), tempCVTerm.getCVLookup());
                     } else {
                         JOptionPane.showMessageDialog(this, "Use OLS to map the instruments source \'" +
-                                msXMLParser.getHeaderInfo().getInstrumentInfo().getIonization() +
+                                msXMLParser.rapFileHeader().getInstrumentInfo().getIonization() +
                                 "\' to the correct CV term.", "CV Term Mapping",
                                 JOptionPane.INFORMATION_MESSAGE);
 
                         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
                         new OLSDialog(this, this, true, "instrumentSource",
                                 "Mass Spectroscopy CV (PSI-MS) [PSI]",
-                                msXMLParser.getHeaderInfo().getInstrumentInfo().getIonization());
+                                msXMLParser.rapFileHeader().getInstrumentInfo().getIonization());
                     }
 
                     //instrument detector
                     if (PRIDEConverter.getUserProperties().getCVTermMappings().containsKey(
-                            msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector())) {
+                            msXMLParser.rapFileHeader().getInstrumentInfo().getDetector())) {
 
                         tempCVTerm = (CvParamImpl) PRIDEConverter.getUserProperties().getCVTermMappings().get(
-                                msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector());
+                                msXMLParser.rapFileHeader().getInstrumentInfo().getDetector());
 
                         setInstrumentDetector(tempCVTerm.getName(),
                                 tempCVTerm.getAccession(), tempCVTerm.getCVLookup());
                     } else {
                         JOptionPane.showMessageDialog(this, "Use OLS to map the instruments detector \'" +
-                                msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector() +
+                                msXMLParser.rapFileHeader().getInstrumentInfo().getDetector() +
                                 "\' to the correct CV term.", "CV Term Mapping",
                                 JOptionPane.INFORMATION_MESSAGE);
 
                         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
                         new OLSDialog(this, this, true, "instrumentDetector",
                                 "Mass Spectroscopy CV (PSI-MS) [PSI]",
-                                msXMLParser.getHeaderInfo().getInstrumentInfo().getDetector());
+                                msXMLParser.rapFileHeader().getInstrumentInfo().getDetector());
                     }
 
                     //analyzer
                     if (PRIDEConverter.getUserProperties().getCVTermMappings().containsKey(
-                            msXMLParser.getHeaderInfo().getInstrumentInfo().getMassAnalyzer())) {
+                            msXMLParser.rapFileHeader().getInstrumentInfo().getMassAnalyzer())) {
 
                         PRIDEConverter.getProperties().setAnalyzerList(new ArrayList());
 
                         tempCVTerm = (CvParamImpl) PRIDEConverter.getUserProperties().
                                 getCVTermMappings().get(
-                                msXMLParser.getHeaderInfo().getInstrumentInfo().getMassAnalyzer());
+                                msXMLParser.rapFileHeader().getInstrumentInfo().getMassAnalyzer());
 
                         Vector names = new Vector();
                         names.add(tempCVTerm.getName());
@@ -429,14 +429,14 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                         PRIDEConverter.getProperties().setAnalyzerList(new ArrayList());
 
                         JOptionPane.showMessageDialog(this, "Use OLS to map the mass analyzer \'" +
-                                msXMLParser.getHeaderInfo().getInstrumentInfo().getMassAnalyzer() +
+                                msXMLParser.rapFileHeader().getInstrumentInfo().getMassAnalyzer() +
                                 "\' to the correct CV term.", "CV Term Mapping",
                                 JOptionPane.INFORMATION_MESSAGE);
 
                         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
                         new OLSDialog(this, this, true, "analyzer",
                                 "Mass Spectroscopy CV (PSI-MS) [PSI]",
-                                msXMLParser.getHeaderInfo().getInstrumentInfo().
+                                msXMLParser.rapFileHeader().getInstrumentInfo().
                                 getMassAnalyzer());
                     }
                 } else { // mzData

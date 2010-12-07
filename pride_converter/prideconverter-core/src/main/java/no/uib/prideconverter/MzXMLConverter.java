@@ -1,7 +1,7 @@
 package no.uib.prideconverter;
 
-import org.systemsbiology.jrap.MSXMLParser;
-import org.systemsbiology.jrap.Scan;
+import org.systemsbiology.jrap.stax.MSXMLParser;
+import org.systemsbiology.jrap.stax.Scan;
 
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class MzXMLConverter {
 
         HashMap<String, Long> mapping = new HashMap<String, Long>();
 
-        float[][] arraysFloat;
+        double[][] arraysFloat;
         Collection<Precursor> precursors;
         Collection<CvParam> ionSelection;
 
@@ -89,9 +89,9 @@ public class MzXMLConverter {
                 PRIDEConverter.getProgressDialog().setValue(i);
 
                 scan = msXMLParser.rap(i);
-                precursorCharge = scan.getPrecursorCharge();
-                precursorMz = scan.getPrecursorMz();
-                msLevel = scan.getMsLevel();
+                precursorCharge = scan.getHeader().getPrecursorCharge();
+                precursorMz = scan.getHeader().getPrecursorMz();
+                msLevel = scan.getHeader().getMsLevel();
 
                 matchFound = false;
 
@@ -101,7 +101,7 @@ public class MzXMLConverter {
                         Object[] temp = (Object[]) properties.getSelectedSpectraKeys().get(k);
 
                         if (((String) temp[0]).equalsIgnoreCase(fileName)) {
-                            if ((Integer) temp[1] == scan.getNum()) {
+                            if ((Integer) temp[1] == scan.getHeader().getNum()) {
                                 matchFound = true;
                                 PRIDEConverter.setSpectrumKey(PRIDEConverter.generateSpectrumKey(temp));
                             }

@@ -191,7 +191,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>ms-lims</artifactId>
-            <version>7.4.1</version>
+            <version>7.5.2</version>
             <exclusions>
                 <exclusion>
                     <artifactId>peptizer</artifactId>
@@ -205,8 +205,8 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         </dependency>
         <dependency>
             <groupId>lennart</groupId>
-            <artifactId>lm_jrap</artifactId>
-            <version>1.1</version>
+            <artifactId>jrap_StAX</artifactId>
+            <version>5.2</version>
         </dependency>
         <dependency>
             <groupId>com.compomics</groupId>

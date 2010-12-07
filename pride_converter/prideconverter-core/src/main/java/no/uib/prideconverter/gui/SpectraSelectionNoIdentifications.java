@@ -22,8 +22,8 @@ import no.uib.prideconverter.util.Util;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTableHeader;
 import org.jdesktop.swingx.decorator.SortOrder;
-import org.systemsbiology.jrap.MSXMLParser;
-import org.systemsbiology.jrap.Scan;
+import org.systemsbiology.jrap.stax.MSXMLParser;
+import org.systemsbiology.jrap.stax.Scan;
 import uk.ac.ebi.pride.model.interfaces.mzdata.MzData;
 import uk.ac.ebi.pride.xml.MzDataXMLUnmarshaller;
 
@@ -709,15 +709,15 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                             for (int i = 1; i <= scanCount; i++) {
                                 scan = msXMLParser.rap(i);
 
-                                precursorCharge = scan.getPrecursorCharge();
-                                precursorMass = new Float(scan.getPrecursorMz()).doubleValue();
+                                precursorCharge = scan.getHeader().getPrecursorCharge();
+                                precursorMass = new Float(scan.getHeader().getPrecursorMz()).doubleValue();
 
                                 if (precursorMass != -1 &&
                                         precursorCharge != -1) {
                                     ((DefaultTableModel) spectraJXTable.getModel()).addRow(
                                             new Object[]{
                                                 file.getName(),
-                                                scan.getNum(),
+                                                scan.getHeader().getNum(),
                                                 precursorMass, precursorCharge,
                                                 2,
                                                 new Boolean(true)
@@ -727,7 +727,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                     ((DefaultTableModel) spectraJXTable.getModel()).addRow(
                                             new Object[]{
                                                 file.getName(),
-                                                scan.getNum(),
+                                                scan.getHeader().getNum(),
                                                 null, precursorCharge,
                                                 2,
                                                 new Boolean(true)
@@ -737,7 +737,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                     ((DefaultTableModel) spectraJXTable.getModel()).addRow(
                                             new Object[]{
                                                 file.getName(),
-                                                scan.getNum(),
+                                                scan.getHeader().getNum(),
                                                 precursorMass, null,
                                                 2,
                                                 new Boolean(true)
@@ -746,7 +746,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                                     ((DefaultTableModel) spectraJXTable.getModel()).addRow(
                                             new Object[]{
                                                 file.getName(),
-                                                scan.getNum(),
+                                                scan.getHeader().getNum(),
                                                 null, null,
                                                 2,
                                                 new Boolean(true)

@@ -17,8 +17,8 @@ import no.uib.prideconverter.util.Util;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTableHeader;
 import org.jdesktop.swingx.decorator.SortOrder;
-import org.systemsbiology.jrap.MSXMLParser;
-import org.systemsbiology.jrap.Scan;
+import org.systemsbiology.jrap.stax.MSXMLParser;
+import org.systemsbiology.jrap.stax.Scan;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -1153,15 +1153,15 @@ public class SpectraSelectionWithIdentifications extends javax.swing.JFrame {
                                             new Object[]{
                                                 null,
                                                 new File(currentSpectraFile).getName(),
-                                                scan.getNum(),
+                                                scan.getHeader().getNum(),
                                                 new Boolean(identifiedSpectraIds.contains(
-                                                new File(currentSpectraFile).getName() + "_" + scan.getNum())),
+                                                new File(currentSpectraFile).getName() + "_" + scan.getHeader().getNum())),
                                                 new Boolean(identifiedSpectraIds.contains(
-                                                new File(currentSpectraFile).getName() + "_" + scan.getNum()))
+                                                new File(currentSpectraFile).getName() + "_" + scan.getHeader().getNum()))
                                             });
 
                                     if (identifiedSpectraIds.contains(
-                                            new File(currentSpectraFile).getName() + "_" + scan.getNum())) {
+                                            new File(currentSpectraFile).getName() + "_" + scan.getHeader().getNum())) {
                                         numberOfSelectedSpectra++;
                                     }
 
