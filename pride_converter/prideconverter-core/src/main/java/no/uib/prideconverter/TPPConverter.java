@@ -531,7 +531,7 @@ public class TPPConverter {
                             null, // user params
                             ppSummary.getSoftware(), // search engine
                             ppSummary.getDbVersion(), // database version
-                            (protein.getPercent_coverage() / 100), // sequence coverage
+                            (protein.getPercent_coverage() > 0 ? (protein.getPercent_coverage() / 100) : 0D), // sequence coverage
                             protein.getProbability(), // score
                             properties.getProteinProphetThreshold(), // threshold
                             null); // spectrum reference
