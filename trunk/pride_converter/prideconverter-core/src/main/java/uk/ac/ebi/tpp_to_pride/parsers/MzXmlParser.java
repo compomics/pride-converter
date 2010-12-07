@@ -7,9 +7,9 @@
 package uk.ac.ebi.tpp_to_pride.parsers;
 
 import org.apache.log4j.Logger;
-import org.systemsbiology.jrap.MSXMLParser;
-import org.systemsbiology.jrap.MZXMLFileInfo;
-import org.systemsbiology.jrap.Scan;
+import org.systemsbiology.jrap.stax.MSXMLParser;
+import org.systemsbiology.jrap.stax.MZXMLFileInfo;
+import org.systemsbiology.jrap.stax.Scan;
 import uk.ac.ebi.pride.model.implementation.mzData.*;
 import uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum;
 
@@ -70,7 +70,7 @@ public class MzXmlParser {
     public MzXmlParser(File inputFile, boolean aInferParentScans) {
         filename = inputFile.getName();
         mxp = new MSXMLParser(inputFile.getAbsolutePath());
-        info = mxp.getHeaderInfo();
+        info = mxp.rapFileHeader();
         logger.info("Read and parsed header of mzXML file '" + filename + "'.");
         if (aInferParentScans) {
             inferParentScans();
@@ -185,7 +185,7 @@ public class MzXmlParser {
     public int addSpectrum(Scan aMsScan, List aSpectra, HashMap aFileAndScanToID) {
         Scan msScan = aMsScan;
 
-        int scanNumber = msScan.getNum();
+        int scanNumber = msScan.getHeader().getNum();
 
         // Process the scan (and all parents).
         int id = processScan(scanNumber, msScan, aSpectra);
@@ -278,11 +278,11 @@ public class MzXmlParser {
         // See if there is a parent scan. If so, do this one first.
         int parentID = -1;
 
-        int precursorScanNum = aScan.getPrecursorScanNum();
+        int precursorScanNum = aScan.getHeader().getPrecursorScanNum();
 
         if (precursorScanNum > 0) {
             parentID = processScan(precursorScanNum, mxp.rap(precursorScanNum), aSpectra);
-        } else if (aScan.getMsLevel() == 2 && scanNumberToParentScanNumber != null) {
+        } else if (aScan.getHeader().getMsLevel() == 2 && scanNumberToParentScanNumber != null) {
             // try our own inferred parent scan...
             Integer parentScan = (Integer) scanNumberToParentScanNumber.get(aScanNumber);
             // See if this precursor spectrum has been used before.
@@ -305,7 +305,7 @@ public class MzXmlParser {
         }
 
         Spectrum mzDataSpectrum = null;
-        if (aScan.getMsLevel() == 1) {
+        if (aScan.getHeader().getMsLevel() == 1) {
             // If this is a top-level parent spectrum, it will be an MS scan.
             mzDataSpectrum = parseMsSpectrum(aScanNumber, id, aScan);
             usedPrecursorSpectraScanToID.put(aScanNumber, id);
@@ -335,8 +335,8 @@ public class MzXmlParser {
         // CV parameters for the spectruminstrument.
         // Note that this information is hardcoded here!
         Collection spectrumInstrumentCvParameters = new ArrayList(2);
-        spectrumInstrumentCvParameters.add(new CvParamImpl("PSI:1000036", "psi", "ScanMode", 0, aScan.getScanType()));
-        spectrumInstrumentCvParameters.add(new CvParamImpl("PSI:1000037", "psi", "Polarity", 1, aScan.getPolarity()));
+        spectrumInstrumentCvParameters.add(new CvParamImpl("PSI:1000036", "psi", "ScanMode", 0, aScan.getHeader().getScanType()));
+        spectrumInstrumentCvParameters.add(new CvParamImpl("PSI:1000037", "psi", "Polarity", 1, aScan.getHeader().getPolarity()));
         
         // Spectrum description comment containing the original mzXML scan number.
         //SpectrumDescComment comment = new SpectrumDescCommentImpl("Original mzXML scan number: " + aScanNumber);
@@ -347,8 +347,8 @@ public class MzXmlParser {
         // Notice that certain collections and annotations are 'null' here.
         // Feel free to add any kind of annotation yourself, however.
         return new SpectrumImpl(new BinaryArrayImpl(aScan.getMassIntensityList()[1], BinaryArrayImpl.BIG_ENDIAN_LABEL),
-                new Double(aScan.getLowMz()), new BinaryArrayImpl(aScan.getMassIntensityList()[0],
-                BinaryArrayImpl.BIG_ENDIAN_LABEL), aScan.getMsLevel(), null, new Double(aScan.getHighMz()),
+                (double) aScan.getHeader().getLowMz(), new BinaryArrayImpl(aScan.getMassIntensityList()[0],
+                BinaryArrayImpl.BIG_ENDIAN_LABEL), aScan.getHeader().getMsLevel(), null, (double) aScan.getHeader().getHighMz(),
                 null, aSpectrumID, null, spectrumDescriptionComments, spectrumInstrumentCvParameters, null, null, null);
     }
 
@@ -367,11 +367,11 @@ public class MzXmlParser {
         // Note that this information is hardcoded here!
         Collection spectrumInstrumentCvParameters = new ArrayList(2);
 
-        if (aScan.getScanType() != null) {
-            spectrumInstrumentCvParameters.add(new CvParamImpl("PSI:1000036", "psi", "ScanMode", 0, aScan.getScanType()));
+        if (aScan.getHeader().getScanType() != null) {
+            spectrumInstrumentCvParameters.add(new CvParamImpl("PSI:1000036", "psi", "ScanMode", 0, aScan.getHeader().getScanType()));
         }
 
-        spectrumInstrumentCvParameters.add(new CvParamImpl("PSI:1000037", "psi", "Polarity", 1, aScan.getPolarity()));
+        spectrumInstrumentCvParameters.add(new CvParamImpl("PSI:1000037", "psi", "Polarity", 1, aScan.getHeader().getPolarity()));
 
         // Precursor annotation collection.
         Collection precursors = new ArrayList(1);
@@ -380,15 +380,15 @@ public class MzXmlParser {
         Collection ionSelection = new ArrayList(3);
 
         // See if we know the precursor charge, and if so, include it.
-        int charge = aScan.getPrecursorCharge();
+        int charge = aScan.getHeader().getPrecursorCharge();
         if (charge > 0) {
             ionSelection.add(new CvParamImpl("PSI:1000041", "psi", "ChargeState", 0, Integer.toString(charge)));
         }
-        ionSelection.add(new CvParamImpl("PSI:1000040", "psi", "MassToChargeRatio", 1, Double.toString(aScan.getPrecursorMz())));
-        ionSelection.add(new CvParamImpl("PSI:RETENTION TIME", "PSI", "Retention time", 2, aScan.getRetentionTime()));
+        ionSelection.add(new CvParamImpl("PSI:1000040", "psi", "MassToChargeRatio", 1, Double.toString(aScan.getHeader().getPrecursorMz())));
+        ionSelection.add(new CvParamImpl("PSI:RETENTION TIME", "PSI", "Retention time", 2, aScan.getHeader().getRetentionTime()));
 
         // Add the precursor.
-        precursors.add(new PrecursorImpl(null, null, ionSelection, null, aScan.getMsLevel() - 1, aPrecursorSpectrumID, 0));
+        precursors.add(new PrecursorImpl(null, null, ionSelection, null, aScan.getHeader().getMsLevel() - 1, aPrecursorSpectrumID, 0));
 
         // Spectrum description comment containing the original mzXML scan number.
         //SpectrumDescComment comment = new SpectrumDescCommentImpl("Original mzXML scan number: " + aScanNumber);
@@ -399,9 +399,9 @@ public class MzXmlParser {
         // Notice that certain collections and annotations are 'null' here.
         // Feel free to add any kind of annotation yourself, however.
         return new SpectrumImpl(new BinaryArrayImpl(aScan.getMassIntensityList()[1], 
-                BinaryArrayImpl.BIG_ENDIAN_LABEL), new Double(aScan.getLowMz()),
+                BinaryArrayImpl.BIG_ENDIAN_LABEL), new Double(aScan.getHeader().getLowMz()),
                 new BinaryArrayImpl(aScan.getMassIntensityList()[0], BinaryArrayImpl.BIG_ENDIAN_LABEL),
-                2, null, new Double(aScan.getHighMz()), null, aSpectrumID, precursors,
+                2, null, new Double(aScan.getHeader().getHighMz()), null, aSpectrumID, precursors,
                 spectrumDescriptionComments, spectrumInstrumentCvParameters, null, null, null);
     }
 
@@ -417,31 +417,41 @@ public class MzXmlParser {
         int totalScans = mxp.getScanCount();
         int parentScanNumber = -1;
         int currentScanNumber = -1;
-        
+
+//        System.err.println("Scans count: " + mxp.getScanCount());
+        int errCount = 0;
         for (int i = 1; i <= totalScans; i++) {
-            Scan scan = mxp.rap(i);
+            Scan scan;
+            try {
+            scan = mxp.rap(i);
+            } catch (Exception e) {
+                scan = null;
+                errCount++;
+                System.err.println("Error: " + e.getLocalizedMessage());
+                e.printStackTrace();
+            }
 
             if (scan != null) {
+
+                currentScanNumber = scan.getHeader().getNum();
                 
-                currentScanNumber = scan.getNum();
+//                System.out.println("scan num: " + currentScanNumber);
                 
-                //System.out.println("currentScanNumber: " + currentScanNumber);
-                
-                if (scan.getMsLevel() == 1) {
+                if (scan.getHeader().getMsLevel() == 1) {
                     parentScanNumber = currentScanNumber;
-                } else if (scan.getMsLevel() == 2) {
+                } else if (scan.getHeader().getMsLevel() == 2) {
                     if (parentScanNumber != -1) {
                         scanNumberToParentScanNumber.put(currentScanNumber, parentScanNumber);
                         
                         //System.out.println("currentScanNumber: " + currentScanNumber + " parentScanNumber: " + parentScanNumber);
                     }
                 } else {
-                    logger.warn("Unable to handle scan of msLevel '" + scan.getMsLevel() + "'. I can only deal with MS levels '1' and '2'!");
+                    logger.warn("Unable to handle scan of msLevel '" + scan.getHeader().getMsLevel() + "'. I can only deal with MS levels '1' and '2'!");
                 }
             }
         }
         logger.info("Finished inferring parent scans. Inferred parents for " + scanNumberToParentScanNumber.size() + " MS2 spectra.");
-        
+//        System.err.println("Error count: " + errCount);
         
         // old version
 //        int scanNumber = 1;

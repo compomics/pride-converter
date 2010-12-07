@@ -4,8 +4,8 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
-import org.systemsbiology.jrap.MSXMLParser;
-import org.systemsbiology.jrap.Scan;
+import org.systemsbiology.jrap.stax.MSXMLParser;
+import org.systemsbiology.jrap.stax.Scan;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
@@ -92,7 +92,7 @@ public class XTandemConverter {
         ArrayList<ModificationImpl> peptideModifications;
         ArrayList<FragmentIon> fragmentIons;
 
-        float[][] arraysFloat;
+        double[][] arraysFloat;
 
         ArrayList<CvParam> cVParams;
         ArrayList<UserParam> userParams;
@@ -1037,9 +1037,9 @@ public class XTandemConverter {
                         PRIDEConverter.getProgressDialog().setValue(i);
 
                         Scan scan = msXMLParser.rap(i);
-                        precursorCharge = scan.getPrecursorCharge();
-                        precursorMz = new Float(scan.getPrecursorMz()).doubleValue();
-                        msLevel = scan.getMsLevel();
+                        precursorCharge = scan.getHeader().getPrecursorCharge();
+                        precursorMz = new Float(scan.getHeader().getPrecursorMz()).doubleValue();
+                        msLevel = scan.getHeader().getMsLevel();
 
                         matchFound = false;
 
@@ -1050,21 +1050,21 @@ public class XTandemConverter {
                                 Object[] temp = (Object[]) PRIDEConverter.getProperties().getSelectedSpectraKeys().get(k);
 
                                 if (((String) temp[0]).equalsIgnoreCase(PRIDEConverter.getCurrentFileName())) {
-                                    if (((String) temp[1]).equalsIgnoreCase("" + scan.getNum())) {
+                                    if (((String) temp[1]).equalsIgnoreCase("" + scan.getHeader().getNum())) {
                                         matchFound = true;
-                                        PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + scan.getNum());
+                                        PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + scan.getHeader().getNum());
                                     }
                                 }
                             }
                         } else {
                             if (PRIDEConverter.getProperties().selectAllIdentifiedSpectra()) {
-                                if (identifiedSpectraIds.contains((PRIDEConverter.getCurrentFileName() + "_" + scan.getNum()))) {
+                                if (identifiedSpectraIds.contains((PRIDEConverter.getCurrentFileName() + "_" + scan.getHeader().getNum()))) {
                                     matchFound = true;
-                                    PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + scan.getNum());
+                                    PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + scan.getHeader().getNum());
                                 }
                             } else {
                                 matchFound = true;
-                                PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + scan.getNum());
+                                PRIDEConverter.setSpectrumKey(PRIDEConverter.getCurrentFileName() + "_" + scan.getHeader().getNum());
                             }
                         }
 

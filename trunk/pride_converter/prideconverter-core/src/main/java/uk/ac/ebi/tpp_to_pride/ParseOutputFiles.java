@@ -7,7 +7,7 @@
 package uk.ac.ebi.tpp_to_pride;
 
 import org.apache.log4j.Logger;
-import org.systemsbiology.jrap.MSInstrumentInfo;
+import org.systemsbiology.jrap.stax.MSInstrumentInfo;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 import uk.ac.ebi.tpp_to_pride.parsers.PeptideProphetXMLParser;
