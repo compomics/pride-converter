@@ -699,6 +699,14 @@ public class PRIDEConverter extends AbstractPrideConverter {
                             addIdentification = true;
                         }
 
+//                        // GEL SPOT: hack to add the source filename as UserParam to the peptide
+//                        // these are NOT exactly the original input file names!!
+//                        ArrayList<UserParam> userparams = peptideIdentification.getUserParams();
+//                        if (userparams == null) {
+//                            userparams = new ArrayList<UserParam>();
+//                        }
+//                        userparams.add(new UserParamImpl("Sourcefile", 0, peptideIdentification.getSpectrumFileId()));
+
                         if (addIdentification) {
                             innerId.addPeptide(spectrumRef,
                                     peptideIdentification.getSequence(),
@@ -707,6 +715,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
                                     peptideIdentification.getThreshold(),
                                     peptideIdentification.getModifications(),
                                     peptideIdentification.getCvParams(),
+                                    // userparams,
                                     peptideIdentification.getUserParams(),
                                     peptideIdentification.getFragmentIons());
 
