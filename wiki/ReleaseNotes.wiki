@@ -2,7 +2,6 @@
 #labels Featured
 
 *Changes in PRIDE Converter v2.4.9 - (Dec.16.2010):*
- * BUG FIX: Added commented-out GEL hack.
  * BUG FIX: Removed 'percent_coverage' value parsing from TPP protXML files (since we don't know how these   percentage values are encoded).
  * BUG FIX: Update JRAP library (external dependency) to latest version jrap_StAX_v5.2.
 
