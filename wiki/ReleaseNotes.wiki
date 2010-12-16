@@ -1,6 +1,13 @@
 #summary Short summary of changes for each version of PRIDE Converter.
 #labels Featured
 
+*Changes in PRIDE Converter v2.4.9 - (Dec.16.2010):*
+ * BUG FIX: Added commented-out GEL hack.
+ * BUG FIX: Removed 'percent_coverage' value parsing from TPP protXML files (since we don't know how these   percentage values are encoded).
+ * BUG FIX: Update JRAP library (external dependency) to latest version jrap_StAX_v5.2.
+
+----
+
 *Changes in PRIDE Converter v2.4.8 - (Dec. 6. 2010):*
  * BUG FIX: Mascot Generic files (MascotGenericConverter.java): Change in the Retention Time management: two retention times are now allowed.
  * BUG FIX: For ms_lims the modification mass is now also added as a ModMonoDelta tag. Fixed an issue with the user name being set incorrectly in the default ms_lims login dialog.
@@ -8,6 +15,7 @@
  * LIBRARY UPDATE: ols-dialog from version 3.2.3 to 3.2.4.
  * LIBRARY UPDATE: omssa-parser to version 1.4.2, that fixes a bug in parsing some special case omx files.
 
+Download count: 41
 ----
 
 *Changes in PRIDE Converter v2.4.7 - (Nov. 27. 2010):*
