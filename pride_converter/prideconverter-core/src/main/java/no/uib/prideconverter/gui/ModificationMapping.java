@@ -1,19 +1,20 @@
 package no.uib.prideconverter.gui;
 
-import no.uib.prideconverter.PRIDEConverter;
 import com.compomics.mascotdatfile.util.interfaces.Modification;
-import java.awt.Window;
-import java.rmi.RemoteException;
-import java.util.Map;
-import javax.swing.JOptionPane;
-import javax.xml.rpc.ServiceException;
 import no.uib.olsdialog.OLSDialog;
 import no.uib.olsdialog.OLSInputable;
+import no.uib.prideconverter.PRIDEConverter;
 import no.uib.prideconverter.util.Util;
 import uk.ac.ebi.ook.web.services.Query;
 import uk.ac.ebi.ook.web.services.QueryService;
 import uk.ac.ebi.ook.web.services.QueryServiceLocator;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
+
+import javax.swing.*;
+import javax.xml.rpc.ServiceException;
+import java.awt.*;
+import java.rmi.RemoteException;
+import java.util.Map;
 
 /**
  * A dialog that lets the user map detected modifications to PSI-MOD CV terms.
@@ -32,6 +33,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
 
     /**
      * Creates a new ModificationMapping dialog.
+     *
      * 
      * @param parent
      * @param modal
@@ -63,7 +65,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
         if ( modification.isValidMass() ) {
             massJTextField.setText(Double.toString(modification.getMass()));
         } else {
-            massJTextField.setText("n/a");
+            massJTextField.setText("-");
         }
 
         locationJTextField.setText(modification.getLocation());
@@ -470,22 +472,74 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
                 Util.writeToErrorLog("An error occured while trying to get the mono mass for modification \'" + accession + "\'");
             }
 
-            if (!massJTextField.getText().equalsIgnoreCase("-")) {
+            // check if the provided modification mass is a number value
+            String massText = massJTextField.getText();
+            if (isNumber(massText)) {
+                // if we have a number value, we check that it is the same (or within acceptable range) as defined in the ontology
+                if (modificationMass != null) {
+                    if (diffGreaterThan(modificationMass, Double.parseDouble(massText), 1.0)) {
+                        this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+                        int option = JOptionPane.showConfirmDialog(
+                                this, "The distance between the mass of the PSI-MOD and the mass of " +
+                                "the detected modification is " +
+                                roundDouble(getDistance(modificationMass, new Double(massJTextField.getText()).doubleValue()), 4) +
+                                " Da.\nAre you sure you have selected the correct PSI-MOD modification?",
+                                "Verify Modification", JOptionPane.YES_NO_CANCEL_OPTION);
 
-                if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File") &&
-                        fixedModification) {
-                    // sequest fixed modifications has to be handled separatly as they  
-                    // include the total mass and not the modification mass
-//                    if (modificationMass != null) {
+                        if (option != 0) {
+                            error = true;
+                        }
+                    }
+                }
+            } else {
+                // if no number value was provided for the modification mass, then we suggest the ontology value
+                this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+                int option = JOptionPane.showConfirmDialog(
+                        this, "The mass of the detected modification is not reported. Do you want to use the mass " +
+                                "defined by the PSI-MOD ontology term? Accession: " + accession + " with mass: " + modificationMass + "Da. ",
+                                "Verify Modification mass", JOptionPane.YES_NO_OPTION);
+
+                if (option != 0) {
+                    error = true;
+                }
+
+            }
+
+//            if (!massJTextField.getText().equalsIgnoreCase("-")) {
 //
-//                        if (Math.abs(modificationMass) -
-//                                Math.abs(new Double(massJTextField.getText()).doubleValue()) > 1) {
+//                if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST Result File") &&
+//                        fixedModification) {
+//                    // sequest fixed modifications has to be handled separatly as they
+//                    // include the total mass and not the modification mass
+////                    if (modificationMass != null) {
+////
+////                        if (Math.abs(modificationMass) -
+////                                Math.abs(new Double(massJTextField.getText()).doubleValue()) > 1) {
+////                            this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+////                            int option = JOptionPane.showConfirmDialog(
+////                                    this, "The distance between the mass of the PSI-MOD and the mass of the detected modification is " +
+////                                    roundDouble(
+////                                    Math.abs(modificationMass) -
+////                                    Math.abs(new Double(massJTextField.getText()).doubleValue()), 4) +
+////                                    " Da.\nAre you sure you have selected the correct PSI-MOD modification?",
+////                                    "Verify Modification", JOptionPane.YES_NO_CANCEL_OPTION);
+////
+////                            if (option != 0) {
+////                                error = true;
+////                            }
+////                        }
+////                    }
+//                } else {
+//
+//                    if (modificationMass != null) {
+//                        String massVal = massJTextField.getText();
+//                        // ToDo: check that the value in the String variable is a number!!!!
+//                        if (diffGreaterThan(modificationMass, new Double(massVal).doubleValue(), 1.0)) {
 //                            this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 //                            int option = JOptionPane.showConfirmDialog(
-//                                    this, "The distance between the mass of the PSI-MOD and the mass of the detected modification is " +
-//                                    roundDouble(
-//                                    Math.abs(modificationMass) -
-//                                    Math.abs(new Double(massJTextField.getText()).doubleValue()), 4) +
+//                                    this, "The distance between the mass of the PSI-MOD and the mass of " +
+//                                    "the detected modification is " +
+//                                    roundDouble(getDistance(modificationMass, new Double(massJTextField.getText()).doubleValue()), 4) +
 //                                    " Da.\nAre you sure you have selected the correct PSI-MOD modification?",
 //                                    "Verify Modification", JOptionPane.YES_NO_CANCEL_OPTION);
 //
@@ -494,26 +548,8 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
 //                            }
 //                        }
 //                    }
-                } else {
-
-                    if (modificationMass != null) {
-
-                        if (diffGreaterThan(modificationMass, new Double(massJTextField.getText()).doubleValue(), 1.0)) {
-                            this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-                            int option = JOptionPane.showConfirmDialog(
-                                    this, "The distance between the mass of the PSI-MOD and the mass of " +
-                                    "the detected modification is " +
-                                    roundDouble(getDistance(modificationMass, new Double(massJTextField.getText()).doubleValue()), 4) +
-                                    " Da.\nAre you sure you have selected the correct PSI-MOD modification?",
-                                    "Verify Modification", JOptionPane.YES_NO_CANCEL_OPTION);
-
-                            if (option != 0) {
-                                error = true;
-                            }
-                        }
-                    }
-                }
-            }
+//                }
+//            }
         } catch (RemoteException ex) {
             this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(
@@ -538,6 +574,15 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
             this.dispose();
         }
     }//GEN-LAST:event_okJButtonActionPerformed
+
+    private boolean isNumber(String input) {
+        try {
+            Double.parseDouble(input);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Returns true if the distance between the two numbers are greater
