@@ -286,24 +286,19 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
                     //add or updated the properties
                     if (msXMLParser.rapFileHeader().getDataProcessing().getCentroided() ==
                             msXMLParser.rapFileHeader().getDataProcessing().YES) {
-                        addProcessingMethod("PeakProcessing", "PSI:1000035", "PSI",
-                                "CentroidMassSpectrum", -1);
-                    } else if (msXMLParser.rapFileHeader().getDataProcessing().
-                            getCentroided() ==
-                            msXMLParser.rapFileHeader().getDataProcessing().NO) {
-                    } else {
-                        //unknown
+                        addProcessingMethod(Util.MS_CENTROID_TERM, Util.MS_CENTROID_ACC, "PSI",
+                                null, -1);
                     }
 
                     if (msXMLParser.rapFileHeader().getDataProcessing().
                             getChargeDeconvoluted() ==
                             msXMLParser.rapFileHeader().getDataProcessing().YES) {
-                        addProcessingMethod("ChargeDeconvolution", "PSI:1000034", "PSI",
+                        addProcessingMethod(Util.MS_CRG_DECON_TERM, Util.MS_CRG_DECON_ACC, Util.MS_CV,
                                 "true", -1);
                     } else if (msXMLParser.rapFileHeader().getDataProcessing().
                             getChargeDeconvoluted() ==
                             msXMLParser.rapFileHeader().getDataProcessing().NO) {
-                        addProcessingMethod("ChargeDeconvolution", "PSI:1000034", "PSI",
+                        addProcessingMethod(Util.MS_CRG_DECON_TERM, Util.MS_CRG_DECON_ACC, Util.MS_CV,
                                 "false", -1);
                     } else {
                         //unknown
@@ -311,12 +306,12 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                     if (msXMLParser.rapFileHeader().getDataProcessing().getDeisotoped() ==
                             msXMLParser.rapFileHeader().getDataProcessing().YES) {
-                        addProcessingMethod("Deisotoping", "PSI:1000033", "PSI", "true",
+                        addProcessingMethod(Util.MS_DEISO_TERM, Util.MS_DEISO_ACC, Util.MS_CV, "true",
                                 -1);
                     } else if (msXMLParser.rapFileHeader().getDataProcessing().
                             getDeisotoped() ==
                             msXMLParser.rapFileHeader().getDataProcessing().NO) {
-                        addProcessingMethod("Deisotoping", "PSI:1000033", "PSI", "false",
+                        addProcessingMethod(Util.MS_DEISO_TERM, Util.MS_DEISO_ACC, Util.MS_CV, "false",
                                 -1);
                     } else {
                         //unknown
@@ -379,7 +374,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
                         new OLSDialog(this, this, true, "instrumentSource",
-                                "Mass Spectroscopy CV (PSI-MS) [PSI]",
+                                "PSI Mass Spectrometry Ontology [MS]",
                                 msXMLParser.rapFileHeader().getInstrumentInfo().getIonization());
                     }
 
@@ -400,7 +395,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
                         new OLSDialog(this, this, true, "instrumentDetector",
-                                "Mass Spectroscopy CV (PSI-MS) [PSI]",
+                                "PSI Mass Spectrometry Ontology [MS]",
                                 msXMLParser.rapFileHeader().getInstrumentInfo().getDetector());
                     }
 
@@ -435,7 +430,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
                         new OLSDialog(this, this, true, "analyzer",
-                                "Mass Spectroscopy CV (PSI-MS) [PSI]",
+                                "PSI Mass Spectrometry Ontology [MS]",
                                 msXMLParser.rapFileHeader().getInstrumentInfo().
                                 getMassAnalyzer());
                     }

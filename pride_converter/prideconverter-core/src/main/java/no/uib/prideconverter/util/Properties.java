@@ -137,8 +137,8 @@ public class Properties {
     
     // CV lookup stuff
     private String cvVersion = "1.0.0";
-    private String cvFullName = "The PSI Ontology";
-    private String cvLabel = "PSI";
+    private String cvFullName = "PSI Mass Spectrometry Ontology";
+    private String cvLabel = "MS";
     private String cvAddress = "http://psidev.sourceforge.net/ontology/";
     private ProteinHit tempProteinHit;
     private ArrayList selectedProteinHits;

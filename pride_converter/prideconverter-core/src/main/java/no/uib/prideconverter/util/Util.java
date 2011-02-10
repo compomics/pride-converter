@@ -9,10 +9,46 @@ package no.uib.prideconverter.util;
  */
 public final class Util {
 
+
+    public static final String MS_CV = "MS";
+
+    public static final String MS_M2ZRATIO_ACC = "MS:1000040";
+    public static final String MS_M2ZRATIO_TERM = "MassToChargeRatio";
+
+    public static final String MS_CHARGESTATE_ACC = "MS:1000041";
+    public static final String MS_CHARGESTATE_TERM = "ChargeState";
+
+    public static final String MS_INTENSITY_ACC = "MS:1000042";
+    public static final String MS_INTENSITY_TERM = "Intensity";
+
+    public static final String MS_CRG_DECON_ACC = "MS:1000034";
+    public static final String MS_CRG_DECON_TERM = "ChargeDeconvolution";
+
+    public static final String MS_DEISO_ACC = "MS:1000033";
+    public static final String MS_DEISO_TERM = "Deisotoping";
+
+    public static final String MS_CENTROID_ACC = "MS:1000127";
+    public static final String MS_CENTROID_TERM = "centroid spectrum";
+
+    public static final String MS_SCAN_POL_ACC = "MS:1000465";
+    public static final String MS_SCAN_POL_TERM = "scan polarity";
+
+    public static final String MS_POS_SCAN_ACC = "MS:1000130";
+    public static final String MS_POS_SCAN_TERM = "positive scan";
+
+    public static final String MS_NEG_SCAN_ACC = "MS:1000129";
+    public static final String MS_NEG_SCAN_TERM = "negative scan";
+
+    public static final String MS_RET_TIME_ACC = "MS:1000894";
+    public static final String MS_RET_TIME_TERM = "retention time";
+
+
+
+
     /**
      * Makes sure that all writing to the ErrorLog has a uniform appearence.
      *
-     * Writes the given String to the errorLog. 
+     * Writes the given String to the errorLog.
      * Adds date and time of entry.
      *
      * @param logEntry

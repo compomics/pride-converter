@@ -121,19 +121,19 @@ public class PeptideProphetXMLParser {
                     ArrayList ionSelection = new ArrayList(3);
 
                     if (mgfParser.getPrecursorCharge(i) > 0) {
-                        ionSelection.add(new CvParamImpl("PSI:1000041",
-                                "PSI", "ChargeState", 0,
+                        ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC,
+                                Util.MS_CV, Util.MS_CHARGESTATE_TERM, 0,
                                 Integer.toString(mgfParser.getPrecursorCharge(i))));
                     }
 
                     if (mgfParser.getIntensity(i) > 1) {
-                        ionSelection.add(new CvParamImpl("PSI:1000042",
-                                "PSI", "Intensity", 1,
+                        ionSelection.add(new CvParamImpl(Util.MS_INTENSITY_ACC,
+                                Util.MS_CV, Util.MS_INTENSITY_TERM, 1,
                                 Double.toString(mgfParser.getIntensity(i))));
                     }
 
-                    ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                            "MassToChargeRatio", 2, Double.toString(
+                    ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+                            Util.MS_M2ZRATIO_TERM, 2, Double.toString(
                             mgfParser.getPrecursorMZ(i))));
 
                     precursors.add(new PrecursorImpl(null, null,
@@ -245,19 +245,19 @@ public class PeptideProphetXMLParser {
                     ArrayList ionSelection = new ArrayList(3);
 
                     if (mgfParser.getPrecursorCharge(i) > 0) {
-                        ionSelection.add(new CvParamImpl("PSI:1000041",
-                                "PSI", "ChargeState", 0,
+                        ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC,
+                                Util.MS_CV, Util.MS_CHARGESTATE_TERM, 0,
                                 Integer.toString(mgfParser.getPrecursorCharge(i))));
                     }
 
                     if (mgfParser.getIntensity(i) > 1) {
-                        ionSelection.add(new CvParamImpl("PSI:1000042",
-                                "PSI", "Intensity", 1,
+                        ionSelection.add(new CvParamImpl(Util.MS_INTENSITY_ACC,
+                                Util.MS_CV, Util.MS_INTENSITY_TERM, 1,
                                 Double.toString(mgfParser.getIntensity(i))));
                     }
 
-                    ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                            "MassToChargeRatio", 2, Double.toString(
+                    ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+                            Util.MS_M2ZRATIO_TERM, 2, Double.toString(
                             mgfParser.getPrecursorMZ(i))));
 
                     precursors.add(new PrecursorImpl(null, null,
@@ -630,6 +630,7 @@ public class PeptideProphetXMLParser {
         Collection queries = new ArrayList();
 
         // Right, now cycle the spectrum queries.
+        int skipCount = 0;
         while (SPECTRUM_QUERY.equals(aParser.getName())) {
 
             // The run name.
@@ -710,6 +711,7 @@ public class PeptideProphetXMLParser {
                 // Read all the necessary attributes.
                 int hit_rank = Integer.parseInt(aParser.getAttributeValue(null, "hit_rank"));
                 String sequence = aParser.getAttributeValue(null, "peptide");
+                //System.out.println("found peptide: " + sequence);
                 String previous_AA = aParser.getAttributeValue(null, "peptid_prev_aa");
                 String next_AA = aParser.getAttributeValue(null, "peptide_next_aa");
                 String protein_accession = aParser.getAttributeValue(null, "protein");
@@ -730,7 +732,11 @@ public class PeptideProphetXMLParser {
 
                 //It could be that num_tot_proteins= "0" (Result of DECOY searches). In this case, the protein should not be considered.
 
+                // ToDo: make sure that this continues at the next 'spectrum_query' tag
+                // ToDo: (or at least after the end of the current spectrum_query tag)!
+                // ToDo: This does not seem the case now!
                 if(tempProteinCount<0){
+                    skipCount++;
                     continue;// I want it to come back to the beginning of the loop (look for the next spectrum query).
                 }
 
@@ -849,7 +855,13 @@ public class PeptideProphetXMLParser {
                     logger.debug("Skipped query and peptidehit (" + sequence + ") with a probability (" + probability
                             + ") below " + aThreshold + ".");
                 }
-            }
+            } // end if 'search_hit'
+        } // while 'spectrum_query'
+
+        // quickly check how many
+        // ToDo: do tests so this is not necessary
+        if (skipCount == 1) {
+            logger.warn("WARNING: One and only one search_hit was skipped during parsing!");
         }
 
         // Create the complete MS/MS run instance

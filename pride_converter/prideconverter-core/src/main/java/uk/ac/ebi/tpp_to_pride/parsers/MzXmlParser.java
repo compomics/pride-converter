@@ -11,6 +11,7 @@ import org.systemsbiology.jrap.stax.MSXMLParser;
 import org.systemsbiology.jrap.stax.MZXMLFileInfo;
 import org.systemsbiology.jrap.stax.Scan;
 import uk.ac.ebi.pride.model.implementation.mzData.*;
+import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
 import uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum;
 
 import java.io.File;
@@ -334,10 +335,37 @@ public class MzXmlParser {
     private Spectrum parseMsSpectrum(int aScanNumber, int aSpectrumID, Scan aScan) {
         // CV parameters for the spectruminstrument.
         // Note that this information is hardcoded here!
-        Collection spectrumInstrumentCvParameters = new ArrayList(2);
-        spectrumInstrumentCvParameters.add(new CvParamImpl("PSI:1000036", "psi", "ScanMode", 0, aScan.getHeader().getScanType()));
-        spectrumInstrumentCvParameters.add(new CvParamImpl("PSI:1000037", "psi", "Polarity", 1, aScan.getHeader().getPolarity()));
-        
+        Collection<CvParam> spectrumInstrumentCvParameters = new ArrayList<CvParam>(2);
+        String scanType = aScan.getHeader().getScanType().trim();
+        if (scanType.equalsIgnoreCase("Full")) {
+            spectrumInstrumentCvParameters.add(new CvParamImpl("MS:1000498", Util.MS_CV, "full scan", 0, aScan.getHeader().getScanType()));
+        } else if (scanType.equalsIgnoreCase("zoom")) {
+            spectrumInstrumentCvParameters.add(new CvParamImpl("MS:1000497", Util.MS_CV, "zoom scan", 0, aScan.getHeader().getScanType()));
+        } else if (scanType.equalsIgnoreCase("SIM")) {
+            spectrumInstrumentCvParameters.add(new CvParamImpl("MS:1000205", Util.MS_CV, "selected ion monitoring", 0, aScan.getHeader().getScanType()));
+        } else if (scanType.equalsIgnoreCase("SRM")) {
+            spectrumInstrumentCvParameters.add(new CvParamImpl("MS:1000206", Util.MS_CV, "selected reaction monitoring", 0, aScan.getHeader().getScanType()));
+        } else if (scanType.equalsIgnoreCase("CRM")) {
+            spectrumInstrumentCvParameters.add(new CvParamImpl("MS:1000244", Util.MS_CV, "consecutive reaction monitoring", 0, aScan.getHeader().getScanType()));
+        } else {
+            spectrumInstrumentCvParameters.add(new CvParamImpl("MS:1000036", Util.MS_CV, "scan mode", 0, aScan.getHeader().getScanType()));
+        }
+
+        String scanPolarity = aScan.getHeader().getPolarity();
+        if (scanPolarity != null) {
+            scanPolarity = scanPolarity.trim();
+            if (scanPolarity.equalsIgnoreCase("+")) {
+                // if it is '+', then we report a 'positive scan'
+                spectrumInstrumentCvParameters.add(new CvParamImpl(Util.MS_POS_SCAN_ACC, Util.MS_CV, Util.MS_POS_SCAN_TERM, 1, null));
+            } else if (scanPolarity.equalsIgnoreCase("-")) {
+                // if it is '-', then we report a 'negative scan'
+                spectrumInstrumentCvParameters.add(new CvParamImpl(Util.MS_NEG_SCAN_ACC, Util.MS_CV, Util.MS_NEG_SCAN_TERM, 1, null));
+            } else {
+                // if it is not null and neither '+' nor '-', then we just report it as is.
+                spectrumInstrumentCvParameters.add(new CvParamImpl(Util.MS_SCAN_POL_ACC, Util.MS_CV, Util.MS_SCAN_POL_TERM, 1, scanPolarity));
+            }
+        }
+
         // Spectrum description comment containing the original mzXML scan number.
         //SpectrumDescComment comment = new SpectrumDescCommentImpl("Original mzXML scan number: " + aScanNumber);
         ArrayList spectrumDescriptionComments = null;//new ArrayList(1);
@@ -365,13 +393,39 @@ public class MzXmlParser {
 
         // CV parameters for the spectruminstrument.
         // Note that this information is hardcoded here!
-        Collection spectrumInstrumentCvParameters = new ArrayList(2);
+        Collection<CvParam> spectrumInstrumentCvParameters = new ArrayList<CvParam>(2);
 
         if (aScan.getHeader().getScanType() != null) {
-            spectrumInstrumentCvParameters.add(new CvParamImpl("PSI:1000036", "psi", "ScanMode", 0, aScan.getHeader().getScanType()));
+            String scanType = aScan.getHeader().getScanType().trim();
+            if (scanType.equalsIgnoreCase("Full")) {
+                spectrumInstrumentCvParameters.add(new CvParamImpl("MS:1000498", Util.MS_CV, "full scan", 0, aScan.getHeader().getScanType()));
+            } else if (scanType.equalsIgnoreCase("zoom")) {
+                spectrumInstrumentCvParameters.add(new CvParamImpl("MS:1000497", Util.MS_CV, "zoom scan", 0, aScan.getHeader().getScanType()));
+            } else if (scanType.equalsIgnoreCase("SIM")) {
+                spectrumInstrumentCvParameters.add(new CvParamImpl("MS:1000205", Util.MS_CV, "selected ion monitoring", 0, aScan.getHeader().getScanType()));
+            } else if (scanType.equalsIgnoreCase("SRM")) {
+                spectrumInstrumentCvParameters.add(new CvParamImpl("MS:1000206", Util.MS_CV, "selected reaction monitoring", 0, aScan.getHeader().getScanType()));
+            } else if (scanType.equalsIgnoreCase("CRM")) {
+                spectrumInstrumentCvParameters.add(new CvParamImpl("MS:1000244", Util.MS_CV, "consecutive reaction monitoring", 0, aScan.getHeader().getScanType()));
+            } else {
+                spectrumInstrumentCvParameters.add(new CvParamImpl("MS:1000036", Util.MS_CV, "scan mode", 0, aScan.getHeader().getScanType()));
+            }
         }
 
-        spectrumInstrumentCvParameters.add(new CvParamImpl("PSI:1000037", "psi", "Polarity", 1, aScan.getHeader().getPolarity()));
+        String scanPolarity = aScan.getHeader().getPolarity();
+        if (scanPolarity != null) {
+            scanPolarity = scanPolarity.trim();
+            if (scanPolarity.equalsIgnoreCase("+")) {
+                // if it is '+', then we report a 'positive scan'
+                spectrumInstrumentCvParameters.add(new CvParamImpl(Util.MS_POS_SCAN_ACC, Util.MS_CV, Util.MS_POS_SCAN_TERM, 1, null));
+            } else if (scanPolarity.equalsIgnoreCase("-")) {
+                // if it is '-', then we report a 'negative scan'
+                spectrumInstrumentCvParameters.add(new CvParamImpl(Util.MS_NEG_SCAN_ACC, Util.MS_CV, Util.MS_NEG_SCAN_TERM, 1, null));
+            } else {
+                // if it is not null and neither '+' nor '-', then we just report it as is.
+                spectrumInstrumentCvParameters.add(new CvParamImpl(Util.MS_SCAN_POL_ACC, Util.MS_CV, Util.MS_SCAN_POL_TERM, 1, scanPolarity));
+            }
+        }
 
         // Precursor annotation collection.
         Collection precursors = new ArrayList(1);
@@ -382,10 +436,10 @@ public class MzXmlParser {
         // See if we know the precursor charge, and if so, include it.
         int charge = aScan.getHeader().getPrecursorCharge();
         if (charge > 0) {
-            ionSelection.add(new CvParamImpl("PSI:1000041", "psi", "ChargeState", 0, Integer.toString(charge)));
+            ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC, Util.MS_CV, Util.MS_CHARGESTATE_TERM, 0, Integer.toString(charge)));
         }
-        ionSelection.add(new CvParamImpl("PSI:1000040", "psi", "MassToChargeRatio", 1, Double.toString(aScan.getHeader().getPrecursorMz())));
-        ionSelection.add(new CvParamImpl("PSI:RETENTION TIME", "PSI", "Retention time", 2, aScan.getHeader().getRetentionTime()));
+        ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV, Util.MS_M2ZRATIO_TERM, 1, Double.toString(aScan.getHeader().getPrecursorMz())));
+        ionSelection.add(new CvParamImpl(Util.MS_RET_TIME_ACC, Util.MS_CV, Util.MS_RET_TIME_TERM, 2, aScan.getHeader().getRetentionTime()));
 
         // Add the precursor.
         precursors.add(new PrecursorImpl(null, null, ionSelection, null, aScan.getHeader().getMsLevel() - 1, aPrecursorSpectrumID, 0));

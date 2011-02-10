@@ -108,19 +108,19 @@ public class MS_LimsConverter {
             charge = lSpectrumFile.getCharge();
 
             if (charge > 0) {
-                ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
-                        "ChargeState", ionSelection.size(), Integer.toString(charge)));
+                ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC, Util.MS_CV,
+                        Util.MS_CHARGESTATE_TERM, ionSelection.size(), Integer.toString(charge)));
             }
 
             // See if we know the precursor intensity
             intensity = lSpectrumFile.getIntensity();
             if (intensity > 1) {
-                ionSelection.add(new CvParamImpl("PSI:1000042", "PSI",
-                        "Intensity", ionSelection.size(), Double.toString(intensity)));
+                ionSelection.add(new CvParamImpl(Util.MS_INTENSITY_ACC, Util.MS_CV,
+                        Util.MS_INTENSITY_TERM, ionSelection.size(), Double.toString(intensity)));
             }
 
-            ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                    "MassToChargeRatio", ionSelection.size(),
+            ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+                    Util.MS_M2ZRATIO_TERM, ionSelection.size(),
                     Double.toString(lSpectrumFile.getPrecursorMZ())));
 
             precursors.add(new PrecursorImpl(null, null, ionSelection, null, 1, 0, 0));

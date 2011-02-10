@@ -166,16 +166,16 @@ public class MascotGenericConverter {
 
                         if (precursorCharge != null) {
                             if (precursorCharge > 0) {
-                                ionSelection.add(new CvParamImpl("PSI:1000041",
-                                        "PSI", "ChargeState", 0,
+                                ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC,
+                                        Util.MS_CV, Util.MS_CHARGESTATE_TERM, 0,
                                         Integer.toString(precursorCharge)));
                             }
                         }
 
                         if (precursorIntensity != 0) {
                             if (precursorIntensity > 1) {
-                                ionSelection.add(new CvParamImpl("PSI:1000042",
-                                        "PSI", "Intensity", 1,
+                                ionSelection.add(new CvParamImpl(Util.MS_INTENSITY_ACC,
+                                        Util.MS_CV, Util.MS_INTENSITY_TERM, 1,
                                         Double.toString(precursorIntensity)));
                             }
                         }
@@ -187,8 +187,8 @@ public class MascotGenericConverter {
                             }
 
                         if (precursorMz != null) {
-                            ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                    "MassToChargeRatio", 2, Double.toString(
+                            ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+                                    Util.MS_M2ZRATIO_TERM, 2, Double.toString(
                                     precursorMz)));
                         }
 

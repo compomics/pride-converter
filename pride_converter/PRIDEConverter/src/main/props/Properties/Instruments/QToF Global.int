@@ -2,43 +2,43 @@
 Name: QToF Global
 
 #instrument source
-Accession: PSI:1000073
-cvLookup: PSI
+Accession: MS:1000073
+cvLookup: MS
 Name: Electrospray Ionization
 
 #instrument detector
-Accession: PSI:1000114
-cvLookup: PSI
+Accession: MS:1000114
+cvLookup: MS
 Name: Microchannel Plate Detector
 
 #analyzers
 1
 2
-Accession: PSI:1000081
-CVLookup: PSI
+Accession: MS:1000081
+CVLookup: MS
 Name: Quadrupole
 Value: null
 
-Accession: PSI:1000084
-CVLookup: PSI
+Accession: MS:1000084
+CVLookup: MS
 Name: Time-of-flight
 Value: null
 
 #processing methods
 3
-Accession: PSI:1000033
-CVLookup: PSI
+Accession: MS:1000033
+CVLookup: MS
 Name: Deisotoping
 Value: true
 
-Accession: PSI:1000034
-CVLookup: PSI
+Accession: MS:1000034
+CVLookup: MS
 Name: Charge Deconvolution
 Value: true
 
-Accession: PSI:1000035
-CVLookup: PSI
-Name: Peak Processing
+Accession: MS:1000035
+CVLookup: MS
+Name: Peak Picking
 Value: Centroid Mass Spectrum 
 
 #software

@@ -1606,13 +1606,13 @@ public class PRIDEConverter extends AbstractPrideConverter {
 //
 //                    // See if we know the precursor charge, and if so, include it.
 //                    if (precursorCharge > 0) {
-//                        ionSelection.add(new CvParamImpl("PSI:1000041",
-//                                "PSI", "ChargeState", 0,
+//                        ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC,
+//                                Util.MS_CV, Util.MS_CHARGESTATE_TERM, 0,
 //                                Integer.toString(precursorCharge)));
 //                    }
 //
-//                    ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-//                            "MassToChargeRatio", 1, Double.toString(
+//                    ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+//                            Util.MS_M2ZRATIO_TERM, 1, Double.toString(
 //                            precursorMass)));
 //
 //                    precursors.add(new PrecursorImpl(null, null,
@@ -1698,12 +1698,12 @@ public class PRIDEConverter extends AbstractPrideConverter {
         // See if we know the precursor charge, and if so, include it.
 
         if (aPrecursorCharge > 0) {
-            ionSelection.add(new CvParamImpl("PSI:1000041", "PSI", "ChargeState", 0, Integer.toString(aPrecursorCharge)));
+            ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC, Util.MS_CV, Util.MS_CHARGESTATE_TERM, 0, Integer.toString(aPrecursorCharge)));
         }
 
         // See if we know the precursor intensity (for the machine used here,
         // intensity is always 'NumberOfCounts').
-        ionSelection.add(new CvParamImpl("PSI:1000040", "PSI", "MassToChargeRatio", 1, Double.toString(aPrecursorMZ)));
+        ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV, Util.MS_M2ZRATIO_TERM, 1, Double.toString(aPrecursorMZ)));
 
         aId++; // Note that the counter is used AND incremented here.
 
@@ -1864,7 +1864,8 @@ public class PRIDEConverter extends AbstractPrideConverter {
                 aCvParams.add(new CvParamImpl("PRIDE:0000062", "PRIDE", "RSp", 6, aSequestRSp.toString()));
             }
 
-            aCvParams.add(new CvParamImpl("PSI:1000224", "PSI", "Charge State", 7, aCharge.toString()));
+// old          // aCvParams.add(new CvParamImpl("PSI:1000224", "PSI", "Charge State", 7, aCharge.toString()));// ToDo: MS:1000041 is charge state!! ERROR!
+            aCvParams.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC, Util.MS_CV, Util.MS_CHARGESTATE_TERM, 7, aCharge.toString()));
 
             // Add individual additional user parameters.
             if (aUserParams == null) {

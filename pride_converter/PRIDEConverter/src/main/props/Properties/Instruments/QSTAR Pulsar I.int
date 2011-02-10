@@ -2,27 +2,27 @@
 Name: QSTAR Pulsar I
 
 #instrument source
-Accession: PSI:1000075
-cvLookup: PSI
+Accession: MS:1000075
+cvLookup: MS
 Name: Matrix-assisted Laser Desorption Ionization
 
 #instrument detector
-Accession: PSI:1000108
-cvLookup: PSI
+Accession: MS:1000108
+cvLookup: MS
 Name: Conversion Dynode Electron Multiplier
 
 #analyzers
 1
 1
-Accession: PSI:1000084
-CVLookup: PSI
+Accession: MS:1000084
+CVLookup: MS
 Name: Time-of-flight
 Value: null
 
 #processing methods
 1
-Accession: PSI:1000033
-CVLookup: PSI
+Accession: MS:1000033
+CVLookup: MS
 Name: Deisotoping
 Value: null
 

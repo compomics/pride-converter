@@ -4,7 +4,7 @@ OutputPath: user.home
 UserName: 
 ServerHost: localhost
 Schema: ms_lims_6
-LastSelectedOntology: Mass Spectroscopy CV (PSI-MS) [PSI]
+LastSelectedOntology: PSI Mass Spectrometry Ontology [MS]
 LastSelectedSampleOntology: NEWT UniProt Taxonomy Database [NEWT]
 CurrentSelectedInstrument:
 CurrentSampleSet:
@@ -20,7 +20,7 @@ OmssaInstallDir: null
 CVTermMappings:
 Pyro-carbamidomethyl|MOD:00419|MOD|S-carbamoylmethylcysteine cyclization (N-terminus)|39.994915|
 Acetyl|MOD:00394|MOD|acetylated residue|42.010565|
-ESI|PSI:1000073|PSI|Electrospray Ionization|null|
+ESI|MS:1000073|MS|Electrospray Ionization|null|
 111.0321_Q|MOD:00040|MOD|2-pyrrolidone-5-carboxylic acid (Gln)|-17.026549|
 carbamidomethyl C|MOD:01214|MOD|iodoacetamide -site C|57.021464|
 C|MOD:01214|MOD|iodoacetamide -site C|57.021464|
@@ -34,15 +34,15 @@ Cam|MOD:01214|MOD|iodoacetamide -site C|57.021464|
 C#|MOD:01214|MOD|iodoacetamide -site C|57.021464|
 Mox|MOD:00425|MOD|monohydroxylated residue|15.994915|
 160.0306_C|MOD:01214|MOD|iodoacetamide -site C|57.021464|
-electrospray ionization|PSI:1000073|PSI|Electrospray Ionization|null|
+electrospray ionization|MS:1000073|MS|Electrospray Ionization|null|
 111.032_E|MOD:00420|MOD|2-pyrrolidone-5-carboxylic acid (Glu)|-18.010565|
-EMT|PSI:1000111|PSI|Electron Multiplier Tube|null|
+EMT|MS:1000111|MS|Electron Multiplier Tube|null|
 Acetyl:2H(3)|MOD:01233|MOD|Acetate labeling reagent (N-term and K) (heavy form, +3amu) -site K|45.029395|
 Deamidated|MOD:00400|MOD|deamidated residue|0.984016|
 Carbamidomethyl|MOD:01214|MOD|iodoacetamide -site C|57.021464|
 Gln->pyro-Glu|MOD:00040|MOD|2-pyrrolidone-5-carboxylic acid (Gln)|-17.026549|
 M*|MOD:00425|MOD|monohydroxylated residue|15.994915|
-Ion Trap|PSI:1000264|PSI|Ion Trap|null|
+Ion Trap|MS:1000264|MS|Ion Trap|null|
 Ace (N-terminal)|MOD:00408|MOD|N-acetylated residue|42.010565|
 339.333_C|MOD:00540|MOD|9xC13 label|9.030194|
 330.3991_C|MOD:00480|MOD|Applied Biosystems cleavable ICAT(TM) light|227.126991|

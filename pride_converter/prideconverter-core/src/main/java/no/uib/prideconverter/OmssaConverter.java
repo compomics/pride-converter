@@ -439,12 +439,12 @@ public class OmssaConverter {
                     chargeString = chargeString.replaceFirst("\\+", "");
 // Charge here is related to spectrum: we don't want this charge
 //                    if (!chargeString.equalsIgnoreCase("0")) {
-//                        ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
-//                                "ChargeState", ionSelection.size(), chargeString));
+//                        ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC, Util.MS_CV,
+//                                Util.MS_CHARGESTATE_TERM, ionSelection.size(), chargeString));
 //                    }
 
-                    ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                            "MassToChargeRatio", ionSelection.size(),
+                    ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+                            Util.MS_M2ZRATIO_TERM, ionSelection.size(),
                             "" + (((double) tempSpectrum.MSSpectrum_precursormz) / omssaResponseScale)));
 
                     precursors.add(new PrecursorImpl(null, null, ionSelection, null, 1, 0, 0));
@@ -502,8 +502,8 @@ public class OmssaConverter {
 
                     // Charge here is related peptide: this is what we want
                          if (!chargeString.equalsIgnoreCase("0")) {
-                            ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
-                                "ChargeState", ionSelection.size(), Integer.toString(currentMSHit.MSHits_charge)));
+                            ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC, Util.MS_CV,
+                                Util.MS_CHARGESTATE_TERM, ionSelection.size(), Integer.toString(currentMSHit.MSHits_charge)));
                             }
                         // @TODO: OMSSA question: how to handle protein isoforms?
                         // Currently handled by simply selection the first peptide hit (in the xml file)

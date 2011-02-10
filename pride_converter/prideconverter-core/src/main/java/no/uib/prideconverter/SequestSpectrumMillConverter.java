@@ -1187,15 +1187,15 @@ public class SequestSpectrumMillConverter {
                         charge = precursorCharge;
 
                         if (charge > 0) {
-                            ionSelection.add(new CvParamImpl("PSI:1000041",
-                                    "PSI", "ChargeState", ionSelection.size(),
+                            ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC,
+                                    Util.MS_CV, Util.MS_CHARGESTATE_TERM, ionSelection.size(),
                                     Integer.toString(charge)));
                         }
 
                         //intensity not given in SEQUEST DTA File
                         if (precursorIntensty != -1) {
-                            ionSelection.add(new CvParamImpl("PSI:1000042",
-                                    "PSI", "Intensity", ionSelection.size(),
+                            ionSelection.add(new CvParamImpl(Util.MS_INTENSITY_ACC,
+                                    Util.MS_CV, Util.MS_INTENSITY_TERM, ionSelection.size(),
                                     Double.toString(precursorIntensty)));
                         }
 
@@ -1203,8 +1203,8 @@ public class SequestSpectrumMillConverter {
                                 properties.getDataSource().equalsIgnoreCase("SEQUEST Result File")) {
 
                             // calculated precursor m/z
-                            ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                    "MassToChargeRatio", ionSelection.size(), Double.toString(
+                            ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+                                    Util.MS_M2ZRATIO_TERM, ionSelection.size(), Double.toString(
                                     ((precursorMh - properties.HYDROGEN_MASS + precursorCharge * properties.HYDROGEN_MASS) / precursorCharge))));
 
                             // precursor MH+
@@ -1213,8 +1213,8 @@ public class SequestSpectrumMillConverter {
                         }
 
                         if (properties.getDataSource().equalsIgnoreCase("Spectrum Mill")) {
-                            ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                    "MassToChargeRatio", ionSelection.size(), Double.toString(precursorMz)));
+                            ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+                                    Util.MS_M2ZRATIO_TERM, ionSelection.size(), Double.toString(precursorMz)));
                         }
 
                         precursors.add(new PrecursorImpl(null, null,
