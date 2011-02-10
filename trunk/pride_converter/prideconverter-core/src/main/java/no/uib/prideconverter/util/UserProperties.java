@@ -33,7 +33,7 @@ public class UserProperties {
     private String userName = ""; //database user name
     private String serverHost = "localhost"; //database serverhost
     private String schema = "ms_lims_7"; //database schema
-    private String lastSelectedOntology = "Mass Spectroscopy CV (PSI-MS) [PSI]";
+    private String lastSelectedOntology = "PSI Mass Spectrometry Ontology [MS]";
     private String lastSelectedSampleOntology = "NEWT UniProt Taxonomy Database [NEWT]";
     private String currentSelectedInstrument = "";
     private String currentSampleSet = "";

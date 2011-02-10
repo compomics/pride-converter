@@ -124,13 +124,13 @@ public class MzXMLConverter {
 
                     // See if we know the precursor charge, and if so, include it.
                     if (precursorCharge > 0) {
-                        ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
-                                "ChargeState", ionSelection.size(),
+                        ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC, Util.MS_CV,
+                                Util.MS_CHARGESTATE_TERM, ionSelection.size(),
                                 Integer.toString(precursorCharge)));
                     }
 
-                    ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                            "MassToChargeRatio", ionSelection.size(), Float.toString(precursorMz)));
+                    ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+                            Util.MS_M2ZRATIO_TERM, ionSelection.size(), Float.toString(precursorMz)));
 
                     precursors.add(new PrecursorImpl(null, null, ionSelection, null, 1, 0, 0));
 

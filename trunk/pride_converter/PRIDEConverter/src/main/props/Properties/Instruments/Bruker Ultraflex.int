@@ -2,38 +2,38 @@
 Name: Bruker Ultraflex
 
 #instrument source
-Accession: PSI:1000075
-cvLookup: PSI
+Accession: MS:1000075
+cvLookup: MS
 Name: Matrix-assisted Laser Desorption Ionization
 
 #instrument detector
-Accession: PSI:1000111
-cvLookup: PSI
+Accession: MS:1000111
+cvLookup: MS
 Name: Electron Multiplier Tube
 
 #analyzers
 1
 1
-Accession: PSI:1000202
-CVLookup: PSI
+Accession: MS:1000202
+CVLookup: MS
 Name: Bruker Daltonics ultraFlex TOF/TOF MS
 Value: null
 
 #processing methods
 3
-Accession: PSI:1000033
-CVLookup: PSI
+Accession: MS:1000033
+CVLookup: MS
 Name: Deisotoping
 Value: false
 
-Accession: PSI:1000034
-CVLookup: PSI
+Accession: MS:1000034
+CVLookup: MS
 Name: Charge Deconvolution
 Value: false
 
-Accession: PSI:1000035
-CVLookup: PSI
-Name: Peak Processing
+Accession: MS:1000035
+CVLookup: MS
+Name: Peak Picking
 Value: CentroidMassSpectrum
 
 #software

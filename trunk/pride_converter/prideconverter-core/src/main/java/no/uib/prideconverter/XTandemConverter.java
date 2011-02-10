@@ -315,23 +315,23 @@ public class XTandemConverter {
 
                                 if (precursorCharge != null) {
                                     if (precursorCharge > 0) {
-                                        ionSelection.add(new CvParamImpl("PSI:1000041",
-                                                "PSI", "ChargeState", ionSelection.size(),
+                                        ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC,
+                                                Util.MS_CV, Util.MS_CHARGESTATE_TERM, ionSelection.size(),
                                                 Integer.toString(precursorCharge)));
                                     }
                                 }
 
                                 if (precursorIntensity != 0) {
                                     if (precursorIntensity > 1) {
-                                        ionSelection.add(new CvParamImpl("PSI:1000042",
-                                                "PSI", "Intensity", ionSelection.size(),
+                                        ionSelection.add(new CvParamImpl(Util.MS_INTENSITY_ACC,
+                                                Util.MS_CV, Util.MS_INTENSITY_TERM, ionSelection.size(),
                                                 Double.toString(precursorIntensity)));
                                     }
                                 }
 
                                 if (precursorMz != null) {
-                                    ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                            "MassToChargeRatio", ionSelection.size(), Double.toString(
+                                    ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+                                            Util.MS_M2ZRATIO_TERM, ionSelection.size(), Double.toString(
                                             precursorMz)));
                                 }
 
@@ -543,14 +543,14 @@ public class XTandemConverter {
                                     charge = precursorCharge;
 
                                     if (charge > 0) {
-                                        ionSelection.add(new CvParamImpl("PSI:1000041",
-                                                "PSI", "ChargeState", ionSelection.size(),
+                                        ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC,
+                                                Util.MS_CV, Util.MS_CHARGESTATE_TERM, ionSelection.size(),
                                                 Integer.toString(charge)));
                                     }
 
                                     // calculated precursor m/z
-                                    ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                            "MassToChargeRatio", ionSelection.size(), Double.toString(
+                                    ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+                                            Util.MS_M2ZRATIO_TERM, ionSelection.size(), Double.toString(
                                             ((precursorMh - PRIDEConverter.getProperties().HYDROGEN_MASS + precursorCharge * PRIDEConverter.getProperties().HYDROGEN_MASS) / precursorCharge))));
 
                                     // precursor MH+
@@ -676,13 +676,13 @@ public class XTandemConverter {
                             // See if we know the precursor charge, and if so, include it.
                             charge = precursorCharge;
                             if (charge > 0) {
-                                ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
-                                        "ChargeState", ionSelection.size(), Integer.toString(charge)));
+                                ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC, Util.MS_CV,
+                                        Util.MS_CHARGESTATE_TERM, ionSelection.size(), Integer.toString(charge)));
                             }
 
                             // calculated precursor m/z
-                            ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                    "MassToChargeRatio", ionSelection.size(), Double.toString(
+                            ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+                                    Util.MS_M2ZRATIO_TERM, ionSelection.size(), Double.toString(
                                     ((precursorMh - PRIDEConverter.getProperties().HYDROGEN_MASS + precursorCharge * PRIDEConverter.getProperties().HYDROGEN_MASS) / precursorCharge))));
 
                             // precursor MH+
@@ -831,19 +831,19 @@ public class XTandemConverter {
                                 // See if we know the precursor charge, and if so, include it.
                                 charge = precursorCharge;
                                 if (charge > 0) {
-                                    ionSelection.add(new CvParamImpl("PSI:1000041",
-                                            "PSI", "ChargeState", ionSelection.size(),
+                                    ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC,
+                                            Util.MS_CV, Util.MS_CHARGESTATE_TERM, ionSelection.size(),
                                             Integer.toString(charge)));
                                 }
 
                                 // precursor intensity
-                                ionSelection.add(new CvParamImpl("PSI:1000042",
-                                        "PSI", "Intensity", ionSelection.size(),
+                                ionSelection.add(new CvParamImpl(Util.MS_INTENSITY_ACC,
+                                        Util.MS_CV, Util.MS_INTENSITY_TERM, ionSelection.size(),
                                         Double.toString(precursorIntensty)));
 
                                 // precursor m/z
-                                ionSelection.add(new CvParamImpl("PSI:1000040",
-                                        "PSI", "MassToChargeRatio", ionSelection.size(), Double.toString(precursorMz)));
+                                ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC,
+                                        Util.MS_CV, Util.MS_M2ZRATIO_TERM, ionSelection.size(), Double.toString(precursorMz)));
 
                                 precursors.add(new PrecursorImpl(null, null, ionSelection, null, msLevel - 1, 0, 0));
 
@@ -960,17 +960,17 @@ public class XTandemConverter {
                         // See if we know the precursor charge, and if so, include it.
                         charge = precursorCharge;
                         if (charge > 0) {
-                            ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
-                                    "ChargeState", ionSelection.size(), Integer.toString(charge)));
+                            ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC, Util.MS_CV,
+                                    Util.MS_CHARGESTATE_TERM, ionSelection.size(), Integer.toString(charge)));
                         }
 
                         // precursor intensity
-                        ionSelection.add(new CvParamImpl("PSI:1000042", "PSI",
-                                "Intensity", ionSelection.size(), Double.toString(precursorIntensty)));
+                        ionSelection.add(new CvParamImpl(Util.MS_INTENSITY_ACC, Util.MS_CV,
+                                Util.MS_INTENSITY_TERM, ionSelection.size(), Double.toString(precursorIntensty)));
 
                         // precursor mass
-                        ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                "MassToChargeRatio", ionSelection.size(), Double.toString(
+                        ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+                                Util.MS_M2ZRATIO_TERM, ionSelection.size(), Double.toString(
                                 precursorMz)));
 
                         precursors.add(new PrecursorImpl(null, null, ionSelection, null, msLevel - 1, 0, 0));
@@ -1081,13 +1081,13 @@ public class XTandemConverter {
 
                             // See if we know the precursor charge, and if so, include it.
                             if (precursorCharge > 0) {
-                                ionSelection.add(new CvParamImpl("PSI:1000041", "PSI",
-                                        "ChargeState", 0,
+                                ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC, Util.MS_CV,
+                                        Util.MS_CHARGESTATE_TERM, 0,
                                         Integer.toString(precursorCharge)));
                             }
 
-                            ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                    "MassToChargeRatio", 2, precursorMz.toString()));
+                            ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+                                    Util.MS_M2ZRATIO_TERM, 2, precursorMz.toString()));
 
                             precursors.add(new PrecursorImpl(null, null, ionSelection, null, 1, 0, 0));
 

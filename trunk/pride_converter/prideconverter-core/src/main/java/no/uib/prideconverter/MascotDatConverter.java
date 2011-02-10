@@ -255,21 +255,21 @@ public class MascotDatConverter {
                             chargeString = chargeString.replaceFirst("\\+", "");
 
                             if (!chargeString.equalsIgnoreCase("0")) {
-                                ionSelection.add(new CvParamImpl("PSI:1000041",
-                                        "PSI", "ChargeState", ionSelection.size(), chargeString));
+                                ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC,
+                                        Util.MS_CV, Util.MS_CHARGESTATE_TERM, ionSelection.size(), chargeString));
                             }
 
                             // See if we know the precursor intensity
                             intensity = currentQuery.getPrecursorIntensity();
 
                             if (intensity > 1) {
-                                ionSelection.add(new CvParamImpl("PSI:1000042",
-                                        "PSI", "Intensity", ionSelection.size(),
+                                ionSelection.add(new CvParamImpl(Util.MS_INTENSITY_ACC,
+                                        Util.MS_CV, Util.MS_INTENSITY_TERM, ionSelection.size(),
                                         Double.toString(intensity)));
                             }
 
-                            ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                    "MassToChargeRatio", ionSelection.size(),
+                            ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+                                    Util.MS_M2ZRATIO_TERM, ionSelection.size(),
                                     Double.toString(currentQuery.getPrecursorMZ())));
 
                             precursors.add(new PrecursorImpl(null, null, ionSelection, null, 1, 0, 0));

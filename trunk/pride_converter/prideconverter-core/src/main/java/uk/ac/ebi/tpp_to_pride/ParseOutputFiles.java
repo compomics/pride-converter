@@ -36,6 +36,7 @@ import java.util.*;
  * @version $Id: ParseOutputFiles.java,v 1.1.1.1 2007/01/12 17:17:10 lmartens Exp $
  * Modified by Harald Barsnes (December 2008)
  */
+@Deprecated
 public class ParseOutputFiles {
 
     /**
@@ -485,6 +486,7 @@ public class ParseOutputFiles {
             Collection instrumentSourceCVParams = new ArrayList();
 
             // @TODO  Check instrument source stuff.
+            // ToDo: update to MS ontology!
             instrumentSourceCVParams.add(new CvParamImpl(projectProperties.getProperty(MZDATA_SOURCE_CV_ACCESSION),
                     "PSI", projectProperties.getProperty(MZDATA_SOURCE_CV_NAME), 0, null));
             Collection instrumentSourceUserParams = new ArrayList(1);
@@ -502,6 +504,7 @@ public class ParseOutputFiles {
 
             Collection instrumentDetectorCVParams = new ArrayList();
             // @TODO  Check instrument detector stuff.
+            // ToDo: update to MS ontology!
             instrumentDetectorCVParams.add(new CvParamImpl(projectProperties.getProperty(MZDATA_DETECTOR_CV_ACCESSION),
                     "PSI", projectProperties.getProperty(MZDATA_DETECTOR_CV_NAME), 0, null));
             Collection instrumentDetectorUserParams = new ArrayList();
@@ -530,6 +533,7 @@ public class ParseOutputFiles {
             Collection analyzerList = new ArrayList(analyzerAccessions.length);
             for (int i = 0; i < analyzerAccessions.length; i++) {
                 Collection analyzerCVParams = new ArrayList(1);
+                // ToDo: update to MS ontology!
                 analyzerCVParams.add(new CvParamImpl(analyzerAccessions[i], "PSI", analyzerNames[i], i, null));
                 Collection analyzerUserParams = new ArrayList();
                 analyzerUserParams.add(new UserParamImpl("Original mzXML instrument analyzer description", 0, analyzer));
@@ -557,6 +561,7 @@ public class ParseOutputFiles {
             // CV lookup stuff.
             Collection cvLookups = new ArrayList(1);
             // @TODO  Check CV lookups.
+            // ToDo: update to MS ontology!
             cvLookups.add(new CVLookupImpl("1.0.0", "The PSI Ontology", "PSI", "http://psidev.sourceforge.net/ontology/"));
             cvLookups.add(new CVLookupImpl("2006-07-07", "The NEWT Ontology", "NEWT", "http://www.ebi.ac.uk/newt/"));
             cvLookups.add(new CVLookupImpl("1.0", "The PRIDE Ontology", "PRIDE", "http://www.ebi.ac.uk/pride"));

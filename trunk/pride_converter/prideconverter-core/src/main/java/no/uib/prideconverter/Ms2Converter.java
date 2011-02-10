@@ -172,14 +172,14 @@ public class Ms2Converter {
                             ionSelection = new ArrayList<CvParam>(3);
 
                             if (precursorCharge > 0) {
-                                ionSelection.add(new CvParamImpl("PSI:1000041",
-                                        "PSI", "ChargeState", ionSelection.size(),
+                                ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC,
+                                        Util.MS_CV, Util.MS_CHARGESTATE_TERM, ionSelection.size(),
                                         Integer.toString(precursorCharge)));
                             }
 
 //                            if (precursorIntensity > 1) {
-//                                ionSelection.add(new CvParamImpl("PSI:1000042",
-//                                        "PSI", "Intensity", ionSelection.size(),
+//                                ionSelection.add(new CvParamImpl(Util.MS_INTENSITY_ACC,
+//                                        Util.MS_CV, Util.MS_INTENSITY_TERM, ionSelection.size(),
 //                                        Double.toString(precursorIntensity)));
 //                            }
 
@@ -190,8 +190,8 @@ public class Ms2Converter {
                                         precursorRetentionTime)));
                             }
 
-                            ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                    "MassToChargeRatio", ionSelection.size(), Double.toString(
+                            ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+                                    Util.MS_M2ZRATIO_TERM, ionSelection.size(), Double.toString(
                                     precursorMz)));
 
                             precursors.add(new PrecursorImpl(null, null,
@@ -348,14 +348,14 @@ public class Ms2Converter {
                         ionSelection = new ArrayList<CvParam>(3);
 
                         if (precursorCharge > 0) {
-                            ionSelection.add(new CvParamImpl("PSI:1000041",
-                                    "PSI", "ChargeState", ionSelection.size(),
+                            ionSelection.add(new CvParamImpl(Util.MS_CHARGESTATE_ACC,
+                                    Util.MS_CV, Util.MS_CHARGESTATE_TERM, ionSelection.size(),
                                     Integer.toString(precursorCharge)));
                         }
 
 //                            if (precursorIntensity > 1) {
-//                                ionSelection.add(new CvParamImpl("PSI:1000042",
-//                                        "PSI", "Intensity", ionSelection.size(),
+//                                ionSelection.add(new CvParamImpl(Util.MS_INTENSITY_ACC,
+//                                        Util.MS_CV, Util.MS_INTENSITY_TERM, ionSelection.size(),
 //                                        Double.toString(precursorIntensity)));
 //                            }
 
@@ -366,8 +366,8 @@ public class Ms2Converter {
                                     precursorRetentionTime)));
                         }
 
-                        ionSelection.add(new CvParamImpl("PSI:1000040", "PSI",
-                                "MassToChargeRatio", ionSelection.size(), Double.toString(precursorMz)));
+                        ionSelection.add(new CvParamImpl(Util.MS_M2ZRATIO_ACC, Util.MS_CV,
+                                Util.MS_M2ZRATIO_TERM, ionSelection.size(), Double.toString(precursorMz)));
 
                         precursors.add(new PrecursorImpl(null, null, ionSelection, null, 1, 0, 0));
 
