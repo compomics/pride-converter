@@ -12,8 +12,8 @@ public final class Util {
 
     public static final String MS_CV = "MS";
 
-    public static final String MS_M2ZRATIO_ACC = "MS:1000040";
-    public static final String MS_M2ZRATIO_TERM = "MassToChargeRatio";
+    public static final String MS_M2ZRATIO_ACC = "MS:1000744";
+    public static final String MS_M2ZRATIO_TERM = "selected ion m/z";
 
     public static final String MS_CHARGESTATE_ACC = "MS:1000041";
     public static final String MS_CHARGESTATE_TERM = "ChargeState";
