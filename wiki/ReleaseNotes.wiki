@@ -11,6 +11,8 @@
  * BUG FIX: Removed 'percent_coverage' value parsing from TPP protXML files (since we don't know how these   percentage values are encoded).
  * BUG FIX: Update JRAP library (external dependency) to latest version jrap_StAX_v5.2.
 
+Download count: 174
+
 ----
 
 *Changes in PRIDE Converter v2.4.8 - (Dec. 6. 2010):*
