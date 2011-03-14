@@ -1,7 +1,7 @@
 #summary Short summary of changes for each version of PRIDE Converter.
 #labels Featured
 
-*Changes in PRIDE Converter v2.5.0 - (March.14.2010):*
+*Changes in PRIDE Converter v2.5.0 - (March.14.2011):*
  * CHANGE: replacement of PSI with MS ontology.
  * BUG FIX: fixed unhandled case in modification mapping when mass was not specified.
 
