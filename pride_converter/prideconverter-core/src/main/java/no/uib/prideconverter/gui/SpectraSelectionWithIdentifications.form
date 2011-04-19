@@ -88,6 +88,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jPanel5" alignment="1" max="32767" attributes="1"/>
+                  <Component id="jPanel4" alignment="1" max="32767" attributes="1"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jPanel6" max="32767" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -97,16 +98,15 @@
                       <Component id="helpJButton" min="-2" pref="23" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="aboutJButton" min="-2" pref="25" max="-2" attributes="0"/>
-                      <EmptySpace pref="384" max="32767" attributes="0"/>
+                      <EmptySpace pref="388" max="32767" attributes="0"/>
                       <Component id="backJButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="nextJButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="cancelJButton" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jSeparator1" alignment="0" pref="707" max="32767" attributes="0"/>
+                  <Component id="jSeparator1" alignment="0" pref="709" max="32767" attributes="0"/>
                   <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jPanel4" alignment="1" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -230,14 +230,14 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jScrollPane3" alignment="0" pref="671" max="32767" attributes="0"/>
-                      <Component id="loadSpectraJButton" alignment="0" pref="671" max="32767" attributes="0"/>
-                      <Group type="102" alignment="1" attributes="0">
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="jScrollPane3" alignment="0" pref="677" max="32767" attributes="0"/>
+                      <Component id="loadSpectraJLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
                           <Component id="spectrumAnnotationJLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="168" max="32767" attributes="0"/>
+                          <EmptySpace pref="238" max="32767" attributes="0"/>
                           <Component id="selectedSpectraJLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="numberOfSelectedSpectraJTextField" min="-2" pref="113" max="-2" attributes="0"/>
@@ -250,34 +250,21 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
+                  <Component id="loadSpectraJLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane3" pref="123" max="32767" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jScrollPane3" pref="171" max="32767" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="numberOfSelectedSpectraJTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="selectedSpectraJLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="spectrumAnnotationJLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="loadSpectraJButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="loadSpectraJButton">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/no/uib/prideconverter/icons/load2.GIF"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Load Spectra"/>
-            <Property name="horizontalTextPosition" type="int" value="10"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="loadSpectraJButtonActionPerformed"/>
-          </Events>
-        </Component>
         <Component class="javax.swing.JLabel" name="selectedSpectraJLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Selected Spectra:"/>
@@ -333,6 +320,17 @@
             </Component>
           </SubComponents>
         </Container>
+        <Component class="javax.swing.JLabel" name="loadSpectraJLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;a href&gt;&lt;i&gt;Load Spectra Details&lt;/i&gt;&lt;/a&gt;&lt;/html&gt;"/>
+            <Property name="toolTipText" type="java.lang.String" value="Click here to load the spectrum details for manual selection"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="loadSpectraJLabelMouseClicked"/>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="loadSpectraJLabelMouseEntered"/>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="loadSpectraJLabelMouseExited"/>
+          </Events>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel6">
@@ -352,12 +350,12 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="selectAllSpectraJRadioButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="185" max="32767" attributes="0"/>
+                          <EmptySpace pref="200" max="32767" attributes="0"/>
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="selectIdentifiedJRadioButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="145" max="32767" attributes="0"/>
+                          <EmptySpace pref="166" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -373,7 +371,7 @@
                   <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="135" max="32767" attributes="0"/>
+                  <EmptySpace pref="129" max="32767" attributes="0"/>
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -415,46 +413,44 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="jScrollPane2" alignment="0" pref="671" max="32767" attributes="1"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jScrollPane2" alignment="0" pref="677" max="32767" attributes="2"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="selectionTypeJLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="fileNamesSelectionJRadioButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="identificationIdsSelectionJRadioButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="100" max="32767" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="separatorJTextField" min="-2" pref="47" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="separatorJTextField" min="-2" pref="22" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="findOutPutFileJButton" min="-2" pref="21" max="-2" attributes="0"/>
+                          <EmptySpace pref="162" max="32767" attributes="0"/>
+                          <Component id="applyAdvancedSelectionButton" min="-2" pref="126" max="-2" attributes="1"/>
                       </Group>
-                      <Component id="applyAdvancedSelectionButton" alignment="0" pref="671" max="32767" attributes="1"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                          <Component id="selectionTypeJLabel" alignment="3" min="-2" max="-2" attributes="1"/>
-                          <Component id="fileNamesSelectionJRadioButton" linkSize="3" alignment="3" min="-2" pref="15" max="-2" attributes="0"/>
-                          <Component id="identificationIdsSelectionJRadioButton" linkSize="3" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
-                          <Component id="separatorJTextField" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="findOutPutFileJButton" linkSize="2" alignment="0" min="-2" pref="16" max="-2" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="selectionTypeJLabel" alignment="2" min="-2" max="-2" attributes="1"/>
+                      <Component id="fileNamesSelectionJRadioButton" linkSize="3" alignment="2" min="-2" pref="15" max="-2" attributes="0"/>
+                      <Component id="identificationIdsSelectionJRadioButton" linkSize="3" alignment="2" min="-2" pref="18" max="-2" attributes="0"/>
+                      <Component id="jLabel5" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="separatorJTextField" linkSize="2" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="applyAdvancedSelectionButton" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="findOutPutFileJButton" linkSize="2" alignment="2" min="-2" pref="16" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jScrollPane2" pref="51" max="32767" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="applyAdvancedSelectionButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -508,7 +504,7 @@
               <ComponentRef name="advancedSelectionButtonGroup"/>
             </Property>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="(Partial) Filenames"/>
+            <Property name="text" type="java.lang.String" value="Filenames"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fileNamesSelectionJRadioButtonActionPerformed"/>
@@ -519,7 +515,7 @@
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="advancedSelectionButtonGroup"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Identification IDs"/>
+            <Property name="text" type="java.lang.String" value="IDs"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="identificationIdsSelectionJRadioButtonActionPerformed"/>
@@ -560,15 +556,15 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel2" alignment="0" pref="162" max="32767" attributes="1"/>
+                      <Component id="jLabel2" alignment="0" pref="168" max="32767" attributes="1"/>
                       <Component id="mascotConfidenceLevelJLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="peptideScoreJTextField" pref="119" max="32767" attributes="1"/>
-                      <Component id="proteinIdFilterJTextField" alignment="1" pref="119" max="32767" attributes="1"/>
-                      <Component id="mascotConfidenceLevelJSpinner" alignment="0" pref="119" max="32767" attributes="1"/>
+                      <Component id="peptideScoreJTextField" pref="127" max="32767" attributes="1"/>
+                      <Component id="proteinIdFilterJTextField" alignment="1" pref="127" max="32767" attributes="1"/>
+                      <Component id="mascotConfidenceLevelJSpinner" alignment="0" pref="127" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>

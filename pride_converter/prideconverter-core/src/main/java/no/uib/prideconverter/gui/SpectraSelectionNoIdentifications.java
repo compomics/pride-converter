@@ -138,7 +138,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
             selectAllJCheckBox.setSelected(PRIDEConverter.getProperties().selectAllSpectra());
 
             spectraJXTable.setModel(PRIDEConverter.getProperties().getSpectrumTableModel());
-            loadSpectraJButton.setEnabled(false);
+            loadSpectraJLabel.setEnabled(false);
             selectedSpectraJLabel.setEnabled(true);
             numberOfSelectedSpectraJTextField.setEnabled(true);
             spectrumAnnotationJLabel.setEnabled(true);
@@ -175,8 +175,8 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
         if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzData") ||
                 PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("TPP")) {
-            loadSpectraJButton.setEnabled(false);
-            loadSpectraJButton.setToolTipText("Manual spectra selection is currently not supported for mzData and TPP");
+            loadSpectraJLabel.setEnabled(false);
+            loadSpectraJLabel.setToolTipText("Manual spectra selection is currently not supported for mzData and TPP");
         }
     }
 
@@ -201,7 +201,6 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         helpJButton = new javax.swing.JButton();
         aboutJButton = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
-        loadSpectraJButton = new javax.swing.JButton();
         selectedSpectraJLabel = new javax.swing.JLabel();
         numberOfSelectedSpectraJTextField = new javax.swing.JTextField();
         spectrumAnnotationJLabel = new javax.swing.JLabel();
@@ -220,6 +219,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                 };
             }
         };
+        loadSpectraJLabel = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         selectAllJCheckBox = new javax.swing.JCheckBox();
 
@@ -302,15 +302,6 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Manual Spectra Selection"));
 
-        loadSpectraJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/load2.GIF"))); // NOI18N
-        loadSpectraJButton.setText("Load Spectra");
-        loadSpectraJButton.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        loadSpectraJButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loadSpectraJButtonActionPerformed(evt);
-            }
-        });
-
         selectedSpectraJLabel.setText("Selected Spectra:");
         selectedSpectraJLabel.setToolTipText("Number of Selected Spectra");
         selectedSpectraJLabel.setEnabled(false);
@@ -355,35 +346,52 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(spectraJXTable);
 
+        loadSpectraJLabel.setText("<html><a href><i>Load Spectra Details</i></a></html>");
+        loadSpectraJLabel.setToolTipText("Click here to load the spectrum details for manual selection");
+        loadSpectraJLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                loadSpectraJLabelMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                loadSpectraJLabelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                loadSpectraJLabelMouseExited(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
+            .add(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, loadSpectraJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel5Layout.createSequentialGroup()
+                        .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
                         .add(spectrumAnnotationJLabel)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 85, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 153, Short.MAX_VALUE)
                         .add(selectedSpectraJLabel)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(numberOfSelectedSpectraJTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 113, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .add(numberOfSelectedSpectraJTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 113, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .add(loadSpectraJLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(504, Short.MAX_VALUE))))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+            .add(jPanel5Layout.createSequentialGroup()
+                .add(loadSpectraJLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(numberOfSelectedSpectraJTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(selectedSpectraJLabel)
                     .add(spectrumAnnotationJLabel))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(loadSpectraJButton)
                 .addContainerGap())
         );
 
@@ -405,7 +413,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
             .add(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(selectAllJCheckBox)
-                .addContainerGap(459, Short.MAX_VALUE))
+                .addContainerGap(481, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -428,7 +436,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 301, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 303, Short.MAX_VALUE)
                         .add(backJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(nextJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -544,447 +552,6 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
      * 
      * @param evt
      */
-    private void loadSpectraJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadSpectraJButtonActionPerformed
-
-        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        
-        numberOfSelectedSpectra = 0;
-
-        progressDialog = new ProgressDialog(this, true);
-        progressDialog.setTitle("Loading Spectra. Please Wait...");
-        progressDialog.setIntermidiate(true);
-
-        Thread t = new Thread(new Runnable() {
-
-            public void run() {
-                progressDialog.setVisible(true);
-            }
-        });
-
-        t.start();
-
-        Thread t2 = new Thread(new Runnable() {
-
-            public void run() {
-
-                MSXMLParser msXMLParser;
-                int scanCount;
-                Scan scan;
-                FileReader reader;
-                MzDataXMLUnmarshaller unmarshallerMzData;
-                MzData mzData;
-                Collection<uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum> spectraMzData;
-                Iterator<uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum> iterator;
-                uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum currentSpectrum;
-                String[] values;
-
-                for (int j = 0; j < PRIDEConverter.getProperties().getSelectedSourceFiles().size(); j++) {
-
-                    if (PRIDEConverter.isConversionCanceled()) {
-
-                        while (((DefaultTableModel) spectraJXTable.getModel()).getRowCount() > 0) {
-                            ((DefaultTableModel) spectraJXTable.getModel()).removeRow(0);
-                        }
-
-                        numberOfSelectedSpectraJTextField.setText("");
-
-                        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-                        return;
-                    }
-
-                    try {
-                        file = new File(PRIDEConverter.getProperties().getSelectedSourceFiles().get(j));
-
-                        progressDialog.setString(file.getName() + " (" + (j + 1) +
-                                "/" + PRIDEConverter.getProperties().getSelectedSourceFiles().size() + ")");
-
-                        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST DTA File")) {
-
-                            f = new FileReader(file);
-                            b = new BufferedReader(f);
-
-                            currentLine = b.readLine();
-
-                            tok = new StringTokenizer(currentLine);
-
-                            precursorMass = new Double(tok.nextToken());
-                            precursorCharge = new Integer(tok.nextToken());
-
-                            ((DefaultTableModel) spectraJXTable.getModel()).addRow(
-                                    new Object[]{
-                                        file.getName(),
-                                        null,
-                                        precursorMass, precursorCharge,
-                                        2,
-                                        new Boolean(true)
-                                    });
-
-                            numberOfSelectedSpectra++;
-
-                            b.close();
-                            f.close();
-
-                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Micromass PKL File")) {
-
-                            f = new FileReader(file);
-                            b = new BufferedReader(f);
-
-                            currentLine = b.readLine();
-
-                            while (currentLine != null) {
-
-                                tok = new StringTokenizer(currentLine);
-
-                                if (tok.countTokens() == 3) {
-
-                                    precursorMass = new Double(tok.nextToken());
-
-                                    //PKL files also includes intensity so ignore the next token
-                                    tok.nextToken();
-
-                                    precursorCharge = new Integer(tok.nextToken());
-
-                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
-                                            new Object[]{
-                                                file.getName(),
-                                                null,
-                                                precursorMass, precursorCharge,
-                                                2,
-                                                new Boolean(true)
-                                            });
-
-                                    numberOfSelectedSpectra++;
-                                }
-
-                                currentLine = b.readLine();
-                            }
-
-                            b.close();
-                            f.close();
-
-                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("VEMS")) {
-
-                            f = new FileReader(file);
-                            b = new BufferedReader(f);
-
-                            currentLine = b.readLine();
-
-                            while (currentLine != null) {
-
-                                tok = new StringTokenizer(currentLine);
-
-                                if (tok.countTokens() == 4) {
-
-                                    precursorMass = new Double(tok.nextToken());
-
-                                    //PKX files also includes intensity so ignore the next token
-                                    tok.nextToken();
-
-                                    precursorCharge = new Integer(tok.nextToken());
-
-                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
-                                            new Object[]{
-                                                file.getName(),
-                                                null,
-                                                precursorMass, precursorCharge,
-                                                2,
-                                                new Boolean(true)
-                                            });
-
-                                    numberOfSelectedSpectra++;
-                                }
-
-                                currentLine = b.readLine();
-                            }
-
-                            b.close();
-                            f.close();
-
-                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")) {
-
-                            msXMLParser = new MSXMLParser(file.getAbsolutePath());
-
-                            scanCount = msXMLParser.getScanCount();
-
-                            for (int i = 1; i <= scanCount; i++) {
-                                scan = msXMLParser.rap(i);
-
-                                precursorCharge = scan.getHeader().getPrecursorCharge();
-                                precursorMass = new Float(scan.getHeader().getPrecursorMz()).doubleValue();
-
-                                if (precursorMass != -1 &&
-                                        precursorCharge != -1) {
-                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
-                                            new Object[]{
-                                                file.getName(),
-                                                scan.getHeader().getNum(),
-                                                precursorMass, precursorCharge,
-                                                2,
-                                                new Boolean(true)
-                                            });
-                                } else if (precursorMass == -1 &&
-                                        precursorCharge != -1) {
-                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
-                                            new Object[]{
-                                                file.getName(),
-                                                scan.getHeader().getNum(),
-                                                null, precursorCharge,
-                                                2,
-                                                new Boolean(true)
-                                            });
-                                } else if (precursorMass != -1 &&
-                                        precursorCharge == -1) {
-                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
-                                            new Object[]{
-                                                file.getName(),
-                                                scan.getHeader().getNum(),
-                                                precursorMass, null,
-                                                2,
-                                                new Boolean(true)
-                                            });
-                                } else {
-                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
-                                            new Object[]{
-                                                file.getName(),
-                                                scan.getHeader().getNum(),
-                                                null, null,
-                                                2,
-                                                new Boolean(true)
-                                            });
-                                }
-
-                                numberOfSelectedSpectra++;
-
-                                numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-                                        "/" +
-                                        numberOfSelectedSpectra);
-                            }
-                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
-
-                            reader = new FileReader(file);
-
-                            unmarshallerMzData = new MzDataXMLUnmarshaller();
-                            mzData = unmarshallerMzData.unMarshall(reader);
-
-                            spectraMzData = mzData.getSpectrumCollection();
-                            iterator = spectraMzData.iterator();
-
-                            while (iterator.hasNext()) {
-                                currentSpectrum = iterator.next();
-
-                                ((DefaultTableModel) spectraJXTable.getModel()).addRow(
-                                        new Object[]{
-                                            file.getName(),
-                                            "" + currentSpectrum.getSpectrumId(),
-                                            null, null,
-                                            2,
-                                            new Boolean(true)
-                                        });
-
-                                numberOfSelectedSpectra++;
-                                numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-                                        "/" + numberOfSelectedSpectra);
-                            }
-
-                            reader.close();
-
-                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Generic File")) {
-
-                            f = new FileReader(file);
-                            b = new BufferedReader(f);
-
-                            String line = null;
-                            int lineCount = 0;
-                            boolean inSpectrum = false;
-                            precursorMass = null;
-                            precursorCharge = null;
-
-                            while ((line = b.readLine()) != null && progressDialog.isVisible()) {
-                                // Advance line count.
-                                lineCount++;
-                                // Delete leading/trailing spaces.
-                                line = line.trim();
-                                // Skip empty lines.
-                                if (line.equals("")) {
-                                    continue;
-                                }
-                                // First line can be 'CHARGE'.
-                                if (lineCount == 1 && line.startsWith("CHARGE")) {
-                                    continue;
-                                }
-
-                                // BEGIN IONS marks the start of the real file.
-                                if (line.equals("BEGIN IONS")) {
-                                    precursorMass = null;
-                                    precursorCharge = null;
-                                    inSpectrum = true;
-                                } // END IONS marks the end.
-                                else if (line.equals("END IONS")) {
-
-                                    inSpectrum = false;
-
-                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
-                                            new Object[]{
-                                                file.getName(),
-                                                null,
-                                                precursorMass, precursorCharge,
-                                                2,
-                                                new Boolean(true)
-                                            });
-
-                                    numberOfSelectedSpectra++;
-                                    numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-                                            "/" + numberOfSelectedSpectra);
-
-                                } else if (inSpectrum && (line.indexOf("=") >= 0)) {
-                                    // Find the starting location of the value (which is one beyond the location
-                                    // of the '=').
-                                    int equalSignIndex = line.indexOf("=");
-
-                                    if (line.startsWith("PEPMASS")) {
-                                        // PEPMASS line found.
-                                        String value = line.substring(equalSignIndex + 1);
-
-                                        //if (PRIDEConverter.getProperties().isCommaTheDecimalSymbol()) {
-                                        value = value.replaceAll(",", ".");
-                                        //}
-
-                                        values = value.split("\\s");
-                                        precursorMass = Double.parseDouble(values[0]);
-
-                                    } else if (line.startsWith("CHARGE")) {
-                                        // CHARGE line found.
-                                        // Note the extra parsing to read a Mascot Generic File charge (eg., 1+).
-                                        precursorCharge = Util.extractCharge(line.substring(equalSignIndex + 1));
-                                    }
-                                }
-                            }
-
-                            b.close();
-
-                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("MS2")) {
-
-                            f = new FileReader(file);
-                            b = new BufferedReader(f);
-
-                            String line = null;
-                            int lineCount = 0;
-                            boolean chargeDecided = false;
-
-                            while ((line = b.readLine()) != null) {
-                                // Advance line count.
-                                lineCount++;
-
-                                // Skip empty lines.
-                                if (line.equals("")) {
-                                    continue;
-                                }
-
-                                // ignore
-                                if (line.startsWith("H") ||
-                                        line.startsWith("D") ||
-                                        line.startsWith("I")) {
-                                    continue;
-                                }
-
-                                // S marks the start of a new spectrum
-                                if (line.startsWith("S")) {
-
-                                    if (PRIDEConverter.getProperties().isCommaTheDecimalSymbol()) {
-                                        line = line.replaceAll(",", ".");
-                                    }
-
-                                    values = line.split("\\s");
-
-                                    precursorMass = new Double(values[3]);
-
-
-                                    chargeDecided = false;
-
-                                } else if (line.startsWith("Z") && !chargeDecided) {
-
-                                    String nextLine = b.readLine();
-
-                                    // multiple charges
-                                    if (nextLine.startsWith("Z")) {
-                                        precursorCharge = null;
-                                    } else {
-                                        values = line.split("\\s");
-                                        precursorCharge = new Integer(values[1]);
-                                    }
-
-                                    chargeDecided = true;
-
-                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
-                                            new Object[]{
-                                                file.getName(),
-                                                null,
-                                                precursorMass, precursorCharge,
-                                                2,
-                                                new Boolean(true)
-                                            });
-
-                                    numberOfSelectedSpectra++;
-                                    numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-                                            "/" + numberOfSelectedSpectra);
-                                }
-                            }
-
-                            b.close();
-                        }
-
-                        numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
-                                "/" + numberOfSelectedSpectra);
-
-                    } catch (FileNotFoundException ex) {
-                        JOptionPane.showMessageDialog(null, 
-                                "The file " + file.getPath() +
-                                "\ncould not be found.",
-                                "File Not Found", JOptionPane.ERROR_MESSAGE);
-                        Util.writeToErrorLog("Error when trying to read file: ");
-                        ex.printStackTrace();
-                    } catch (Exception e) {
-
-                        Util.writeToErrorLog("Error parsing " + PRIDEConverter.getProperties().getDataSource() + ": ");
-                        e.printStackTrace();
-
-                        String fileType = PRIDEConverter.getProperties().getDataSource();
-
-                        JOptionPane.showMessageDialog(null,
-                                "The file could not parsed as a " +
-                                fileType + ":\n " +
-                                file.getPath() +
-                                "\n\n" +
-                                "See ../Properties/ErrorLog.txt for more details.",
-                                "Error Parsing File", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-
-                progressDialog.setVisible(false);
-                progressDialog.dispose();
-
-                if (spectraJXTable.getRowCount() > 0) {
-                    selectedSpectraJLabel.setEnabled(true);
-                    numberOfSelectedSpectraJTextField.setEnabled(true);
-                    spectrumAnnotationJLabel.setEnabled(true);
-
-                    loadSpectraJButton.setEnabled(false);
-                    selectAllJCheckBox.setEnabled(false);
-                }
-
-                if (numberOfSelectedSpectra == 0) {
-                    nextJButton.setEnabled(false);
-                } else {
-                    nextJButton.setEnabled(true);
-                }
-            }
-        });
-
-        t2.start();
-
-        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-    }//GEN-LAST:event_loadSpectraJButtonActionPerformed
-
     /**
      * Makes sure that the number of selected spectra is updated when the 
      * user selects or deselects a spectra in the list. Right clicking in 
@@ -1014,7 +581,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         if (selectAll) {
             for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
                 if (!(((Boolean) spectraJXTable.getValueAt(i, 5)).booleanValue())) {
-                    spectraJXTable.setValueAt(new Boolean(true), i, 5);
+                    spectraJXTable.setValueAt(true, i, 5);
                 }
             }
 
@@ -1027,7 +594,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
         } else {
             for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
                 if ((((Boolean) spectraJXTable.getValueAt(i, 5)).booleanValue())) {
-                    spectraJXTable.setValueAt(new Boolean(false), i, 5);
+                    spectraJXTable.setValueAt(false, i, 5);
                 }
             }
 
@@ -1075,7 +642,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
 
         for (int i = 0; i < spectraJXTable.getRowCount(); i++) {
             spectraJXTable.setValueAt(
-                    new Boolean(!((Boolean) spectraJXTable.getValueAt(i, 5)).booleanValue()), i, 5);
+                    (!((Boolean) spectraJXTable.getValueAt(i, 5)).booleanValue()), i, 5);
 
             if (((Boolean) spectraJXTable.getValueAt(i, 5)).booleanValue()) {
                 numberOfSelectedSpectra++;
@@ -1179,6 +746,440 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
     }//GEN-LAST:event_spectraJXTableMouseClicked
 
     /**
+     * Loads the spectra from the selected files. Done in a separate thread 
+     * to keep the program from hanging.
+     * 
+     * @param evt
+     */
+    private void loadSpectraJLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loadSpectraJLabelMouseClicked
+        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+
+        numberOfSelectedSpectra = 0;
+
+        progressDialog = new ProgressDialog(this, true);
+        progressDialog.setTitle("Loading Spectra. Please Wait...");
+        progressDialog.setIntermidiate(true);
+
+        Thread t = new Thread(new Runnable() {
+
+            public void run() {
+                progressDialog.setVisible(true);
+            }
+        });
+
+        t.start();
+
+        Thread t2 = new Thread(new Runnable() {
+
+            public void run() {
+
+                MSXMLParser msXMLParser;
+                int scanCount;
+                Scan scan;
+                FileReader reader;
+                MzDataXMLUnmarshaller unmarshallerMzData;
+                MzData mzData;
+                Collection<uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum> spectraMzData;
+                Iterator<uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum> iterator;
+                uk.ac.ebi.pride.model.interfaces.mzdata.Spectrum currentSpectrum;
+                String[] values;
+
+                for (int j = 0; j < PRIDEConverter.getProperties().getSelectedSourceFiles().size(); j++) {
+
+                    if (PRIDEConverter.isConversionCanceled()) {
+
+                        while (((DefaultTableModel) spectraJXTable.getModel()).getRowCount() > 0) {
+                            ((DefaultTableModel) spectraJXTable.getModel()).removeRow(0);
+                        }
+
+                        numberOfSelectedSpectraJTextField.setText("");
+
+                        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+                        return;
+                    }
+
+                    try {
+                        file = new File(PRIDEConverter.getProperties().getSelectedSourceFiles().get(j));
+
+                        progressDialog.setString(file.getName() + " (" + (j + 1) +
+                                "/" + PRIDEConverter.getProperties().getSelectedSourceFiles().size() + ")");
+
+                        if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("SEQUEST DTA File")) {
+
+                            f = new FileReader(file);
+                            b = new BufferedReader(f);
+
+                            currentLine = b.readLine();
+
+                            tok = new StringTokenizer(currentLine);
+
+                            precursorMass = new Double(tok.nextToken());
+                            precursorCharge = new Integer(tok.nextToken());
+
+                            ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                    new Object[]{
+                                        file.getName(),
+                                        null,
+                                        precursorMass, precursorCharge,
+                                        2, true});
+
+                            numberOfSelectedSpectra++;
+
+                            b.close();
+                            f.close();
+
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Micromass PKL File")) {
+
+                            f = new FileReader(file);
+                            b = new BufferedReader(f);
+
+                            currentLine = b.readLine();
+
+                            while (currentLine != null) {
+
+                                tok = new StringTokenizer(currentLine);
+
+                                if (tok.countTokens() == 3) {
+
+                                    precursorMass = new Double(tok.nextToken());
+
+                                    //PKL files also includes intensity so ignore the next token
+                                    tok.nextToken();
+
+                                    precursorCharge = new Integer(tok.nextToken());
+
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                            new Object[]{
+                                                file.getName(),
+                                                null,
+                                                precursorMass, precursorCharge,
+                                                2, true});
+
+                                    numberOfSelectedSpectra++;
+                                }
+
+                                currentLine = b.readLine();
+                            }
+
+                            b.close();
+                            f.close();
+
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("VEMS")) {
+
+                            f = new FileReader(file);
+                            b = new BufferedReader(f);
+
+                            currentLine = b.readLine();
+
+                            while (currentLine != null) {
+
+                                tok = new StringTokenizer(currentLine);
+
+                                if (tok.countTokens() == 4) {
+
+                                    precursorMass = new Double(tok.nextToken());
+
+                                    //PKX files also includes intensity so ignore the next token
+                                    tok.nextToken();
+
+                                    precursorCharge = new Integer(tok.nextToken());
+
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                            new Object[]{
+                                                file.getName(),
+                                                null,
+                                                precursorMass, precursorCharge,
+                                                2, true});
+
+                                    numberOfSelectedSpectra++;
+                                }
+
+                                currentLine = b.readLine();
+                            }
+
+                            b.close();
+                            f.close();
+
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzXML")) {
+
+                            msXMLParser = new MSXMLParser(file.getAbsolutePath());
+
+                            scanCount = msXMLParser.getScanCount();
+
+                            for (int i = 1; i <= scanCount; i++) {
+                                scan = msXMLParser.rap(i);
+
+                                precursorCharge = scan.getHeader().getPrecursorCharge();
+                                precursorMass = new Float(scan.getHeader().getPrecursorMz()).doubleValue();
+
+                                if (precursorMass != -1 &&
+                                        precursorCharge != -1) {
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                            new Object[]{
+                                                file.getName(),
+                                                scan.getHeader().getNum(),
+                                                precursorMass, precursorCharge,
+                                                2, true});
+                                } else if (precursorMass == -1 &&
+                                        precursorCharge != -1) {
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                            new Object[]{
+                                                file.getName(),
+                                                scan.getHeader().getNum(),
+                                                null, precursorCharge,
+                                                2, true});
+                                } else if (precursorMass != -1 &&
+                                        precursorCharge == -1) {
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                            new Object[]{
+                                                file.getName(),
+                                                scan.getHeader().getNum(),
+                                                precursorMass, null,
+                                                2, true});
+                                } else {
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                            new Object[]{
+                                                file.getName(),
+                                                scan.getHeader().getNum(),
+                                                null, null,
+                                                2, true});
+                                }
+
+                                numberOfSelectedSpectra++;
+
+                                numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
+                                        "/" +
+                                        numberOfSelectedSpectra);
+                            }
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("mzData")) {
+
+                            reader = new FileReader(file);
+
+                            unmarshallerMzData = new MzDataXMLUnmarshaller();
+                            mzData = unmarshallerMzData.unMarshall(reader);
+
+                            spectraMzData = mzData.getSpectrumCollection();
+                            iterator = spectraMzData.iterator();
+
+                            while (iterator.hasNext()) {
+                                currentSpectrum = iterator.next();
+
+                                ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                        new Object[]{
+                                            file.getName(),
+                                            "" + currentSpectrum.getSpectrumId(),
+                                            null, null,
+                                            2, true});
+
+                                numberOfSelectedSpectra++;
+                                numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
+                                        "/" + numberOfSelectedSpectra);
+                            }
+
+                            reader.close();
+
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("Mascot Generic File")) {
+
+                            f = new FileReader(file);
+                            b = new BufferedReader(f);
+
+                            String line = null;
+                            int lineCount = 0;
+                            boolean inSpectrum = false;
+                            precursorMass = null;
+                            precursorCharge = null;
+
+                            while ((line = b.readLine()) != null && progressDialog.isVisible()) {
+                                // Advance line count.
+                                lineCount++;
+                                // Delete leading/trailing spaces.
+                                line = line.trim();
+                                // Skip empty lines.
+                                if (line.equals("")) {
+                                    continue;
+                                }
+                                // First line can be 'CHARGE'.
+                                if (lineCount == 1 && line.startsWith("CHARGE")) {
+                                    continue;
+                                }
+
+                                // BEGIN IONS marks the start of the real file.
+                                if (line.equals("BEGIN IONS")) {
+                                    precursorMass = null;
+                                    precursorCharge = null;
+                                    inSpectrum = true;
+                                } // END IONS marks the end.
+                                else if (line.equals("END IONS")) {
+
+                                    inSpectrum = false;
+
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                            new Object[]{
+                                                file.getName(),
+                                                null,
+                                                precursorMass, precursorCharge,
+                                                2, true});
+
+                                    numberOfSelectedSpectra++;
+                                    numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
+                                            "/" + numberOfSelectedSpectra);
+
+                                } else if (inSpectrum && (line.indexOf("=") >= 0)) {
+                                    // Find the starting location of the value (which is one beyond the location
+                                    // of the '=').
+                                    int equalSignIndex = line.indexOf("=");
+
+                                    if (line.startsWith("PEPMASS")) {
+                                        // PEPMASS line found.
+                                        String value = line.substring(equalSignIndex + 1);
+
+                                        //if (PRIDEConverter.getProperties().isCommaTheDecimalSymbol()) {
+                                        value = value.replaceAll(",", ".");
+                                        //}
+
+                                        values = value.split("\\s");
+                                        precursorMass = Double.parseDouble(values[0]);
+
+                                    } else if (line.startsWith("CHARGE")) {
+                                        // CHARGE line found.
+                                        // Note the extra parsing to read a Mascot Generic File charge (eg., 1+).
+                                        precursorCharge = Util.extractCharge(line.substring(equalSignIndex + 1));
+                                    }
+                                }
+                            }
+
+                            b.close();
+
+                        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("MS2")) {
+
+                            f = new FileReader(file);
+                            b = new BufferedReader(f);
+
+                            String line = null;
+                            int lineCount = 0;
+                            boolean chargeDecided = false;
+
+                            while ((line = b.readLine()) != null) {
+                                // Advance line count.
+                                lineCount++;
+
+                                // Skip empty lines.
+                                if (line.equals("")) {
+                                    continue;
+                                }
+
+                                // ignore
+                                if (line.startsWith("H") ||
+                                        line.startsWith("D") ||
+                                        line.startsWith("I")) {
+                                    continue;
+                                }
+
+                                // S marks the start of a new spectrum
+                                if (line.startsWith("S")) {
+
+                                    if (PRIDEConverter.getProperties().isCommaTheDecimalSymbol()) {
+                                        line = line.replaceAll(",", ".");
+                                    }
+
+                                    values = line.split("\\s");
+
+                                    precursorMass = new Double(values[3]);
+
+
+                                    chargeDecided = false;
+
+                                } else if (line.startsWith("Z") && !chargeDecided) {
+
+                                    String nextLine = b.readLine();
+
+                                    // multiple charges
+                                    if (nextLine.startsWith("Z")) {
+                                        precursorCharge = null;
+                                    } else {
+                                        values = line.split("\\s");
+                                        precursorCharge = new Integer(values[1]);
+                                    }
+
+                                    chargeDecided = true;
+
+                                    ((DefaultTableModel) spectraJXTable.getModel()).addRow(
+                                            new Object[]{
+                                                file.getName(),
+                                                null,
+                                                precursorMass, precursorCharge,
+                                                2, true});
+
+                                    numberOfSelectedSpectra++;
+                                    numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
+                                            "/" + numberOfSelectedSpectra);
+                                }
+                            }
+
+                            b.close();
+                        }
+
+                        numberOfSelectedSpectraJTextField.setText(numberOfSelectedSpectra +
+                                "/" + numberOfSelectedSpectra);
+
+                    } catch (FileNotFoundException ex) {
+                        JOptionPane.showMessageDialog(null,
+                                "The file " + file.getPath() +
+                                "\ncould not be found.",
+                                "File Not Found", JOptionPane.ERROR_MESSAGE);
+                        Util.writeToErrorLog("Error when trying to read file: ");
+                        ex.printStackTrace();
+                    } catch (Exception e) {
+
+                        Util.writeToErrorLog("Error parsing " + PRIDEConverter.getProperties().getDataSource() + ": ");
+                        e.printStackTrace();
+
+                        String fileType = PRIDEConverter.getProperties().getDataSource();
+
+                        JOptionPane.showMessageDialog(null,
+                                "The file could not parsed as a " +
+                                fileType + ":\n " +
+                                file.getPath() +
+                                "\n\n" +
+                                "See ../Properties/ErrorLog.txt for more details.",
+                                "Error Parsing File", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+
+                progressDialog.setVisible(false);
+                progressDialog.dispose();
+
+                if (spectraJXTable.getRowCount() > 0) {
+                    selectedSpectraJLabel.setEnabled(true);
+                    numberOfSelectedSpectraJTextField.setEnabled(true);
+                    spectrumAnnotationJLabel.setEnabled(true);
+
+                    loadSpectraJLabel.setEnabled(false);
+                    selectAllJCheckBox.setEnabled(false);
+                }
+
+                if (numberOfSelectedSpectra == 0) {
+                    nextJButton.setEnabled(false);
+                } else {
+                    nextJButton.setEnabled(true);
+                }
+            }
+        });
+
+        t2.start();
+
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+}//GEN-LAST:event_loadSpectraJLabelMouseClicked
+
+    private void loadSpectraJLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loadSpectraJLabelMouseEntered
+        setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+}//GEN-LAST:event_loadSpectraJLabelMouseEntered
+
+    private void loadSpectraJLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loadSpectraJLabelMouseExited
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+}//GEN-LAST:event_loadSpectraJLabelMouseExited
+
+    /**
      * Saves the inserted information to the Properties object.
      */
     private void saveInsertedInformation() {
@@ -1222,7 +1223,7 @@ public class SpectraSelectionNoIdentifications extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JButton loadSpectraJButton;
+    private javax.swing.JLabel loadSpectraJLabel;
     private javax.swing.JButton nextJButton;
     private javax.swing.JTextField numberOfSelectedSpectraJTextField;
     private javax.swing.JCheckBox selectAllJCheckBox;
