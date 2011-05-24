@@ -44,7 +44,6 @@ public class RequestFtpAccess extends javax.swing.JDialog {
         submissionTipsJEditorPane = new javax.swing.JEditorPane();
         aboutJButton = new javax.swing.JButton();
         helpJButton = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Request PRIDE FTP Access?");
@@ -61,7 +60,7 @@ public class RequestFtpAccess extends javax.swing.JDialog {
 
         submissionTipsJEditorPane.setContentType("text/html");
         submissionTipsJEditorPane.setEditable(false);
-        submissionTipsJEditorPane.setText("<html>\r\n  <head>\r\n  </head>\r\n  <body>\r\n    <p style=\"margin-top: 0\" align=\"justify\">\r\n<br>\nThe size of your PRIDE XML file is larger than the maximum file size for using the 'Direct Submission' via the PRIDE web page.<br> <br>\nWe therefore recommend using the PRIDE FTP server. To get access to the FTP server, please contact the PRIDE team at \n<a href=\"mailto:pride-support@ebi.ac.uk?subject=PRIDE%20Converter%3A%20request%20FTP%20access&body=Dear%20PRIDE%20Team.%20%0D%0A%0D%0AI%20would%20like%20to%20request%20access%20to%20the%20PRIDE%20FTP%20server%20to%20upload%20my%20PRIDE%20XML%20file(s).%20%0D%0A%0D%0ABest%20regards,%20%0D%0A(...Insert%20your%20name%20here...)\">pride-support@ebi.ac.uk</a>.\n<br><br>\n    </p>\r\n  </body>\r\n</html>\r\n");
+        submissionTipsJEditorPane.setText("<html>\r\n  <head>\r\n  </head>\r\n  <body>\r\n    <p style=\"margin-top: 0\" align=\"justify\">\r\n<br>\nYour file is ready for upload to the PRIDE database. \n<br><br>\nPrior to submission we recommend that you use our tool  <a href=\"http://code.google.com/p/pride-toolsuite/wiki/PRIDEInspector\">PRIDE Inspector</a> to review your submission data. \n<br><br>\nTo submit, please create a user account (if you don't have one already) and contact pride-support \nat <a href=\"mailto:pride-support@ebi.ac.uk?subject=PRIDE%20Converter%3A%20request%20FTP%20access&body=Dear%20PRIDE%20Team.%20%0D%0A%0D%0AI%20would%20like%20to%20request%20access%20to%20the%20PRIDE%20FTP%20server%20to%20upload%20my%20PRIDE%20XML%20file(s).%20%0D%0A%0D%0ABest%20regards,%20%0D%0A(...Insert%20your%20name%20here...)\">pride-support@ebi.ac.uk</a> for details about the FTP submission procedure. \n<br><br>\nPlease also take a moment to have a look at the <a href=\"http://www.ebi.ac.uk/pride/easySubmitData.do\">PRIDE submission guidelines</a>.\n<br><br>\n    </p>\r\n  </body>\r\n</html>\r\n");
         submissionTipsJEditorPane.addHyperlinkListener(new javax.swing.event.HyperlinkListener() {
             public void hyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {
                 submissionTipsJEditorPaneHyperlinkUpdate(evt);
@@ -75,14 +74,14 @@ public class RequestFtpAccess extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 151, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         aboutJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF"))); // NOI18N
@@ -109,13 +108,12 @@ public class RequestFtpAccess extends javax.swing.JDialog {
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(layout.createSequentialGroup()
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 233, Short.MAX_VALUE)
-                        .add(closeJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 65, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 245, Short.MAX_VALUE)
+                        .add(closeJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 65, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -123,9 +121,7 @@ public class RequestFtpAccess extends javax.swing.JDialog {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(18, 18, 18)
-                .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(closeJButton)
                     .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -199,7 +195,6 @@ public class RequestFtpAccess extends javax.swing.JDialog {
     private javax.swing.JButton helpJButton;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JEditorPane submissionTipsJEditorPane;
     // End of variables declaration//GEN-END:variables
 }

@@ -27,15 +27,14 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
+                  <Component id="jPanel1" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
                       <Component id="helpJButton" min="-2" pref="23" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="aboutJButton" min="-2" pref="25" max="-2" attributes="0"/>
-                      <EmptySpace pref="233" max="32767" attributes="0"/>
+                      <EmptySpace pref="245" max="32767" attributes="0"/>
                       <Component id="closeJButton" min="-2" pref="65" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jSeparator1" alignment="0" pref="353" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -46,9 +45,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jPanel1" max="32767" attributes="0"/>
-              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-              <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="closeJButton" alignment="1" min="-2" max="-2" attributes="0"/>
                   <Group type="103" alignment="1" groupAlignment="0" attributes="0">
@@ -84,7 +81,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="317" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="332" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -92,8 +89,8 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="jScrollPane1" min="-2" pref="151" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="278" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -107,7 +104,7 @@
               <Properties>
                 <Property name="contentType" type="java.lang.String" value="text/html"/>
                 <Property name="editable" type="boolean" value="false"/>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xd;&#xa;  &lt;head&gt;&#xd;&#xa;  &lt;/head&gt;&#xd;&#xa;  &lt;body&gt;&#xd;&#xa;    &lt;p style=&quot;margin-top: 0&quot; align=&quot;justify&quot;&gt;&#xd;&#xa;&lt;br&gt;&#xa;The size of your PRIDE XML file is larger than the maximum file size for using the &apos;Direct Submission&apos; via the PRIDE web page.&lt;br&gt; &lt;br&gt;&#xa;We therefore recommend using the PRIDE FTP server. To get access to the FTP server, please contact the PRIDE team at &#xa;&lt;a href=&quot;mailto:pride-support@ebi.ac.uk?subject=PRIDE%20Converter%3A%20request%20FTP%20access&amp;body=Dear%20PRIDE%20Team.%20%0D%0A%0D%0AI%20would%20like%20to%20request%20access%20to%20the%20PRIDE%20FTP%20server%20to%20upload%20my%20PRIDE%20XML%20file(s).%20%0D%0A%0D%0ABest%20regards,%20%0D%0A(...Insert%20your%20name%20here...)&quot;&gt;pride-support@ebi.ac.uk&lt;/a&gt;.&#xa;&lt;br&gt;&lt;br&gt;&#xa;    &lt;/p&gt;&#xd;&#xa;  &lt;/body&gt;&#xd;&#xa;&lt;/html&gt;&#xd;&#xa;"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xd;&#xa;  &lt;head&gt;&#xd;&#xa;  &lt;/head&gt;&#xd;&#xa;  &lt;body&gt;&#xd;&#xa;    &lt;p style=&quot;margin-top: 0&quot; align=&quot;justify&quot;&gt;&#xd;&#xa;&lt;br&gt;&#xa;Your file is ready for upload to the PRIDE database. &#xa;&lt;br&gt;&lt;br&gt;&#xa;Prior to submission we recommend that you use our tool  &lt;a href=&quot;http://code.google.com/p/pride-toolsuite/wiki/PRIDEInspector&quot;&gt;PRIDE Inspector&lt;/a&gt; to review your submission data. &#xa;&lt;br&gt;&lt;br&gt;&#xa;To submit, please create a user account (if you don&apos;t have one already) and contact pride-support &#xa;at &lt;a href=&quot;mailto:pride-support@ebi.ac.uk?subject=PRIDE%20Converter%3A%20request%20FTP%20access&amp;body=Dear%20PRIDE%20Team.%20%0D%0A%0D%0AI%20would%20like%20to%20request%20access%20to%20the%20PRIDE%20FTP%20server%20to%20upload%20my%20PRIDE%20XML%20file(s).%20%0D%0A%0D%0ABest%20regards,%20%0D%0A(...Insert%20your%20name%20here...)&quot;&gt;pride-support@ebi.ac.uk&lt;/a&gt; for details about the FTP submission procedure. &#xa;&lt;br&gt;&lt;br&gt;&#xa;Please also take a moment to have a look at the &lt;a href=&quot;http://www.ebi.ac.uk/pride/easySubmitData.do&quot;&gt;PRIDE submission guidelines&lt;/a&gt;.&#xa;&lt;br&gt;&lt;br&gt;&#xa;    &lt;/p&gt;&#xd;&#xa;  &lt;/body&gt;&#xd;&#xa;&lt;/html&gt;&#xd;&#xa;"/>
               </Properties>
               <Events>
                 <EventHandler event="hyperlinkUpdate" listener="javax.swing.event.HyperlinkListener" parameters="javax.swing.event.HyperlinkEvent" handler="submissionTipsJEditorPaneHyperlinkUpdate"/>
@@ -138,8 +135,6 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="helpJButtonActionPerformed"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JSeparator" name="jSeparator1">
     </Component>
   </SubComponents>
 </Form>
