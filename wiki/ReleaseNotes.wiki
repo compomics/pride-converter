@@ -8,6 +8,7 @@
 *Changes in PRIDE Converter v2.5.1 - (April 19. 2011):*
  * FEATURE IMPROVEMENT: Improved the GUI of the SpectraSelection panels by reducing the size of the "Load Spectra" button (and moving it), as this was pressed by some users even when not doing manual selection, thus slowing down the process.
 
+Download count: 222
 ----
 
 *Changes in PRIDE Converter v2.5.0 - (March 14. 2011):*
