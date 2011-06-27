@@ -3,12 +3,13 @@ package no.uib.prideconverter.gui;
 import no.uib.prideconverter.PRIDEConverter;
 import java.awt.Window;
 import java.awt.event.KeyEvent;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import no.uib.olsdialog.OLSDialog;
 import no.uib.olsdialog.OLSInputable;
+import no.uib.prideconverter.util.CvMappingProperties;
+import no.uib.prideconverter.util.CvMappingReader;
 import uk.ac.ebi.pride.model.implementation.core.ProtocolStepImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 
@@ -24,6 +25,10 @@ public class NewProtocolStep extends javax.swing.JDialog implements OLSInputable
     private ProtocolDetails protocolDetails;
     private ProtocolStepImpl protocolStep;
     private int modifiedRow = -1;
+    private Map<String, List<String>> preselectedOntologyTermsProtocol;
+    private Map<String, List<String>> preselectedOntologyTermsAnalyzer;
+
+//    todo:aqui me quede!!!!!
 
     /**
      * Opens a new NewProtocolStep dialog.
@@ -33,6 +38,10 @@ public class NewProtocolStep extends javax.swing.JDialog implements OLSInputable
      */
     public NewProtocolStep(ProtocolDetails protocolDetails, boolean modal) {
         super(protocolDetails, modal);
+        CvMappingProperties prop = new CvMappingProperties();
+        CvMappingReader cvMappingReader = new CvMappingReader(prop.getDefaultMappingFile());
+        preselectedOntologyTermsProtocol = cvMappingReader.getPreselectedTerms(prop.getPropertyValue("protocolKeyword"));
+        preselectedOntologyTermsAnalyzer = cvMappingReader.getPreselectedTerms(prop.getPropertyValue("instrumentAnalyzerKeyword"));
 
         this.protocolDetails = protocolDetails;
 
@@ -342,8 +351,14 @@ public class NewProtocolStep extends javax.swing.JDialog implements OLSInputable
      * @param evt
      */
     private void olsSearchJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_olsSearchJButtonActionPerformed
+        System.out.println("protocols - OLS search");
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new OLSDialog(this, this, true, "protocolSteps", PRIDEConverter.getUserProperties().getLastSelectedOntology(), null);
+        String ontologyTitle = PRIDEConverter.getUserProperties().getLastSelectedOntology();
+        String msRoot = PRIDEConverter.getUserProperties().getMsRoot();
+        if(msRoot.indexOf(ontologyTitle) != -1){
+            ontologyTitle = msRoot;
+        }
+        new OLSDialog(this, this, true, "protocolSteps", ontologyTitle, null, preselectedOntologyTermsProtocol);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_olsSearchJButtonActionPerformed
 
@@ -397,7 +412,7 @@ public class NewProtocolStep extends javax.swing.JDialog implements OLSInputable
      * @param evt
      */
     private void editJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editJMenuItemActionPerformed
-
+        System.out.println("protocols - edit JMenu");
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
         
         int selectedRow = cvTermsJTable.getSelectedRow();
@@ -414,7 +429,13 @@ public class NewProtocolStep extends javax.swing.JDialog implements OLSInputable
         searchTerm = searchTerm.replaceAll("\\[", " ");
         searchTerm = searchTerm.replaceAll("\\]", " ");
 
-        new OLSDialog(this, this, true, "protocolSteps", ontology, selectedRow, searchTerm);
+        String msRoot = PRIDEConverter.getUserProperties().getMsRoot();
+        if(msRoot.indexOf(ontology) != -1){
+            ontology = msRoot;
+        }
+        new OLSDialog(this, this, true, "protocolSteps", ontology, selectedRow, searchTerm, preselectedOntologyTermsAnalyzer);
+        //new OLSDialog(this, this, true, "protocolSteps", ontology, selectedRow, searchTerm);
+
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_editJMenuItemActionPerformed
 
@@ -589,7 +610,7 @@ public class NewProtocolStep extends javax.swing.JDialog implements OLSInputable
      * @see OLSInputable
      */
     public void insertOLSResult(String field, String selectedValue, String accession,
-            String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm) {
+            String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm, Map<String, String> metadata) {
 
         PRIDEConverter.getUserProperties().setLastSelectedOntology(ontologyLong);
         addProtocolSteps(selectedValue, accession, ontologyShort, modifiedRow);

@@ -3,9 +3,7 @@ package no.uib.prideconverter.gui;
 import no.uib.olsdialog.OLSDialog;
 import no.uib.olsdialog.OLSInputable;
 import no.uib.prideconverter.PRIDEConverter;
-import no.uib.prideconverter.util.ComboBoxInputable;
-import no.uib.prideconverter.util.MyComboBoxRenderer;
-import no.uib.prideconverter.util.Util;
+import no.uib.prideconverter.util.*;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 import uk.ac.ebi.pride.model.interfaces.mzdata.CvParam;
 
@@ -21,6 +19,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * A frame where information about the samples can be inserted.
@@ -37,6 +36,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     private Vector columnToolTips;
     private boolean keepQuantificationSelection = false;
     private Vector tempSampleCvParameters;
+    private Map<String, List<String>> preselectedOntologyTerms;
 
     private boolean speciesCheckDone = false;
 
@@ -46,6 +46,10 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
      * @param location where to locate the frame on the screen
      */
     public SampleDetails(Point location) {
+        CvMappingProperties prop = new CvMappingProperties();
+        CvMappingReader cvMappingReader = new CvMappingReader(prop.getDefaultMappingFile());
+        preselectedOntologyTerms = cvMappingReader.getPreselectedTerms(prop.getPropertyValue("sampleKeyword"));
+
 
         // sets the default wizard frame size
         this.setPreferredSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
@@ -1208,7 +1212,12 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
      */
     private void sampleDetailsJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleDetailsJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new OLSDialog(this, this, true, "singleSample", PRIDEConverter.getUserProperties().getLastSelectedSampleOntology(), null);
+        String ontologyTitle = PRIDEConverter.getUserProperties().getLastSelectedSampleOntology();
+        String newtRoot = PRIDEConverter.getUserProperties().getNewtRoot();
+        if(newtRoot.indexOf(ontologyTitle) != -1){
+            ontologyTitle = newtRoot;
+        }
+        new OLSDialog(this, this, true, "singleSample", ontologyTitle, null, preselectedOntologyTerms);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_sampleDetailsJButtonActionPerformed
 
@@ -1236,7 +1245,11 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
         searchTerm = searchTerm.replaceAll("\\]", " ");
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new OLSDialog(this, this, true, "singleSample", ontology, selectedRow, searchTerm);
+                String msNewtRoot = PRIDEConverter.getUserProperties().getNewtRoot();
+        if(msNewtRoot.indexOf(ontology) != -1){
+            ontology = msNewtRoot;
+        }
+        new OLSDialog(this, this, true, "singleSample", ontology, selectedRow, searchTerm, preselectedOntologyTerms);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_editJMenuItemActionPerformed
 
@@ -2631,7 +2644,7 @@ public class SampleDetails extends javax.swing.JFrame implements ComboBoxInputab
     }
 
     public void insertOLSResult(String field, String selectedValue, String accession, String ontologyShort,
-            String ontologyLong, int modifiedRow, String mappedTerm) {
+            String ontologyLong, int modifiedRow, String mappedTerm, Map<String, String> metadata) {
 
         if (mappedTerm != null) {
             PRIDEConverter.getUserProperties().getCVTermMappings().put(

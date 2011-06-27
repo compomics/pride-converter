@@ -107,7 +107,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                     </execution>
                 </executions>
             </plugin>
-            
+
             <!-- Jar plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -173,11 +173,23 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             <releases>
             </releases>
         </repository>
+
+        <!--IntAct repository-->
+        <repository>
+            <id>intact.nexus</id>
+            <name>IntAct Nexus</name>
+            <url>http://www.ebi.ac.uk/intact/maven/nexus/content/groups/public/</url>
+        </repository>
     </repositories>
 
 
     <!-- Dependencies -->
     <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+        </dependency>
         <dependency>
             <groupId>de.proteinms.omxparser</groupId>
             <artifactId>omssa-parser</artifactId>
@@ -221,7 +233,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         <dependency>
             <groupId>no.uib</groupId>
             <artifactId>ols-dialog</artifactId>
-            <version>3.2.4</version>
+            <version>3.3.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.pride</groupId>
@@ -310,7 +322,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
                 </exclusion>
                 <exclusion>
                     <groupId>psidev.psi.tools</groupId>
-                    <artifactId>xxindex</artifactId>    
+                    <artifactId>xxindex</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -340,5 +352,12 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             </exclusions>
         </dependency>
 
+        <!--Reads cv-mapping files-->
+        <dependency>
+            <groupId>psidev.psi.tools</groupId>
+            <artifactId>cv-rule-reader</artifactId>
+            <version>2.0.1</version>
+        </dependency>
     </dependencies>
+
 </project>

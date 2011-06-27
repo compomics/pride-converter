@@ -3,11 +3,13 @@ package no.uib.prideconverter.gui;
 import no.uib.prideconverter.PRIDEConverter;
 import java.awt.Window;
 import java.awt.event.KeyEvent;
-import java.util.Vector;
+import java.util.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import no.uib.olsdialog.OLSDialog;
 import no.uib.olsdialog.OLSInputable;
+import no.uib.prideconverter.util.CvMappingProperties;
+import no.uib.prideconverter.util.CvMappingReader;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
 
 /**
@@ -21,6 +23,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
 
     private SampleDetails sampleDetails;
     private int modifiedRow = -1;
+    private Map<String,List<String>> preselectedOntologyTerms;
 
     /**
      * Opens a new NewSample dialog.
@@ -30,6 +33,10 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
      */
     public NewSample(SampleDetails sampleDetails, boolean modal) {
         super(sampleDetails, modal);
+        CvMappingProperties prop = new CvMappingProperties();
+        CvMappingReader cvMappingReader = new CvMappingReader(prop.getDefaultMappingFile());
+        preselectedOntologyTerms = cvMappingReader.getPreselectedTerms(prop.getPropertyValue("sampleKeyword"));
+
 
         this.sampleDetails = sampleDetails;
 
@@ -366,7 +373,12 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
      */
     private void olsSearchJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_olsSearchJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new OLSDialog(this, this, true, "sample", PRIDEConverter.getUserProperties().getLastSelectedSampleOntology(), null);
+        String ontologyTitle = PRIDEConverter.getUserProperties().getLastSelectedSampleOntology();
+        String newtRoot = PRIDEConverter.getUserProperties().getNewtRoot();
+        if(newtRoot.indexOf(ontologyTitle) != -1){
+            ontologyTitle = newtRoot;
+        }
+        new OLSDialog(this, this, true, "sample", ontologyTitle, null, preselectedOntologyTerms);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_olsSearchJButtonActionPerformed
 
@@ -436,7 +448,11 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
         searchTerm = searchTerm.replaceAll("\\[", " ");
         searchTerm = searchTerm.replaceAll("\\]", " ");
 
-        new OLSDialog(this, this, true, "sample", ontology, selectedRow, searchTerm);
+        String msNewtRoot = PRIDEConverter.getUserProperties().getNewtRoot();
+        if(msNewtRoot.indexOf(ontology) != -1){
+            ontology = msNewtRoot;
+        }
+        new OLSDialog(this, this, true, "sample", ontology, selectedRow, searchTerm, preselectedOntologyTerms);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_editJMenuItemActionPerformed
 
@@ -620,7 +636,7 @@ public class NewSample extends javax.swing.JDialog implements OLSInputable {
      * @see OLSInputable
      */
     public void insertOLSResult(String field, String selectedValue, String accession,
-            String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm) {
+            String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm, Map<String, String> metadata) {
 
         PRIDEConverter.getUserProperties().setLastSelectedSampleOntology(ontologyLong);
         addSample(selectedValue, accession, ontologyShort, modifiedRow);

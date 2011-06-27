@@ -4,6 +4,7 @@ import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import no.uib.olsdialog.OLSDialog;
 import no.uib.olsdialog.OLSInputable;
@@ -842,7 +843,7 @@ public class SpectrumDetails extends javax.swing.JDialog implements OLSInputable
      * Inserts the selected CV parameter into the CV parameters table.
      */
     public void insertOLSResult(String field, String selectedValue, String accession,
-            String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm) {
+            String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm, Map<String, String> metadata) {
 
         PRIDEConverter.getUserProperties().setLastSelectedOntology(ontologyLong);
 

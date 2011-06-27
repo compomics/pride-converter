@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="https://psidev.svn.sourceforge.net/svnroot/psidev/psi/tools/current/xsl/cv-mapping/CvMappingRules.xsl" type="text/xsl"?>
+<CvMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="http://www.psidev.info/files/validator/CvMapping.xsd" modelName="pride.xsd"
+           modelURI="http://www.ebi.ac.uk/pride/help_resources/pride.xsd" modelVersion="1.0.0">
+
+    <CvReferenceList>
+        <CvReference cvName="NEWT UniProt Taxonomy Database" cvIdentifier="NEWT"/>
+        <CvReference cvName="BRENDA tissue / enzyme source" cvIdentifier="BTO"/>
+        <CvReference cvName="Gene Ontology" cvIdentifier="GO"/>
+        <CvReference cvName="Cell Type" cvIdentifier="CL"/>
+        <CvReference cvName="Human Disease" cvIdentifier="DOID"/>
+        <CvReference cvName="Phenotypic qualities (properties)" cvIdentifier="PATO"/>
+        <CvReference cvName="Separation Methods" cvIdentifier="SEP"/>
+        <CvReference cvName="Physico-Chemical Methods and Properties" cvIdentifier="FIX"/>
+        <CvReference cvName="PSI Mass Spectrometry Ontology" cvIdentifier="MS"/>
+        <CvReference cvName="PRIDE Controlled Vocabulary" cvIdentifier="PRIDE"/>
+        <CvReference cvName="Protein Modifications (PSI-MOD)" cvIdentifier="MOD"/>
+        <!--<CvReference cvName="PSI" cvIdentifier="PSI"/>-->
+        <!--<CvReference cvName="UO" cvIdentifier="UO"/>    -->
+    </CvReferenceList>
+
+    <CvMappingRuleList>
+    <!-- SAMPLE: NEWT, BTO, GO, CL, DOID, PATO -->
+        <!-- MS, PATO, GO, BTO copied from ms:cv-mapping 2011-06-20 -->
+        <CvMappingRule id="sample_may"
+                       cvElementPath="/ExperimentCollection/Experiment/mzData/description/admin/sampleDescription/cvParam/@accession"
+                       requirementLevel="MAY"
+                       scopePath="/ExperimentCollection/Experiment/mzData/description/admin/sampleDescription"
+                       cvTermsCombinationLogic="OR">
+            <!--NEWT-->
+            <CvTerm termAccession="1"
+                      useTerm="false"
+                      termName="Root node of taxonomy"
+                      isRepeatable="true"
+                      allowChildren="true"
+                      cvIdentifierRef="NEWT" />
+            <!--CL-->
+            <CvTerm termAccession="CL:0000000"
+                      useTerm="false"
+                      termName="cell"
+                      isRepeatable="true"
+                      allowChildren="true"
+                      cvIdentifierRef="CL" />
+            <!--DOID-->
+            <CvTerm termAccession="DOID:4"
+                      useTerm="false"
+                      termName="disease"
+                      isRepeatable="true"
+                      allowChildren="true"
+                      cvIdentifierRef="DOID" />
+            <!--MS-->
+            <!--<CvTerm termAccession="MS:1000548"-->
+                    <!--useTerm="false"-->
+                    <!--termName="sample attribute"-->
+                    <!--isRepeatable="true"-->
+                    <!--allowChildren="true"-->
+                    <!--cvIdentifierRef="MS" />-->
+            <!--PATO-->
+            <CvTerm termAccession="PATO:0001241"
+                    useTerm="false"
+                    termName="quality of an object"
+                    isRepeatable="true"
+                    allowChildren="true"
+                    cvIdentifierRef="PATO"/>
+            <!--GO-->
+            <CvTerm termAccession="GO:0005575"
+                    useTerm="false"
+                    termName="cellular_component"
+                    isRepeatable="true"
+                    allowChildren="true"
+                    cvIdentifierRef="GO"/>
+            <!--BTO-->
+            <CvTerm termAccession="BTO:0000000"
+                    useTerm="false"
+                    termName="brenda source tissue ontology"
+                    isRepeatable="true"
+                    allowChildren="true"
+                    cvIdentifierRef="BTO"/>
+            <!--todo: Check PRIDE:0000017-->
+        </CvMappingRule>
+
+
+    <!-- PROTOCOL: MS, PRIDE, FIX, SEP -->
+        <CvMappingRule id="protocol_steps_may"
+                       cvElementPath="/ExperimentCollection/Experiment/Protocol/ProtocolSteps/stepdescription/cvParam/@accession"
+                       requirementLevel="MAY"
+                       scopePath="/ExperimentCollection/Experiment/Protocol/ProtocolSteps/stepdescription"
+                       cvTermsCombinationLogic="OR">
+            <!--MS-->
+            <CvTerm termAccession="MS:0000000"
+                    useTerm="false"
+                    termName="Proteomics Standards Initiative Mass Spectrometry Vocabularies"
+                    isRepeatable="true"
+                    allowChildren="true"
+                    cvIdentifierRef="MS"/>
+            <!--PRIDE-->
+            <CvTerm termAccession="PRIDE:0000001"
+                    useTerm="false"
+                    termName="Protocol step description additional parameter"
+                    isRepeatable="true"
+                    allowChildren="true"
+                    cvIdentifierRef="PRIDE"/>
+            <!--FIX-->
+            <CvTerm termAccession="FIX:0000000"
+                    useTerm="false"
+                    termName="biophysical chemistry"
+                    isRepeatable="true"
+                    allowChildren="true"
+                    cvIdentifierRef="FIX"/>
+            <!--SEP-->
+            <CvTerm termAccession="sep:00001"
+                    useTerm="false"
+                    termName="entity"
+                    isRepeatable="true"
+                    allowChildren="true"
+                    cvIdentifierRef="SEP"/>
+        </CvMappingRule>
+
+
+    <!--INSTRUMENT: MS, PRIDE-->
+        <!--PROCESSING METHOD-->
+        <CvMappingRule id="processingmethod_must"
+                       cvElementPath="/ExperimentCollection/Experiment/mzData/description/dataProcessing/processingMethod/cvParam/@accession"
+                       cvTermsCombinationLogic="OR"
+                       scopePath="/ExperimentCollection/Experiment/mzData/description/dataProcessing/processingMethod"
+                       requirementLevel="MUST">
+            <CvTerm termAccession="MS:1000452"
+                    useTerm="false"
+                    termName="data transformation"
+                    isRepeatable="true"
+                    allowChildren="true"
+                    cvIdentifierRef="MS"/>
+            <!--<CvTerm termAccession="PSI:1000452"-->
+                    <!--useTerm="false"-->
+                    <!--termName="data processing method"-->
+                    <!--isRepeatable="true"-->
+                    <!--allowChildren="true"-->
+                    <!--cvIdentifierRef="PSI"/>-->
+        </CvMappingRule>
+
+        <CvMappingRule id="processingmethod_may"
+                       cvElementPath="/ExperimentCollection/Experiment/mzData/description/dataProcessing/processingMethod/cvParam/@accession"
+                       cvTermsCombinationLogic="OR"
+                       scopePath="/ExperimentCollection/Experiment/mzData/description/dataProcessing/processingMethod"
+                       requirementLevel="MAY">
+            <CvTerm termAccession="MS:1000531"
+                    useTerm="false"
+                    termName="software"
+                    isRepeatable="true"
+                    allowChildren="true"
+                    cvIdentifierRef="MS"/>
+            <CvTerm termAccession="PRIDE:0000278"
+                    useTerm="false"
+                    termName="Processing method additional parameter"
+                    isRepeatable="true"
+                    allowChildren="true"
+                    cvIdentifierRef="PRIDE"/>
+            <!-- todo: Check MS:1001458, MS:1000630 -->
+        </CvMappingRule>
+
+        <!--SOURCE-->
+        <CvMappingRule id="source_must"
+                       cvElementPath="/ExperimentCollection/Experiment/mzData/description/instrument/source/cvParam/@accession"
+                       requirementLevel="MUST"
+                       scopePath="/ExperimentCollection/Experiment/mzData/description/instrument/source"
+                       cvTermsCombinationLogic="OR">
+            <CvTerm termAccession="MS:1000008"
+                  useTerm="false"
+                  termName="ionization type"
+                  isRepeatable="false"
+                  allowChildren="true"
+                  cvIdentifierRef="MS"/>
+            <CvTerm termAccession="MS:1000458"
+                  useTerm="false"
+                  termName="Source Description"
+                  isRepeatable="false"
+                  allowChildren="true"
+                  cvIdentifierRef="MS"/>
+        </CvMappingRule>
+
+        <!--ANALYZER-->
+        <CvMappingRule id="analyzer_must"
+                       cvElementPath="/ExperimentCollection/Experiment/mzData/description/instrument/analyzerList/analyzer/cvParam/@accession"
+                       requirementLevel="MUST"
+                       scopePath="/ExperimentCollection/Experiment/mzData/description/instrument/analyzerList/analyzer"
+                       cvTermsCombinationLogic="OR">
+            <CvTerm termAccession="MS:1000451"
+                    useTerm="false"
+                    termName="Mass Analyzer"
+                    isRepeatable="false"
+                    allowChildren="true"
+                    cvIdentifierRef="MS"/>
+            <CvTerm termAccession="MS:1000443"
+                    useTerm="false"
+                    termName="Mass Analyzer type"
+                    isRepeatable="true"
+                    allowChildren="true"
+                    cvIdentifierRef="MS"/>
+        </CvMappingRule>
+
+        <CvMappingRule id="analyzer_may"
+                       cvElementPath="/ExperimentCollection/Experiment/mzData/description/instrument/analyzerList/analyzer/cvParam/@accession"
+                       requirementLevel="MAY" scopePath="/ExperimentCollection/Experiment/mzData/description/instrument/analyzerList/analyzer"
+                       cvTermsCombinationLogic="OR">
+            <CvTerm termAccession="MS:1000480"
+                    useTerm="false"
+                    termName="mass analyzer attribute"
+                    isRepeatable="true"
+                    allowChildren="true"
+                    cvIdentifierRef="MS"/>
+            <CvTerm termAccession="MS:1000031"
+                    useTerm="false"
+                    termName="instrument model"
+                    isRepeatable="false"
+                    allowChildren="true"
+                    cvIdentifierRef="MS"/>
+            <CvTerm termAccession="MS:1000076"
+                    useTerm="false"
+                    termName="Negative Ion Mode"
+                    isRepeatable="false"
+                    allowChildren="false"
+                    cvIdentifierRef="MS"/>
+            <CvTerm termAccession="MS:1000077"
+                    useTerm="false"
+                    termName="Positive Ion Mode"
+                    isRepeatable="false"
+                    allowChildren="false"
+                    cvIdentifierRef="MS"/>
+            <CvTerm termAccession="MS:1000031"
+                    useTerm="true"
+                    termName="instrument model"
+                    isRepeatable="false"
+                    allowChildren="true"
+                    cvIdentifierRef="MS"/>
+        </CvMappingRule>
+
+        <!--DETECTOR-->
+        <CvMappingRule id="detector_must"
+                       cvElementPath="/ExperimentCollection/Experiment/mzData/description/instrument/detector/cvParam/@accession"
+                       requirementLevel="MUST" scopePath="/ExperimentCollection/Experiment/mzData/description/instrument/detector"
+                       cvTermsCombinationLogic="OR">
+            <CvTerm termAccession="MS:1000026"
+                    useTerm="false"
+                    termName="detector type"
+                    isRepeatable="false"
+                    allowChildren="true"
+                    cvIdentifierRef="MS"/>
+            <CvTerm termAccession="MS:1000453"
+                    useTerm="false"
+                    termName="Detector Description"
+                    isRepeatable="false"
+                    allowChildren="true"
+                    cvIdentifierRef="MS"/>
+        </CvMappingRule>
+
+        <CvMappingRule id="detector_may"
+                       cvElementPath="/ExperimentCollection/Experiment/mzData/description/instrument/detector/cvParam/@accession"
+                       requirementLevel="MAY"
+                       scopePath="/ExperimentCollection/Experiment/mzData/description/instrument/detector"
+                       cvTermsCombinationLogic="OR">
+            <CvTerm termAccession="MS:1000027"
+                    useTerm="false"
+                    termName="detector acquisition mode"
+                    isRepeatable="true"
+                    allowChildren="true"
+                    cvIdentifierRef="MS"/>
+            <CvTerm termAccession="MS:1000481"
+                    useTerm="false"
+                    termName="detector attribute"
+                    isRepeatable="true"
+                    allowChildren="true"
+                    cvIdentifierRef="MS"/>
+        </CvMappingRule>
+
+
+<!--todo:CHECK-->
+        <!--todo: check MOD CV-->
+
+    <!-- precursor -->
+        <!--<CvMappingRule id="precursor_charge_state_may" cvElementPath="/ExperimentCollection/Experiment/mzData/spectrumList/spectrum/spectrumDesc/precursorList/precursor/ionSelection/cvParam/@accession" requirementLevel="MAY"  scopePath="/ExperimentCollection/Experiment/mzData/spectrumList/spectrum/spectrumDesc/precursorList/precursor" cvTermsCombinationLogic="OR">-->
+          <!--<CvTerm termAccession="PSI:1000041" useTerm="true" termName="Charge State" isRepeatable="false" allowChildren="false" cvIdentifierRef="PSI"/>-->
+        <!--</CvMappingRule>-->
+        <!--<CvMappingRule id="precursor_masstochargeratio_must" cvElementPath="/ExperimentCollection/Experiment/mzData/spectrumList/spectrum/spectrumDesc/precursorList/precursor/ionSelection/cvParam/@accession" requirementLevel="MUST"  scopePath="/ExperimentCollection/Experiment/mzData/spectrumList/spectrum/spectrumDesc/precursorList/precursor" cvTermsCombinationLogic="OR">-->
+          <!--<CvTerm termAccession="PSI:1000040" useTerm="true" termName="Mass To Charge Ratio" isRepeatable="false" allowChildren="false" cvIdentifierRef="PSI"/>-->
+        <!--</CvMappingRule>-->
+
+    <!-- in pride xml instrument model allowed in the analyzer tag which is not a good practice compared to mzML -->
+    <!-- resolving this add additional_may that can handle instrument models -->
+         <!--<CvMappingRule id="additional_may" cvElementPath="/ExperimentCollection/Experiment/mzData/description/instrument/additional/cvParam/@accession" requirementLevel="MAY" scopePath="/ExperimentCollection/Experiment/mzData/description/instrument/additional" cvTermsCombinationLogic="OR">-->
+          <!--<CvTerm termAccession="PSI:1000031" useTerm="false" termName="Model" isRepeatable="false" allowChildren="true" cvIdentifierRef="PSI"/>-->
+           <!--<CvTerm termAccession="MS:1000031" useTerm="true" termName="instrument model" isRepeatable="false" allowChildren="true" cvIdentifierRef="MS"/>-->
+         <!--</CvMappingRule>-->
+
+
+    <!--Fragment Ion-->
+        <!--<CvMappingRule id="fragment_ion_may"-->
+                       <!--cvElementPath="/ExperimentCollection/Experiment/GelFreeIdentification/PeptideItem/fragmentIon/cvParam/@accession"-->
+                       <!--requirementLevel="MAY"-->
+                       <!--scopePath="/ExperimentCollection/Experiment/GelFreeIdentification/PeptideItem/fragmentIon"-->
+                       <!--cvTermsCombinationLogic="OR">-->
+          <!--<CvTerm termAccession="PRIDE:0000187"-->
+                  <!--useTerm="false"-->
+                  <!--termName="Fragment Ion Annotation"-->
+                  <!--isRepeatable="true"-->
+                  <!--allowChildren="true"-->
+                  <!--cvIdentifierRef="PRIDE"/>-->
+        <!--</CvMappingRule>-->
+
+
+        <!--<CvMappingRule id="peptide_additional_may"-->
+                       <!--cvElementPath="/ExperimentCollection/Experiment/GelFreeIdentification/peptideitem//cvParam/@accession"-->
+                       <!--requirementLevel="MAY"-->
+                       <!--scopePath="/ExperimentCollection/Experiment/GelFreeIdentification/peptideitem"-->
+                       <!--cvTermsCombinationLogic="OR">-->
+          <!--<CvTerm termAccession="PRIDE:0000003"-->
+                  <!--useTerm="false"-->
+                  <!--termName="Peptide item additional parameter"-->
+                  <!--isRepeatable="true"-->
+                  <!--allowChildren="true"-->
+                  <!--cvIdentifierRef="PRIDE"/>-->
+        <!--</CvMappingRule>-->
+
+    </CvMappingRuleList>
+</CvMapping>

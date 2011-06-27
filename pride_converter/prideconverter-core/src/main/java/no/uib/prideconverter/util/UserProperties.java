@@ -35,6 +35,12 @@ public class UserProperties {
     private String schema = "ms_lims_7"; //database schema
     private String lastSelectedOntology = "PSI Mass Spectrometry Ontology [MS]";
     private String lastSelectedSampleOntology = "NEWT UniProt Taxonomy Database [NEWT]";
+    private String newtRoot = "NEWT UniProt Taxonomy Database [NEWT] / Root node of taxonomy";
+    private String msRoot = "PSI Mass Spectrometry Ontology [MS] / Proteomics Standards Initiative Mass Spectrometry Vocabularies";
+    private String msSource = "PSI Mass Spectrometry Ontology [MS] / source";
+    private String msDetector = "PSI Mass Spectrometry Ontology [MS] / detector";
+    private String msAnalyzer = "PSI Mass Spectrometry Ontology [MS] / mass analyzer";
+    private String msProcessing = "PSI Mass Spectrometry Ontology [MS] / data transformation";
     private String currentSelectedInstrument = "";
     private String currentSampleSet = "";
     private String currentProtocol = "";
@@ -46,6 +52,54 @@ public class UserProperties {
     private double[] purityCorrections = {0, 1, 5.90, 2, 0, 2, 5.6, 0.1, 0, 3, 4.5, 0.1, 0.1, 4, 3.5, 0.1};
     private HashMap<String, CvParam> cvTermMappings;
     private String omssaInstallDir = null;
+
+    public String getNewtRoot() {
+        return newtRoot;
+    }
+
+    public void setNewtRoot(String newtRoot) {
+        this.newtRoot = newtRoot;
+    }
+
+    public String getMsRoot() {
+        return msRoot;
+    }
+
+    public void setMsRoot(String msRoot) {
+        this.msRoot = msRoot;
+    }
+
+    public String getMsSource() {
+        return msSource;
+    }
+
+    public void setMsSource(String msSource) {
+        this.msSource = msSource;
+    }
+
+    public String getMsDetector() {
+        return msDetector;
+    }
+
+    public void setMsDetector(String msDetector) {
+        this.msDetector = msDetector;
+    }
+
+    public String getMsAnalyzer() {
+        return msAnalyzer;
+    }
+
+    public void setMsAnalyzer(String msAnalyzer) {
+        this.msAnalyzer = msAnalyzer;
+    }
+
+    public String getMsProcessing() {
+        return msProcessing;
+    }
+
+    public void setMsProcessing(String msProcessing) {
+        this.msProcessing = msProcessing;
+    }
 
     /**
      * Contains all PRIDE Converter version numbers that did not include
