@@ -13,10 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -25,9 +22,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import no.uib.olsdialog.OLSDialog;
 import no.uib.olsdialog.OLSInputable;
-import no.uib.prideconverter.util.ComboBoxInputable;
-import no.uib.prideconverter.util.MyComboBoxRenderer;
-import no.uib.prideconverter.util.Util;
+import no.uib.prideconverter.util.*;
 import org.systemsbiology.jrap.stax.MSXMLParser;
 import uk.ac.ebi.pride.model.implementation.mzData.AnalyzerImpl;
 import uk.ac.ebi.pride.model.implementation.mzData.CvParamImpl;
@@ -48,6 +43,10 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
     private String instrumentPath;
     private boolean valuesChanged = false;
     private String lastSelectedInstrumentName;
+    private Map<String, List<String>> preselectedOntologyTermsSource;
+    private Map<String, List<String>> preselectedOntologyTermsDetector;
+    private Map<String, List<String>> preselectedOntologyTermsAnalyzer;
+    private Map<String, List<String>> preselectedOntologyTermsProcessingMethods;
 
     /** 
      * Opens a new Instrument frame and inserts the stored information.
@@ -55,6 +54,12 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
      * @param location where to position the frame
      */
     public Instrument(Point location) {
+        CvMappingProperties prop = new CvMappingProperties();
+        CvMappingReader cvMappingReader = new CvMappingReader(prop.getDefaultMappingFile());
+        preselectedOntologyTermsSource = cvMappingReader.getPreselectedTerms(prop.getPropertyValue("instrumentSourceKeyword"));
+        preselectedOntologyTermsDetector = cvMappingReader.getPreselectedTerms(prop.getPropertyValue("instrumentDetectorKeyword"));
+        preselectedOntologyTermsAnalyzer = cvMappingReader.getPreselectedTerms(prop.getPropertyValue("instrumentAnalyzerKeyword"));
+        preselectedOntologyTermsProcessingMethods = cvMappingReader.getPreselectedTerms(prop.getPropertyValue("instrumentProcessingMethodKeyword"));
 
         // sets the default wizard frame size
         this.setPreferredSize(new Dimension(PRIDEConverter.getProperties().FRAME_WIDTH,
@@ -374,8 +379,8 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
                         new OLSDialog(this, this, true, "instrumentSource",
-                                "PSI Mass Spectrometry Ontology [MS]",
-                                msXMLParser.rapFileHeader().getInstrumentInfo().getIonization());
+                                PRIDEConverter.getUserProperties().getMsSource(),
+                                msXMLParser.rapFileHeader().getInstrumentInfo().getIonization(), preselectedOntologyTermsSource);
                     }
 
                     //instrument detector
@@ -395,8 +400,8 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
                         new OLSDialog(this, this, true, "instrumentDetector",
-                                "PSI Mass Spectrometry Ontology [MS]",
-                                msXMLParser.rapFileHeader().getInstrumentInfo().getDetector());
+                                PRIDEConverter.getUserProperties().getMsDetector(),
+                                msXMLParser.rapFileHeader().getInstrumentInfo().getDetector(), preselectedOntologyTermsDetector);
                     }
 
                     //analyzer
@@ -430,9 +435,9 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
 
                         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
                         new OLSDialog(this, this, true, "analyzer",
-                                "PSI Mass Spectrometry Ontology [MS]",
+                                PRIDEConverter.getUserProperties().getMsAnalyzer(),
                                 msXMLParser.rapFileHeader().getInstrumentInfo().
-                                getMassAnalyzer());
+                                getMassAnalyzer(), preselectedOntologyTermsAnalyzer);
                     }
                 } else { // mzData
                     //instrument source
@@ -1459,7 +1464,11 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             searchTerm = searchTerm.replaceAll("\\]", " ");
         }
 
-        new OLSDialog(this, this, true, "instrumentSource", ontology, searchTerm);
+        String msSource = PRIDEConverter.getUserProperties().getMsSource();
+        if(msSource.indexOf(ontology) != -1){
+            ontology = msSource;
+        }
+        new OLSDialog(this, this, true, "instrumentSource", ontology, searchTerm, preselectedOntologyTermsSource);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_instrumentSourceJButtonActionPerformed
 
@@ -1493,8 +1502,12 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
             searchTerm = searchTerm.replaceAll("\\]", " ");
         }
 
-        new OLSDialog(this, this, true, "instrumentDetector", PRIDEConverter.getUserProperties().
-                getLastSelectedOntology(), searchTerm);
+        String ontologyTitle = PRIDEConverter.getUserProperties().getLastSelectedOntology();
+        String msDetector = PRIDEConverter.getUserProperties().getMsDetector();
+        if(msDetector.indexOf(ontologyTitle) != -1){
+            ontologyTitle = msDetector;
+        }
+        new OLSDialog(this, this, true, "instrumentDetector", ontologyTitle, searchTerm, preselectedOntologyTermsDetector);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_instrumentDetectorJButtonActionPerformed
 
@@ -1516,8 +1529,12 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
      */
     private void processingMethodsJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processingMethodsJButtonActionPerformed
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        new OLSDialog(this, this, true, "processingMethods", PRIDEConverter.getUserProperties().
-                getLastSelectedOntology(), null);
+        String ontologyTitle = PRIDEConverter.getUserProperties().getLastSelectedOntology();
+        String msProcessing = PRIDEConverter.getUserProperties().getMsProcessing();
+        if(msProcessing.indexOf(ontologyTitle) != -1){
+            ontologyTitle = msProcessing;
+        }
+        new OLSDialog(this, this, true, "processingMethods", ontologyTitle, null, preselectedOntologyTermsProcessingMethods);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_processingMethodsJButtonActionPerformed
 
@@ -1547,7 +1564,11 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
         searchTerm = searchTerm.replaceAll("\\[", " ");
         searchTerm = searchTerm.replaceAll("\\]", " ");
 
-        new OLSDialog(this, this, true, "processingMethods", ontology, selectedRow, searchTerm);
+        String msProcessing = PRIDEConverter.getUserProperties().getMsProcessing();
+        if(msProcessing.indexOf(ontology) != -1){
+            ontology = msProcessing;
+        }
+        new OLSDialog(this, this, true, "processingMethods", ontology, selectedRow, searchTerm, preselectedOntologyTermsProcessingMethods);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_processingMethodsEditJMenuItemActionPerformed
 
@@ -2898,7 +2919,7 @@ public class Instrument extends javax.swing.JFrame implements ComboBoxInputable,
     public void insertOLSResult(String field, String selectedValue,
             String accession,
             String ontologyShort, String ontologyLong, int modifiedRow,
-            String mappedTerm) {
+            String mappedTerm, Map<String, String> metadata) {
 
         PRIDEConverter.getUserProperties().setLastSelectedOntology(ontologyLong);
 

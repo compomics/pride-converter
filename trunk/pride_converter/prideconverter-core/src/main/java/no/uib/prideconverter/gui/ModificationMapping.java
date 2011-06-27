@@ -14,7 +14,8 @@ import javax.swing.*;
 import javax.xml.rpc.ServiceException;
 import java.awt.*;
 import java.rmi.RemoteException;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 /**
  * A dialog that lets the user map detected modifications to PSI-MOD CV terms.
@@ -30,6 +31,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
     private CvParamImpl selectedCvTerm;
     private Modification modification;
     private boolean fixedModification = false;
+    private Map<String, java.util.List<String>> preselectedOntologyTerms;
 
     /**
      * Creates a new ModificationMapping dialog.
@@ -44,6 +46,10 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
     public ModificationMapping(java.awt.Frame parent, boolean modal, ProgressDialog progressDialog,
             Modification modification, CvParamImpl cvParam, boolean fixedModification) {
         super(parent, modal);
+
+        preselectedOntologyTerms = new HashMap<String, List<String>>();
+        preselectedOntologyTerms.put("MOD", null);
+
         initComponents();
 
         outputDetails = (OutputDetails) parent;
@@ -405,7 +411,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
 
         new OLSDialog(this, this, true, "modificationSelection",
                 "Protein Modifications (PSI-MOD) [MOD]", -1,
-                searchTerm, tempModificationMass, 0.1, OLSDialog.OLS_DIALOG_TERM_NAME_SEARCH);
+                searchTerm, tempModificationMass, 0.1, OLSDialog.OLS_DIALOG_TERM_NAME_SEARCH, preselectedOntologyTerms);
 
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_psiModJButtonActionPerformed
@@ -661,7 +667,7 @@ public class ModificationMapping extends javax.swing.JDialog implements OLSInput
      * @see OLSInputable
      */
     public void insertOLSResult(String field, String selectedValue, String accession,
-            String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm) {
+            String ontologyShort, String ontologyLong, int modifiedRow, String mappedTerm, Map<String, String> metadata) {
 
 
         // the code below changes the (short) name of the PSI-MOD ontology 
