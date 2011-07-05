@@ -163,7 +163,7 @@
                       <Component id="helpJButton" min="-2" pref="23" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="aboutJButton" min="-2" pref="25" max="-2" attributes="0"/>
-                      <EmptySpace pref="358" max="32767" attributes="0"/>
+                      <EmptySpace pref="360" max="32767" attributes="0"/>
                       <Component id="backJButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="nextJButton" min="-2" max="-2" attributes="0"/>
@@ -257,11 +257,11 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="sampleJTabbedPane" alignment="0" pref="645" max="32767" attributes="0"/>
+                      <Component id="sampleJTabbedPane" alignment="0" pref="649" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="jLabel32" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="namesJComboBox" pref="559" max="32767" attributes="0"/>
+                          <Component id="namesJComboBox" pref="571" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="deleteJButton" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -278,7 +278,7 @@
                       <Component id="deleteJButton" linkSize="1" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="sampleJTabbedPane" pref="387" max="32767" attributes="0"/>
+                  <Component id="sampleJTabbedPane" pref="388" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="102" attributes="0">
@@ -343,9 +343,9 @@
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="jScrollPane3" alignment="0" pref="616" max="32767" attributes="1"/>
+                              <Component id="jScrollPane3" alignment="0" pref="624" max="32767" attributes="1"/>
+                              <Component id="sampleDetailsJButton" alignment="0" pref="624" max="32767" attributes="1"/>
                               <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="1"/>
-                              <Component id="sampleDetailsJButton" alignment="0" pref="616" max="32767" attributes="1"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -357,7 +357,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jScrollPane3" pref="274" max="32767" attributes="0"/>
+                          <Component id="jScrollPane3" pref="287" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="sampleDetailsJButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -373,7 +373,7 @@
                         <Font component="jLabel2" italic="true" property="font" relativeSize="true" size="-2"/>
                       </FontInfo>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Preferred Ontologies: NEWT (species), BTO (tissue), CTO (cell type), GO and DO (disease state)"/>
+                    <Property name="text" type="java.lang.String" value="Preferred Ontologies: NEWT (species), BTO (tissue), CL (cell type), GO (gene ontology) and DOID (disease state)"/>
                   </Properties>
                 </Component>
                 <Container class="javax.swing.JScrollPane" name="jScrollPane3">
@@ -438,10 +438,10 @@
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="jScrollPane4" alignment="0" pref="616" max="32767" attributes="1"/>
+                              <Component id="jScrollPane4" alignment="0" pref="624" max="32767" attributes="1"/>
                               <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jLabel4" alignment="0" pref="616" max="32767" attributes="1"/>
-                              <Component id="addSampleJButton" alignment="0" pref="616" max="32767" attributes="1"/>
+                              <Component id="jLabel4" alignment="0" pref="624" max="32767" attributes="1"/>
+                              <Component id="addSampleJButton" alignment="0" pref="624" max="32767" attributes="1"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -453,7 +453,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jScrollPane4" pref="105" max="32767" attributes="0"/>
+                          <Component id="jScrollPane4" pref="133" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="addSampleJButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -543,16 +543,16 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="intensityThresholdJTextField" alignment="0" pref="114" max="32767" attributes="0"/>
-                                          <Component id="upperRangeJTextField" alignment="0" pref="114" max="32767" attributes="0"/>
-                                          <Component id="lowerRangeJTextField" alignment="0" pref="114" max="32767" attributes="0"/>
+                                          <Component id="intensityThresholdJTextField" alignment="0" pref="175" max="32767" attributes="0"/>
+                                          <Component id="upperRangeJTextField" alignment="0" pref="175" max="32767" attributes="0"/>
+                                          <Component id="lowerRangeJTextField" alignment="0" pref="175" max="32767" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="peakRangeJLabel" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
-                                      <Component id="purityCorrectionsJTextField" pref="376" max="32767" attributes="0"/>
+                                      <Component id="purityCorrectionsJTextField" pref="416" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
                               </Group>
