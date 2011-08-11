@@ -226,14 +226,14 @@ public class PRIDEConverter extends AbstractPrideConverter {
     public static void main(String[] args) {
 
         if(new JLabel().getFont().getSize() <= 12) {
-            properties.FRAME_WIDTH = 700;
+            properties.FRAME_WIDTH = 750;
             properties.FRAME_HEIGHT = 650;
         } else if (new JLabel().getFont().getSize() > 12 &&
                 new JLabel().getFont().getSize() <= 15) {
-            properties.FRAME_WIDTH = 800;
+            properties.FRAME_WIDTH = 850;
             properties.FRAME_HEIGHT = 750;
         } else if (new JLabel().getFont().getSize() > 15) {
-            properties.FRAME_WIDTH = 900;
+            properties.FRAME_WIDTH = 950;
             properties.FRAME_HEIGHT = 850;
         }
 

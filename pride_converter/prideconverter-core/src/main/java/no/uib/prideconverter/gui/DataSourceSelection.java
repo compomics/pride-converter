@@ -1,15 +1,13 @@
 package no.uib.prideconverter.gui;
 
 import no.uib.prideconverter.PRIDEConverter;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.util.ArrayList;
-import javax.swing.UIManager;
+import no.uib.prideconverter.util.BareBonesBrowserLaunch;
+
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.html.HTMLDocument;
-import no.uib.prideconverter.util.BareBonesBrowserLaunch;
+import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * This frame handles the selection of the dataformat to be converted.
@@ -106,10 +104,10 @@ public class DataSourceSelection extends javax.swing.JFrame {
             tppJRadioButton.setSelected(true);
             tppJRadioButtonActionPerformed(null);
             nextJButton.setEnabled(true);
-        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("DTASelect")) {
-            dtaSelectJRadioButton.setSelected(true);
-            dtaSelectJRadioButtonActionPerformed(null);
-            nextJButton.setEnabled(true);
+//        } else if (PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("DTASelect")) {
+//            dtaSelectJRadioButton.setSelected(true);
+//            dtaSelectJRadioButtonActionPerformed(null);
+//            nextJButton.setEnabled(true);
         } else {
             ((TitledBorder) descriptionJPanel.getBorder()).setTitle("Welcome Message");
             descriptionJEditorPane.setText("<br><b>PRIDE Converter</b><br><br>" +
@@ -159,7 +157,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         ms2JRadioButton = new javax.swing.JRadioButton();
         mzDataJRadioButton = new javax.swing.JRadioButton();
         mzXMLJRadioButton = new javax.swing.JRadioButton();
-        dtaSelectJRadioButton = new javax.swing.JRadioButton();
         jPanel3 = new javax.swing.JPanel();
         ms_limsJRadioButton = new javax.swing.JRadioButton();
         tppJRadioButton = new javax.swing.JRadioButton();
@@ -218,7 +215,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         vemsJRadioButton.setToolTipText("Virtual Expert Mass Spectrometrist ");
         vemsJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         vemsJRadioButton.setIconTextGap(10);
-        vemsJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         vemsJRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 vemsJRadioButtonActionPerformed(evt);
@@ -230,7 +226,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         ms2JRadioButton.setText("MS2");
         ms2JRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         ms2JRadioButton.setIconTextGap(10);
-        ms2JRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         ms2JRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ms2JRadioButtonActionPerformed(evt);
@@ -242,7 +237,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         mzDataJRadioButton.setText("mzData");
         mzDataJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         mzDataJRadioButton.setIconTextGap(10);
-        mzDataJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         mzDataJRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mzDataJRadioButtonActionPerformed(evt);
@@ -250,26 +244,12 @@ public class DataSourceSelection extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(mzXMLJRadioButton);
-        mzXMLJRadioButton.setFont(mzXMLJRadioButton.getFont());
         mzXMLJRadioButton.setText("mzXML");
         mzXMLJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         mzXMLJRadioButton.setIconTextGap(10);
-        mzXMLJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         mzXMLJRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mzXMLJRadioButtonActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(dtaSelectJRadioButton);
-        dtaSelectJRadioButton.setFont(dtaSelectJRadioButton.getFont());
-        dtaSelectJRadioButton.setText("DTASelect");
-        dtaSelectJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        dtaSelectJRadioButton.setIconTextGap(10);
-        dtaSelectJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        dtaSelectJRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dtaSelectJRadioButtonActionPerformed(evt);
             }
         });
 
@@ -279,16 +259,15 @@ public class DataSourceSelection extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(vemsJRadioButton)
                     .add(ms2JRadioButton)
-                    .add(mzXMLJRadioButton)
                     .add(mzDataJRadioButton)
-                    .add(dtaSelectJRadioButton))
-                .addContainerGap(84, Short.MAX_VALUE))
+                    .add(mzXMLJRadioButton))
+                .addContainerGap(95, Short.MAX_VALUE))
         );
 
-        jPanel1Layout.linkSize(new java.awt.Component[] {dtaSelectJRadioButton, ms2JRadioButton, mzDataJRadioButton, mzXMLJRadioButton, vemsJRadioButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+        jPanel1Layout.linkSize(new java.awt.Component[] {ms2JRadioButton, mzDataJRadioButton, mzXMLJRadioButton, vemsJRadioButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
 
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -301,12 +280,10 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 .add(mzDataJRadioButton)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(mzXMLJRadioButton)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(dtaSelectJRadioButton)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
-        jPanel1Layout.linkSize(new java.awt.Component[] {dtaSelectJRadioButton, ms2JRadioButton, mzDataJRadioButton, mzXMLJRadioButton, vemsJRadioButton}, org.jdesktop.layout.GroupLayout.VERTICAL);
+        jPanel1Layout.linkSize(new java.awt.Component[] {ms2JRadioButton, mzDataJRadioButton, mzXMLJRadioButton, vemsJRadioButton}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
         buttonGroup1.add(ms_limsJRadioButton);
         ms_limsJRadioButton.setFont(ms_limsJRadioButton.getFont());
@@ -314,7 +291,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         ms_limsJRadioButton.setToolTipText("Mass Spectrometry Laboratory Information Managment System");
         ms_limsJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         ms_limsJRadioButton.setIconTextGap(10);
-        ms_limsJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         ms_limsJRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ms_limsJRadioButtonActionPerformed(evt);
@@ -326,7 +302,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         tppJRadioButton.setText("Peptide- and ProteinProphet");
         tppJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         tppJRadioButton.setIconTextGap(10);
-        tppJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         tppJRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tppJRadioButtonActionPerformed(evt);
@@ -339,7 +314,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         omssaJRadioButton.setToolTipText("Open Mass Spectrometry Search Algorithm ");
         omssaJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         omssaJRadioButton.setIconTextGap(10);
-        omssaJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         omssaJRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 omssaJRadioButtonActionPerformed(evt);
@@ -351,7 +325,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         sequestDTAFilesJRadioButton.setText("SEQUEST DTA Files");
         sequestDTAFilesJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         sequestDTAFilesJRadioButton.setIconTextGap(10);
-        sequestDTAFilesJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         sequestDTAFilesJRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sequestDTAFilesJRadioButtonActionPerformed(evt);
@@ -363,7 +336,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         sequestResultsJRadioButton.setText("SEQUEST Result Files");
         sequestResultsJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         sequestResultsJRadioButton.setIconTextGap(10);
-        sequestResultsJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         sequestResultsJRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sequestResultsJRadioButtonActionPerformed(evt);
@@ -405,7 +377,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         pklFilesJRadioButton.setText("Micromass PKL Files");
         pklFilesJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         pklFilesJRadioButton.setIconTextGap(10);
-        pklFilesJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         pklFilesJRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pklFilesJRadioButtonActionPerformed(evt);
@@ -417,7 +388,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         spectrumMillJRadioButton.setText("Spectrum Mill");
         spectrumMillJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         spectrumMillJRadioButton.setIconTextGap(10);
-        spectrumMillJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         spectrumMillJRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 spectrumMillJRadioButtonActionPerformed(evt);
@@ -429,7 +399,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         xTandemJRadioButton.setText("X!Tandem");
         xTandemJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         xTandemJRadioButton.setIconTextGap(10);
-        xTandemJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         xTandemJRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 xTandemJRadioButtonActionPerformed(evt);
@@ -441,7 +410,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         mgfJRadioButton.setText("Mascot Generic Files");
         mgfJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         mgfJRadioButton.setIconTextGap(10);
-        mgfJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         mgfJRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mgfJRadioButtonActionPerformed(evt);
@@ -453,7 +421,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         mascotDatFileJRadioButton.setText("Mascot DAT Files");
         mascotDatFileJRadioButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         mascotDatFileJRadioButton.setIconTextGap(10);
-        mascotDatFileJRadioButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         mascotDatFileJRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mascotDatFileJRadioButtonActionPerformed(evt);
@@ -472,7 +439,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                     .add(mascotDatFileJRadioButton)
                     .add(spectrumMillJRadioButton)
                     .add(pklFilesJRadioButton))
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -519,7 +486,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
         jLabel3.setFont(jLabel3.getFont().deriveFont((jLabel3.getFont().getStyle() | java.awt.Font.ITALIC), jLabel3.getFont().getSize()-2));
         jLabel3.setText("Select the source you want to convert data from, and click on 'Next'  to continue.");
 
-        helpJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/help.GIF"))); // NOI18N
         helpJButton.setToolTipText("Help");
         helpJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -527,7 +493,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
             }
         });
 
-        aboutJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF"))); // NOI18N
         aboutJButton.setToolTipText("About");
         aboutJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -553,7 +518,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
             descriptionJPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(descriptionJPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE)
                 .addContainerGap())
         );
         descriptionJPanelLayout.setVerticalGroup(
@@ -575,13 +540,13 @@ public class DataSourceSelection extends javax.swing.JFrame {
                         .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 25, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 360, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 423, Short.MAX_VALUE)
                         .add(backJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(nextJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(18, 18, 18)
                         .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 744, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel3)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, descriptionJPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -607,7 +572,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                             .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                     .add(layout.createSequentialGroup()
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(helpJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, Short.MAX_VALUE))
+                        .add(helpJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))
                     .add(layout.createSequentialGroup()
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, 0, 0, Short.MAX_VALUE)))
@@ -679,9 +644,9 @@ public class DataSourceSelection extends javax.swing.JFrame {
         } else if (tppJRadioButton.isSelected()) {
             PRIDEConverter.getProperties().setDataSource("TPP");
             new DataFileSelectionTPP(this.getLocation());
-        } else if (dtaSelectJRadioButton.isSelected()) {
-            PRIDEConverter.getProperties().setDataSource("DTASelect");
-            new DataFileSelectionDTASelect(this.getLocation());
+//        } else if (dtaSelectJRadioButton.isSelected()) {
+//            PRIDEConverter.getProperties().setDataSource("DTASelect");
+//            new DataFileSelectionDTASelect(this.getLocation());
         }
 
         this.setVisible(false);
@@ -1009,7 +974,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 "PeptideProphet/ProteinProphet validates peptide assignments and protein identifications made " +
                 "on the basis of peptides assigned to MS/MS spectra made by database search programs " +
                 "such as SEQUEST.<br><br>" +
-                "File Extensions: .pepXML, .pep.xml, .protXML and .prot.xml<br><br>" +
+                "<b>Limited support</b> for the following file extensions: .pepXML, .pep.xml, .protXML and .prot.xml<br><br>" +
                 "More Information: <br>" +
                 "<a href=\"http://peptideprophet.sourceforge.net\">http://peptideprophet.sourceforge.net</a><br>" +
                 "and<br>" +
@@ -1098,26 +1063,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
      * 
      * @param evt
      */
-    private void dtaSelectJRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtaSelectJRadioButtonActionPerformed
-        ((TitledBorder) descriptionJPanel.getBorder()).setTitle("Data Source Description");
-        repaint();
-
-        this.nextJButton.setEnabled(true);
-        descriptionJEditorPane.setText("<br>" +
-                "<b>DTASelect</b><br><br>" +
-                "DTASelect reassembles SEQUEST peptide information into protein information.<br><br>" +
-                "File Extensions: .txt for the identifications (the DTASelect file) and .ms2 for the spectra<br><br>" +
-                "More Information: <a href=\"http://fields.scripps.edu/DTASelect\">" +
-                "http://fields.scripps.edu/DTASelect</a><br><br><br>" +
-                "<b>NB: DTASelect support is currently in a beta status. " +
-                "<br>If you find any bugs please let us know.</b>");
-        descriptionJEditorPane.setCaretPosition(0);
-
-        if (!PRIDEConverter.getProperties().getDataSource().equalsIgnoreCase("DTASelect")) {
-            resetDataSourceProperties();
-        }
-}//GEN-LAST:event_dtaSelectJRadioButtonActionPerformed
-
     /**
      * Resets all the data source properties. Like the list of selected files, 
      * the spectra table etc.
@@ -1136,7 +1081,6 @@ public class DataSourceSelection extends javax.swing.JFrame {
     private javax.swing.JButton cancelJButton;
     private javax.swing.JEditorPane descriptionJEditorPane;
     private javax.swing.JPanel descriptionJPanel;
-    private javax.swing.JRadioButton dtaSelectJRadioButton;
     private javax.swing.JButton helpJButton;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
