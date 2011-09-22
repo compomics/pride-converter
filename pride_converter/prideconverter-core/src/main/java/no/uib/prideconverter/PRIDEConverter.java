@@ -1032,9 +1032,7 @@ public class PRIDEConverter extends AbstractPrideConverter {
 
                         // check the size of the unzipped file and compare it to the
                         // maximum size recommended before using the FTP server
-                        if (sizeOfFileBeforeZipping > 15) {
-                            new RequestFtpAccess(outputFrame, true);
-                        }
+                        new RequestFtpAccess(outputFrame, true);
                     }
 
                     // memory clean up
