@@ -8,6 +8,7 @@
 *Changes in PRIDE Converter v2.5.3 - (August 11. 2011):*
  * FEATURE IMPROVEMENT: removed support for DTASelect files, never properly implemented
 
+Download count: 176
 ----
 *Changes in PRIDE Converter v2.5.2 - (June 21. 2011):*
   * BUG FIX: Added 2 new FragmentIon accessions (PRIDE:0000280 and PRIDE:0000281)
