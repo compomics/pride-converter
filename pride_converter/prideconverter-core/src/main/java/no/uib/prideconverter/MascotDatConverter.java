@@ -573,12 +573,13 @@ public class MascotDatConverter {
                                                     PRIDEConverter.getProperties().getDataSource() + "_" + currentFragmentIon.getType());
 
                                             // check if a mapping was found or not
+                                            //introduced on 9/1/2012, wrong message
                                             if (fragmentIonMappedDetails == null) {
-                                                JOptionPane.showMessageDialog(PRIDEConverter.getOutputFrame(),
-                                                        "Unknown fragment ion \'" + currentFragmentIon.getType() + "\'. Ion not included in annotation.\n" +
-                                                        "Please contact the PRIDE support team at pride-support@ebi.ac.uk.",
-                                                        "Unknown Fragment Ion",
-                                                        JOptionPane.INFORMATION_MESSAGE);
+//                                                JOptionPane.showMessageDialog(PRIDEConverter.getOutputFrame(),
+//                                                        "Unknown fragment ion \'" + currentFragmentIon.getType() + "\'. Ion not included in annotation.\n" +
+//                                                        "Please contact the PRIDE support team at pride-support@ebi.ac.uk.",
+//                                                        "Unknown Fragment Ion",
+//                                                        JOptionPane.INFORMATION_MESSAGE);
                                             } else {
 
                                                 // -1 means that a mapping was found but that that this particular fragment
