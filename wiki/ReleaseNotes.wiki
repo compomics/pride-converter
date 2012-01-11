@@ -1,6 +1,10 @@
 #summary Short summary of changes for each version of PRIDE Converter.
 #labels Featured
 
+*Changes in PRIDE Converter v2.5.5 - (January 11. 2012):*
+ * BUG FIX: Updated to support new fragment ion types reported by Mascot dat file parser
+
+----
 *Changes in PRIDE Converter v2.5.4 - (October 18. 2011):*
  * BUG FIX: use latest MascotDatFile version 3.2.6 fixing some issues when MascotDat header had been modified
 
