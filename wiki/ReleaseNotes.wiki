@@ -8,6 +8,7 @@
 *Changes in PRIDE Converter v2.5.4 - (October 18. 2011):*
  * BUG FIX: use latest MascotDatFile version 3.2.6 fixing some issues when MascotDat header had been modified
 
+Download count: 244
 ----
 *Changes in PRIDE Converter v2.5.3 - (August 11. 2011):*
  * FEATURE IMPROVEMENT: removed support for DTASelect files, never properly implemented
