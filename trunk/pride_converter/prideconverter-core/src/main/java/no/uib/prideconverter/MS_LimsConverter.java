@@ -327,9 +327,14 @@ public class MS_LimsConverter {
                                 modificationCVParams.add(userProperties.getCVTermMappings().get(modificationName));
 
                                 ArrayList<MassDelta> monoMasses = new ArrayList<MassDelta>();
-                                monoMasses.add(new MonoMassDeltaImpl(
+                                
+                                if (userProperties.getCVTermMappings().get(modificationName).getValue() != null) {
+                                    monoMasses.add(new MonoMassDeltaImpl(
                                         Double.parseDouble(userProperties.getCVTermMappings().get(modificationName).getValue())));
-
+                                } else {
+                                    // @TODO: possible to get modification mass from ms_lims??
+                                }
+                                
                                 peptideModifications.add(new ModificationImpl(
                                         userProperties.getCVTermMappings().get(modificationName).getAccession(),
                                         0,
@@ -368,8 +373,13 @@ public class MS_LimsConverter {
                                 modificationCVParams.add(userProperties.getCVTermMappings().get(modificationName));
 
                                 ArrayList<MassDelta> monoMasses = new ArrayList<MassDelta>();
-                                monoMasses.add(new MonoMassDeltaImpl(
+                                
+                                if (userProperties.getCVTermMappings().get(modificationName).getValue() != null) {
+                                    monoMasses.add(new MonoMassDeltaImpl(
                                         Double.parseDouble(userProperties.getCVTermMappings().get(modificationName).getValue())));
+                                } else {
+                                    // @TODO: possible to get modification mass from ms_lims??
+                                }
 
                                 peptideModifications.add(new ModificationImpl(
                                         userProperties.getCVTermMappings().get(modificationName).getAccession(),
@@ -428,8 +438,13 @@ public class MS_LimsConverter {
                                         get(modificationName));
 
                                 ArrayList<MassDelta> monoMasses = new ArrayList<MassDelta>();
-                                monoMasses.add(new MonoMassDeltaImpl(
+                                
+                                if (userProperties.getCVTermMappings().get(modificationName).getValue() != null) {
+                                    monoMasses.add(new MonoMassDeltaImpl(
                                         Double.parseDouble(userProperties.getCVTermMappings().get(modificationName).getValue())));
+                                } else {
+                                    // @TODO: possible to get modification mass from ms_lims??
+                                }
 
                                 peptideModifications.add(new ModificationImpl(
                                         userProperties.getCVTermMappings().

@@ -113,6 +113,8 @@ public class PRIDEConverterWrapper {
 
             String options = "", currentOption;
 
+            ArrayList javaOptionsAsList = new ArrayList();
+
             if (javaOptions.exists()) {
 
                 try {
@@ -124,6 +126,7 @@ public class PRIDEConverterWrapper {
                     while (currentOption != null) {
                         if (!currentOption.startsWith("#")) {
                             options += currentOption + " ";
+                            javaOptionsAsList.add(currentOption.trim());
                         }
 
                         currentOption = b.readLine();
@@ -140,6 +143,8 @@ public class PRIDEConverterWrapper {
             } else {
                 // options find not found. using default memory settings
                 options = "-Xms128M -Xmx768M";
+                javaOptionsAsList.add("-Xms128M");
+                javaOptionsAsList.add("-Xmx768M");
             }
 
             path = path + "lib" + File.separator;
@@ -163,7 +168,21 @@ public class PRIDEConverterWrapper {
             }
 
             try {
-                Process p = Runtime.getRuntime().exec(cmdLine);
+                // create the command line
+                ArrayList process_name_array = new ArrayList();
+                process_name_array.add(javaHome + "java");
+
+                // add the options
+                for (int i=0; i < javaOptionsAsList.size(); i++) {
+                    process_name_array.add(javaOptionsAsList.get(i));
+                }
+
+                process_name_array.add("-jar");
+                process_name_array.add(new File(tempFile, prideConverterSourceJarFileName).getAbsolutePath());
+                ProcessBuilder pb = new ProcessBuilder(process_name_array);
+
+                // run the command line
+                Process p = pb.start();
 
                 InputStream stderr = p.getErrorStream();
                 InputStreamReader isr = new InputStreamReader(stderr);

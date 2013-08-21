@@ -12,6 +12,7 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <Events>
     <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
@@ -76,7 +77,7 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="helpJButton" pref="24" max="32767" attributes="1"/>
+                      <Component id="helpJButton" max="32767" attributes="1"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="1">
                       <EmptySpace max="-2" attributes="0"/>
@@ -133,7 +134,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" max="-2" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jPanel5" linkSize="8" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -289,7 +290,7 @@
                           <Component id="sequestDTAFilesJRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="ms_limsJRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="31" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -306,7 +307,7 @@
                       <Component id="tppJRadioButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="ms_limsJRadioButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="26" max="32767" attributes="0"/>
+                      <EmptySpace pref="29" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -440,7 +441,7 @@
                           <Component id="spectrumMillJRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="pklFilesJRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="61" max="32767" attributes="0"/>
+                      <EmptySpace pref="69" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -457,7 +458,7 @@
                       <Component id="spectrumMillJRadioButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="pklFilesJRadioButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="26" max="32767" attributes="0"/>
+                      <EmptySpace pref="29" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -591,6 +592,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="helpJButton">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/no/uib/prideconverter/icons/help.GIF"/>
+        </Property>
         <Property name="toolTipText" type="java.lang.String" value="Help"/>
       </Properties>
       <Events>
@@ -599,6 +603,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="aboutJButton">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/no/uib/prideconverter/icons/prideConverter_16.GIF"/>
+        </Property>
         <Property name="toolTipText" type="java.lang.String" value="About"/>
       </Properties>
       <Events>
@@ -628,7 +635,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane2" pref="248" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" pref="247" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -644,7 +651,7 @@
           <SubComponents>
             <Component class="javax.swing.JEditorPane" name="descriptionJEditorPane">
               <Properties>
-                <Property name="contentType" type="java.lang.String" value="text/html"/>
+                <Property name="contentType" type="java.lang.String" value="text/html" noResource="true"/>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                   <FontInfo relative="true">
