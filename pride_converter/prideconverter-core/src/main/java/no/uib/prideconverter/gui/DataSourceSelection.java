@@ -354,7 +354,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                     .add(tppJRadioButton)
                     .add(sequestDTAFilesJRadioButton)
                     .add(ms_limsJRadioButton))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -369,7 +369,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 .add(tppJRadioButton)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(ms_limsJRadioButton)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         buttonGroup1.add(pklFilesJRadioButton);
@@ -439,7 +439,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                     .add(mascotDatFileJRadioButton)
                     .add(spectrumMillJRadioButton)
                     .add(pklFilesJRadioButton))
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -454,7 +454,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                 .add(spectrumMillJRadioButton)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(pklFilesJRadioButton)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
@@ -486,6 +486,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
         jLabel3.setFont(jLabel3.getFont().deriveFont((jLabel3.getFont().getStyle() | java.awt.Font.ITALIC), jLabel3.getFont().getSize()-2));
         jLabel3.setText("Select the source you want to convert data from, and click on 'Next'  to continue.");
 
+        helpJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/help.GIF"))); // NOI18N
         helpJButton.setToolTipText("Help");
         helpJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -493,6 +494,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
             }
         });
 
+        aboutJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no/uib/prideconverter/icons/prideConverter_16.GIF"))); // NOI18N
         aboutJButton.setToolTipText("About");
         aboutJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -502,7 +504,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
 
         descriptionJPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Source Description"));
 
-        descriptionJEditorPane.setContentType("text/html");
+        descriptionJEditorPane.setContentType("text/html"); // NOI18N
         descriptionJEditorPane.setEditable(false);
         descriptionJEditorPane.setFont(descriptionJEditorPane.getFont());
         descriptionJEditorPane.addHyperlinkListener(new javax.swing.event.HyperlinkListener() {
@@ -525,7 +527,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
             descriptionJPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(descriptionJPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -572,7 +574,7 @@ public class DataSourceSelection extends javax.swing.JFrame {
                             .add(cancelJButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                     .add(layout.createSequentialGroup()
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(helpJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))
+                        .add(helpJButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .add(layout.createSequentialGroup()
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(aboutJButton, 0, 0, Short.MAX_VALUE)))
