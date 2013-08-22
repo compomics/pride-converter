@@ -1,8 +1,19 @@
 #summary Short summary of changes for each version of PRIDE Converter.
 #labels Featured
 
+*Changes in PRIDE Converter v2.5.6 - (August 22. 2013):*
+ * BUG FIX: Fixed an issue with the wrapper on the newer Java versions.
+ * BUG FIX: Fixed an issue with missing icons in the data source selection dialog.
+ * BUG FIX: Fixed an issue with a possible null pointer in MS_LimsConverter related to strange PTMs.
+ * BUG FIX: Replaced paths to CvMappingRules.xsl as the file had moved.
+ * LIBRARY UPDATE: Updated cv-rule-reader to version 2.0.3.
+
+----
+
 *Changes in PRIDE Converter v2.5.5 - (January 11. 2012):*
  * BUG FIX: Updated to support new fragment ion types reported by Mascot dat file parser
+
+Download count: 933
 
 ----
 *Changes in PRIDE Converter v2.5.4 - (October 18. 2011):*
