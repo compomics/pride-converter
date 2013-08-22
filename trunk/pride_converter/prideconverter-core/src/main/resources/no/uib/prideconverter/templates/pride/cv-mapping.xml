@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="https://psidev.svn.sourceforge.net/svnroot/psidev/psi/tools/current/xsl/cv-mapping/CvMappingRules.xsl" type="text/xsl"?>
+<?xml-stylesheet href="https://svn.code.sf.net/p/psidev/svn/psi/tools/current/xsl/cv-mapping/CvMappingRules.xsl" type="text/xsl"?>
 <CvMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:noNamespaceSchemaLocation="http://www.psidev.info/files/validator/CvMapping.xsd" modelName="pride.xsd"
            modelURI="http://www.ebi.ac.uk/pride/help_resources/pride.xsd" modelVersion="1.0.0">

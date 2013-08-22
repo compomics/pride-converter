@@ -10,7 +10,7 @@
 
     <!-- Set the version number for the whole project -->
     <properties>
-        <version.number>2.5.5-beta</version.number>
+        <version.number>2.5.5</version.number>
     </properties>
 
     <build>
