@@ -14,7 +14,7 @@
     <version>${version.number}</version>
     <name>prideconverter-core</name>
     <description>PRIDE Converter converts MS data into valid PRIDE XML for submission to the publicly available PRIDE database.
-It presents a convenient, wizard-like graphical user interface, and includes efficient access to the Ontology Lookup Service (OLS).
+        It presents a convenient, wizard-like graphical user interface, and includes efficient access to the Ontology Lookup Service (OLS).
     </description>
     <url>http://pride-converter.googlecode.com</url>
 
@@ -150,23 +150,23 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
             </snapshots>
         </repository>
 
-         <!-- UGent Genesis Maven 1 repository -->
-		<repository>
-			<id>genesis-maven-repository</id>
-			<name>Genesis repository</name>
-			<url>http://genesis.UGent.be/maven</url>
-			<layout>legacy</layout>
-		</repository>
+        <!-- UGent Genesis Maven 1 repository -->
+        <repository>
+            <id>genesis-maven-repository</id>
+            <name>Genesis repository</name>
+            <url>http://genesis.UGent.be/maven</url>
+            <layout>legacy</layout>
+        </repository>
 
-		<!-- UGent Genesis Maven 2 repository -->
-		<repository>
-			<id>genesis-maven2-repository</id>
-			<name>Genesis maven2 repository</name>
-			<url>http://genesis.UGent.be/maven2</url>
-			<layout>default</layout>
-		</repository>
+        <!-- UGent Genesis Maven 2 repository -->
+        <repository>
+            <id>genesis-maven2-repository</id>
+            <name>Genesis maven2 repository</name>
+            <url>http://genesis.UGent.be/maven2</url>
+            <layout>default</layout>
+        </repository>
 
-         <!-- PRIDE SourceForge Maven 2 repository -->
+        <!-- PRIDE SourceForge Maven 2 repository -->
         <repository>
             <id>PRIDE_SourceForge_Maven2_Repository</id>
             <url>http://pride-proteome.sourceforge.net/maven2</url>
@@ -193,7 +193,22 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         <dependency>
             <groupId>de.proteinms.omxparser</groupId>
             <artifactId>omssa-parser</artifactId>
-            <version>1.4.2</version>
+            <version>1.6.3</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jsparklines</artifactId>
+                    <groupId>no.uib</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jshortcut</artifactId>
+                    <groupId>net.jimmc</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>de.proteinms.xtandemparser</groupId>
+            <artifactId>xtandem-parser</artifactId>
+            <version>1.7.7</version>
         </dependency>
         <dependency>
             <groupId>com.jgoodies</groupId>
@@ -233,7 +248,7 @@ It presents a convenient, wizard-like graphical user interface, and includes eff
         <dependency>
             <groupId>no.uib</groupId>
             <artifactId>ols-dialog</artifactId>
-            <version>3.3.1-SNAPSHOT</version>
+            <version>3.4.2</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.pride</groupId>
