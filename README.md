@@ -107,8 +107,6 @@ If this fails, try to download and install Java 1.5 or above, as explained in th
 
 At start up you will be given the choice of importing the settings from any previously installed versions of **PRIDE Converter**. Simply follow the instructions to import your old settings and lists of instruments, contacts etc. Upgrading does not delete your previous installation, but when you have verified that you can run the new version without problems, you can manually remove the old version by deleting the given folders.
 
-At the [download page](http://code.google.com/p/pride-converter/downloads/list) you will also find a zip file containing example data sets to test the converter.
-
 [Go to top of page](#pride-converter)
 
 ### Troubleshooting
