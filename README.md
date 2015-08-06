@@ -211,10 +211,16 @@ PRIDE Converter has mainly been developed using [NetBeans](http://www.netbeans.o
 
 (Click on a screenshot to see the full size version)
 
-[http://pride-converter.googlecode.com/svn/wiki/images/screenshots/dataSourceSelection\_small.PNG](http://pride-converter.googlecode.com/svn/wiki/images/screenshots/dataSourceSelection.PNG) [http://pride-converter.googlecode.com/svn/wiki/images/screenshots/dataFileSelection\_small.PNG](http://pride-converter.googlecode.com/svn/wiki/images/screenshots/dataFileSelection.PNG) [http://pride-converter.googlecode.com/svn/wiki/images/screenshots/spectraSelection\_small.PNG](http://pride-converter.googlecode.com/svn/wiki/images/screenshots/spectraSelection.PNG)
-[http://pride-converter.googlecode.com/svn/wiki/images/screenshots/experimentProperties\_small.PNG](http://pride-converter.googlecode.com/svn/wiki/images/screenshots/experimentProperties.PNG)
-[http://pride-converter.googlecode.com/svn/wiki/images/screenshots/sampleDetails\_small.PNG](http://pride-converter.googlecode.com/svn/wiki/images/screenshots/sampleDetails.PNG)
-[http://pride-converter.googlecode.com/svn/wiki/images/screenshots/protocolDetails\_small.PNG](http://pride-converter.googlecode.com/svn/wiki/images/screenshots/protocolDetails.PNG)
-[http://pride-converter.googlecode.com/svn/wiki/images/screenshots/instrumentAndProcessing\_small.PNG](http://pride-converter.googlecode.com/svn/wiki/images/screenshots/instrumentAndProcessing.PNG) [http://pride-converter.googlecode.com/svn/wiki/images/screenshots/userParameters\_small.PNG](http://pride-converter.googlecode.com/svn/wiki/images/screenshots/userParameters.PNG) [http://pride-converter.googlecode.com/svn/wiki/images/screenshots/outputDetails\_small.PNG](http://pride-converter.googlecode.com/svn/wiki/images/screenshots/outputDetails.PNG) [http://pride-converter.googlecode.com/svn/wiki/images/screenshots/olsDialog\_small.PNG](http://pride-converter.googlecode.com/svn/wiki/images/screenshots/olsDialog.PNG) [http://pride-converter.googlecode.com/svn/wiki/images/screenshots/modificationMapping\_small.PNG](http://pride-converter.googlecode.com/svn/wiki/images/screenshots/modificationMapping.PNG)
+[![](https://github.com/compomics/pride-converter/wiki/images/screenshots/dataSourceSelection\_small.PNG)](https://github.com/compomics/pride-converter/wiki/images/screenshots/dataSourceSelection.PNG)
+[![](https://github.com/compomics/pride-converter/wiki/images/screenshots/dataSourceSelection\_small.PNG)](https://github.com/compomics/pride-converter/wiki/images/screenshots/dataFileSelection.PNG)
+[![](https://github.com/compomics/pride-converter/wiki/images/screenshots/spectraSelection\_small.PNG)](https://github.com/compomics/pride-converter/wiki/images/screenshots/spectraSelection.PNG)
+[![](https://github.com/compomics/pride-converter/wiki/images/screenshots/experimentProperties\_small.PNG)](https://github.com/compomics/pride-converter/wiki/images/screenshots/experimentProperties.PNG)
+[![](https://github.com/compomics/pride-converter/wiki/images/screenshots/sampleDetails\_small.PNG)](https://github.com/compomics/pride-converter/wiki/images/screenshots/sampleDetails.PNG)
+[![](https://github.com/compomics/pride-converter/wiki/images/screenshots/protocolDetails\_small.PNG)](https://github.com/compomics/pride-converter/wiki/images/screenshots/protocolDetails.PNG)
+[![](https://github.com/compomics/pride-converter/wiki/images/screenshots/instrumentAndProcessing\_small.PNG)](https://github.com/compomics/pride-converter/wiki/images/screenshots/instrumentAndProcessing.PNG)
+[![](https://github.com/compomics/pride-converter/wiki/images/screenshots/userParameters\_small.PNG)](https://github.com/compomics/pride-converter/wiki/images/screenshots/userParameters.PNG)
+[![](https://github.com/compomics/pride-converter/wiki/images/screenshots/outputDetails\_small.PNG)](https://github.com/compomics/pride-converter/wiki/images/screenshots/outputDetails.PNG)
+[![](https://github.com/compomics/pride-converter/wiki/images/screenshots/olsDialog\_small.PNG)](https://github.com/compomics/pride-converter/wiki/images/screenshots/olsDialog.PNG)
+[![](https://github.com/compomics/pride-converter/wiki/images/screenshots/modificationMapping\_small.PNG)](https://github.com/compomics/pride-converter/wiki/images/screenshots/modificationMapping.PNG)
 
 [Go to top of page](#pride-converter)
