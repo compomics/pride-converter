@@ -1,7 +1,7 @@
 
 ---
 
-**This project is out-dated and we strongly recommend to use the newer [PRIDE Converter 2](http://code.google.com/p/pride-converter-2/).**
+**This project is out-dated and we strongly recommend to use the newer [PRIDE Converter 2](https://github.com/PRIDE-Toolsuite/pride-converter-2).**
 
 Input formats, not supported by PRIDE Converter 2, for instance ms\_lims, SEQUEST Result Files and Spectrum Mill can be still be converted by the old converter, referred to simply as PRIDE Converter at the current page.
 
