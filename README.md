@@ -89,7 +89,7 @@ If you use **PRIDE Converter** to publish your data as part of a paper, please i
 
 ### Downloading
 
-You can download the latest version [here](http://www.ebi.ac.uk/pride/resources/tools/converter/2.5.7/PRIDE_Converter_v2.5.7.zip). Unzipping the file, creates the following directory structure:
+You can download the latest version [here](https://www.ebi.ac.uk/pride/resources/tools/converter/2.5.7/PRIDE_Converter_v2.5.7.zip). Unzipping the file, creates the following directory structure:
 
 ```
   PRIDE_Converter_vX.Y
